@@ -1,10 +1,42 @@
+{*
+	People : default
+
+	@param $authors
+*}
+{block title}Addons Authors{/block}
+
 {block content}
 
-<ul>
-	<li n:foreach="$authors as $author">
-		<strong>{$author|userlink}:</strong>
-		{foreach $author->related('addon') as $addon}
-			{$addon|addonlink}{sep}, {/sep}
-		{/foreach}
-	</li>
-</ul>
+<h1>Authors</h1>
+
+<div class="row">
+	<div class="span9">
+		<div class="row">
+		
+			<div class="span3" n:foreach="$authors as $author">
+				<h2>{$author|userlink}</h2>
+				{foreach $author->related('addon') as $addon}
+					{$addon|addonlink}{sep}, {/sep}
+				{/foreach}
+			
+			</div>
+		</div>
+
+
+		<div class="pagination">
+			<ul>
+				<li><a href="#">Prev</a></li>
+				<li class="active"><a href="#">1</a></li>
+				<li><a href="#">2</a></li>
+				<li><a href="#">3</a></li>
+				<li><a href="#">4</a></li>
+				<li><a href="#">Next</a></li>
+			</ul>
+		</div>
+
+		
+	</div>
+	<div class="span3">
+		{include '../Layout/sidebar.latte'}
+	</div>
+</div>

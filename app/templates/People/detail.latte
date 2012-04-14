@@ -1,3 +1,17 @@
 {block content}
 
-<h1>{$author->name}</h1>
+<div class="row">
+	<div class="span9">
+		<h1>{$author->name}</h1>
+
+		{foreach $author->related('addon') as $addon}
+			{$addon|addonlink}{sep}, {/sep}
+		{/foreach}
+		
+	</div>
+	
+
+	<div class="span3">
+		{include '../Layout/sidebar.latte'}
+	</div>
+</div>
