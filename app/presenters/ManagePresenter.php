@@ -151,6 +151,7 @@ final class ManagePresenter extends BasePresenter
 		$this->addon->shortDescription = $values->shortDescription;
 		$this->addon->description = $values->description;
 
+		$this->addon->user = $this->getUser()->getIdentity();
 		$this->context->addonUpdater->update($this->addon);
 		$this->storeAddon();
 
@@ -185,6 +186,8 @@ final class ManagePresenter extends BasePresenter
 		$this->addon = $importer->import();
 		$this->addon->repository = $values->url;
 		$this->storeAddon();
+
+		$this->addon->user = $this->getUser()->getIdentity();
 		$this->context->addonUpdater->update($this->addon);
 
 		$this->flashMessage('Imported addon.');
