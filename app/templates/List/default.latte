@@ -1,0 +1,18 @@
+{block content}
+
+<table class="table table-bordered">
+	<tr>
+		<th>Name</th>
+		<th>Author</th>
+		<th>Tags</th>
+	</tr>
+	<tr n:foreach="$addons as $addon">
+		<td>{$addon->name}</td>
+		<td>{$addon->related('user')->name}</td>
+		<td>
+		{foreach $addon->related('addon_tags') as $addonTag}
+		<span class="label">{$addonTag->ref('tags')->name}</span>
+		{/foreach}
+		</td>
+	</tr>
+</table>

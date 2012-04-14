@@ -17,7 +17,7 @@
 	<meta name="description" content="Nette Framework web application skeleton">
 	<meta name="robots" content="{$robots}" n:ifset="$robots">
 
-	<title>Nette Application Skeleton</title>
+	<title>Nette Addons</title>
 
 	<link rel="stylesheet" media="screen,projection,tv" href="{$basePath}/css/screen.css" type="text/css">
 	<link rel="stylesheet" media="print" href="{$basePath}/css/print.css" type="text/css">
@@ -43,8 +43,8 @@
 				<a class="brand" href="#">Nette Addons</a>
 				<div class="nav-collapse">
 					<ul class="nav">
-					  <li class="active"><a href="#">Home</a></li>
-					  <li><a href="#about">About</a></li>
+					  <li n:class="$presenter->name === 'Homepage' ? active"><a n:href="Homepage:">Home</a></li>
+					  <li n:class="$presenter->name === 'List' ? active"><a n:href="List:">Browse all</a></li>
 					</ul>
 				</div><!--/.nav-collapse -->
 	        </div>
@@ -52,9 +52,9 @@
     </div>
 
 	<div n:foreach="$flashes as $flash" class="flash {$flash->type}">{$flash->message}</div>
-	
+
 	<div class="container">
-		
+
 		{include #content}
 
 		<hr>
