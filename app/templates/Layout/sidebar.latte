@@ -7,7 +7,7 @@
 
 	<ul class="main-tags">
 		<li n:foreach="$categories as $category">
-			<a n:href="List: tag => $category->id">{$category->name}</a>
+			<a n:href="List: tag => $category->slug">{$category->name}</a>
 		</li>
 	</ul>
 </div>
