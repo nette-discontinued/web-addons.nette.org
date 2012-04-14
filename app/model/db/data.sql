@@ -33,19 +33,11 @@ INSERT INTO `addon_dependency` (`id`, `addon_id`, `dependency_id`, `package_name
 (19,	7,	NULL,	'php',	'self.version',	'replace');
 
 INSERT INTO `addon_tag` (`addon_id`, `tag_id`) VALUES
-(1,	1),
+(1,	2),
 (2,	2),
-(1,	3),
-(1,	4),
-(1,	5),
 (1,	6),
-(3,	6),
-(4,	6),
-(3,	7),
-(4,	7),
-(3,	8),
-(4,	8),
-(4,	9);
+(1,	10),
+(1,	11);
 
 INSERT INTO `addon_version` (`id`, `addon_id`, `version`, `license`, `composer_json`) VALUES
 (1,	1,	'2.0',	'',	NULL),
@@ -59,15 +51,17 @@ INSERT INTO `addon_votes` (`addon_id`, `user_id`, `vote`, `comment`) VALUES
 (1,	1,	1,	NULL);
 
 INSERT INTO `tag` (`id`, `name`, `slug`, `level`, `visible`) VALUES
-(1,	'Assets',	'assets',	1,	1),
-(2,	'cURL',	'curl',	1,	1),
-(3,	'JavaScrip',	'javascript',	9,	1),
-(4,	'CSS',	'css',	9,	1),
-(5,	'webloader',	'',	0,	1),
-(6,	'nette',	'',	0,	1),
-(7,	'framework',	'',	0,	1),
-(8,	'doctrine',	'',	0,	1),
-(9,	'cms',	'',	0,	1);
+(1,	'Vizuální komponenty',	'vizualni-komponenty',	1,	1),
+(2,	'Nevizuální komponenty',	'nevizualni-komponenty',	1,	1),
+(3,	'Rozšíření formulářů',	'rozsireni-fomrularu',	1,	1),
+(4,	'Jazykové mutace',	'jazykove-mutace',	1,	1),
+(5,	'AJAX',	'ajax',	1,	1),
+(6,	'Helpery a pomůcky pro šablony',	'helpery-a-pomucky-pro-sablony',	1,	1),
+(7,	'Rozšíření a nástroje',	'rozsireni-a-nastroje',	1,	1),
+(8,	'Panely pro DebugBar',	'panely-pro-debugbar',	1,	1),
+(9,	'Datagridy',	'datagridy',	2,	1),
+(10,	'JavaScrip',	'javascript',	9,	1),
+(11,	'CSS',	'css',	9,	1);
 
 INSERT INTO `user` (`id`, `name`, `password`, `email`) VALUES
 (1,	'Merxes',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'me@gmail.com'),
