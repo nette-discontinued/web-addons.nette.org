@@ -6955,6 +6955,24 @@ body {
   padding-top: 60px;
   padding-bottom: 40px;
 }
-.addons-recently h2 {
+h1 {
+  padding-bottom: 12px;
+}
+a:hover .label {
+  text-decoration: none;
+}
+.homepage-addons h2 {
   padding-bottom: 10px;
+}
+.addon-list-item {
+  border-bottom: 1px dotted #999999;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+}
+.addon-list-item .icon img {
+  display: block;
+  margin: 10px auto auto;
+}
+.box-create-addon {
+  text-align: center;
 }
