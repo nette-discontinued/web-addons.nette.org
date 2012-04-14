@@ -28,6 +28,30 @@
 			Vote: <a n:href="vote! up">+1</a> / <a n:href="vote! down">-1</a>
 		</td>
 	</tr>
+	<tr>
+		<th>Version</th>
+		<td>
+			{foreach $addon->related('addon_version') as $version}
+				<div>
+					<h2>{$version->version}</h2>
+					<button class="btn">Download</button><br>
+					<h3>Dependencies</h3>
+					<ul>
+						{foreach $version->related('addon_dependency') as $dep}
+							<li>
+								{if $dep->dependency_id}
+									{$dep->dependency->name}
+								{else}
+									{$dep->package_name}
+								{/if}
+								| {$dep->version}
+							</li>
+						{/foreach}
+					</ul>
+				</div>
+			{/foreach}
+		</td>
+	</tr>
 </table>
 
 {!$addon->description|texy}
