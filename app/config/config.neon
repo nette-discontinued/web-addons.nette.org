@@ -41,5 +41,7 @@ services:
 	# github
 	github: NetteAddons\GitHub\Service( 'https://api.github.com', 50000 )
 
-
 factories:
+	repository:
+		parameters: [vendor, name]
+		class: NetteAddons\GitHub\Repository ( @github , %vendor%, %name% )
