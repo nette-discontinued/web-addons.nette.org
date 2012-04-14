@@ -11,8 +11,10 @@ class AddAddonForm extends BaseForm
 		$this->addText('name', 'Name', 40, 100)
 			->addRule(self::FILLED);
 		$this->addTextArea('shortDescription', 'Short description', 60, 4)
+			->setAttribute('class', 'span4')
 			->addRule(self::FILLED);
-		$this->addTextArea('description', 'Description', 80, 20);
+		$this->addTextArea('description', 'Description', 80, 20)
+			->setAttribute('class', 'span6');
 
 		$this->addHidden('repository');
 
