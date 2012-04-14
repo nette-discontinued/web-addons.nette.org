@@ -54,10 +54,14 @@ class Tags extends Table
 			}
 		}
 
-		$this->getAddonTags()->insert(array(
-			'addon_id' => $addon->id,
-			'tag_id' => $tag->id
-		));
+		try {
+			$this->getAddonTags()->insert(array(
+				'addon_id' => $addon->id,
+				'tag_id' => $tag->id
+			));
+		} catch (\PDOException $e) {
+			// duplicate entry is not an error in this case
+		}
 
 		return TRUE;
 	}
