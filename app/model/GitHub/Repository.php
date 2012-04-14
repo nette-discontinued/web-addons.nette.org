@@ -142,12 +142,13 @@ class Repository extends \Nette\Object
 	 */
 	public static function createFromUrl(ApiService $service, $fileFactory, $url)
 	{
-		if (!Strings::startsWith($url, 'http://github.com/') && Strings::startsWith($url, 'https://github.com/')) {
+		$url = new \Nette\Http\Url($url);
+		$path = substr($url->getPath(), 1);
+		if ($url->getHost() != 'github.com' && strpos($path, '/') === FALSE) {
 			throw new \NetteAddons\InvalidArgumentException("Invalid github url");
 		}
 
-		$url = new \Nette\Http\Url($url);
-		list($vendor, $name) = explode('/', substr($url->getPath(), 1));
+		list($vendor, $name) = explode('/', $path);
 		return new static($service, $fileFactory, $vendor, $name);
 	}
 }
