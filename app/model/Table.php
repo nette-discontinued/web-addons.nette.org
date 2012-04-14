@@ -39,9 +39,19 @@ abstract class Table extends Nette\Object
 	/**
 	 * @return \Nette\Database\Table\Selection
 	 */
-	public function getTable()
+	protected function getTable()
 	{
 		return $this->database->table($this->tableName);
+	}
+
+
+
+	/**
+	 * @return \Nette\Database\Table\Selection
+	 */
+	public function findAll()
+	{
+		return $this->getTable();
 	}
 
 
