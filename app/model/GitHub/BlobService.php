@@ -39,7 +39,6 @@ class BlobService extends \Nette\Object
 			throw new \NetteAddons\NotImplementedException;
 		}
 
-		$data = $this->curl->get($url);
-		return $this->responseToJson($data);
+		return $this->curl->get($url);
 	}
 }
