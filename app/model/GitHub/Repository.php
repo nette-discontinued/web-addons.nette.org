@@ -2,6 +2,8 @@
 
 namespace NetteAddons\Model\GitHub;
 
+use Nette\Utils\Strings;
+
 /**
  * @author	Patrik Votoček
  */
@@ -84,7 +86,7 @@ class Repository extends \Nette\Object
 				list($addon->vendorName, $addon->name) = explode('/', $data->name);
 			}
 			if (isset($data->description)) {
-				$addon->shortDescription = \Nette\Utils\Strings::truncate($data->description, 250);
+				$addon->shortDescription = Strings::truncate($data->description, 250);
 			}
 			if (isset($data->keywords)) {
 				$addon->tags = $data->keywords;
@@ -144,6 +146,9 @@ class Repository extends \Nette\Object
 		$path = substr($url->getPath(), 1);
 		if ($url->getHost() != 'github.com' && strpos($path, '/') === FALSE) {
 			throw new \NetteAddons\InvalidArgumentException("Invalid github url");
+		}
+		if (Strings::endsWith($path, '.git')) {
+			$path = Strings::substring($path, 0, -4);
 		}
 
 		list($vendor, $name) = explode('/', $path);
