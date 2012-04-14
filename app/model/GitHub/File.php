@@ -35,6 +35,14 @@ class File extends \Nette\Object
 	 */
 	public function get($path)
 	{
-		return $this->service->exec("/{$this->vendor}/{$this->name}/{$this->commit}/$path");
+		try {
+			return $this->service->exec("/{$this->vendor}/{$this->name}/{$this->commit}/$path");
+		} catch(\NetteAddons\InvalidStateException $e) {
+			if ($e->getCode() == 404) {
+				throw new \NetteAddons\Model\GitHub\FileNotFoundException($e->getName(), $e->getCode(), $e);
+			}
+
+			throw $e;
+		}
 	}
 }
