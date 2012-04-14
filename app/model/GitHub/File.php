@@ -39,7 +39,7 @@ class File extends \Nette\Object
 			return $this->service->exec("/{$this->vendor}/{$this->name}/{$this->commit}/$path");
 		} catch(\NetteAddons\InvalidStateException $e) {
 			if ($e->getCode() == 404) {
-				throw new \NetteAddons\Model\GitHub\FileNotFoundException($e->getName(), $e->getCode(), $e);
+				throw new \NetteAddons\Model\GitHub\FileNotFoundException($e->getMessage(), $e->getCode(), $e);
 			}
 
 			throw $e;
