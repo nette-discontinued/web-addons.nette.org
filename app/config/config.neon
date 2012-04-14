@@ -24,10 +24,10 @@ nette:
 
 services:
 	database: @Nette\Database\Connection
-
-	authenticator: Authenticator( @database::table(users) )
-
 	nette.presenterFactory: NetteAddons\PresenterFactory(%appDir%, @container)
+
+	authenticator: NetteAddons\Authenticator
+	users: NetteAddons\Users
 
 
 factories:
