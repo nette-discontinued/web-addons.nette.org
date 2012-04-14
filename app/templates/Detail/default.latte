@@ -39,7 +39,7 @@
 				<div class="box-tags">
 					<h3>Tags</h3>
 					{foreach $addon->related('addon_tag') as $addonTag}
-						<span class="label">{$addonTag->ref('tag')->name}</span>
+						{include '../Addon/tag.latte' tag => $addonTag }
 					{/foreach}
 				</div>
 			</div>

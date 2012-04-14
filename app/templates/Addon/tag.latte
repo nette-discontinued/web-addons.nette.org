@@ -1,0 +1,10 @@
+{*
+	Tag 
+
+	@param $addonTag
+*}
+{if $tags->isCategory($tag->tag) }
+	<a n:href="List: tag => $tag->tag->slug" class="label label-info">{$tag->tag->name}</a>
+{else}
+	<a n:href="List: tag => $tag->tag->slug" class="label">{$tag->tag->name}</a>
+{/if}
