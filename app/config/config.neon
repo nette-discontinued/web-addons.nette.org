@@ -65,8 +65,8 @@ factories:
 		class: NetteAddons\Model\GitHub\File( @githubBlob , %vendor%, %name%, %commit% )
 
 	repositoryImporter:
-		class: NetteAddons\Model\RepositoryImporter(%url%, %api%)
-		parameters: [url, api]
+		class: NetteAddons\Model\RepositoryImporter( @repositoryFromUrlFactory, %url%)
+		parameters: [url]
 
 	archiveImporter:
 		class: NetteAddons\Model\ArchiveImporter(%archiveFile%)

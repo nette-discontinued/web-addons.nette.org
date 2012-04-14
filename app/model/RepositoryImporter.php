@@ -8,22 +8,35 @@ use Nette;
 
 /**
  * @author Filip Procházka <filip.prochazka@kdyby.org>
+ * @author	Patrik Votoček
  */
 class RepositoryImporter extends Nette\Object implements IAddonImporter
 {
-
-	public function __construct($repositoryUrl, $githubApi)
-	{
-		throw new Nette\NotImplementedException;
-	}
-
-
+	/** @var callable */
+	private $loader;
 
 	/**
+	 * @param callable
+	 * @param string
+	 */
+	public function __construct($repostiryFactory, $url)
+	{
+		$this->loader = callback($this->repostiryFactory)->invoke($url);
+	}
+
+	/**
+	 * @return Addon
 	 */
 	public function import()
 	{
-		throw new Nette\NotImplementedException;
+		return $this->loader->getMainMetadata();
 	}
 
+	/**
+	 * @return AddonVersion[]
+	 */
+	public function importVersions()
+	{
+		return $this->loader->getVersionsMetadatas();
+	}
 }
