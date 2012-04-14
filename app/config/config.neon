@@ -15,6 +15,9 @@ nette:
 	session:
 		expiration: '+ 14 days'
 
+	container:
+		debugger: true
+
 	database:
 		default:
 			dsn: '%database.driver%:host=%database.host%;dbname=%database.dbname%'
