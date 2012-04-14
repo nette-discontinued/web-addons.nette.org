@@ -1,0 +1,105 @@
+{define #form}
+{? Nette\Latte\Macros\FormMacros::renderFormBegin($_form = $form, array('class' => 'form-horizontal'))}
+
+{* errors *}
+{block #formErrors}
+    <div n:foreach="$form->errors as $error" class="alert alert-error"><a class="close" data-dismiss="alert">×</a>{$error}</div>
+{/block}
+
+{* controls with group *}
+<fieldset n:foreach="$form->groups as $group" n:if="$group->controls && $group->getOption('visual')" n:block="#formGroup">
+    <legend n:ifset="$group->options['label']">{$group->options['label']}</legend>
+    <p n:ifset="$group->options['description']">{$group->options['description']}</p>
+
+    {block #controls}
+    {foreach $group->controls as $control}
+        {var $form = $control->form, $_form = $form}
+        {continueIf $control instanceof Nette\Forms\ISubmitterControl || $control instanceof Nette\Forms\Controls\HiddenField}
+        <div n:if="!$control->getOption('rendered')" id="{$control->htmlId}-pair" n:class="$control->getOption('required')? required, control-group, $control->errors? error">
+
+            {var $name = $control->lookupPath('Nette\Forms\Form'), $controlName => 'control-' . $name}
+            {capture $description}
+                <p class="help-block" n:if="$desc = $control->getOption('description')">{$desc}</p>
+            {/capture}
+
+            {capture $error}
+                {var $controlErrors = $control->errors}
+                <p class="help-inline" n:if="$error = reset($controlErrors)">{$error}</p>
+            {/capture}
+
+            {block #$controlName}
+                {if $control instanceof Nette\Forms\Controls\Button}
+                    {block #buttonControl}
+                        <div class="controls">
+                            {input $name, class => 'btn'}
+                            {ifset $error}{!$error}{/ifset}
+                            {ifset $description}{!$description}{/ifset}
+                        </div>
+                    {/block}
+                {elseif $control instanceof Nette\Forms\Controls\Checkbox}
+                    {block #checkboxControl}
+                        <div class="controls">
+                            {label $name, class => 'checkbox'}{input $name}{$control->label->getText()}{/label}
+                            {!$error}
+                            {!$description}
+                        </div>
+                    {/block}
+                {elseif $control instanceof Nette\Forms\Controls\RadioList}
+                    {block #radioListControl}
+                        {label $name, class => 'control-label' /}
+                        <div class="controls">
+                            {block #radioListItems}
+                                {foreach $control->items as $key => $value}
+                                    {var $html = $control->getControl($key), $input = $html[0], $label = $html[1]}
+                                    {!$label->class('radio')->startTag()}{$input}{$label->getText()}{!$label->class('radio')->endTag()}
+                                {/foreach}
+                            {/block}
+                            {!$error}
+                            {!$description}
+                        </div>
+                    {/block}
+                {else}
+                    {block #control}
+                    {label $name, class => 'control-label' /}
+                    <div class="controls">
+                        {if $control->controlPrototype->type === 'email'}
+                            <div class="input-prepend">
+                                <span class="add-on">@</span>{input $name}
+                            </div>
+                        {else}
+                            {input $name}
+                        {/if}
+                        {!$error}
+                        {!$description}
+                    </div>
+                    {/block}
+                {/if}
+            {/block}
+        </div>
+    {/foreach}
+    {/block}
+</fieldset>
+
+{* controls without group *}
+{include #controls, group => $form}
+
+<div class="form-actions" n:inner-block="#formActions">
+    {var $_form = $form}
+    {foreach $form->getComponents(TRUE, 'Nette\Forms\ISubmitterControl') as $control}
+        {var $name = $control->lookupPath('Nette\Forms\Form'), $submitName = 'submit-' . $name}
+        {continueIf $control->getOption('rendered')}
+
+        {block #$submitName}
+            {input $name, class => 'btn'}
+        {/block}
+    {/foreach}
+</div>
+
+
+{* end renders hidden inputs *}
+{? Nette\Latte\Macros\FormMacros::renderFormEnd($form)}
+{/define}
+
+{if !isset($render) || $render !== FALSE}
+    {include #form, form => $form}
+{/if}
