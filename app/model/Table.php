@@ -9,6 +9,8 @@ use Nette\Database\Table\Selection;
 
 
 /**
+ * Represents repository for database table
+ *
  * @property \Nette\Database\Table\Selection $table
  */
 abstract class Table extends Nette\Object
@@ -17,7 +19,7 @@ abstract class Table extends Nette\Object
 	/**
 	 * @var \Nette\Database\Connection
 	 */
-	protected $database;
+	protected $connection;
 
 
 
@@ -32,7 +34,7 @@ abstract class Table extends Nette\Object
 			throw new \NetteAddons\InvalidStateException("Property \$tableName must be defined in $class.");
 		}
 
-		$this->database = $db;
+		$this->connection = $db;
 	}
 
 
@@ -42,7 +44,7 @@ abstract class Table extends Nette\Object
 	 */
 	protected function getTable()
 	{
-		return $this->database->table($this->tableName);
+		return $this->connection->table($this->tableName);
 	}
 
 

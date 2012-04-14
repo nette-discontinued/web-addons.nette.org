@@ -10,10 +10,11 @@ class ListPresenter extends BasePresenter
 
 	public function renderDefault($tag = NULL, $author = NULL, $search = NULL)
 	{
-		$addons = $this->context->addons->findAll();
+		$addonRepository = $this->context->addons;
+		$addons = $addonRepository->findAll();
 
 		if ($tag) {
-			$addons->where('addon_tag = ?', $tag);
+			$addonRepository->filterByTag($addons, $tag);
 		}
 
 		if ($author) {

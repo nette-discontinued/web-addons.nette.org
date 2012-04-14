@@ -42,7 +42,6 @@ services:
 
 	# importing
 	addonUpdater: NetteAddons\Model\AddonUpdater
-	addonCreator: NetteAddons\Model\AddonCreator
 
 	# github
 	curl: NetteAddons\Curl( 50000 )

@@ -9,7 +9,7 @@ use Nette\Security\Identity;
 
 
 /**
- * User model
+ * Users repository
  */
 class Users extends Table
 {
@@ -60,6 +60,14 @@ class Users extends Table
 		unset($user['password']);
 
 		return new Identity($user->id, NULL, $data);
+	}
+
+
+
+	public function findAuthors()
+	{
+		$users = $this->connection->table('addon')->select('DISTINCT(user_id)');
+		return $this->findAll()->where('id', $users);
 	}
 
 }

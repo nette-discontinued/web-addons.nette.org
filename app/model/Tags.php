@@ -8,7 +8,7 @@ use Nette\Database\Table\ActiveRow;
 
 
 /**
- * @author Filip Procházka <filip.prochazka@kdyby.org>
+ * Tags repository
  */
 class Tags extends Table
 {
@@ -64,7 +64,7 @@ class Tags extends Table
 	 */
 	protected function getAddonTags()
 	{
-		return $this->database->table('addon_tag');
+		return $this->connection->table('addon_tag');
 	}
 
 	public function isCategory(ActiveRow $tag)

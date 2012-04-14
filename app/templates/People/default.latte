@@ -1,0 +1,11 @@
+{block content}
+
+<ul>
+	<li n:foreach="$users as $author">
+		<strong>{$author->name}:</strong>
+		{foreach $author->related('addon') as $addon}
+		<a n:href="Detail: $addon->id">{$addon->name}</a>{sep}, {/sep}
+		{/foreach}
+
+	</li>
+</ul>
