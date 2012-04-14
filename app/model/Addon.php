@@ -3,6 +3,7 @@
 namespace NetteAddons\Model;
 
 use Nette;
+use Nette\Utils\Strings;
 
 
 
@@ -91,6 +92,25 @@ class Addon extends Nette\Object
 		}
 
 		return $addon;
+	}
+
+
+
+	/**
+	 * Sets the composer name.
+	 * It is built from the current package name and specifed username.
+	 * @param $username
+	 */
+	public function buildComposerName()
+	{
+		$this->composerName = $this->trimPackageName($this->user->name) . '/' . $this->trimPackageName($this->name);
+	}
+
+
+	private function trimPackageName($string)
+	{
+		$name = Strings::toAscii($string);
+		return preg_replace('#[^A-Za-z0-9]#i', '', $name);
 	}
 
 }
