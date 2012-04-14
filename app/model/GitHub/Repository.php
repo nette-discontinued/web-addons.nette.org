@@ -60,6 +60,19 @@ class Repository extends \Nette\Object
 
 	/**
 	 * @param string
+	 * @return stdClass
+	 */
+	public function getTree($hash)
+	{
+		$data = $this->service->exec("/repos/{$this->vendor}/{$this->name}/git/trees/$hash");
+		if ($data) {
+			$data = json_decode($data);
+		}
+		return $data;
+	}
+
+	/**
+	 * @param string
 	 * @return string
 	 */
 	protected function getComposerJson($hash)
@@ -68,6 +81,19 @@ class Repository extends \Nette\Object
 			return callback($this->fileFactory)->invoke($this->vendor, $this->name, $hash)->get('composer.json');
 		} catch(FileNotFoundException $e) {
 			return NULL;
+		}
+	}
+
+	/**
+	 * @param string
+	 */
+	protected function getReadme($hash)
+	{
+		$tree = $this->getTree($hash);
+		foreach ($tree->tree as $item) {
+			if (Strings::startsWith(Strings::lower($item->path), 'readme')) {
+				return callback($this->fileFactory)->invoke($this->vendor, $this->name, $hash)->get($item->path);
+			}
 		}
 	}
 
@@ -91,6 +117,7 @@ class Repository extends \Nette\Object
 			if (isset($data->keywords)) {
 				$addon->tags = $data->keywords;
 			}
+			$addon->description = $this->getReadme($branch);
 			return $addon;
 		}
 	}
