@@ -15,9 +15,12 @@
 		
 			<div class="span3" n:foreach="$authors as $author">
 				<h2>{$author|userlink}</h2>
-				{foreach $author->related('addon') as $addon}
-					{$addon|addonlink}{sep}, {/sep}
-				{/foreach}
+				<img src="http://forum.nette.org/cs/img/avatars/2118.jpg" alt="{$author->name}" />
+
+				<br>
+
+			
+				<span class="badge">{$author->related('addon')->count()}</span>
 			
 			</div>
 		</div>
