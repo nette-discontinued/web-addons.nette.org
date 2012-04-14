@@ -1,7 +1,7 @@
 {block content}
 
 <div class="row">
-	
+
 	<div class="span9">
 
 		<div class="hero-unit">
@@ -12,60 +12,36 @@
 
 
 		<div class="addons-recently homepage-addons">
-			<h2>Recently added (<a n:href="List:">All</a>) <a href="javascript:;" title="Feed recent"><i class="icon-fire"></i></a></h2>
+			<h2>Recently updated (<a n:href="List:">All</a>) <a href="javascript:;" title="Feed recent"><i class="icon-fire"></i></a></h2>
 
 			<div class="row">
-
-				{include ../Addon/homepageDetail.latte}
-				
-				<div class="span3">
-					<h3><a href="javascript:;">EditableTree</a></h3>
-					<p>Nadstavba <a href="javascript:">TreeView</a></p>
-					<p><a class="btn" href="#">View details &raquo;</a></p>
-				</div>
-			
-				<div class="span3">
-					<h3><a href="javascript:;">FbTools</a></h3>
-					<p><td>Sada nástrojů pro práci s&nbsp;Facebook Social Plugins <a title="Like Button" href="javascrip:;">LikeButton</a>, <a title="Comments" href="javascrip:;">Comments</a>, <a title="Open Graph Tags(ogt)" href="javascrip:;">OpenGraphTags</a>, <a title="Like Box" href="javascrip:;">Like&nbsp;Box</a></td></p>
-					<p><a class="btn" href="#">View details &raquo;</a></p>
-				</div>
+				{foreach $updatedAddons as $addon}
+					{include ../Addon/homepageDetail.latte addon => $addon}
+				{/foreach}
 			</div>
 		</div>
 
+		{*
 		<div class="addons-recently homepage-addons">
 			<h2>Most downloaded (<a n:href="List:">All</a>)</h2>
 
 			<div class="row">
-				
-				{include ../Addon/homepageDetail.latte}
-				
-
-				<div class="span3">
-					<h3><a href="javascript:;">EditableTree</a></h3>
-					<p>Nadstavba <a href="javascript:">TreeView</a></p>
-					<p><a class="btn" href="#">View details &raquo;</a></p>
-				</div>
-			
-				<div class="span3">
-					<h3><a href="javascript:;">FbTools</a></h3>
-					<p><td>Sada nástrojů pro práci s&nbsp;Facebook Social Plugins <a title="Like Button" href="javascrip:;">LikeButton</a>, <a title="Comments" href="javascrip:;">Comments</a>, <a title="Open Graph Tags(ogt)" href="javascrip:;">OpenGraphTags</a>, <a title="Like Box" href="javascrip:;">Like&nbsp;Box</a></td></p>
-					<p><a class="btn" href="#">View details &raquo;</a></p>
-				</div>
+				{foreach $mostDownloadedAddons as $addon}
+					{include ../Addon/homepageDetail.latte addon => $addon}
+				{/foreach}
 			</div>
 		</div>
+		*}
 	</div>
 	<div class="span3">
-
 		<div class="well">
 			<h3>Browser (<a n:href="List:">All</a>)</h3>
 
 			<ul class="main-tags">
-				<li><a href="javascript:;" title="UI">UI</a></li>
-				<li><a href="javascript:;" title="Forms">Forms</a></li>
-				<li><a href="javascript:;" title="Media">Media</a></li>
-				<li><a href="javascript:;" title="Utilities">Utilities</a></li>
-				
-			</ul><!-- /main-tags -->
+				<li n:foreach="$categories as $category">
+					<a n:href="List: tag => $category->id">{$category->name}</a>
+				</li>
+			</ul>
 		</div>
 
 		<div class="well">
@@ -75,7 +51,7 @@
 				<li><a href="javascript:;">How to Add a Plugin</a></li>
 				<li><a href="javascript:;">Plugin Writing Guidelines</a></li>
 				<li><a href="javascript:;">Send Feedback</a></li>
-			</ul><!-- /main-tags -->
+			</ul>
 		</div>
 
 		<div class="well">
@@ -83,8 +59,7 @@
 
 			<ul class="main-tags">
 				<li><a href="javascript:;" title="Plugin Authors">Plugin Authors</a></li>
-				
-			</ul><!-- /main-tags -->
+			</ul>
 		</div>
 
 	</div>
