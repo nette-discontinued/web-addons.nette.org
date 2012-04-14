@@ -11,15 +11,35 @@
 		</div>
 
 
-		<div class="addons-recently homepage-addons-recently">
+		<div class="addons-recently homepage-addons">
 			<h2>Recently added (<a n:href="List:">All</a>) <a href="javascript:;" title="Feed recent"><i class="icon-fire"></i></a></h2>
 
 			<div class="row">
+
+				{include ../Addon/homepageDetail.latte}
+				
 				<div class="span3">
-					<h3><a href="javascript:;">ConfirmationDialog</a></h3>
-					<p>Snadné a bezpečné potvrzování akcí</p>
+					<h3><a href="javascript:;">EditableTree</a></h3>
+					<p>Nadstavba <a href="javascript:">TreeView</a></p>
 					<p><a class="btn" href="#">View details &raquo;</a></p>
 				</div>
+			
+				<div class="span3">
+					<h3><a href="javascript:;">FbTools</a></h3>
+					<p><td>Sada nástrojů pro práci s&nbsp;Facebook Social Plugins <a title="Like Button" href="javascrip:;">LikeButton</a>, <a title="Comments" href="javascrip:;">Comments</a>, <a title="Open Graph Tags(ogt)" href="javascrip:;">OpenGraphTags</a>, <a title="Like Box" href="javascrip:;">Like&nbsp;Box</a></td></p>
+					<p><a class="btn" href="#">View details &raquo;</a></p>
+				</div>
+			</div>
+		</div>
+
+		<div class="addons-recently homepage-addons">
+			<h2>Most downloaded (<a n:href="List:">All</a>)</h2>
+
+			<div class="row">
+				
+				{include ../Addon/homepageDetail.latte}
+				
+
 				<div class="span3">
 					<h3><a href="javascript:;">EditableTree</a></h3>
 					<p>Nadstavba <a href="javascript:">TreeView</a></p>
