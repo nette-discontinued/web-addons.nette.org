@@ -20,8 +20,18 @@ class ArchiveImporter extends Nette\Object implements IAddonImporter
 
 
 	/**
+	 * @return Addon
 	 */
 	public function import()
+	{
+		throw new Nette\NotImplementedException;
+	}
+
+	/**
+	 * @return AddonVersion[]
+	 * @throws \Nette\NotImplementedException
+	 */
+	public function importVersions()
 	{
 		throw new Nette\NotImplementedException;
 	}

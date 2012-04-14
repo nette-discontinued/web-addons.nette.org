@@ -7,15 +7,17 @@ use Nette;
 
 
 /**
+ *
  */
 interface IAddonImporter
 {
-
 	/**
-	 * Returns informations about Addon.
-	 *
 	 * @return Addon
 	 */
-	function import();
+	public function import();
 
+	/**
+	 * @return AddonVersion[]
+	 */
+	public function importVersions();
 }
