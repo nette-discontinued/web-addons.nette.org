@@ -151,12 +151,14 @@ final class ManagePresenter extends BasePresenter
 		$this->addon->shortDescription = $values->shortDescription;
 		$this->addon->description = $values->description;
 
+		$this->context->addonUpdater->update($this->addon);
 		$this->storeAddon();
 
 		$this->flashMessage('Addon created.');
 
 		if ($this->addon->repository) {
 			$this->redirect('versionImport');
+
 		} else {
 			$this->redirect('versionCreate');
 		}
@@ -183,6 +185,7 @@ final class ManagePresenter extends BasePresenter
 		$this->addon = $importer->import();
 		$this->addon->repository = $values->url;
 		$this->storeAddon();
+		$this->context->addonUpdater->update($this->addon);
 
 		$this->flashMessage('Imported addon.');
 		$this->redirect('create');
@@ -208,6 +211,7 @@ final class ManagePresenter extends BasePresenter
 		$version->version = $values->version;
 		$this->addon->versions[] = $version;
 		$this->storeAddon();
+		$this->context->addonUpdater->update($this->addon);
 
 		$this->flashMessage('Version created.');
 		$this->redirect('finish');
