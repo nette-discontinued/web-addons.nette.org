@@ -23,12 +23,14 @@ abstract class Table extends Nette\Object
 
 	/**
 	 * @param \Nette\Database\Connection $db
+	 *
+	 * @throws \NetteAddons\InvalidStateException
 	 */
 	public function __construct(Nette\Database\Connection $db)
 	{
 		if (!isset($this->tableName)) {
 			$class = get_called_class();
-			throw new Nette\InvalidStateException("Property \$tableName must be defined in $class.");
+			throw new \NetteAddons\InvalidStateException("Property \$tableName must be defined in $class.");
 		}
 
 		$this->database = $db;
@@ -101,15 +103,16 @@ abstract class Table extends Nette\Object
 
 	/**
 	 * @param \Nette\Database\Table\ActiveRow|\Nette\Database\Table\Selection $selection
-	 * @throws \Nette\InvalidArgumentException
-	 * @return boolean
+	 *
+	 * @throws \NetteAddons\InvalidArgumentException
+	 * @return bool
 	 */
 	public function remove($selection)
 	{
 		try {
 			if ($selection instanceof Selection) {
 				if ($selection->getName() !== $this->tableName) {
-					throw new Nette\InvalidArgumentException;
+					throw new \NetteAddons\InvalidArgumentException;
 				}
 
 				/** @var Selection $selection */
@@ -120,7 +123,7 @@ abstract class Table extends Nette\Object
 				$selection->delete();
 
 			} else {
-				throw new Nette\InvalidArgumentException;
+				throw new \NetteAddons\InvalidArgumentException;
 			}
 
 			return TRUE;
