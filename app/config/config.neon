@@ -38,6 +38,7 @@ services:
 	addons: NetteAddons\Model\Addons
 	tags: NetteAddons\Model\Tags
 	addonVersions: NetteAddons\Model\AddonVersions
+	addonVotes: NetteAddons\Model\AddonVotes
 	versionDependencies: NetteAddons\Model\VersionDependencies
 
 	# importing
