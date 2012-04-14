@@ -64,11 +64,7 @@ class Repository extends \Nette\Object
 	 */
 	public function getTree($hash)
 	{
-		$data = $this->service->exec("/repos/{$this->vendor}/{$this->name}/git/trees/$hash");
-		if ($data) {
-			$data = json_decode($data);
-		}
-		return $data;
+		return $this->service->exec("/repos/{$this->vendor}/{$this->name}/git/trees/$hash");
 	}
 
 	/**
