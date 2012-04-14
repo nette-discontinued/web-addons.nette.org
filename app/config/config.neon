@@ -55,6 +55,11 @@ factories:
 		parameters: [vendor, name]
 		class: NetteAddons\Model\GitHub\Repository( @githubApi , %vendor%, %name% )
 
+	repositoryFromUrl:
+		parameters: [url]
+		class: NetteAddons\Model\GitHub\Repository
+		factory: NetteAddons\Model\GitHub\Repository::createFromUrl( @githubApi , %url% )
+
 	file:
 		parameters: [vendor, name, commit]
 		class: NetteAddons\Model\GitHub\File( @githubBlob , %vendor%, %name%, %commit% )

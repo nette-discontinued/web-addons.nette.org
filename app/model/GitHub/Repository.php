@@ -2,6 +2,8 @@
 
 namespace NetteAddons\Model\GitHub;
 
+use Nette\Utils\Strings;
+
 /**
  * @author	Patrik Votoček
  */
@@ -50,5 +52,21 @@ class Repository extends \Nette\Object
 			$branches[$branche->name] = $branche->commit->sha;
 		}
 		return $branches;
+	}
+
+	/**
+	 * @param ApiService
+	 * @param string
+	 * @throws \NetteAddons\InvalidArgumentException
+	 */
+	public static function createFromUrl(ApiService $service, $url)
+	{
+		if (!Strings::startsWith($url, 'http://github.com/') && Strings::startsWith($url, 'https://github.com/')) {
+			throw new \NetteAddons\InvalidArgumentException("Invalid github url");
+		}
+
+		$url = new \Nette\Http\Url($url);
+		list($vendor, $name) = explode('/', substr($url->getPath(), 1));
+		return new static($service, $vendor, $name);
 	}
 }
