@@ -83,6 +83,18 @@ abstract class Table extends Nette\Object
 
 
 	/**
+	 * @param int $id
+	 *
+	 * @return \Nette\Database\Table\ActiveRow
+	 */
+	public function find($id)
+	{
+		return $this->findOneBy(array('id' => $id));
+	}
+
+
+
+	/**
 	 * Updates user with values
 	 *
 	 * @param \Nette\Database\Table\ActiveRow $user

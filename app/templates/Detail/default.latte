@@ -3,15 +3,17 @@
 <table class="table table-bordered">
 	<tr>
 		<th>Name</th>
-		<th>Author</th>
-		<th>Tags</th>
+		<td>{$addon->name}</td>
 	</tr>
-	<tr n:foreach="$addons as $addon">
-		<td><a n:href="Detail: $addon->id">{$addon->name}</a></td>
+	<tr>
+		<th>Author</th>
 		<td>{$addon->user->name}</td>
+	</tr>
+	<tr>
+		<th>Tags</th>
 		<td>
 		{foreach $addon->related('addon_tag') as $addonTag}
-		<span class="label">{$addonTag->tag->name}</span>
+		<span class="label">{$addonTag->ref('tag')->name}</span>
 		{/foreach}
 		</td>
 	</tr>
