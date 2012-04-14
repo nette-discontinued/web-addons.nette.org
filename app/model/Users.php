@@ -9,7 +9,7 @@ use Nette\Security\Identity;
 
 
 /**
- * User model
+ * Users repository
  */
 class Users extends Table
 {

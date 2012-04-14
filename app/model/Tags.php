@@ -8,7 +8,7 @@ use Nette\Database\Table\ActiveRow;
 
 
 /**
- * @author Filip Procházka <filip.prochazka@kdyby.org>
+ * Tags repository
  */
 class Tags extends Table
 {

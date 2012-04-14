@@ -7,7 +7,7 @@ use Nette;
 
 
 /**
- * @author Filip Procházka <filip.prochazka@kdyby.org>
+ * Addon versions repository
  */
 class AddonVersions extends Table
 {

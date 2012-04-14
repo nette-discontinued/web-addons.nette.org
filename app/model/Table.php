@@ -9,6 +9,8 @@ use Nette\Database\Table\Selection;
 
 
 /**
+ * Represents repository for database table
+ *
  * @property \Nette\Database\Table\Selection $table
  */
 abstract class Table extends Nette\Object
