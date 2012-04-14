@@ -208,7 +208,7 @@ final class ManagePresenter extends BasePresenter
 		$importer = $this->getContext()->createRepositoryImporter($values->url);
 		$this->addon = $importer->import();
 		if (!isset($this->addon->repository)) {
-			$this->addon->repository = $values->url;
+			$this->addon->repository = \NetteAddons\Model\GitHub\Repository::normalizeUrl($values->url);
 		}
 		$this->storeAddon();
 
