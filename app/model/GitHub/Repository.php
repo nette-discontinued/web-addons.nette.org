@@ -129,7 +129,7 @@ class Repository extends \Nette\Object
 		foreach ($versions as $v => $hash) {
 			if (($data = $this->getComposerJson($hash)) && ($metadata = json_decode($data))) {
 				$version = new \NetteAddons\Model\AddonVersion;
-				$version->version = $v;
+				$version->version = Strings::startsWith($v, 'v') ? Strings::substring($v, 1) : $v;
 				$version->composerJson = json_decode($data, TRUE);
 
 				if (isset($metadata->require)) {
