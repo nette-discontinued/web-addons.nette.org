@@ -1,5 +1,7 @@
 <?php
 
+namespace NetteAddons;
+
 /**
  * Homepage presenter.
  *

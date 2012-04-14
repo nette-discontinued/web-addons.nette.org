@@ -1,5 +1,7 @@
 <?php
 
+namespace NetteAddons;
+
 use Nette\Diagnostics\Debugger,
 	Nette\Application as NA;
 

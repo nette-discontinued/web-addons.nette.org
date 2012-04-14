@@ -1,5 +1,7 @@
 <?php
 
+namespace NetteAddons;
+
 use Nette\Application\UI,
 	Nette\Security as NS;
 
