@@ -14,7 +14,7 @@ interface IAddonImporter
 	/**
 	 * Returns array of informations about addon.
 	 *
-	 * @return mixed
+	 * @return Addon
 	 */
 	function import();
 
