@@ -48,7 +48,13 @@
 						<li n:class="$presenter->name === 'Homepage' ? active"><a n:href="Homepage:">Home</a></li>
 						<li n:class="$presenter->name === 'List' ? active"><a n:href="List:">Browse all</a></li>
 					</ul>
-					<p class="navbar-text pull-right">Logged in as <a href="javascript:;">username</a></p>
+					<p class="navbar-text pull-right">
+						{if $user->isLoggedIn()}
+							Logged in as <a href="javascript:;">{$user->identity->name}</a> / <a n:href="Sign:out">Logout</a>
+						{else}
+							<a n:href="Sign:in">Login</a>
+						{/if}
+					</p>
 				</div><!--/.nav-collapse -->
 			</div>
 		</div>
