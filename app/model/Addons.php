@@ -19,6 +19,21 @@ class Addons extends Table
 
 
 
+	public function filterByTag(\Nette\Database\Table\Selection $addons, $tag)
+	{
+		$addonIds = array_values(
+			$this->database->table('addon_tag')
+			->where('tag_id = ?', $tag)->select('addon_id')
+			->fetchPairs('addon_id', 'addon_id')
+		);
+
+		$addons->where('id', $addonIds);
+
+		return $addons;
+	}
+
+
+
 	/**
 	 * @param int $id
 	 * @return Addon|boolean
