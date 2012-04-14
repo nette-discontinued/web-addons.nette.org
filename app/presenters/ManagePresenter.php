@@ -226,6 +226,7 @@ final class ManagePresenter extends BasePresenter
 	public function actionFinish()
 	{
 		if ($this->addon !== NULL) {
+			$this->addon->user = $this->getUser()->getIdentity();
 			$row = $this->updater->update($this->addon);
 			$this->removeStoredAddon();
 			$this->flashMessage('Addon sucessfuly saved.');
