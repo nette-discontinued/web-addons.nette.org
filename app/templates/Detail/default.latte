@@ -20,12 +20,6 @@
 					<h1>{$addon->name}</h1>
 
 					<p>{$addon->short_description}</p>
-				
-					<div class="author">
-
-						<span class="date">({$addon->updated_at|date:'%d.%m.%Y'})</span>
-						{$addon->user|userlink}
-					</div>
 
 					{*$addon->license*}
 				</div>
@@ -43,18 +37,33 @@
 		<div class="row">
 
 			<div class="span5">
-				Repository: <br>
-				<a href="{$addon->repository}">{$addon->repository}</a><br>
+				<div class="author">
+					<i class="icon-user"></i> {$addon->user|userlink}
+					<span class="date">(Last update: {$addon->updated_at|date:'%d.%m.%Y'})</span>
+				</div>
 
-				<br>
-				Current: {$addon->related('votes')->aggregation('SUM(vote)') ?: 0}<br>
 				
-				{if $user->isLoggedIn()}
-					Vote: <a class="btn btn-success btn-mini" n:href="vote! up">+1</a> / <a class="btn btn-danger btn-mini" n:href="vote! down">-1</a>
+				{if $addon->repository}
+					Repository: <br>
+					<a href="{$addon->repository}">{$addon->repository}</a><br>
+					<br>
 				{/if}
+				
 			</div>
 
 			<div class="span4">
+				<div class="box-vote">
+					
+					{if $user->isLoggedIn()}
+						<a class="btn btn-success btn-mini" n:href="vote! up">+1</a> 
+					{/if}	
+						<span class="votes">{$addon->related('votes')->aggregation('SUM(vote)') ?: 0}</span>
+					{if $user->isLoggedIn()}	
+						<a class="btn btn-danger btn-mini" n:href="vote! down">-1</a>
+					{/if}
+				</div>
+
+
 				<div class="box-tags">
 					<h3>Tags</h3>
 					{foreach $addon->related('addon_tag') as $addonTag}

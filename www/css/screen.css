@@ -6992,6 +6992,25 @@ a:hover .label {
 .addon-detail .vendor {
   color: #999999;
 }
+.author .date {
+  color: #999999;
+  font-size: 11px;
+}
+.box-vote {
+  padding-bottom: 15px;
+  text-align: center;
+}
+.box-vote .votes {
+  padding: 10px;
+  text-align: right;
+  font-size: 60px;
+}
 .box-versions {
   margin-top: 20px;
+}
+.downloads h4 {
+  padding-bottom: 5px;
+}
+.downloads h5 {
+  padding-top: 10px;
 }
