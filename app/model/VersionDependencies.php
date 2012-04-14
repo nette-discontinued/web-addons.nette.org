@@ -28,16 +28,18 @@ class VersionDependencies extends Table
 	{
 		foreach (array('require', 'suggest', 'provide', 'replace', 'conflict', 'recommend') as $type) {
 			foreach ($version->$type as $packageName => $versionName) {
-				list($vendorName, $packageName) = explode('/', $packageName, 2);
+				if (strpos($packageName, '/') !== FALSE){
+					list($vendorName, $packageName) = explode('/', $packageName, 2);
+					if ($dep = $this->findAddon($vendorName, $packageName)) {
+						$insert = array(
+							'dependency_id' => $dep->getPrimary()
+						);
+					}
+				}
 
-				if ($dep = $this->findAddon($vendorName, $packageName)) {
+				if (!isset($insert)) {
 					$insert = array(
-						'dependency_id' => $dep->getPrimary()
-					);
-
-				} else {
-					$insert = array(
-						'package_name' => $vendorName . '/' . $packageName
+						'package_name' => (isset($vendorName) ? $vendorName . '/' : NULL) . $packageName
 					);
 				}
 
