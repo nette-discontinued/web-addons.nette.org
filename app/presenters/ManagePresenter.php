@@ -3,6 +3,7 @@
 namespace NetteAddons;
 
 use NetteAddons\Model\Addon,
+	NetteAddons\Model\Addons,
 	NetteAddons\Model\AddonVersion,
 	NetteAddons\Model\AddonUpdater,
 	NetteAddons\Model\IAddonImporter;
@@ -19,6 +20,9 @@ final class ManagePresenter extends BasePresenter
 	/** @var AddonUpdater */
 	private $updater;
 
+	/** @var Addons */
+	private $addons;
+
 	/**
 	 * @var string
 	 * @persistent
@@ -30,9 +34,10 @@ final class ManagePresenter extends BasePresenter
 
 
 
-	public function setContext(AddonUpdater $updater, Session $session)
+	public function setContext(AddonUpdater $updater, Addons $addons, Session $session)
 	{
 		$this->updater = $updater;
+		$this->addons = $addons;
 		$this->session = $session->getSection('NetteAddons.ManagePresenter');
 	}
 
@@ -157,24 +162,29 @@ final class ManagePresenter extends BasePresenter
 			$this->addon->buildComposerName();
 		}
 
-		try {
-			$this->context->addonUpdater->update($this->addon);
-			$this->storeAddon();
-
-			$this->flashMessage('Addon created.');
-
+		if ($this->addons->findOneBy(array('composer_name' => $this->addon->composerName)) !== FALSE) {
+			$message = 'Addon with same composer package already exists. ';
 			if ($this->addon->repository) {
-				$this->redirect('versionImport');
+				$message .= 'Please specify another package to import.';
+				$this->flashMessage($message);
+				$this->redirect('add');
+			} else {
+				$message .= 'Please specify another addon name.';
+				$form->addError($message);
+				return;
+			}
+		}
 
-			} else {
-				$this->redirect('versionCreate');
-			}
-		} catch (\PDOException $e) {
-			if ($e->getCode() === 23000) {
-				$form->addError('Duplicate composer name.');
-			} else {
-				throw $e;
-			}
+		$this->updater->update($this->addon);
+		$this->storeAddon();
+
+		$this->flashMessage('Addon created.');
+
+		if ($this->addon->repository) {
+			$this->redirect('versionImport');
+
+		} else {
+			$this->redirect('versionCreate');
 		}
 	}
 
@@ -226,7 +236,7 @@ final class ManagePresenter extends BasePresenter
 		$version->version = $values->version;
 		$this->addon->versions[] = $version;
 		$this->storeAddon();
-		$this->context->addonUpdater->update($this->addon);
+		$this->updater->update($this->addon);
 
 		$this->flashMessage('Version created.');
 		$this->redirect('finish');
