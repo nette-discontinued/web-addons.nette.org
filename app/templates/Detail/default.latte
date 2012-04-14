@@ -48,7 +48,10 @@
 
 				<br>
 				Current: {$addon->related('votes')->aggregation('SUM(vote)') ?: 0}<br>
-				Vote: <a n:href="vote! up">+1</a> / <a n:href="vote! down">-1</a>
+				
+				{if $user->isLoggedIn()}
+					Vote: <a class="btn btn-success btn-mini" n:href="vote! up">+1</a> / <a class="btn btn-danger btn-mini" n:href="vote! down">-1</a>
+				{/if}
 			</div>
 
 			<div class="span4">
