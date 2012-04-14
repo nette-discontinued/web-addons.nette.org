@@ -3,7 +3,6 @@
 namespace NetteAddons\Model;
 
 use Nette\Object;
-use Nette\Database\Connection;
 use Nette\Database\Table\ActiveRow;
 use Nette\Security\Identity;
 
