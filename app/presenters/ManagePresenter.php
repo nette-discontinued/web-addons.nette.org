@@ -207,7 +207,9 @@ final class ManagePresenter extends BasePresenter
 		$values = $form->getValues();
 		$importer = $this->getContext()->createRepositoryImporter($values->url);
 		$this->addon = $importer->import();
-		$this->addon->repository = $values->url;
+		if (!isset($this->addon->repository)) {
+			$this->addon->repository = $values->url;
+		}
 		$this->storeAddon();
 
 		$this->addon->user = $this->getUser()->getIdentity();
