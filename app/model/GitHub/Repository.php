@@ -7,7 +7,7 @@ namespace NetteAddons\Model\GitHub;
  */
 class Repository extends \Nette\Object
 {
-	/** @var Service */
+	/** @var ApiService */
 	private $service;
 	/** @var string */
 	private $vendor;
@@ -15,9 +15,11 @@ class Repository extends \Nette\Object
 	private $name;
 
 	/**
-	 * @param Service
+	 * @param ApiService
+	 * @param string
+	 * @param string
 	 */
-	public function __construct(Service $service, $vendor, $name)
+	public function __construct(ApiService $service, $vendor, $name)
 	{
 		$this->service = $service;
 		$this->vendor = $vendor;

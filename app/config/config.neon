@@ -40,9 +40,9 @@ services:
 
 	# github
 	curl: NetteAddons\Curl( 50000 )
-	github: NetteAddons\Model\GitHub\Service( @curl, 'https://api.github.com' )
+	githubApi: NetteAddons\Model\GitHub\ApiService( @curl, 'https://api.github.com' )
 
 factories:
 	repository:
 		parameters: [vendor, name]
-		class: NetteAddons\Model\GitHub\Repository ( @github , %vendor%, %name% )
+		class: NetteAddons\Model\GitHub\Repository ( @githubApi , %vendor%, %name% )

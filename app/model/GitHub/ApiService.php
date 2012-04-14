@@ -5,7 +5,7 @@ namespace NetteAddons\Model\GitHub;
 /**
  * @author	Patrik Votoček
  */
-class Service extends \Nette\Object
+class ApiService extends \Nette\Object
 {
 	const METHOD_GET = 'GET';
 
