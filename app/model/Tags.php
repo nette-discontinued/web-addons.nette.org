@@ -64,7 +64,7 @@ class Tags extends Table
 	 */
 	protected function getAddonTags()
 	{
-		return $this->database->table('addon_tag');
+		return $this->connection->table('addon_tag');
 	}
 
 }
