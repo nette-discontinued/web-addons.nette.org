@@ -61,11 +61,15 @@ class AddonUpdater extends Nette\Object
 			'vendor_name' => $addon->vendorName,
 		);
 
+		if (!$addon->user instanceof Nette\Security\Identity) {
+			throw new \NetteAddons\InvalidArgumentException;
+		}
+
 		if (!$addonRow = $this->addons->findOneBy($package)) {
 			$addonRow = $this->addons->createRow($package + array(
 				'repository' => $addon->repository,
-				'description' => $addon->description,
-				'short_description' => $addon->shortDescription,
+				'description' => $addon->description ?: "",
+				'short_description' => $addon->shortDescription ? : "",
 				'updated_at' => new \Datetime('now'),
 				'user_id' => $addon->user->getId()
 			));
