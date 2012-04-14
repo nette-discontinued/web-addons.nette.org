@@ -61,7 +61,7 @@ class AddonUpdater extends Nette\Object
 				'name' => $addon->name,
 				'repository' => $addon->repository,
 				'description' => $addon->description,
-				'short_description' => $addon->short_description,
+				'short_description' => $addon->shortDescription,
 				'updated_at' => new \Datetime('now'),
 				'user_id' => $addon->user->getId()
 			));
