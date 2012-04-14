@@ -98,7 +98,14 @@ class Repository extends \Nette\Object
 	 */
 	public function getMainMetadata()
 	{
-		$repo = $this->service->exec("/repos/{$this->vendor}/{$this->name}");
+		try {
+			$repo = $this->service->exec("/repos/{$this->vendor}/{$this->name}");
+		} catch(\NetteAddons\InvalidStateException $e) {
+			if ($e->getCode() == 404) {
+				return NULL;
+			}
+			throw $e;
+		}
 		$branch = isset($repo->master_branch) ? $repo->master_branch : 'master';
 
 		$data = json_decode($this->getComposerJson($branch));
