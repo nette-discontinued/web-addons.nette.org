@@ -111,3 +111,17 @@ ADD UNIQUE `addon_id_version` (`addon_id`, `version`);
 -- dependecies of versions are unique
 ALTER TABLE `addon_dependency`
 ADD UNIQUE `addon_id_dependency_id_package_name_version` (`addon_id`, `dependency_id`, `package_name`, `version`);
+
+
+ALTER TABLE `addon`
+CHANGE `name` `name` varchar(100) COLLATE 'utf8_general_ci' NOT NULL COMMENT 'user friendly form' AFTER `id`,
+CHANGE `vendor_name` `composer_name` varchar(100) COLLATE 'utf8_general_ci' NOT NULL COMMENT 'vendor / package' AFTER `name`;
+
+ALTER TABLE `addon_version`
+ADD `license` varchar(100) COLLATE 'utf8_general_ci' NOT NULL COMMENT 'separed by comma' AFTER `version`;
+
+ALTER TABLE `addon`
+ADD `demo` varchar(500) COLLATE 'utf8_general_ci' NULL COMMENT 'url to demo' AFTER `description`;
+
+ALTER TABLE `addon`
+ADD UNIQUE (`composer_name`);
