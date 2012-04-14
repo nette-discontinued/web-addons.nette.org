@@ -22,7 +22,7 @@ CREATE TABLE `addon_dependency` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `addon_id` int(10) unsigned NOT NULL,
   `dependency_id` int(10) unsigned DEFAULT NULL,
-  `packageName` varchar(100) DEFAULT NULL,
+  `package_name` varchar(100) DEFAULT NULL,
   `version` varchar(20) NOT NULL,
   `type` enum('require','suggest','provide','replace','conflict','recommend') NOT NULL DEFAULT 'require',
   PRIMARY KEY (`id`),
@@ -72,4 +72,4 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- 2012-04-14 15:44:04
+-- 2012-04-14 15:45:59
