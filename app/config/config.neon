@@ -35,6 +35,7 @@ services:
     # tables
 	users: NetteAddons\Model\Users
 	addons: NetteAddons\Model\Addons
+	tags: NetteAddons\Model\Tags
 
 
 factories:
