@@ -1,6 +1,6 @@
 <?php
 
-namespace NetteAddons;
+namespace NetteAddons\Model;
 
 use Nette;
 
@@ -15,7 +15,7 @@ class Table extends Nette\Object
 	/**
 	 * @var \Nette\Database\Connection
 	 */
-	private $database;
+	protected $database;
 
 	/**
 	 * @var string
@@ -55,5 +55,20 @@ class Table extends Nette\Object
 	{
 		return $this->findBy($by)->limit(1)->fetch();
 	}
+
+
+
+	/**
+	 * Updates user with values
+	 *
+	 * @param \Nette\Database\Table\ActiveRow $user
+	 * @param array $values
+	 */
+	public function update(ActiveRow $user, array $values)
+	{
+		// todo validate values
+		$user->update($values);
+	}
+
 
 }

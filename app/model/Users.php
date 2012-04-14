@@ -1,6 +1,6 @@
 <?php
 
-namespace NetteAddons;
+namespace NetteAddons\Model;
 
 use Nette\Object;
 use Nette\Database\Connection;
@@ -12,7 +12,7 @@ use Nette\Security\Identity;
 /**
  * User model
  */
-class Users extends Object
+class Users extends Table
 {
 
 	/**
@@ -32,20 +32,6 @@ class Users extends Object
 		return $this->database->table('users')
 			->where('name = ? OR email = ?', $name, $name)
 			->fetch();
-	}
-
-
-
-	/**
-	 * Updates user with values
-	 *
-	 * @param \Nette\Database\Table\ActiveRow $user
-	 * @param array $values
-	 */
-	public function update(ActiveRow $user, array $values)
-	{
-		// todo validate values
-		$user->update($values);
 	}
 
 
