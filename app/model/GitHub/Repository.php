@@ -83,7 +83,7 @@ class Repository extends \Nette\Object
 		if ($data) {
 			$addon = new \NetteAddons\Model\Addon;
 			if (isset($data->name)) {
-				$addon->name = $data->name;
+				list($addon->vendorName, $addon->name) = explode('/', $data->name);
 			}
 			if (isset($data->description)) {
 				$addon->description = $data->description;
