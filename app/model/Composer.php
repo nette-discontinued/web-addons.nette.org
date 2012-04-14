@@ -3,12 +3,16 @@
 namespace NetteAddons\Model;
 
 /**
+ * Generating JSON for Composer API
+ *
  * @author Jan Marek
  */
 class Composer extends \Nette\Object
 {
 
 	/**
+	 * Generate packages.json data
+	 *
 	 * @param Addon[] $addons
 	 * @return array
 	 */
@@ -17,7 +21,7 @@ class Composer extends \Nette\Object
 		$packages = array();
 
 		foreach ($addons as $addon) {
-			$addonName = $this->getFullName($addon);
+			$addonName = $addon->composerName;
 
 			$versions = array();
 
@@ -39,6 +43,13 @@ class Composer extends \Nette\Object
 		);
 	}
 
+	/**
+	 * Generate composer.json data
+	 *
+	 * @param Addon $addon
+	 * @param AddonVersion $version
+	 * @return array
+	 */
 	public function createComposerJson(Addon $addon, AddonVersion $version)
 	{
 		// use default version
@@ -49,7 +60,7 @@ class Composer extends \Nette\Object
 		}
 
 		$data = array(
-			'name' => $this->getFullName($addon),
+			'name' => $addon->composerName,
 			'tags' => $addon->tags,
 			'description' => $addon->shortDescription,
 			'version' => $version->version,
@@ -62,11 +73,6 @@ class Composer extends \Nette\Object
 		}
 
 		return $data;
-	}
-
-	public function getFullName(Addon $addon)
-	{
-		return $addon->vendorName . '/' . $addon->name;
 	}
 
 }
