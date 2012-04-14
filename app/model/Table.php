@@ -11,7 +11,7 @@ use Nette\Database\Table\Selection;
 /**
  * @author Filip Procházka <filip.prochazka@kdyby.org>
  */
-class Table extends Nette\Object
+abstract class Table extends Nette\Object
 {
 
 	/**
