@@ -18,6 +18,16 @@ class Addon extends Nette\Object
 	public $name;
 
 	/**
+	 * @var string
+	 */
+	public $description;
+
+	/**
+	 * @var string
+	 */
+	public $repository;
+
+	/**
 	 * @var array|AddonVersion[]
 	 */
 	public $versions = array();
