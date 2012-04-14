@@ -31,6 +31,26 @@ class Addons extends Table
 
 
 	/**
+	 * @param \NetteAddons\Model\Addon $addon
+	 */
+	public function createAddon(Addon $addon)
+	{
+		throw new Nette\NotImplementedException;
+	}
+
+
+
+	/**
+	 * @param \NetteAddons\Model\Addon $addon
+	 */
+	public function updateAddon(Addon $addon)
+	{
+		throw new Nette\NotImplementedException;
+	}
+
+
+
+	/**
 	 * @param \Nette\Database\Table\ActiveRow $addon
 	 * @param string|\Nette\Database\Table\ActiveRow $tag
 	 */
