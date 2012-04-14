@@ -59,7 +59,7 @@ class Curl extends \Nette\Object
 
 		$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		if ($httpCode != 200) {
-			throw new \NetteAddons\InvalidStateException("Server returns $httpCode code");
+			throw new \NetteAddons\InvalidStateException("Server error", $httpCode);
 		}
 
 		curl_close($ch);
