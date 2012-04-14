@@ -3,14 +3,14 @@
 <h1>Addons</h1>
 
 <div class="row">
-	
+
 	<div class="span9">
 
 		{* Filter *}
 		<div class="well box-filter-addons">
 			<h3>Filter</h3>
 
-			
+
 		</div>
 
 		{* /Filter *}
@@ -26,15 +26,11 @@
 			</div>
 
 			<div class="span8">
-				<h2><a n:href="Detail: $addon->id">{$addon->name}</a></h2>
+				<h2>{$addon|addonlink}</h2>
 
-				<div class="author">
-					<a href="javascript:;">{$addon->user->name}</a>
-				</div>
-				
-				<div class="description">
-					{!$addon->description|truncate:250}
-				</div>
+				<div class="author">{$addon->user|userlink}</div>
+
+				<div class="description">{$addon->short_description}</div>
 
 				<div class="tags">
 					{foreach $addon->related('addon_tag') as $addonTag}
@@ -46,9 +42,9 @@
 					{/foreach}
 				</div>
 
-			</div>	
+			</div>
 
-		</div>		
+		</div>
 
 
 		<div class="pagination">
@@ -78,7 +74,7 @@
 				<li><a href="javascript:;" title="Forms">Forms</a></li>
 				<li><a href="javascript:;" title="Media">Media</a></li>
 				<li><a href="javascript:;" title="Utilities">Utilities</a></li>
-				
+
 			</ul><!-- /main-tags -->
 		</div>
 
@@ -97,7 +93,7 @@
 
 			<ul class="main-tags">
 				<li><a href="javascript:;" title="Plugin Authors">Plugin Authors</a></li>
-				
+
 			</ul><!-- /main-tags -->
 		</div>
 
