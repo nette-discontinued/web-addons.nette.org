@@ -20,9 +20,9 @@
 					<p>{$addon->short_description}</p>
 				
 					<div class="author">
-						
+
 						<span class="date">({$addon->updated_at|date:'%d.%m.%Y'})</span>
-						{$addon->user|userlink} 
+						{$addon->user|userlink}
 					</div>
 				</div>
 			</div>
@@ -49,17 +49,17 @@
 					{/foreach}
 				</div>
 			</div>
-			
+
 		</div>
 
 		<div class="box-versions">
 
 			<div class="row">
 				<div class="span9">
-					<h3>Versions</h3>						
+					<h3>Versions</h3>
 				</div>
 			</div>
-			
+
 			<div class="row downloads">
 				{foreach $addon->related('addon_version') as $version}
 					<div class="version span2">
@@ -81,19 +81,19 @@
 					</div>
 				{/foreach}
 
-			</div>				
+			</div>
 		</div>
 
 
 
-	
+
 		<div class="description">
 
 			{!$addon->description|texy}
 		</div>
 
 
-		
+
 	</div>
 	<div class="span3">
 
