@@ -4,6 +4,7 @@ namespace NetteAddons\Model;
 
 use Nette;
 use Nette\Database\Table\ActiveRow;
+use Nette\Database\Table\Selection;
 
 
 
@@ -20,12 +21,17 @@ class Addons extends Table
 
 
 
-	public function filterByTag(\Nette\Database\Table\Selection $addons, $tag)
+	/**
+	 * @param \Nette\Database\Table\Selection $addons
+	 * @param string $tag
+	 * @return \Nette\Database\Table\Selection
+	 */
+	public function filterByTag(Selection $addons, $tag)
 	{
 		$addonIds = array_values(
 			$this->database->table('addon_tag')
-			->where('tag_id = ?', $tag)->select('addon_id')
-			->fetchPairs('addon_id', 'addon_id')
+				->where('tag_id = ?', $tag)->select('addon_id')
+				->fetchPairs('addon_id', 'addon_id')
 		);
 
 		$addons->where('id', $addonIds);
