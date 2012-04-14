@@ -16,7 +16,7 @@ class AddAddonForm extends BaseForm
 		$this->addTextArea('description', 'Description', 80, 20)
 			->setAttribute('class', 'span6');
 
-		$this->addText('demo', 'Repository URL:', 60, 500)
+		$this->addText('demo', 'Demo URL:', 60, 500)
 			->setAttribute('class', 'span6');
 
 		$this->addSubmit('create', 'Create');
