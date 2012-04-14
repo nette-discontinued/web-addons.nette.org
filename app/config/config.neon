@@ -36,6 +36,8 @@ common:
 
 		authenticator: Authenticator( @database::table(users) )
 
+		nette.presenterFactory: NetteAddons\PresenterFactory(@container, %appDir%)
+
 
 	factories:
 
