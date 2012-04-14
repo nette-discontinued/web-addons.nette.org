@@ -56,10 +56,13 @@ class AddonUpdater extends Nette\Object
 	 */
 	public function update(Addon $addon)
 	{
-		if (!$addonRow = $this->addons->findOneBy(array('name' => $addon->name))) {
-			$addonRow = $this->addons->createRow(array(
-				'name' => $addon->name,
-				'vendor_name' => $addon->vendorName,
+		$package = array(
+			'name' => $addon->name,
+			'vendor_name' => $addon->vendorName,
+		);
+
+		if (!$addonRow = $this->addons->findOneBy($package)) {
+			$addonRow = $this->addons->createRow($package + array(
 				'repository' => $addon->repository,
 				'description' => $addon->description,
 				'short_description' => $addon->shortDescription,
