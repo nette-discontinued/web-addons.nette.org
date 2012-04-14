@@ -12,7 +12,7 @@ interface IAddonImporter
 {
 
 	/**
-	 * Returns array of informations about addon.
+	 * Returns informations about Addon.
 	 *
 	 * @return Addon
 	 */
