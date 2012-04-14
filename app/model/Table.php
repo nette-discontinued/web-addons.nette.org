@@ -88,8 +88,13 @@ abstract class Table extends Nette\Object
 	 */
 	public function update(ActiveRow $user, array $values)
 	{
-		// todo validate values
-		$user->update($values);
+		try {
+			$user->update($values);
+			return TRUE;
+
+		} catch (\PDOException $e) {
+			return FALSE;
+		}
 	}
 
 
@@ -133,7 +138,12 @@ abstract class Table extends Nette\Object
 	 */
 	public function createRow(array $values)
 	{
-		return $this->getTable()->insert($values);
+		try {
+			return $this->getTable()->insert($values);
+
+		} catch (\PDOException $e) {
+			return FALSE;
+		}
 	}
 
 }

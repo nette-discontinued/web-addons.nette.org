@@ -44,12 +44,7 @@ class Users extends Table
 	 */
 	public function register(array $values)
 	{
-		try {
-			return $this->createRow($values);
-
-		} catch (\PDOException $e) {
-			return FALSE;
-		}
+		return $this->createRow($values);
 	}
 
 
