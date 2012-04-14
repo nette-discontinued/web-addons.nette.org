@@ -26,7 +26,7 @@ nette:
 
 
 services:
-	database: @Nette\Database\Connection
+	databaseConnection: @Nette\Database\Connection
 	nette.presenterFactory: NetteAddons\PresenterFactory(%appDir%, @container)
 	templateFactory: NetteAddons\TemplateFactory
 
