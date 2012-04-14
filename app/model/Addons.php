@@ -15,7 +15,7 @@ class Addons extends Table
 	/**
 	 * @var string
 	 */
-	protected $tableName = 'addons';
+	protected $tableName = 'addon';
 
 
 
@@ -83,7 +83,7 @@ class Addons extends Table
 	 */
 	public function getAddonDependencies(ActiveRow $addon)
 	{
-		return $addon->related('addon_dependencies');
+		return $addon->related('addon_dependency');
 	}
 
 
@@ -93,7 +93,7 @@ class Addons extends Table
 	 */
 	protected function getTagsTable()
 	{
-		return $this->database->table('addon_tags');
+		return $this->database->table('addon_tag');
 	}
 
 }

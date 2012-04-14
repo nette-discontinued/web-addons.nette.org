@@ -13,11 +13,11 @@ class ListPresenter extends BasePresenter
 		$addons = $this->context->addons->findAll();
 
 		if ($tag) {
-			$addons->where('tag = ?', $tag);
+			$addons->where('addon_tag = ?', $tag);
 		}
 
 		if ($author) {
-			$addons->where('author = ?', $author);
+			$addons->where('user = ?', $author);
 		}
 
 		if ($search) {

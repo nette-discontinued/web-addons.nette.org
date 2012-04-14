@@ -17,7 +17,7 @@ class Users extends Table
 	/**
 	 * @var string
 	 */
-	protected $tableName = 'users';
+	protected $tableName = 'user';
 
 
 

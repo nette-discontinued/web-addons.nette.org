@@ -8,10 +8,10 @@
 	</tr>
 	<tr n:foreach="$addons as $addon">
 		<td>{$addon->name}</td>
-		<td>{$addon->related('user')->name}</td>
+		<td>{$addon->user->name}</td>
 		<td>
-		{foreach $addon->related('addon_tags') as $addonTag}
-		<span class="label">{$addonTag->ref('tags')->name}</span>
+		{foreach $addon->related('addon_tag') as $addonTag}
+		<span class="label">{$addonTag->tag->name}</span>
 		{/foreach}
 		</td>
 	</tr>
