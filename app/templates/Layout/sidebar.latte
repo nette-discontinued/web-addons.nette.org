@@ -3,32 +3,29 @@
 </div>
 
 <div class="well">
-	<h3>Browser (<a n:href="List:">All</a>)</h3>
+		<h3>Browser (<a n:href="List:">All</a>)</h3>
 
-	<ul class="main-tags">
-		<li><a href="javascript:;" title="UI">UI</a></li>
-		<li><a href="javascript:;" title="Forms">Forms</a></li>
-		<li><a href="javascript:;" title="Media">Media</a></li>
-		<li><a href="javascript:;" title="Utilities">Utilities</a></li>
+		<ul class="main-tags">
+			<li n:foreach="$categories as $category">
+				<a n:href="List: tag => $category->id">{$category->name}</a>
+			</li>
+		</ul>
+	</div>
 
-	</ul><!-- /main-tags -->
-</div>
+	<div class="well">
+		<h3>Resources</h3>
 
-<div class="well">
-	<h3>Resources</h3>
+		<ul class="main-tags">
+			<li><a href="javascript:;">How to Add a Plugin</a></li>
+			<li><a href="javascript:;">Plugin Writing Guidelines</a></li>
+			<li><a href="javascript:;">Send Feedback</a></li>
+		</ul>
+	</div>
 
-	<ul class="main-tags">
-		<li><a href="javascript:;">How to Add a Plugin</a></li>
-		<li><a href="javascript:;">Plugin Writing Guidelines</a></li>
-		<li><a href="javascript:;">Send Feedback</a></li>
-	</ul><!-- /main-tags -->
-</div>
+	<div class="well">
+		<h3>People</h3>
 
-<div class="well">
-	<h3>People</h3>
-
-	<ul class="main-tags">
-		<li><a href="javascript:;" title="Plugin Authors">Plugin Authors</a></li>
-
-	</ul><!-- /main-tags -->
-</div>
+		<ul class="main-tags">
+			<li><a n:href="People:" title="Plugin Authors">Plugin Authors</a></li>
+		</ul>
+	</div>
