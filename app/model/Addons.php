@@ -52,11 +52,14 @@ class Addons extends Table
 
 	/**
 	 * @param int $id
-	 * @return Addon
+	 * @return Addon|boolean
 	 */
 	public function get($id)
 	{
-		$row = $this->getTable()->get($id);
+		if (!$row = $this->getTable()->get($id)) {
+			return FALSE;
+		}
+
 		$addon = new Addon();
 		$addon->name = $row->name;
 		foreach ($row->related('addon_version') as $versionRow) {
