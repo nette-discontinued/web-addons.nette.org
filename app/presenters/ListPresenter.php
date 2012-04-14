@@ -22,11 +22,35 @@ class ListPresenter extends BasePresenter
 		}
 
 		if ($search) {
-			// todo
+			$addonRepository->filterByString($addons, $search);
 		}
 
 		$this->template->addons = $addons;
-		
+	}
+
+
+	protected function createComponentFilterForm()
+	{
+		$form = new FilterForm($this->context->tags);
+		$form->onSuccess[] = array($this, 'filterFormSubmitted');
+		$form->setDefaults(array(
+			'search' => $this->getParameter('search'),
+			'tag' => $this->getParameter('tag'),
+		));
+
+		return $form;
+	}
+
+
+
+	public function filterFormSubmitted(FilterForm $form)
+	{
+		$values = $form->getValues();
+
+		$this->redirect('default', array(
+			'search' => $values->search,
+			'tag' => $values->tag,
+		));
 	}
 
 }

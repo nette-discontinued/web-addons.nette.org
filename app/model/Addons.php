@@ -38,6 +38,14 @@ class Addons extends Table
 
 
 
+	public function filterByString(Selection $addons, $string)
+	{
+		$string = "%$string%";
+		$addons->where('name LIKE ? OR short_description LIKE ?', $string, $string);
+	}
+
+
+
 	/**
 	 * @param \Nette\Database\Table\ActiveRow $addonVersion
 	 * @return \Nette\Database\Table\GroupedSelection

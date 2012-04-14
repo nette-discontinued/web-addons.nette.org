@@ -6,33 +6,12 @@
 
 	<div class="span9">
 
-		{* Filter *}
 		<div class="well box-filter-addons">
 			<h3>Filter</h3>
-			<form class="form-horizontal">
-
-				<input type="search" name="search" value="" placeholder="search">
-
-				<select name="category">
-					<option value="--">Select Primary Category</option>
-					
-					<option value="ui">UI</option>
-					<option value="form">From</option>
-					<option value="visual">Visual</option>
-				</select>
-
-				<input type="submit" name="action-search" value="Search" />
-
-			</form>
+			{control filterForm}
 		</div>
 
-		{* /Filter *}
-
-
-
 		{* List *}
-
-
 		<div class="row addon-list-item" n:foreach="$addons as $addon">
 			<div class="icon span1">
 				<img src="{$basePath}/images/addon/default-ico.png" width="64" heigth="64" alt="Addon ico" />
