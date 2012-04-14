@@ -4,7 +4,6 @@
 
 	<div class="span9">
 
-
 		<div class="hero-unit addon-detail">
 			<div class="row">
 				<div class="icon span1">
@@ -25,78 +24,61 @@
 			<p class="addon-download"><a class="btn btn-primary btn-large"><i class="icon-download icon-white"></i> Download</a></p>
 		</div>
 
-
-		
-
-		
-
-		
-
 		<div class="row">
 
 			<div class="span5">
+				Repository: <br>
+				<a href="{$addon->repository}">{$addon->repository}</a><br>
 
+				<br>
 				Current: {$addon->related('votes')->aggregation('SUM(vote)') ?: 0}<br>
 				Vote: <a n:href="vote! up">+1</a> / <a n:href="vote! down">-1</a>
-				
 			</div>
 
 			<div class="span4">
-				{foreach $addon->related('addon_tag') as $addonTag}
-					<span class="label">{$addonTag->ref('tag')->name}</span>
-				{/foreach}
+				<div class="box-tags">
+					<h3>Tags</h3>
+					{foreach $addon->related('addon_tag') as $addonTag}
+						<span class="label">{$addonTag->ref('tag')->name}</span>
+					{/foreach}
+				</div>
 			</div>
 			
 		</div>
 
+		<div class="box-versions">
 
-
-<table class="table table-bordered">
-	
-	<tr n:if="$addon->repository">
-		<th>Repository</th>
-		<td><a href="{$addon->repository}">{$addon->repository}</a></td>
-	</tr>
-	<tr>
-		<th>Tags</th>
-		<td>
-		{foreach $addon->related('addon_tag') as $addonTag}
-		<span class="label">{$addonTag->ref('tag')->name}</span>
-		{/foreach}
-		</td>
-	</tr>
-	<tr>
-		<th>Votes</th>
-		<td>
-			Current: {$addon->related('votes')->aggregation('SUM(vote)') ?: 0}<br>
-			Vote: <a n:href="vote! up">+1</a> / <a n:href="vote! down">-1</a>
-		</td>
-	</tr>
-	<tr>
-		<th>Version</th>
-		<td>
-			{foreach $addon->related('addon_version') as $version}
-				<div>
-					<h2>{$version->version}</h2>
-					<button class="btn">Download</button><br>
-					<h3>Dependencies</h3>
-					<ul>
-						{foreach $version->related('addon_dependency') as $dep}
-							<li>
-								{if $dep->dependency_id}
-									{$dep->dependency->name}
-								{else}
-									{$dep->package_name}
-								{/if}
-								| {$dep->version}
-							</li>
-						{/foreach}
-					</ul>
+			<div class="row">
+				<div class="span9">
+					<h3>Versions</h3>						
 				</div>
-			{/foreach}
-		</td>
-	</tr>
-</table>
+			</div>
+			
+			<div class="row downloads">
+				{foreach $addon->related('addon_version') as $version}
+					<div class="version span2">
+						<h4>{$version->version}</h4>
+						<button class="btn">Download</button><br>
+						<h5>Dependencies</h5>
+						<ul>
+							{foreach $version->related('addon_dependency') as $dep}
+								<li class="small">
+									{if $dep->dependency_id}
+										{$dep->dependency->name}
+									{else}
+										{$dep->package_name}
+									{/if}
+									| {$dep->version}
+								</li>
+							{/foreach}
+						</ul>
+					</div>
+				{/foreach}
+
+			</div>				
+		</div>
+
+
 
 	
 		<div class="description">
