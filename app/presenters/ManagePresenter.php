@@ -97,6 +97,13 @@ final class ManagePresenter extends BasePresenter
 	}
 
 
+	protected function removeStoredAddon()
+	{
+		$this->addon = NULL;
+		unset($this->session[$this->getSessionKey()]);
+	}
+
+
 
 
 	/*************** Addon creation ****************/
@@ -219,9 +226,10 @@ final class ManagePresenter extends BasePresenter
 	public function actionFinish()
 	{
 		if ($this->addon !== NULL) {
-			$id = $this->updater->update($this->addon);
+			$row = $this->updater->update($this->addon);
+			$this->removeStoredAddon();
 			$this->flashMessage('Addon sucessfuly saved.');
-			$this->redirect('Detail:', $id);
+			$this->redirect('Detail:', $row->id);
 		} else {
 			$this->redirect('create');
 		}
