@@ -14,6 +14,6 @@ class Addons extends Table
 	/**
 	 * @var string
 	 */
-	protected $table = 'addons';
+	protected $tableName = 'addons';
 
 }

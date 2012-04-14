@@ -17,7 +17,7 @@ class Users extends Table
 	/**
 	 * @var string
 	 */
-	protected $table = 'users';
+	protected $tableName = 'users';
 
 
 
@@ -28,7 +28,7 @@ class Users extends Table
 	 */
 	public function findOneByName($name)
 	{
-		return $this->database->table('users')
+		return $this->getTable()
 			->where('name = ? OR email = ?', $name, $name)
 			->fetch();
 	}
@@ -45,7 +45,7 @@ class Users extends Table
 	public function register(array $values)
 	{
 		try {
-			return $this->database->table('users')->insert($values);
+			return $this->createRow($values);
 
 		} catch (\PDOException $e) {
 			return FALSE;

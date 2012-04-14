@@ -4,6 +4,7 @@ namespace NetteAddons\Model;
 
 use Nette;
 use Nette\Database\Table\ActiveRow;
+use Nette\Database\Table\Selection;
 
 
 
@@ -21,7 +22,7 @@ class Table extends Nette\Object
 	/**
 	 * @var string
 	 */
-	protected $table;
+	protected $tableName;
 
 
 
@@ -36,13 +37,23 @@ class Table extends Nette\Object
 
 
 	/**
+	 * @return \Nette\Database\Table\Selection
+	 */
+	public function getTable()
+	{
+		return $this->database->table($this->tableName);
+	}
+
+
+
+	/**
 	 * @param array $by
 	 *
 	 * @return \Nette\Database\Table\Selection
 	 */
 	public function findBy(array $by)
 	{
-		return $this->database->table($this->table)->where($by);
+		return $this->getTable()->where($by);
 	}
 
 
@@ -71,5 +82,48 @@ class Table extends Nette\Object
 		$user->update($values);
 	}
 
+
+
+	/**
+	 * @param \Nette\Database\Table\ActiveRow|\Nette\Database\Table\Selection $selection
+	 * @throws \Nette\InvalidArgumentException
+	 * @return boolean
+	 */
+	public function remove($selection)
+	{
+		try {
+			if ($selection instanceof Selection) {
+				if ($selection->getName() !== $this->tableName) {
+					throw new Nette\InvalidArgumentException;
+				}
+
+				/** @var Selection $selection */
+				$selection->delete();
+
+			} elseif ($selection instanceof ActiveRow) {
+				/** @var ActiveRow $selection */
+				$selection->delete();
+
+			} else {
+				throw new Nette\InvalidArgumentException;
+			}
+
+			return TRUE;
+
+		} catch (\PDOException $e) {
+			return FALSE;
+		}
+	}
+
+
+
+	/**
+	 * @param array $values
+	 * @return \Nette\Database\Table\ActiveRow
+	 */
+	public function createRow(array $values)
+	{
+		return $this->getTable()->insert($values);
+	}
 
 }
