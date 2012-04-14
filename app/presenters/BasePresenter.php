@@ -10,4 +10,9 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 		return $this->context->templateFactory->createTemplate(NULL, $this);
 	}
 
+	protected function beforeRender()
+	{
+		$this->template->categories = $this->context->tags->findMainTags();
+	}
+
 }
