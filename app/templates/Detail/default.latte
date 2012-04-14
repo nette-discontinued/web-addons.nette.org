@@ -15,7 +15,7 @@
 				</div>
 
 				<div class="span6">
-					
+
 					<h4 class="vendor">{$addon->composer_name}</h4>
 					<h1>{$addon->name}</h1>
 
@@ -31,7 +31,7 @@
 				{/if}
 				<a class="btn btn-primary btn-large" href="javascript:;"><i class="icon-download icon-white"></i> Download</a>
 			</p>
-			
+
 		</div>
 
 		<div class="row">
@@ -42,25 +42,20 @@
 					<span class="date">(Last update: {$addon->updated_at|date:'%d.%m.%Y'})</span>
 				</div>
 
-				
+
 				{if $addon->repository}
 					Repository: <br>
 					<a href="{$addon->repository}">{$addon->repository}</a><br>
 					<br>
 				{/if}
-				
+
 			</div>
 
 			<div class="span4">
 				<div class="box-vote">
-					
-					{if $user->isLoggedIn()}
-						<a class="btn btn-success btn-mini" n:href="vote! up">+1</a> 
-					{/if}	
-						<span class="votes">{$addon->related('votes')->aggregation('SUM(vote)') ?: 0}</span>
-					{if $user->isLoggedIn()}	
-						<a class="btn btn-danger btn-mini" n:href="vote! down">-1</a>
-					{/if}
+					<a n:if="$user->loggedIn" class="btn btn-success btn-mini" n:href="vote! up">+1</a>
+					<span class="votes">{$addon->related('votes')->aggregation('SUM(vote)') ?: 0}</span>
+					<a n:if="$user->loggedIn" class="btn btn-danger btn-mini" n:href="vote! down">-1</a>
 				</div>
 
 
