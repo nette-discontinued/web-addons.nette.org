@@ -38,7 +38,7 @@ class Authenticator extends Object implements NS\IAuthenticator
 	public function authenticate(array $credentials)
 	{
 		list($username, $password) = $credentials;
-		$user = $this->users->findByName($username);
+		$user = $this->users->findOneByName($username);
 
 		if (!$user) {
 			throw new NS\AuthenticationException("User '$username' not found.", self::IDENTITY_NOT_FOUND);
