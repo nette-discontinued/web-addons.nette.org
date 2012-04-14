@@ -51,6 +51,25 @@ class Addons extends Table
 
 
 	/**
+	 * @param int $id
+	 * @return Addon
+	 */
+	public function get($id)
+	{
+		$row = $this->getTable()->get($id);
+		$addon = new Addon();
+		$addon->name = $row->name;
+		foreach ($row->related('addon_version') as $versionRow) {
+			$addon->versions[] = $version = new AddonVersion();
+			$version->version = $versionRow->version;
+		}
+
+		return $addon;
+	}
+
+
+
+	/**
 	 * @param \Nette\Database\Table\ActiveRow $addon
 	 * @param string|\Nette\Database\Table\ActiveRow $tag
 	 */
