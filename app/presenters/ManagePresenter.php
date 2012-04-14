@@ -42,6 +42,11 @@ final class ManagePresenter extends BasePresenter
 	{
 		parent::startup();
 
+		if (!$this->user->isLoggedIn()) {
+			$this->flashMessage('Nejprve se prosím registrujte nebo přihlašte.');
+			$this->redirect('Homepage:');
+		}
+
 		$this->restoreAddon();
 		bd($this->addon);
 	}
