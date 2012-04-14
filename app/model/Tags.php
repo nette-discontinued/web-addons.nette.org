@@ -78,3 +78,4 @@ class Tags extends Table
 	}
 
 }
+

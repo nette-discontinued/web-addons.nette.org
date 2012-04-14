@@ -159,3 +159,4 @@ abstract class Table extends Nette\Object
 	}
 
 }
+
