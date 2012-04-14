@@ -9,7 +9,7 @@ use Nette\Database\Table\Selection;
 
 
 /**
- * @author Filip Procházka <filip.prochazka@kdyby.org>
+ * @property \Nette\Database\Table\Selection $table
  */
 abstract class Table extends Nette\Object
 {
