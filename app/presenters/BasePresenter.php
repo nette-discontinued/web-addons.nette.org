@@ -13,6 +13,7 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 	protected function beforeRender()
 	{
 		$this->template->categories = $this->context->tags->findMainTags();
+		$this->template->tags = $this->context->tags; // pro praci s tagama
 	}
 
 }
