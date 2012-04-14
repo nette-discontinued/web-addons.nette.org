@@ -3,11 +3,11 @@
 </div>
 
 <div class="well">
-	<h3>Browser (<a n:href="List:">All</a>)</h3>
+	<h3>Category (<a n:href="List:">All</a>)</h3>
 
 	<ul class="main-tags">
 		<li n:foreach="$categories as $category">
-			<a n:href="List: tag => $category->slug">{$category->name}</a>
+			<a n:href="List: tag => $category->id">{$category->name}</a>
 		</li>
 	</ul>
 </div>
