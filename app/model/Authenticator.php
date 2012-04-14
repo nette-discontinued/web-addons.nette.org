@@ -54,14 +54,14 @@ class Authenticator extends Object implements NS\IAuthenticator
 
 
 	/**
-	 * Computes salted password hash.
+	 * Computes password hash.
 	 *
 	 * @param  string
 	 * @return string
 	 */
 	public function calculateHash($password)
 	{
-		return md5($password . str_repeat('*enter any random salt here*', 10));
+		return sha1($password);
 	}
 
 }
