@@ -32,11 +32,24 @@ class Users extends Object
 
 	/**
 	 * @param array $by
-	 * @return \Nette\Database\Table\ActiveRow
+	 *
+	 * @return \Nette\Database\Table\Selection
 	 */
 	public function findBy(array $by)
 	{
-		return $this->database->table('users')->where($by)->fetch();
+		return $this->database->table('users')->where($by);
+	}
+
+
+
+	/**
+	 * @param array $by
+	 *
+	 * @return \Nette\Database\Table\ActiveRow
+	 */
+	public function findOneBy(array $by)
+	{
+		return $this->findBy($by)->limit(1)->fetch();
 	}
 
 
@@ -46,7 +59,7 @@ class Users extends Object
 	 *
 	 * @return \Nette\Database\Table\ActiveRow
 	 */
-	public function findByName($name)
+	public function findOneByName($name)
 	{
 		return $this->database->table('users')
 			->where('name = ? OR email = ?', $name, $name)
