@@ -1,6 +1,6 @@
 <?php
 
-namespace NetteAddons\GitHub;
+namespace NetteAddons\Model\GitHub;
 
 class Service extends \Nette\Object
 {
