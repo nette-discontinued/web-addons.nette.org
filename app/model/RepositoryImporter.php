@@ -19,9 +19,9 @@ class RepositoryImporter extends Nette\Object implements IAddonImporter
 	 * @param callable
 	 * @param string
 	 */
-	public function __construct($repostiryFactory, $url)
+	public function __construct($repositoryFactory, $url)
 	{
-		$this->loader = callback($this->repostiryFactory)->invoke($url);
+		$this->loader = callback($repositoryFactory)->invoke($url);
 	}
 
 	/**
