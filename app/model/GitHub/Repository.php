@@ -102,10 +102,11 @@ class Repository extends \Nette\Object
 	{
 		$versions = array_merge($this->getBranches(), $this->getTags());
 		$metadatas = array();
-		foreach ($versions as $version => $hash) {
-			if ($data = $this->getComposerJson($hash)) {
+		foreach ($versions as $v => $hash) {
+			if (($data = $this->getComposerJson($hash)) && ($metadata = json_decode($data))) {
 				$version = new \NetteAddons\Model\AddonVersion;
-				$version->version = $version;
+				$version->version = $v;
+				$version->composerJson = json_decode($data, TRUE);
 
 				// @todo more metadata
 
