@@ -38,7 +38,7 @@ final class ManagePresenter extends BasePresenter
 
 
 
-	public function startup()
+	protected function startup()
 	{
 		parent::startup();
 
