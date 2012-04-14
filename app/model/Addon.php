@@ -20,6 +20,11 @@ class Addon extends Nette\Object
 	/**
 	 * @var string
 	 */
+	public $vendorName;
+
+	/**
+	 * @var string
+	 */
 	public $shortDescription;
 
 	/**
