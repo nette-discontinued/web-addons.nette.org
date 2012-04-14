@@ -29,8 +29,7 @@ class VersionDependencies extends Table
 		foreach (array('require', 'suggest', 'provide', 'replace', 'conflict', 'recommend') as $type) {
 			foreach ($version->$type as $packageName => $versionName) {
 				if (strpos($packageName, '/') !== FALSE){
-					list($vendorName, $packageName) = explode('/', $packageName, 2);
-					if ($dep = $this->findAddon($vendorName, $packageName)) {
+					if ($dep = $this->findAddon($packageName)) {
 						$insert = array(
 							'dependency_id' => $dep->getPrimary()
 						);
@@ -39,7 +38,7 @@ class VersionDependencies extends Table
 
 				if (!isset($insert)) {
 					$insert = array(
-						'package_name' => (isset($vendorName) ? $vendorName . '/' : NULL) . $packageName
+						'package_name' => $packageName
 					);
 				}
 
