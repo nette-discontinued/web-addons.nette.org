@@ -9,8 +9,21 @@
 		{* Filter *}
 		<div class="well box-filter-addons">
 			<h3>Filter</h3>
+			<form class="form-horizontal">
 
+				<input type="search" name="search" value="" placeholder="search">
 
+				<select name="category">
+					<option value="--">Select Primary Category</option>
+					
+					<option value="ui">UI</option>
+					<option value="form">From</option>
+					<option value="visual">Visual</option>
+				</select>
+
+				<input type="submit" name="action-search" value="Search" />
+
+			</form>
 		</div>
 
 		{* /Filter *}
@@ -35,9 +48,9 @@
 				<div class="tags">
 					{foreach $addon->related('addon_tag') as $addonTag}
 						{if $tags->isCategory($addonTag->tag) }
-							<a href="javascript:;" class="label label-info">{$addonTag->tag->name}</a>
+							<a n:href="List: tag => $addonTag->tag->slug" class="label label-info">{$addonTag->tag->name}</a>
 						{else}
-							<a href="javascript:;" class="label">{$addonTag->tag->name}</a>
+							<a n:href="List: tag => $addonTag->tag->slug" class="label">{$addonTag->tag->name}</a>
 						{/if}
 					{/foreach}
 				</div>
@@ -62,40 +75,7 @@
 	</div>
 	<div class="span3">
 
-		<div class="well box-create-addon">
-			<a href="javascript:;" class="btn btn-large btn-success">Create New Addon</a>
-		</div>
-
-		<div class="well">
-			<h3>Browser (<a n:href="List:">All</a>)</h3>
-
-			<ul class="main-tags">
-				<li><a href="javascript:;" title="UI">UI</a></li>
-				<li><a href="javascript:;" title="Forms">Forms</a></li>
-				<li><a href="javascript:;" title="Media">Media</a></li>
-				<li><a href="javascript:;" title="Utilities">Utilities</a></li>
-
-			</ul><!-- /main-tags -->
-		</div>
-
-		<div class="well">
-			<h3>Resources</h3>
-
-			<ul class="main-tags">
-				<li><a href="javascript:;">How to Add a Plugin</a></li>
-				<li><a href="javascript:;">Plugin Writing Guidelines</a></li>
-				<li><a href="javascript:;">Send Feedback</a></li>
-			</ul><!-- /main-tags -->
-		</div>
-
-		<div class="well">
-			<h3>People</h3>
-
-			<ul class="main-tags">
-				<li><a href="javascript:;" title="Plugin Authors">Plugin Authors</a></li>
-
-			</ul><!-- /main-tags -->
-		</div>
+		{include '../Layout/sidebar.latte'}
 
 	</div>
 
