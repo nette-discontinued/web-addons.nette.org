@@ -43,7 +43,7 @@ class Addon extends Nette\Object
 	public $repository;
 
 	/**
-	 * @var URL to addon demo.
+	 * @var string URL to addon demo.
 	 */
 	public $demo;
 
