@@ -60,7 +60,7 @@ INSERT INTO `tag` (`id`, `name`, `slug`, `level`, `visible`) VALUES
 (7,	'Rozšíření a nástroje',	'rozsireni-a-nastroje',	1,	1),
 (8,	'Panely pro DebugBar',	'panely-pro-debugbar',	1,	1),
 (9,	'Datagridy',	'datagridy',	2,	1),
-(10,	'JavaScrip',	'javascript',	9,	1),
+(10,	'JavaScript',	'javascript',	9,	1),
 (11,	'CSS',	'css',	9,	1);
 
 INSERT INTO `user` (`id`, `name`, `password`, `email`) VALUES
