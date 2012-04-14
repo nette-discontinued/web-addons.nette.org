@@ -17,14 +17,35 @@ class AddonUpdater extends Nette\Object
 	 */
 	private $addons;
 
+	/**
+	 * @var Tags
+	 */
+	private $tags;
+
+	/**
+	 * @var AddonVersions
+	 */
+	private $versions;
+
+	/**
+	 * @var VersionDependencies
+	 */
+	private $dependencies;
+
 
 
 	/**
 	 * @param \NetteAddons\Model\Addons $addons
+	 * @param \NetteAddons\Model\Tags $tags
+	 * @param \NetteAddons\Model\AddonVersions $versions
+	 * @param \NetteAddons\Model\VersionDependencies $dependencies
 	 */
-	public function __construct(Addons $addons)
+	public function __construct(Addons $addons, Tags $tags, AddonVersions $versions, VersionDependencies $dependencies)
 	{
 		$this->addons = $addons;
+		$this->tags = $tags;
+		$this->versions = $versions;
+		$this->dependencies = $dependencies;
 	}
 
 

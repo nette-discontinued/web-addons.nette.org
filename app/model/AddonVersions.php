@@ -9,7 +9,7 @@ use Nette;
 /**
  * @author Filip Procházka <filip.prochazka@kdyby.org>
  */
-class Dependencies extends Table
+class AddonVersions extends Table
 {
 
 	/**
