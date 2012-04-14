@@ -150,6 +150,7 @@ final class ManagePresenter extends BasePresenter
 		$this->addon->name = $values->name;
 		$this->addon->shortDescription = $values->shortDescription;
 		$this->addon->description = $values->description;
+		$this->addon->demo = $values->demo;
 
 		$this->addon->user = $this->getUser()->getIdentity();
 		$this->context->addonUpdater->update($this->addon);
