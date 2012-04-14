@@ -51,21 +51,20 @@ class TemplateFactory extends Nette\Object
 		};
 
 		// Helpers
-		$template->registerHelperLoader('Nette\Templating\DefaultHelpers::loader');
+		$template->registerHelperLoader('Nette\Templating\Helpers::loader');
+		$template->registerHelper('texy', new TexyHelper());
 
 		if ($this->translator)
 		{
 			$template->setTranslator($this->translator);
 		}
 
-		if ($control)
-		{
+		if ($control) {
 			$presenter = $control->getPresenter(FALSE);
 			$template->_control = $template->control = $control;
 			$template->_presenter = $template->presenter = $presenter;
 
-			if ($presenter)
-			{
+			if ($presenter) {
 				$template->user = $presenter->getUser();
 				$template->netteHttpResponse = $presenter->getService('httpResponse');
 				$template->netteCacheStorage = $presenter->getService('cacheStorage');
@@ -80,8 +79,7 @@ class TemplateFactory extends Nette\Object
 			}
 		}
 
-		if (!isset($template->flashes) || !is_array($template->flashes))
-		{
+		if (!isset($template->flashes) || !is_array($template->flashes)) {
 			$template->flashes = array();
 		}
 
