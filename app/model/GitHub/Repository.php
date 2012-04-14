@@ -110,7 +110,7 @@ class Repository extends \Nette\Object
 
 				// @todo more metadata
 
-				$metadatas[$version] = $version;
+				$metadatas[$v] = $version;
 			}
 		}
 
