@@ -132,6 +132,10 @@ class Repository extends \Nette\Object
 				$version->version = Strings::startsWith($v, 'v') ? Strings::substring($v, 1) : $v;
 				$version->composerJson = json_decode($data, TRUE);
 
+				if (isset($metadata->license)) {
+					$version->license = is_array($metadata->license)
+						? implode(',', $metadata->license) : $metadata->license;
+				}
 				if (isset($metadata->require)) {
 					$version->require = $version->composerJson['require'];
 				}
