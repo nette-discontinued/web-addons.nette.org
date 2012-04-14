@@ -51,7 +51,7 @@ class Service extends \Nette\Object
 	 */
 	protected function responseToJson($input)
 	{
-		$output = json_encode($input);
+		$output = json_decode($input);
 
 		if ($output === NULL) {
 			throw new \NetteAddons\InvalidStateException("Invalid JSON");
