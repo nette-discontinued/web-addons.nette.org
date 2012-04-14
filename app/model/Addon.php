@@ -22,4 +22,9 @@ class Addon extends Nette\Object
 	 */
 	public $versions = array();
 
+	/**
+	 * @var array|string[]
+	 */
+	public $tags = array();
+
 }

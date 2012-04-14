@@ -20,37 +20,6 @@ class Addons extends Table
 
 
 	/**
-	 * @param \NetteAddons\Model\IAddonImporter $importer
-	 */
-	public function import(IAddonImporter $importer)
-	{
-		$addon = $importer->import();
-		throw new Nette\NotImplementedException;
-	}
-
-
-
-	/**
-	 * @param \NetteAddons\Model\Addon $addon
-	 */
-	public function createAddon(Addon $addon)
-	{
-		throw new Nette\NotImplementedException;
-	}
-
-
-
-	/**
-	 * @param \NetteAddons\Model\Addon $addon
-	 */
-	public function updateAddon(Addon $addon)
-	{
-		throw new Nette\NotImplementedException;
-	}
-
-
-
-	/**
 	 * @param int $id
 	 * @return Addon|boolean
 	 */
@@ -62,9 +31,22 @@ class Addons extends Table
 
 		$addon = new Addon();
 		$addon->name = $row->name;
-		foreach ($row->related('addon_version') as $versionRow) {
+		foreach ($this->findAddonVersions($row) as $versionRow) {
 			$addon->versions[] = $version = new AddonVersion();
 			$version->version = $versionRow->version;
+
+			foreach ($this->findVersionDependencies($versionRow) as $dependency) {
+				if ($dependency->package_name) {
+					$version->{$dependency->type}[$dependency->package_name] = $dependency->package_version;
+
+				} else {
+					$version->{$dependency->type}[$dependency->dependency->name] = $dependency->package_version;
+				}
+			}
+		}
+
+		foreach ($this->findAddonTags($row) as $tagRow) {
+			$addon->tags[] = $tagRow->tag->name;
 		}
 
 		return $addon;
@@ -73,49 +55,36 @@ class Addons extends Table
 
 
 	/**
-	 * @param \Nette\Database\Table\ActiveRow $addon
-	 * @param string|\Nette\Database\Table\ActiveRow $tag
+	 * @param \Nette\Database\Table\ActiveRow $addonVersion
+	 * @return \Nette\Database\Table\GroupedSelection
 	 */
-	public function addAddonTag(ActiveRow $addon, $tag)
+	public function findVersionDependencies(ActiveRow $addonVersion)
 	{
-		try {
-			if (!$tag instanceof ActiveRow){
-				$tag = $this->database->table('tags')
-					->where('name = ? OR slug = ? OR id = ?', $tag, $tag, $tag)
-					->limit(1)->fetch();
-			}
-
-			$this->getTagsTable()->insert(array(
-				'addonId' => $addon->getPrimary(),
-				$tag->getPrimary()
-			));
-
-			return TRUE;
-
-		} catch (\PDOException $e) {
-			return FALSE;
-		}
+		return $addonVersion->related('addon_dependency');
 	}
 
 
 
 	/**
 	 * @param \Nette\Database\Table\ActiveRow $addon
-	 * @return mixed
+	 *
+	 * @return \Nette\Database\Table\GroupedSelection
 	 */
-	public function getAddonDependencies(ActiveRow $addon)
+	public function findAddonTags(ActiveRow $addon)
 	{
-		return $addon->related('addon_dependency');
+		return $addon->related('addon_tag');
 	}
 
 
 
 	/**
-	 * @return \Nette\Database\Table\Selection
+	 * @param \Nette\Database\Table\ActiveRow $addon
+	 *
+	 * @return \Nette\Database\Table\GroupedSelection
 	 */
-	protected function getTagsTable()
+	public function findAddonVersions(ActiveRow $addon)
 	{
-		return $this->database->table('addon_tag');
+		return $addon->related('addon_version');
 	}
 
 }
