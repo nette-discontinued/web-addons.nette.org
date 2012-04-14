@@ -23,7 +23,6 @@ abstract class Table extends Nette\Object
 
 	/**
 	 * @param \Nette\Database\Connection $db
-	 *
 	 * @throws \NetteAddons\InvalidStateException
 	 */
 	public function __construct(Nette\Database\Connection $db)
@@ -60,7 +59,6 @@ abstract class Table extends Nette\Object
 
 	/**
 	 * @param array $by
-	 *
 	 * @return \Nette\Database\Table\Selection
 	 */
 	public function findBy(array $by)
@@ -72,8 +70,7 @@ abstract class Table extends Nette\Object
 
 	/**
 	 * @param array $by
-	 *
-	 * @return \Nette\Database\Table\ActiveRow
+	 * @return \Nette\Database\Table\ActiveRow|FALSE
 	 */
 	public function findOneBy(array $by)
 	{
@@ -84,8 +81,7 @@ abstract class Table extends Nette\Object
 
 	/**
 	 * @param int $id
-	 *
-	 * @return \Nette\Database\Table\ActiveRow
+	 * @return \Nette\Database\Table\ActiveRow|FALSE
 	 */
 	public function find($id)
 	{
@@ -115,7 +111,6 @@ abstract class Table extends Nette\Object
 
 	/**
 	 * @param \Nette\Database\Table\ActiveRow|\Nette\Database\Table\Selection $selection
-	 *
 	 * @throws \NetteAddons\InvalidArgumentException
 	 * @return bool
 	 */
