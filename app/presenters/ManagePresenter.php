@@ -153,16 +153,24 @@ final class ManagePresenter extends BasePresenter
 		$this->addon->demo = $values->demo;
 
 		$this->addon->user = $this->getUser()->getIdentity();
-		$this->context->addonUpdater->update($this->addon);
-		$this->storeAddon();
+		try {
+			$this->context->addonUpdater->update($this->addon);
+			$this->storeAddon();
 
-		$this->flashMessage('Addon created.');
+			$this->flashMessage('Addon created.');
 
-		if ($this->addon->repository) {
-			$this->redirect('versionImport');
+			if ($this->addon->repository) {
+				$this->redirect('versionImport');
 
-		} else {
-			$this->redirect('versionCreate');
+			} else {
+				$this->redirect('versionCreate');
+			}
+		} catch (\PDOException $e) {
+			if ($e->getCode() === 23000) {
+				$form->addError('Duplicate composer name.');
+			} else {
+				throw $e;
+			}
 		}
 	}
 
