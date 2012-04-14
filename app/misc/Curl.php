@@ -34,9 +34,11 @@ class Curl extends \Nette\Object
 		curl_setopt($ch, CURLOPT_USERAGENT, self::UA);
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-		// TODO: use the certificate!
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 		curl_setopt($ch, CURLOPT_TIMEOUT_MS, $this->timeout);
+
+		if (PHP_OS == 'WINNT') {
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+		}
 
 		return $ch;
 	}
