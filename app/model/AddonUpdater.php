@@ -58,7 +58,7 @@ class AddonUpdater extends Nette\Object
 	{
 		$package = array(
 			'name' => $addon->name,
-			'vendor_name' => $addon->vendorName,
+			'composer_name' => $addon->composerName,
 		);
 
 		if (!$addon->user instanceof Nette\Security\Identity) {

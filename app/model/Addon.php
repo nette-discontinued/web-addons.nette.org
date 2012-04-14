@@ -20,7 +20,7 @@ class Addon extends Nette\Object
 	/**
 	 * @var string
 	 */
-	public $vendorName;
+	public $composerName;
 
 	/**
 	 * @var \Nette\Security\Identity
@@ -43,6 +43,11 @@ class Addon extends Nette\Object
 	public $repository;
 
 	/**
+	 * @var URL to addon demo.
+	 */
+	public $demo;
+
+	/**
 	 * @var array|AddonVersion[]
 	 */
 	public $versions = array();
@@ -58,7 +63,7 @@ class Addon extends Nette\Object
 	{
 		$addon = new static;
 		$addon->name = $row->name;
-		$addon->vendorName = $row->vendor_name;
+		$addon->composerName = $row->composer_name;
 		$addon->description = $row->short_description;
 
 		foreach ($row->related('addon_tag') as $addonTag) {
@@ -75,7 +80,7 @@ class Addon extends Nette\Object
 				if (isset($dependencyRow->dependency_id)) {
 					$dependency = $dependencyRow->ref('addon_version')->via('dependency_id');
 					$dependencyAddon = $dependencyRow->ref($dependency->ref('addon'));
-					$dependencyName = $dependencyAddon->vendor_name . '/' . $dependencyAddon->name;
+					$dependencyName = $dependencyAddon->composer_name;
 					$version->{$type}[$dependencyName] = $dependencyRow->version;
 				} else {
 					$version->{$type}[$dependencyRow->package_name] = $dependencyRow->version;
