@@ -111,6 +111,7 @@ class Repository extends \Nette\Object
 		$data = json_decode($this->getComposerJson($branch));
 		if ($data) {
 			$addon = new \NetteAddons\Model\Addon;
+			$addon->repository = "http://github.com/{$this->vendor}/{$this->name}";
 			if (isset($data->name)) {
 				$addon->composerName = $data->name;
 				$addon->name = str_replace('/', ' ', $data->name);
