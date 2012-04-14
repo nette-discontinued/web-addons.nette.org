@@ -8,13 +8,16 @@ SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
 DROP TABLE IF EXISTS `addon_dependencies`;
 CREATE TABLE `addon_dependencies` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `addonId` int(10) unsigned DEFAULT NULL,
+  `addonId` int(10) unsigned NOT NULL,
+  `dependencyId` int(10) unsigned DEFAULT NULL,
   `packageName` varchar(100) DEFAULT NULL,
   `version` varchar(20) NOT NULL,
   `type` enum('require','suggest','provide','replace','conflict','recommend') NOT NULL DEFAULT 'require',
   PRIMARY KEY (`id`),
   KEY `addonId` (`addonId`),
-  CONSTRAINT `addon_dependencies_ibfk_1` FOREIGN KEY (`addonId`) REFERENCES `addons` (`id`)
+  KEY `dependencyId` (`dependencyId`),
+  CONSTRAINT `addon_dependencies_ibfk_1` FOREIGN KEY (`dependencyId`) REFERENCES `addons` (`id`),
+  CONSTRAINT `addon_dependencies_ibfk_2` FOREIGN KEY (`addonId`) REFERENCES `addon_versions` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -75,4 +78,4 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- 2012-04-14 13:07:24
+-- 2012-04-14 14:53:58
