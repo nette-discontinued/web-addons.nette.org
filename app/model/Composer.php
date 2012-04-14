@@ -66,7 +66,7 @@ class Composer extends \Nette\Object
 			'version' => $version->version,
 		);
 
-		foreach (array('require', 'suggest', 'provide', 'replace', 'conflict') as $name => $section) {
+		foreach (array('require', 'suggest', 'provide', 'replace', 'conflict') as $section) {
 			if ($version->$section) {
 				$data[$section] = $version->$section;
 			}
