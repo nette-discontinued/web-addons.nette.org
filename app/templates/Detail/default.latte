@@ -1,29 +1,67 @@
 {block content}
 
-<table class="table table-bordered">
-	<tr>
-		<th>Name</th>
-		<td>{$addon->name}</td>
-	</tr>
-	<tr>
-		<th>Author</th>
-		<td>{$addon->user|userlink}</td>
-	</tr>
-	<tr>
-		<th>Tags</th>
-		<td>
-		{foreach $addon->related('addon_tag') as $addonTag}
-		<span class="label">{$addonTag->ref('tag')->name}</span>
-		{/foreach}
-		</td>
-	</tr>
-	<tr>
-		<th>Votes</th>
-		<td>
-			Current: {$addon->related('votes')->aggregation('SUM(vote)') ?: 0}<br>
-			Vote: <a n:href="vote! up">+1</a> / <a n:href="vote! down">-1</a>
-		</td>
-	</tr>
-</table>
+<div class="row">
 
-{!$addon->description|texy}
+	<div class="span9">
+
+
+		<div class="hero-unit addon-detail">
+			<div class="row">
+				<div class="icon span1">
+					<img src="{$basePath}/images/addon/default-ico.png" width="64" heigth="64" alt="{$addon->name}" />
+				</div>
+
+				<div class="span6">
+					<h1>{$addon->name}</h1>
+				
+					<div class="author">
+						
+						<span class="date">({$addon->updated_at|date:'%d.%m.%Y'})</span>
+						{$addon->user|userlink} 
+					</div>
+				</div>
+			</div>
+
+			<p class="addon-download"><a class="btn btn-primary btn-large"><i class="icon-download icon-white"></i> Download</a></p>
+		</div>
+
+
+		
+
+		
+
+		
+
+		<div class="row">
+
+			<div class="span5">
+
+				Current: {$addon->related('votes')->aggregation('SUM(vote)') ?: 0}<br>
+				Vote: <a n:href="vote! up">+1</a> / <a n:href="vote! down">-1</a>
+				
+			</div>
+
+			<div class="span4">
+				{foreach $addon->related('addon_tag') as $addonTag}
+					<span class="label">{$addonTag->ref('tag')->name}</span>
+				{/foreach}
+			</div>
+			
+		</div>
+
+	
+		<div class="description">
+
+			{!$addon->description|texy}
+		</div>
+
+
+		
+	</div>
+	<div class="span3">
+
+		{include '../Layout/sidebar.latte'}
+
+	</div>
+
+</div>
