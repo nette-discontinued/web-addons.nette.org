@@ -28,7 +28,7 @@ class Addons extends Table
 	 */
 	public function filterByTag(Selection $addons, $tag)
 	{
-		$addonIds = $this->database->table('addon_tag')
+		$addonIds = $this->connection->table('addon_tag')
 			->where('tag_id = ?', $tag)->select('addon_id');
 
 		$addons->where('id', $addonIds);
