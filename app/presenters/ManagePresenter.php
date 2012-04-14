@@ -4,7 +4,8 @@ namespace NetteAddons;
 
 use NetteAddons\Model\Addon,
 	NetteAddons\Model\AddonVersion,
-	NetteAddons\Model\Addons;
+	NetteAddons\Model\Addons,
+	NetteAddons\Model\IAddonImporter;
 use Nette\Http\Session,
 	Nette\Http\SessionSection;
 
@@ -142,7 +143,7 @@ final class ManagePresenter extends BasePresenter
 
 		$this->flashMessage('Addon created.');
 
-		if ($values->repository) {
+		if ($this->addon->repository) {
 			$this->redirect('versionImport');
 		} else {
 			$this->redirect('versionCreate');
@@ -163,9 +164,16 @@ final class ManagePresenter extends BasePresenter
 	}
 
 
-	public function importAddonFormSubmitted()
+	public function importAddonFormSubmitted(ImportAddonForm $form)
 	{
+		$values = $form->getValues();
+		$importer = $this->getContext()->createRepositoryImporter($values->url);
+		$this->addon = $importer->import();
+		$this->addon->repository = $values->url;
+		$this->storeAddon();
 
+		$this->flashMessage('Imported addon.');
+		$this->redirect('create');
 	}
 
 
@@ -190,6 +198,17 @@ final class ManagePresenter extends BasePresenter
 		$this->storeAddon();
 
 		$this->flashMessage('Version created.');
+		$this->redirect('finish');
+	}
+
+
+
+	/*************** Import versions ****************/
+
+	public function handleImportVersions()
+	{
+		$importer = $this->getContext()->createRepositoryImporter($this->addon->repository);
+		$this->addon->versions = $importer->importVersions();
 		$this->redirect('finish');
 	}
 
