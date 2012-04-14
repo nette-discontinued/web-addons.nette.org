@@ -6964,6 +6964,9 @@ a:hover .label {
 .hero-unit {
   padding-bottom: 40px;
 }
+.small {
+  font-size: 11px;
+}
 .homepage-addons h2 {
   padding-bottom: 10px;
 }
@@ -6981,4 +6984,7 @@ a:hover .label {
 }
 .addon-detail .addon-download {
   text-align: right;
+}
+.box-versions {
+  margin-top: 20px;
 }
