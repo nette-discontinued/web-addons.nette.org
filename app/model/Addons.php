@@ -28,11 +28,8 @@ class Addons extends Table
 	 */
 	public function filterByTag(Selection $addons, $tag)
 	{
-		$addonIds = array_values(
-			$this->connection->table('addon_tag')
-				->where('tag_id = ?', $tag)->select('addon_id')
-				->fetchPairs('addon_id', 'addon_id')
-		);
+		$addonIds = $this->database->table('addon_tag')
+			->where('tag_id = ?', $tag)->select('addon_id');
 
 		$addons->where('id', $addonIds);
 

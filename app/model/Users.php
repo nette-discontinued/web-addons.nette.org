@@ -62,4 +62,12 @@ class Users extends Table
 		return new Identity($user->id, NULL, $data);
 	}
 
+
+
+	public function findAuthors()
+	{
+		$users = $this->database->table('addon')->select('DISTINCT(user_id)');
+		return $this->findAll()->where('id', $users);
+	}
+
 }
