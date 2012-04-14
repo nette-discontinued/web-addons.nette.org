@@ -46,4 +46,8 @@ services:
 factories:
 	repository:
 		parameters: [vendor, name]
-		class: NetteAddons\Model\GitHub\Repository ( @githubApi , %vendor%, %name% )
+		class: NetteAddons\Model\GitHub\Repository( @githubApi , %vendor%, %name% )
+
+	file:
+    	parameters: [vendor, name, commit]
+    	class: NetteAddons\Model\GitHub\File( @githubBlob , %vendor%, %name%, %commit% )
