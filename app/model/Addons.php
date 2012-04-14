@@ -8,6 +8,7 @@ use Nette\Database\Table\ActiveRow;
 
 
 /**
+ * Addons table repository
  */
 class Addons extends Table
 {

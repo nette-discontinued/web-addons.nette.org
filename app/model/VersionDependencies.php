@@ -7,7 +7,7 @@ use Nette;
 
 
 /**
- * @author Filip Procházka <filip.prochazka@kdyby.org>
+ * Version dependencies repository
  */
 class VersionDependencies extends Table
 {
