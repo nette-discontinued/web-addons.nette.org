@@ -109,22 +109,22 @@ class Repository extends \Nette\Object
 				$version->composerJson = json_decode($data, TRUE);
 
 				if (isset($metadata->require)) {
-					$version->require = $metadata->require;
+					$version->require = $version->composerJson['require'];
 				}
 				if (isset($metadata->recommend)) {
-					$version->recommend = $metadata->recommend;
+					$version->recommend = $version->composerJson['recommend'];
 				}
 				if (isset($metadata->suggest)) {
-					$version->suggest = $metadata->suggest;
+					$version->suggest = $version->composerJson['suggest'];
 				}
 				if (isset($metadata->conflict)) {
-					$version->conflict = $metadata->conflict;
+					$version->conflict = $version->composerJson['conflict'];
 				}
 				if (isset($metadata->replace)) {
-					$version->replace = $metadata->replace;
+					$version->replace = $version->composerJson['replace'];
 				}
 				if (isset($metadata->provide)) {
-					$version->provide = $metadata->provide;
+					$version->provide = $version->composerJson['provide'];
 				}
 
 				$metadatas[$v] = $version;
