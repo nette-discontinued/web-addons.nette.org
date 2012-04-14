@@ -35,6 +35,8 @@ abstract class BaseForm extends Form
 
 	public function attached($presenter)
 	{
+		parent::attached($presenter);
+
 		if ($presenter instanceof Presenter) {
 			$this->templateFactory = $presenter->getContext()->templateFactory;
 		}
