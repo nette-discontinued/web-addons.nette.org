@@ -35,7 +35,7 @@ INSERT INTO `user` (`id`, `name`, `password`, `email`) VALUES
 (3,	'Vrtak',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'vrtak@gmail.com'),
 (4,	'Honza Marek',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'honza.marek@gmail.com'),
 (5,	'Panda',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'panda@gmail.com'),
-(6,	'chemiX',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'chemix@gmail.com'),
+(6,	'chemiX',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'iamchemix@gmail.com'),
 (7,	'dgx',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'dgx@gmail.com');
 
 -- 2012-04-14 15:46:04
