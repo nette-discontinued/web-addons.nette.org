@@ -100,13 +100,8 @@ abstract class Table extends Nette\Object
 	 */
 	public function update(ActiveRow $user, array $values)
 	{
-		try {
-			$user->update($values);
-			return TRUE;
-
-		} catch (\PDOException $e) {
-			return FALSE;
-		}
+		$user->update($values);
+		return TRUE;
 	}
 
 
@@ -118,28 +113,23 @@ abstract class Table extends Nette\Object
 	 */
 	public function remove($selection)
 	{
-		try {
-			if ($selection instanceof Selection) {
-				if ($selection->getName() !== $this->tableName) {
-					throw new \NetteAddons\InvalidArgumentException;
-				}
-
-				/** @var Selection $selection */
-				$selection->delete();
-
-			} elseif ($selection instanceof ActiveRow) {
-				/** @var ActiveRow $selection */
-				$selection->delete();
-
-			} else {
+		if ($selection instanceof Selection) {
+			if ($selection->getName() !== $this->tableName) {
 				throw new \NetteAddons\InvalidArgumentException;
 			}
 
-			return TRUE;
+			/** @var Selection $selection */
+			$selection->delete();
 
-		} catch (\PDOException $e) {
-			return FALSE;
+		} elseif ($selection instanceof ActiveRow) {
+			/** @var ActiveRow $selection */
+			$selection->delete();
+
+		} else {
+			throw new \NetteAddons\InvalidArgumentException;
 		}
+
+		return TRUE;
 	}
 
 
@@ -154,7 +144,11 @@ abstract class Table extends Nette\Object
 			return $this->getTable()->insert($values);
 
 		} catch (\PDOException $e) {
-			return FALSE;
+			if ($e->getCode() == 23000) {
+				throw new \NetteAddons\DuplicateEntryException();
+			} else {
+				throw $e;
+			}
 		}
 	}
 
@@ -174,17 +168,12 @@ abstract class Table extends Nette\Object
 		$pairs = implode(', ', $pairs);
 		$values = array_values($values);
 
-		try {
-			$this->connection->queryArgs(
-				'INSERT INTO `' . $this->tableName . '` SET ' . $pairs .
-				' ON DUPLICATE KEY UPDATE ' . $pairs, array_merge($values, $values)
-			);
+		$this->connection->queryArgs(
+			'INSERT INTO `' . $this->tableName . '` SET ' . $pairs .
+			' ON DUPLICATE KEY UPDATE ' . $pairs, array_merge($values, $values)
+		);
 
-			return $this->findOneBy(func_get_arg(0));
-
-		} catch (\PDOException $e) {
-			return FALSE;
-		}
+		return $this->findOneBy(func_get_arg(0));
 	}
 
 }
