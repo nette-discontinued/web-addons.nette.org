@@ -72,4 +72,16 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- 2012-04-14 15:45:59
+CREATE TABLE `addon_votes` (
+  `addon_id` int(10) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  `vote` tinyint(4) NOT NULL COMMENT '+1 / -1',
+  `comment` varchar(1000) DEFAULT NULL,
+  PRIMARY KEY (`addon_id`,`user_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `addon_votes_ibfk_1` FOREIGN KEY (`addon_id`) REFERENCES `addon` (`id`),
+  CONSTRAINT `addon_votes_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- 2012-04-14 17:32:34
