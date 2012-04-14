@@ -1,7 +1,7 @@
 {block content}
 
 <ul>
-	<li n:foreach="$users as $author">
+	<li n:foreach="$authors as $author">
 		<strong>{$author|userlink}:</strong>
 		{foreach $author->related('addon') as $addon}
 			{$addon|addonlink}{sep}, {/sep}

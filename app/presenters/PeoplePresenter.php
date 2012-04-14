@@ -10,7 +10,14 @@ class PeoplePresenter extends BasePresenter
 
 	public function renderDefault()
 	{
-		$this->template->users = $this->context->users->findAuthors();
+		$this->template->authors = $this->context->users->findAuthors();
+	}
+
+
+
+	public function renderDetail($id)
+	{
+		$this->template->author = $this->context->users->find($id);
 	}
 
 }
