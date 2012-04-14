@@ -47,7 +47,9 @@ class Tags extends Table
 			if (!$tag) {
 				$tag = $this->createOrUpdate(array(
 					'name' => func_get_arg(1),
-					'slug' => Strings::webalize(func_get_arg(1))
+					'slug' => Strings::webalize(func_get_arg(1)),
+					'level' => self::LEVEL_ORDINARY_TAG,
+					'visible' => true,
 				));
 			}
 		}
