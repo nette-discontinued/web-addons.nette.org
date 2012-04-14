@@ -4,7 +4,7 @@
  * My Application bootstrap file.
  */
 use Nette\Application\Routers\Route;
-
+use Nette\Config\Configurator;
 
 // Load Nette Framework
 require LIBS_DIR . '/nette/nette/Nette/loader.php';
@@ -25,7 +25,8 @@ $configurator->createRobotLoader()
 	->register();
 
 // Create Dependency Injection container from config.neon file
-$configurator->addConfig(__DIR__ . '/config/config.neon');
+$configurator->addConfig(__DIR__ . '/config/config.neon', Configurator::NONE);
+$configurator->addConfig(__DIR__ . '/config/config.local.neon', Configurator::NONE);
 $container = $configurator->createContainer();
 
 // Setup router

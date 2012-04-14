@@ -1,7 +1,9 @@
+# copy this file to congig.local.neon
+
 parameters:
 	database:
 		driver: mysql
 		host: localhost
-		dbname: netteadons
+		dbname: test
 		user:
 		password:
