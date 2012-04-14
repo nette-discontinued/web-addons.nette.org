@@ -43,11 +43,17 @@ class Tags extends Table
 				$tag = $this->getTable()
 					->where('name = ? OR slug = ? OR id = ?', $tag, $tag, $tag)
 					->limit(1)->fetch();
+
+				if (!$tag) {
+					$tag = $this->createOrUpdate(array('name' => func_get_arg(1)));
+				}
 			}
 
+			dump($tag);
+
 			$this->getAddonTags()->insert(array(
-				'addonId' => $addon->getPrimary(),
-				$tag->getPrimary()
+				'addon_id' => $addon->id,
+				'tag_id' => $tag->id
 			));
 
 			return TRUE;

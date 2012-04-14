@@ -4,6 +4,9 @@ namespace NetteAddons;
 
 
 
+/**
+ *
+ */
 class ImportAddonForm extends BaseForm
 {
 	protected function buildForm()
