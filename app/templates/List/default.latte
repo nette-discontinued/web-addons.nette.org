@@ -47,11 +47,7 @@
 
 				<div class="tags">
 					{foreach $addon->related('addon_tag') as $addonTag}
-						{if $tags->isCategory($addonTag->tag) }
-							<a n:href="List: tag => $addonTag->tag->slug" class="label label-info">{$addonTag->tag->name}</a>
-						{else}
-							<a n:href="List: tag => $addonTag->tag->slug" class="label">{$addonTag->tag->name}</a>
-						{/if}
+						{include '../Addon/tag.latte' tag => $addonTag }
 					{/foreach}
 				</div>
 
