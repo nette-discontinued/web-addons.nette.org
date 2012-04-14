@@ -112,7 +112,9 @@ final class ManagePresenter extends BasePresenter
 
 		if ($this->addon !== NULL) {
 			$form->setDefaults(array(
-				'name' => $this->addon->name
+				'name' => $this->addon->name,
+				'shortDescription' => $this->addon->shortDescription,
+				'description' => $this->addon->description
 			));
 		}
 
@@ -133,6 +135,8 @@ final class ManagePresenter extends BasePresenter
 			$this->addon = new Addon();
 		}
 		$this->addon->name = $values->name;
+		$this->addon->shortDescription = $values->shortDescription;
+		$this->addon->description = $values->description;
 
 		$this->storeAddon();
 
@@ -145,6 +149,24 @@ final class ManagePresenter extends BasePresenter
 		}
 	}
 
+
+
+
+	/*************** Addon import ****************/
+
+	protected function createComponentImportAddonForm()
+	{
+		$form = new ImportAddonForm();
+
+		$form->onSuccess[] = callback($this, 'importAddonFormSubmitted');
+		return $form;
+	}
+
+
+	public function importAddonFormSubmitted()
+	{
+
+	}
 
 
 	/*************** Create a new version ****************/

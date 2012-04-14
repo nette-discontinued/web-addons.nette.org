@@ -49,6 +49,55 @@
 			
 		</div>
 
+
+
+<table class="table table-bordered">
+	
+	<tr n:if="$addon->repository">
+		<th>Repository</th>
+		<td><a href="{$addon->repository}">{$addon->repository}</a></td>
+	</tr>
+	<tr>
+		<th>Tags</th>
+		<td>
+		{foreach $addon->related('addon_tag') as $addonTag}
+		<span class="label">{$addonTag->ref('tag')->name}</span>
+		{/foreach}
+		</td>
+	</tr>
+	<tr>
+		<th>Votes</th>
+		<td>
+			Current: {$addon->related('votes')->aggregation('SUM(vote)') ?: 0}<br>
+			Vote: <a n:href="vote! up">+1</a> / <a n:href="vote! down">-1</a>
+		</td>
+	</tr>
+	<tr>
+		<th>Version</th>
+		<td>
+			{foreach $addon->related('addon_version') as $version}
+				<div>
+					<h2>{$version->version}</h2>
+					<button class="btn">Download</button><br>
+					<h3>Dependencies</h3>
+					<ul>
+						{foreach $version->related('addon_dependency') as $dep}
+							<li>
+								{if $dep->dependency_id}
+									{$dep->dependency->name}
+								{else}
+									{$dep->package_name}
+								{/if}
+								| {$dep->version}
+							</li>
+						{/foreach}
+					</ul>
+				</div>
+			{/foreach}
+		</td>
+	</tr>
+</table>
+
 	
 		<div class="description">
 

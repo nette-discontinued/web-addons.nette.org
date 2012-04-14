@@ -53,15 +53,20 @@ services:
 factories:
 	repository:
 		parameters: [vendor, name]
-		class: NetteAddons\Model\GitHub\Repository( @githubApi , %vendor%, %name% )
+		class: NetteAddons\Model\GitHub\Repository( @githubApi, @fileFactory, %vendor%, %name% )
+
+	repositoryFromUrl:
+		parameters: [url]
+		class: NetteAddons\Model\GitHub\Repository
+		factory: NetteAddons\Model\GitHub\Repository::createFromUrl( @githubApi, @fileFactory, %url% )
 
 	file:
 		parameters: [vendor, name, commit]
 		class: NetteAddons\Model\GitHub\File( @githubBlob , %vendor%, %name%, %commit% )
 
 	repositoryImporter:
-		class: NetteAddons\Model\RepositoryImporter(%url%, %api%)
-		parameters: [url, api]
+		class: NetteAddons\Model\RepositoryImporter( @repositoryFromUrlFactory, %url%)
+		parameters: [url]
 
 	archiveImporter:
 		class: NetteAddons\Model\ArchiveImporter(%archiveFile%)
