@@ -83,7 +83,7 @@ class Repository extends \Nette\Object
 		if ($data) {
 			$addon = new \NetteAddons\Model\Addon;
 			if (isset($data->name)) {
-				$addon->name = $data->name;
+				list($addon->vendorName, $addon->name) = explode('/', $data->name);
 			}
 			if (isset($data->description)) {
 				$addon->description = $data->description;
@@ -102,14 +102,15 @@ class Repository extends \Nette\Object
 	{
 		$versions = array_merge($this->getBranches(), $this->getTags());
 		$metadatas = array();
-		foreach ($versions as $version => $hash) {
-			if ($data = $this->getComposerJson($hash)) {
+		foreach ($versions as $v => $hash) {
+			if (($data = $this->getComposerJson($hash)) && ($metadata = json_decode($data))) {
 				$version = new \NetteAddons\Model\AddonVersion;
-				$version->version = $version;
+				$version->version = $v;
+				$version->composerJson = json_decode($data, TRUE);
 
 				// @todo more metadata
 
-				$metadatas[$version] = $version;
+				$metadatas[$v] = $version;
 			}
 		}
 
