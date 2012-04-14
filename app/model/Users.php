@@ -42,7 +42,7 @@ class Users extends Object
 
 
 	/**
-	 * @param $name
+	 * @param string $name name or email of user
 	 *
 	 * @return \Nette\Database\Table\ActiveRow
 	 */
@@ -56,6 +56,8 @@ class Users extends Object
 
 
 	/**
+	 * Updates user with values
+	 *
 	 * @param \Nette\Database\Table\ActiveRow $user
 	 * @param array $values
 	 */
@@ -68,18 +70,27 @@ class Users extends Object
 
 
 	/**
+	 * Creates new user. When email or username is taken, returns false
+	 *
 	 * @param array $values
+	 *
+	 * @return \Nette\Database\Table\ActiveRow|FALSE
 	 */
 	public function register(array $values)
 	{
-		// todo validate values
-		$this->database->table('users')->insert($values);
+		try {
+			return $this->database->table('users')->insert($values);
+
+		} catch (\PDOException $e) {
+			return FALSE;
+		}
 	}
 
 
 
 	/**
 	 * @param \Nette\Database\Table\ActiveRow $user
+	 *
 	 * @return \Nette\Security\Identity
 	 */
 	public function createIdentity(ActiveRow $user)
