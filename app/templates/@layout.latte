@@ -39,9 +39,9 @@
 					</ul>
 					<p class="navbar-text pull-right">
 						{if $user->isLoggedIn()}
-							Logged in as <a href="javascript:;">{$user->identity->name}</a> / <a n:href="Sign:out">Logout</a>
+							Logged in as <a href="javascript:;">{$user->identity->name}</a> / <a n:href="Sign:out">Log out</a>
 						{else}
-							<a n:href="Sign:in">Login</a>
+							<a n:href="Sign:in">Log in</a>
 						{/if}
 					</p>
 				</div><!--/.nav-collapse -->
