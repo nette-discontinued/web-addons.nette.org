@@ -2,7 +2,8 @@
 
 namespace NetteAddons\Model\GitHub;
 
-use Nette\Utils\Strings;
+use Nette\Utils\Strings,
+	Nette\Http\Url;
 
 /**
  * @author	Patrik Votoček
@@ -171,18 +172,17 @@ class Repository extends \Nette\Object
 	}
 
 	/**
-	 * @param ApiService
-	 * @param callable
 	 * @param string
+	 * @return \Nette\Http\Url
 	 * @throws \NetteAddons\InvalidArgumentException
 	 */
-	public static function createFromUrl(ApiService $service, $fileFactory, $url)
+	public static function normalizeUrl($url)
 	{
 		if (Strings::startsWith($url, 'github.com/')) {
 			$url = "http://".$url;
 		}
 
-		$url = new \Nette\Http\Url($url);
+		$url = new Url($url);
 		$path = substr($url->getPath(), 1);
 		if ($url->getHost() != 'github.com' && strpos($path, '/') === FALSE) {
 			throw new \NetteAddons\InvalidArgumentException("Invalid github url");
@@ -191,6 +191,21 @@ class Repository extends \Nette\Object
 			$path = Strings::substring($path, 0, -4);
 		}
 
+		$normalized = new Url("https://github.com");
+		$normalized->setPath('/'.$path);
+		return $normalized;
+	}
+
+	/**
+	 * @param ApiService
+	 * @param callable
+	 * @param string
+	 * @throws \NetteAddons\InvalidArgumentException
+	 */
+	public static function createFromUrl(ApiService $service, $fileFactory, $url)
+	{
+		$url = new Url((string)static::normalizeUrl((string)$url));
+		$path = substr($url->getPath(), 1);
 		list($vendor, $name) = explode('/', $path);
 		return new static($service, $fileFactory, $vendor, $name);
 	}
