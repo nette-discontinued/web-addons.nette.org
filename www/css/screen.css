@@ -6963,6 +6963,7 @@ a:hover .label {
 }
 .hero-unit {
   padding-bottom: 40px;
+  padding-top: 50px;
 }
 .small {
   font-size: 11px;
@@ -6982,8 +6983,14 @@ a:hover .label {
 .box-create-addon {
   text-align: center;
 }
+.addon-detail .icon {
+  padding-top: 20px;
+}
 .addon-detail .addon-download {
   text-align: right;
+}
+.addon-detail .vendor {
+  color: #999999;
 }
 .box-versions {
   margin-top: 20px;
