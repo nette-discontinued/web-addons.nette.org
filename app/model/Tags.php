@@ -4,6 +4,7 @@ namespace NetteAddons\Model;
 
 use Nette;
 use Nette\Database\Table\ActiveRow;
+use Nette\Utils\Strings;
 
 
 
@@ -38,27 +39,25 @@ class Tags extends Table
 	 */
 	public function addAddonTag(ActiveRow $addon, $tag)
 	{
-		try {
-			if (!$tag instanceof ActiveRow) {
-				$tag = $this->getTable()
-					->where('name = ? OR slug = ? OR id = ?', $tag, $tag, $tag)
-					->limit(1)->fetch();
+		if (!$tag instanceof ActiveRow) {
+			$tag = $this->getTable()
+				->where('name = ? OR slug = ? OR id = ?', $tag, $tag, $tag)
+				->limit(1)->fetch();
 
-				if (!$tag) {
-					$tag = $this->createOrUpdate(array('name' => func_get_arg(1)));
-				}
+			if (!$tag) {
+				$tag = $this->createOrUpdate(array(
+					'name' => func_get_arg(1),
+					'slug' => Strings::webalize(func_get_arg(1))
+				));
 			}
-
-			$this->getAddonTags()->insert(array(
-				'addon_id' => $addon->id,
-				'tag_id' => $tag->id
-			));
-
-			return TRUE;
-
-		} catch (\PDOException $e) {
-			return FALSE;
 		}
+
+		$this->getAddonTags()->insert(array(
+			'addon_id' => $addon->id,
+			'tag_id' => $tag->id
+		));
+
+		return TRUE;
 	}
 
 
