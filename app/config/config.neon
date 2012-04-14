@@ -39,9 +39,9 @@ services:
 	tags: NetteAddons\Model\Tags
 
 	# github
-	github: NetteAddons\GitHub\Service( 'https://api.github.com', 50000 )
+	github: NetteAddons\Model\GitHub\Service( 'https://api.github.com', 50000 )
 
 factories:
 	repository:
 		parameters: [vendor, name]
-		class: NetteAddons\GitHub\Repository ( @github , %vendor%, %name% )
+		class: NetteAddons\Model\GitHub\Repository ( @github , %vendor%, %name% )
