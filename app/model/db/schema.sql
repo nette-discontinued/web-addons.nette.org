@@ -107,3 +107,7 @@ REMOVE PARTITIONING;
 -- versions for addon must be unique
 ALTER TABLE `addon_version`
 ADD UNIQUE `addon_id_version` (`addon_id`, `version`);
+
+-- dependecies of versions are unique
+ALTER TABLE `addon_dependency`
+ADD UNIQUE `addon_id_dependency_id_package_name_version` (`addon_id`, `dependency_id`, `package_name`, `version`);
