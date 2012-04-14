@@ -59,10 +59,10 @@ class VersionDependencies extends Table
 	 * @param string $packageName
 	 * @return \Nette\Database\Table\ActiveRow
 	 */
-	private function findAddon($vendorName, $packageName)
+	private function findAddon($composerName)
 	{
 		return $this->connection->table('addon')
-			->where('name = ? OR vendor_name = ?', $vendorName, $packageName)
+			->where('composer_name = ?', $composerName)
 			->limit(1)->fetch();
 	}
 

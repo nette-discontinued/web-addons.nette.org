@@ -18,6 +18,11 @@ class AddonVersion extends Nette\Object
 	public $version;
 
 	/**
+	 * @var string
+	 */
+	public $license;
+
+	/**
 	 * @var array|string[]
 	 */
 	public $require = array();
