@@ -2,8 +2,6 @@
 
 namespace NetteAddons\Model\GitHub;
 
-use Nette\Utils\Strings;
-
 /**
  * @author	Patrik Votoček
  */
@@ -86,7 +84,7 @@ class Repository extends \Nette\Object
 				list($addon->vendorName, $addon->name) = explode('/', $data->name);
 			}
 			if (isset($data->description)) {
-				$addon->description = $data->description;
+				$addon->shortDescription = \Nette\Utils\Strings::truncate($data->description, 250);
 			}
 			if (isset($data->keywords)) {
 				$addon->tags = $data->keywords;
