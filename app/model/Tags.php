@@ -49,8 +49,6 @@ class Tags extends Table
 				}
 			}
 
-			dump($tag);
-
 			$this->getAddonTags()->insert(array(
 				'addon_id' => $addon->id,
 				'tag_id' => $tag->id
