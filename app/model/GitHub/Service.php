@@ -2,6 +2,9 @@
 
 namespace NetteAddons\Model\GitHub;
 
+/**
+ * @author	Patrik Votoček
+ */
 class Service extends \Nette\Object
 {
 	const UA = 'Nette Addons';

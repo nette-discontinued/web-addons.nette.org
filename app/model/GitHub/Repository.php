@@ -2,6 +2,9 @@
 
 namespace NetteAddons\Model\GitHub;
 
+/**
+ * @author	Patrik Votoček
+ */
 class Repository extends \Nette\Object
 {
 	/** @var Service */
