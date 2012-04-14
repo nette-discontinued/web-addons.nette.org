@@ -15,42 +15,10 @@ use Nette\Security\Identity;
 class Users extends Object
 {
 
-	/** @var \Nette\Database\Connection */
-	private $database;
-
-
-
 	/**
-	 * @param \Nette\Database\Connection $db
+	 * @var string
 	 */
-	public function __construct(Connection $db)
-	{
-		$this->database = $db;
-	}
-
-
-
-	/**
-	 * @param array $by
-	 *
-	 * @return \Nette\Database\Table\Selection
-	 */
-	public function findBy(array $by)
-	{
-		return $this->database->table('users')->where($by);
-	}
-
-
-
-	/**
-	 * @param array $by
-	 *
-	 * @return \Nette\Database\Table\ActiveRow
-	 */
-	public function findOneBy(array $by)
-	{
-		return $this->findBy($by)->limit(1)->fetch();
-	}
+	protected $table = 'users';
 
 
 
