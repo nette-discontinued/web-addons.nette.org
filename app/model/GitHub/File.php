@@ -35,6 +35,6 @@ class File extends \Nette\Object
 	 */
 	public function get($path)
 	{
-		return $this->service->exec("/{$this->vendor}/{$this->name}/{$this->commit}/$path")
+		return $this->service->exec("/{$this->vendor}/{$this->name}/{$this->commit}/$path");
 	}
 }
