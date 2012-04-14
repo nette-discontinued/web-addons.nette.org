@@ -15,4 +15,9 @@ class DetailPresenter extends BasePresenter
 		$this->template->addon = $addon;
 	}
 
+	public function handleVote($vote)
+	{
+		throw new NotImplementedException();
+	}
+
 }

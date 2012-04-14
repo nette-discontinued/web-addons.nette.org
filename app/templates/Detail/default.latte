@@ -17,6 +17,13 @@
 		{/foreach}
 		</td>
 	</tr>
+	<tr>
+		<th>Votes</th>
+		<td>
+			Current: {$addon->related('votes')->aggregation('SUM(vote)') ?: 0}<br>
+			Vote: <a n:href="vote! up">+1</a> / <a n:href="vote! down">-1</a>
+		</td>
+	</tr>
 </table>
 
 {!$addon->description|texy}
