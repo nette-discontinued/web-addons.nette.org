@@ -1,5 +1,9 @@
 <div class="well box-create-addon">
-	<a n:href="Manage:add" class="btn btn-large btn-success">Create New Addon</a>
+	{if $user->isLoggedIn()}
+		<a n:href="Manage:add" class="btn btn-large btn-success">Create New Addon</a>
+	{else}
+		<a href="javascript:;" class="btn btn-large btn-success disabled" title="Log in for create a new addon">Create New Addon</a>	
+	{/if}
 </div>
 
 <div class="well">
