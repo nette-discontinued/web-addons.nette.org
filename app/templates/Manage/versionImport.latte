@@ -1,4 +1,17 @@
 
 {block content}
 
-<p><a n:href="importVersions!">Import repository versions</a></p>
+<div class="well">
+	Importing repository versions, please wait for the operation to complete.
+</div>
+
+
+<script type="text/javascript">
+	$(function () {
+		$.post({link importVersions!}, function (data) {
+			if (data.redirect) {
+				window.location.href = data.redirect;
+			}
+		}, 'json');
+	});
+</script>
