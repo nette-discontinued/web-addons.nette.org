@@ -37,6 +37,12 @@ services:
 	users: NetteAddons\Model\Users
 	addons: NetteAddons\Model\Addons
 	tags: NetteAddons\Model\Tags
+	addonVersions: NetteAddons\Model\AddonVersions
+	versionDependencies: NetteAddons\Model\VersionDependencies
+
+	# importing
+	addonUpdater: NetteAddons\Model\AddonUpdater
+	addonCreator: NetteAddons\Model\AddonCreator
 
 	# github
 	curl: NetteAddons\Curl( 50000 )
