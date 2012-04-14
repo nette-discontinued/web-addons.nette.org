@@ -19,7 +19,7 @@ class AddAddonForm extends BaseForm
 		$this->addText('demo', 'Demo URL:', 60, 500)
 			->setAttribute('class', 'span6');
 
-		$this->addSubmit('create', 'Create');
+		$this->addSubmit('create', 'Next');
 	}
 
 }
