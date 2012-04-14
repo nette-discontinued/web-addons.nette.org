@@ -58,7 +58,7 @@ class AddonUpdater extends Nette\Object
 	{
 		$package = array(
 			'name' => $addon->name,
-			'composer_name' => $addon->composerName,
+			'composer_name' => $addon->composerName
 		);
 
 		if (!$addon->user instanceof Nette\Security\Identity) {
@@ -70,6 +70,7 @@ class AddonUpdater extends Nette\Object
 				'repository' => $addon->repository,
 				'description' => $addon->description ?: "",
 				'short_description' => $addon->shortDescription ? : "",
+				'demo' => $addon->demo ?: NULL,
 				'updated_at' => new \Datetime('now'),
 				'user_id' => $addon->user->getId()
 			));
