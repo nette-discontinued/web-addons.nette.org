@@ -1,13 +1,35 @@
-
-
-{block content}
+{block #content}
 
 <p>Please select an option:</p>
 
 <ol>
-	<li>
-        <a n:href="import">Import from Git repository</a><br/><br/>
-        {control importAddonForm}
-    </li>
-	<li><a n:href="create">Manually create the addon</a></li>
+	<li id="fromGitHub">
+		<a href="#">Import from Git repository</a><br/><br/>
+		<div>
+			{control importAddonForm}
+		</div>
+	</li>
+	<li id="manualCreate">
+		<a href="#">Manually create the addon</a><br><br>
+		<div class="hide">
+			{control addAddonForm}
+		</div>
+	</li>
 </ol>
+
+
+<script>
+	$(function () {
+		$('#manualCreate a').on('click', function (e) {
+			$('#manualCreate > div').slideDown();
+			$('#fromGitHub > div').slideUp();
+			return false;
+		});
+
+		$('#fromGitHub a').on('click', function (e) {
+			$('#manualCreate > div').slideUp();
+			$('#fromGitHub > div').slideDown();
+			return false;
+		});
+	});
+</script>
