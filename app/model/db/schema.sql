@@ -85,3 +85,9 @@ CREATE TABLE `addon_votes` (
 
 
 -- 2012-04-14 17:32:34
+
+-- added addon.short_description
+ALTER TABLE `addon`
+ADD `short_description` varchar(250) COLLATE 'utf8_general_ci' NOT NULL COMMENT 'short description' AFTER `repository`,
+COMMENT=''
+REMOVE PARTITIONING;
