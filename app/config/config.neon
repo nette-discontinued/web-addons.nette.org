@@ -37,5 +37,8 @@ services:
 	addons: NetteAddons\Model\Addons
 	tags: NetteAddons\Model\Tags
 
+	# github
+	github: NetteAddons\GitHub\Service( 'https://api.github.com', 50000 )
+
 
 factories:
