@@ -4,7 +4,7 @@ namespace NetteAddons;
 
 use NetteAddons\Model\Addon,
 	NetteAddons\Model\AddonVersion,
-	NetteAddons\Model\Addons,
+	NetteAddons\Model\AddonUpdater,
 	NetteAddons\Model\IAddonImporter;
 use Nette\Http\Session,
 	Nette\Http\SessionSection;
@@ -16,8 +16,8 @@ final class ManagePresenter extends BasePresenter
 	/** @var SessionSection */
 	private $session;
 
-	/** @var Addons */
-	private $addons;
+	/** @var AddonUpdater */
+	private $updater;
 
 	/**
 	 * @var string
@@ -30,9 +30,9 @@ final class ManagePresenter extends BasePresenter
 
 
 
-	public function setContext(Addons $addons, Session $session)
+	public function setContext(AddonUpdater $updater, Session $session)
 	{
-		$this->addons = $addons;
+		$this->updater = $updater;
 		$this->session = $session->getSection('NetteAddons.ManagePresenter');
 	}
 
@@ -219,7 +219,7 @@ final class ManagePresenter extends BasePresenter
 	public function actionFinish()
 	{
 		if ($this->addon !== NULL) {
-			$id = $this->addons->createAddon($this->addon);
+			$id = $this->updater->update($this->addon);
 			$this->flashMessage('Addon sucessfuly saved.');
 			$this->redirect('Detail:', $id);
 		} else {
