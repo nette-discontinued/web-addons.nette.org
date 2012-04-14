@@ -47,4 +47,7 @@ class AddonVersion extends Nette\Object
 	 */
 	public $recommend = array();
 
+	/** @var array */
+	public $composerJson = array();
+
 }

@@ -91,3 +91,15 @@ ALTER TABLE `addon`
 ADD `short_description` varchar(250) COLLATE 'utf8_general_ci' NOT NULL COMMENT 'short description' AFTER `repository`,
 COMMENT=''
 REMOVE PARTITIONING;
+
+-- added composer.json to version
+ALTER TABLE `addon_version`
+ADD `composer_json` text COLLATE 'utf8_general_ci' NULL AFTER `version`,
+COMMENT=''
+REMOVE PARTITIONING;
+
+-- added vendor name to addon
+ALTER TABLE `addon`
+ADD `vendor_name` varchar(100) COLLATE 'utf8_general_ci' NOT NULL AFTER `name`,
+COMMENT=''
+REMOVE PARTITIONING;
