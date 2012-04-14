@@ -103,3 +103,7 @@ ALTER TABLE `addon`
 ADD `vendor_name` varchar(100) COLLATE 'utf8_general_ci' NOT NULL AFTER `name`,
 COMMENT=''
 REMOVE PARTITIONING;
+
+-- versions for addon must be unique
+ALTER TABLE `addon_version`
+ADD UNIQUE `addon_id_version` (`addon_id`, `version`);
