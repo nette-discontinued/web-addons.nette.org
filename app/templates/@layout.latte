@@ -16,6 +16,7 @@
 
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
 	<script type="text/javascript" src="{$basePath}/js/netteForms.js"></script>
+	<script type="text/javascript" src="{$basePath}/js/bootstrap/bootstrap-alert.js"></script>
 	{block head}{/block}
 </head>
 
@@ -49,9 +50,9 @@
 		</div>
 	</div>
 
-	<div n:foreach="$flashes as $flash" class="flash {$flash->type}">{$flash->message}</div>
-
 	<div class="container">
+
+		<div n:foreach="$flashes as $flash" class="alert alert-{$flash->type}"><a class="close" data-dismiss="alert">×</a>{$flash->message}</div>
 
 		{include #content}
 
@@ -61,5 +62,9 @@
 			<p>&copy; <a href="http://nettefoundation.com/" >Nette Foundation</a> 2012</p>
 		</footer>
 	</div>
+
+	<script type="text/javascript">
+		$(".alert").alert();
+	</script>
 </body>
 </html>
