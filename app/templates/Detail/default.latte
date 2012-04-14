@@ -70,7 +70,7 @@
 							{foreach $version->related('addon_dependency') as $dep}
 								<li class="small">
 									{if $dep->dependency_id}
-										{$dep->dependency->name}
+										<a n:href="this, $dep->dependency->id">{$dep->dependency->name}</a>
 									{else}
 										{$dep->package_name}
 									{/if}
