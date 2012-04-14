@@ -39,7 +39,8 @@ services:
 	tags: NetteAddons\Model\Tags
 
 	# github
-	github: NetteAddons\Model\GitHub\Service( 'https://api.github.com', 50000 )
+	curl: NetteAddons\Curl( 50000 )
+	github: NetteAddons\Model\GitHub\Service( @curl, 'https://api.github.com' )
 
 factories:
 	repository:
