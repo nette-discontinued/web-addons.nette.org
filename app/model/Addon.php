@@ -23,6 +23,11 @@ class Addon extends Nette\Object
 	public $vendorName;
 
 	/**
+	 * @var \Nette\Security\Identity
+	 */
+	public $user;
+
+	/**
 	 * @var string
 	 */
 	public $shortDescription;

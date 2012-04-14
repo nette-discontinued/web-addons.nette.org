@@ -24,19 +24,14 @@ class AddonVersions extends Table
 	 * @param \Nette\Database\Table\ActiveRow $addon
 	 * @param \NetteAddons\Model\AddonVersion $version
 	 *
-	 * @return bool
+	 * @return \Nette\Database\Table\ActiveRow
 	 */
 	public function setAddonVersion(ActiveRow $addon, AddonVersion $version)
 	{
-		try {
-			return $this->createOrUpdate(array(
-				'addon_id' => $addon->getPrimary(),
-				'version' => $version->version,
-			));
-
-		} catch (\PDOException $e) {
-			return FALSE;
-		}
+		return $this->createOrUpdate(array(
+			'addon_id' => $addon->getPrimary(),
+			'version' => $version->version,
+		));
 	}
 
 }

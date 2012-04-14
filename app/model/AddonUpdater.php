@@ -52,6 +52,7 @@ class AddonUpdater extends Nette\Object
 
 	/**
 	 * @param \NetteAddons\Model\Addon $addon
+	 * @return \Nette\Database\Table\ActiveRow
 	 */
 	public function update(Addon $addon)
 	{
@@ -60,7 +61,9 @@ class AddonUpdater extends Nette\Object
 				'name' => $addon->name,
 				'repository' => $addon->repository,
 				'description' => $addon->description,
-				// todo: author
+				'short_description' => $addon->short_description,
+				'updated_at' => new \Datetime('now'),
+				'user_id' => $addon->user->getId()
 			));
 		}
 
@@ -69,8 +72,11 @@ class AddonUpdater extends Nette\Object
 		}
 
 		foreach ($addon->versions as $version) {
-			$this->versions->setAddonVersion($addonRow, $version);
+			$versionRow = $this->versions->setAddonVersion($addonRow, $version);
+			$this->dependencies->setVersionDependencies($versionRow, $version);
 		}
+
+		return $addonRow;
 	}
 
 }

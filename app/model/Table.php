@@ -173,11 +173,17 @@ abstract class Table extends Nette\Object
 
 		$pairs = implode(', ', $pairs);
 		$values = array_values($values);
-		$this->connection->queryArgs(
-			'INSERT INTO `' . $this->tableName . '` SET ' . $pairs .
-			' ON DUPLICATE KEY UPDATE ' . $pairs, array_merge($values, $values));
 
-		return new ActiveRow($values, $this->getTable());
+		try {
+			$this->connection->queryArgs(
+				'INSERT INTO `' . $this->tableName . '` SET ' . $pairs .
+				' ON DUPLICATE KEY UPDATE ' . $pairs, array_merge($values, $values));
+
+			return new ActiveRow($values, $this->getTable());
+
+		} catch (\PDOException $e) {
+			return FALSE;
+		}
 	}
 
 }
