@@ -3,9 +3,11 @@
 namespace NetteAddons;
 
 use NetteAddons\Model\Addon,
+	NetteAddons\Model\AddonVersion,
 	NetteAddons\Model\Addons;
 use Nette\Http\Session,
 	Nette\Http\SessionSection;
+
 
 
 final class ManagePresenter extends BasePresenter
@@ -16,20 +18,37 @@ final class ManagePresenter extends BasePresenter
 	/** @var Addons */
 	private $addons;
 
-	/** @var string @persistent */
-	private $token;
+	/**
+	 * @var string
+	 * @persistent
+	 */
+	public $token;
 
 	/** @var Addon from the session. */
 	private $addon;
 
 
-	public function __construct(Addons $addons, Session $session)
+
+	public function setContext(Addons $addons, Session $session)
 	{
 		$this->addons = $addons;
 		$this->session = $session->getSection('NetteAddons.ManagePresenter');
+	}
+
+
+
+	public function startup()
+	{
+		parent::startup();
 
 		$this->restoreAddon();
+		bd($this->addon);
 	}
+
+
+
+	/*************** Session storage ****************/
+
 
 	/**
 	 * Generates a new token for the wizzard.
@@ -52,7 +71,7 @@ final class ManagePresenter extends BasePresenter
 		if ($this->token === NULL) {
 			$this->generateToken();
 		}
-		return "addon->$this->token";
+		return "addon-$this->token";
 	}
 
 
@@ -78,11 +97,8 @@ final class ManagePresenter extends BasePresenter
 
 
 
-	public function actionAdd()
-	{
 
-	}
-
+	/*************** Addon creation ****************/
 
 
 	/**
@@ -92,7 +108,7 @@ final class ManagePresenter extends BasePresenter
 	protected function createComponentAddAddonForm()
 	{
 		$form = new AddAddonForm();
-		$form->onSubmit[] = callback($this, 'addAddonFormSubmitted');
+		$form->onSuccess[] = callback($this, 'addAddonFormSubmitted');
 
 		if ($this->addon !== NULL) {
 			$form->setDefaults(array(
@@ -113,8 +129,10 @@ final class ManagePresenter extends BasePresenter
 	{
 		$values = $form->getValues();
 
-		$addon = new Addon();
-		$addon->name = $values->name;
+		if ($this->addon === NULL) {
+			$this->addon = new Addon();
+		}
+		$this->addon->name = $values->name;
 
 		$this->storeAddon();
 
@@ -123,8 +141,49 @@ final class ManagePresenter extends BasePresenter
 		if ($values->repository) {
 			$this->redirect('versionImport');
 		} else {
-			$this->generateToken();
 			$this->redirect('versionCreate');
 		}
 	}
+
+
+
+	/*************** Create a new version ****************/
+
+	protected function createComponentAddVersionForm()
+	{
+		$form = new AddVersionForm();
+
+		$form->onSuccess[] = callback($this, 'addVersionFormSubmitted');
+		return $form;
+	}
+
+
+	public function addVersionFormSubmitted(AddVersionForm $form)
+	{
+		$values = $form->getValues();
+
+		$version = new AddonVersion();
+		$version->version = $values->version;
+		$this->addon->versions[] = $version;
+		$this->storeAddon();
+
+		$this->flashMessage('Version created.');
+		$this->redirect('finish');
+	}
+
+
+
+	/*************** Finish the addon creation ****************/
+
+	public function actionFinish()
+	{
+		if ($this->addon !== NULL) {
+			$id = $this->addons->createAddon($this->addon);
+			$this->flashMessage('Addon sucessfuly saved.');
+			$this->redirect('Detail:', $id);
+		} else {
+			$this->redirect('create');
+		}
+	}
+
 }
