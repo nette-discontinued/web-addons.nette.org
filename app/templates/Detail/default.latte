@@ -9,6 +9,10 @@
 		<th>Author</th>
 		<td>{$addon->user|userlink}</td>
 	</tr>
+	<tr n:if="$addon->repository">
+		<th>Repository</th>
+		<td><a href="{$addon->repository}">{$addon->repository}</a></td>
+	</tr>
 	<tr>
 		<th>Tags</th>
 		<td>
