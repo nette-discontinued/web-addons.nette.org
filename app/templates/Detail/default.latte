@@ -26,10 +26,18 @@
 						<span class="date">({$addon->updated_at|date:'%d.%m.%Y'})</span>
 						{$addon->user|userlink}
 					</div>
+
+					{*$addon->license*}
 				</div>
 			</div>
 
-			<p class="addon-download"><a class="btn btn-primary btn-large"><i class="icon-download icon-white"></i> Download</a></p>
+			<p class="addon-download">
+				{if $addon->demo}
+					<a class="btn btn-success btn-large" href="{$addon->demo}"><i class="icon-eye-open icon-white"></i> Demo</a>
+				{/if}
+				<a class="btn btn-primary btn-large" href="javascript:;"><i class="icon-download icon-white"></i> Download</a>
+			</p>
+			
 		</div>
 
 		<div class="row">
