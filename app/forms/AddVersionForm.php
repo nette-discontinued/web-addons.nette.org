@@ -9,7 +9,7 @@ namespace NetteAddons;
  */
 class AddVersionForm extends BaseForm
 {
-	public function buildForm()
+	protected function buildForm()
 	{
 		$this->addText('version', 'Version', 10, 20)
 			->addRule(self::FILLED);
