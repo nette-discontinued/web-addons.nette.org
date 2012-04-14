@@ -26,7 +26,10 @@ services:
 	database: @Nette\Database\Connection
 	nette.presenterFactory: NetteAddons\PresenterFactory(%appDir%, @container)
 
+    # security
 	authenticator: NetteAddons\Model\Authenticator
+
+    # tables
 	users: NetteAddons\Model\Users
 	addons: NetteAddons\Model\Addons
 

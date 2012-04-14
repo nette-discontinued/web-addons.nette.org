@@ -1,6 +1,6 @@
 <?php
 
-namespace NetteAddons;
+namespace NetteAddons\Model;
 
 use Nette\Object;
 use Nette\Security as NS;
