@@ -80,7 +80,6 @@ class Repository extends \Nette\Object
 		$branch = isset($repo->master_branch) ? $repo->master_branch : 'master';
 
 		$data = json_decode($this->getComposerJson($branch));
-		return $data;
 		if ($data) {
 			$addon = new \NetteAddons\Model\Addon;
 			if (isset($data->name)) {
