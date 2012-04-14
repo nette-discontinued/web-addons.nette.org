@@ -67,4 +67,14 @@ class Tags extends Table
 		return $this->database->table('addon_tag');
 	}
 
+	public function isCategory(ActiveRow $tag)
+	{
+		return $tag->level == Static::LEVEL_CATEGORY;
+	}
+
+	public function isSubCategory(ActiveRow $tag)
+	{
+		return $tag->level == Static::LEVEL_SUBCATEGORY;
+	}
+
 }
