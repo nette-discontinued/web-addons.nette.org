@@ -28,4 +28,52 @@ class Addons extends Table
 		throw new Nette\NotImplementedException;
 	}
 
+
+
+	/**
+	 * @param \Nette\Database\Table\ActiveRow $addon
+	 * @param string|\Nette\Database\Table\ActiveRow $tag
+	 */
+	public function addAddonTag(ActiveRow $addon, $tag)
+	{
+		try {
+			if (!$tag instanceof ActiveRow){
+				$tag = $this->database->table('tags')
+					->where('name = ? OR slug = ? OR id = ?', $tag, $tag, $tag)
+					->limit(1)->fetch();
+			}
+
+			$this->getTagsTable()->insert(array(
+				'addonId' => $addon->getPrimary(),
+				$tag->getPrimary()
+			));
+
+			return TRUE;
+
+		} catch (\PDOException $e) {
+			return FALSE;
+		}
+	}
+
+
+
+	/**
+	 * @param \Nette\Database\Table\ActiveRow $addon
+	 * @return mixed
+	 */
+	public function getAddonDependencies(ActiveRow $addon)
+	{
+		return $addon->related('addon_dependencies');
+	}
+
+
+
+	/**
+	 * @return \Nette\Database\Table\Selection
+	 */
+	protected function getTagsTable()
+	{
+		return $this->database->table('addon_tags');
+	}
+
 }
