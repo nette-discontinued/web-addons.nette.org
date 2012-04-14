@@ -178,6 +178,10 @@ class Repository extends \Nette\Object
 	 */
 	public static function createFromUrl(ApiService $service, $fileFactory, $url)
 	{
+		if (Strings::startsWith($url, 'github.com/')) {
+			$url = "http://".$url;
+		}
+
 		$url = new \Nette\Http\Url($url);
 		$path = substr($url->getPath(), 1);
 		if ($url->getHost() != 'github.com' && strpos($path, '/') === FALSE) {
