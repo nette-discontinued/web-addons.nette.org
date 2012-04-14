@@ -25,6 +25,7 @@ class ListPresenter extends BasePresenter
 		}
 
 		$this->template->addons = $addons;
+		$this->template->tags = $this->context->tags;
 	}
 
 }
