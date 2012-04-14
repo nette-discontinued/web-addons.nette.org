@@ -131,7 +131,7 @@ class Repository extends \Nette\Object
 			}
 		}
 
-		return $versions;
+		return $metadatas;
 	}
 
 	/**
