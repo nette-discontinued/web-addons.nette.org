@@ -158,5 +158,27 @@ abstract class Table extends Nette\Object
 		}
 	}
 
+
+
+	/**
+	 * @param array $values
+	 * @return \Nette\Database\Table\ActiveRow
+	 */
+	public function createOrUpdate(array $values)
+	{
+		$pairs = array();
+		foreach ($values as $key => $value) {
+			$pairs[] = "`$key` = ?";
+		}
+
+		$pairs = implode(', ', $pairs);
+		$values = array_values($values);
+		$this->connection->queryArgs(
+			'INSERT INTO `' . $this->tableName . '` SET ' . $pairs .
+			' ON DUPLICATE KEY UPDATE ' . $pairs, array_merge($values, $values));
+
+		return new ActiveRow($values, $this->getTable());
+	}
+
 }
 

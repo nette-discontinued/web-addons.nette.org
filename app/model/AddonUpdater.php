@@ -55,8 +55,22 @@ class AddonUpdater extends Nette\Object
 	 */
 	public function update(Addon $addon)
 	{
-		throw new Nette\NotImplementedException;
-	}
+		if (!$addonRow = $this->addons->findOneBy(array('name' => $addon->name))) {
+			$addonRow = $this->addons->createRow(array(
+				'name' => $addon->name,
+				'repository' => $addon->repository,
+				'description' => $addon->description,
+				// todo: author
+			));
+		}
 
+		foreach ($addon->tags as $tag) {
+			$this->tags->addAddonTag($addonRow, $tag);
+		}
+
+		foreach ($addon->versions as $version) {
+			$this->versions->setAddonVersion($addonRow, $version);
+		}
+	}
 
 }
