@@ -106,7 +106,7 @@ class Repository extends \Nette\Object
 			$addon = new \NetteAddons\Model\Addon;
 			if (isset($data->name)) {
 				$addon->composerName = $data->name;
-				$addon->name = Strings::replace($data->name, '/', ' ');
+				$addon->name = str_replace($data->name, '/', ' ');
 			}
 			if (isset($data->description)) {
 				$addon->shortDescription = Strings::truncate($data->description, 250);
