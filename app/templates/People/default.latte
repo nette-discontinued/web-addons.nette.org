@@ -14,12 +14,8 @@
 		<div class="row authors-list">
 		
 			<div class="span2 author" n:foreach="$authors as $author">
-				
-					<h2>{$author|userlink}</h2>
-				
-					<img src="http://forum.nette.org/cs/img/avatars/2118.jpg" alt="{$author->name}" />
-			
-					<span class="badge">{$author->related('addon')->count()}</span>			
+				<img src="http://forum.nette.org/cs/img/avatars/2118.jpg" alt="{$author->name}" />
+				<h2>{$author|userlink}  <span class="label label-success">{$author->related('addon')->count()}</span></h2>		
 			</div>
 		</div>
 
