@@ -71,39 +71,4 @@ class Addons extends Table
 		$addons->where('name LIKE ? OR shortDescription LIKE ?', $string, $string);
 	}
 
-
-
-	/**
-	 * @param \Nette\Database\Table\ActiveRow $addonVersion
-	 * @return \Nette\Database\Table\GroupedSelection
-	 */
-	public function findVersionDependencies(ActiveRow $addonVersion)
-	{
-		return $addonVersion->related('addons_dependencies');
-	}
-
-
-
-	/**
-	 * @param \Nette\Database\Table\ActiveRow $addon
-	 *
-	 * @return \Nette\Database\Table\GroupedSelection
-	 */
-	public function findAddonTags(ActiveRow $addon)
-	{
-		return $addon->related('addons_tags');
-	}
-
-
-
-	/**
-	 * @param \Nette\Database\Table\ActiveRow $addon
-	 *
-	 * @return \Nette\Database\Table\GroupedSelection
-	 */
-	public function findAddonVersions(ActiveRow $addon)
-	{
-		return $addon->related('addons_versions');
-	}
-
 }
