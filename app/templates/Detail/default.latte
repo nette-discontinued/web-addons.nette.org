@@ -53,9 +53,10 @@
 
 			<div class="span4">
 				<div class="box-vote">
-					<a n:if="$user->loggedIn" class="btn btn-success btn-mini" n:href="vote! up">+1</a>
+					{if $user->loggedIn}{var $my = $addon->related('addon_votes')->where('user_id = ?', $user->id)->fetch()->vote}{/if}
+					<a n:if="$user->loggedIn" n:class="btn, btn-success, btn-mini, ($my > 0) ? disabled" n:href="vote! ($my > 0) ? cancel : up">+1</a>
 					<span class="votes">{$addon->related('votes')->aggregation('SUM(vote)') ?: 0}</span>
-					<a n:if="$user->loggedIn" class="btn btn-danger btn-mini" n:href="vote! down">-1</a>
+					<a n:if="$user->loggedIn" n:class="btn, btn-danger, btn-mini, ($my < 0) ? disabled" n:href="vote! ($my < 0) ? cancel : down">-1</a>
 				</div>
 
 

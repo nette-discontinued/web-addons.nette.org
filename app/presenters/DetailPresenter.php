@@ -29,12 +29,16 @@ class DetailPresenter extends BasePresenter
 	 */
 	public function handleVote($vote)
 	{
-		if ($vote === 'up') {
-			$vote = 1;
-		} elseif ($vote === 'down') {
-			$vote = -1;
-		} else {
+		$trans = array(
+			'up' => 1,
+			'cancel' => 0,
+			'down' => -1,
+		);
+
+		if (!isset($trans[$vote])) {
 			$this->error('invalid vote');
+		} else {
+			$vote = $trans[$vote];
 		}
 
 		if (!$this->user->loggedIn) {
