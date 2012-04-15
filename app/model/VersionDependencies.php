@@ -31,19 +31,19 @@ class VersionDependencies extends Table
 				if (strpos($packageName, '/') !== FALSE){
 					if ($dep = $this->findAddon($packageName)) {
 						$insert = array(
-							'dependency_id' => $dep->getPrimary()
+							'dependencyId' => $dep->getPrimary()
 						);
 					}
 				}
 
 				if (!isset($insert)) {
 					$insert = array(
-						'package_name' => $packageName
+						'packageName' => $packageName
 					);
 				}
 
 				$this->createOrUpdate(array(
-					'addon_id' => $addon->getPrimary(),
+					'addonId' => $addon->getPrimary(),
 					'version' => $versionName,
 					'type' => $type,
 				) + $insert);
@@ -61,7 +61,7 @@ class VersionDependencies extends Table
 	private function findAddon($composerName)
 	{
 		return $this->connection->table('addon')
-			->where('composer_name = ?', $composerName)
+			->where('composerName = ?', $composerName)
 			->limit(1)->fetch();
 	}
 

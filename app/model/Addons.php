@@ -40,7 +40,7 @@ class Addons extends Table
 	public function filterByTag(Selection $addons, $tag)
 	{
 		$addonIds = $this->connection->table('addons_tags')
-			->where('tag_id = ?', $tag)->select('addon_id');
+			->where('tagId = ?', $tag)->select('addonId');
 
 		$addons->where('id', $addonIds);
 
@@ -68,7 +68,7 @@ class Addons extends Table
 	public function filterByString(Selection $addons, $string)
 	{
 		$string = "%$string%";
-		$addons->where('name LIKE ? OR short_description LIKE ?', $string, $string);
+		$addons->where('name LIKE ? OR shortDescription LIKE ?', $string, $string);
 	}
 
 
