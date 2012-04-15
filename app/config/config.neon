@@ -37,6 +37,7 @@ services:
 
     # security
 	authenticator: NetteAddons\Model\Authenticator
+	authorizator: NetteAddons\Model\Authorizator
 
     # tables
 	users: NetteAddons\Model\Users
