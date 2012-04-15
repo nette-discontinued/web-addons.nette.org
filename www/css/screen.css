@@ -6998,7 +6998,7 @@ a:hover .label {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ee5f5b', endColorstr='#c43c35', GradientType=0);
 }
 .progress-yesno .bar {
-  border-right: 1px solid white;
+  border-right: 1px solid #dbdfcc;
 }
 .box-create-addon {
   text-align: center;
