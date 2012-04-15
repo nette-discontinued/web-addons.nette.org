@@ -80,7 +80,7 @@ class AddonManageFacade extends Nette\Object
 	 * @throws \UnexpectedValueException
 	 * @return \NetteAddons\Model\Addon
 	 */
-	public function importRepositoryVersions(Model\Importers\GitHubImporter $importer, $owner)
+	public function importRepository(Model\Importers\GitHubImporter $importer, $owner)
 	{
 		/** @var \NetteAddons\Model\Addon $addon */
 		if (NULL === ($addon = $importer->import())) {
