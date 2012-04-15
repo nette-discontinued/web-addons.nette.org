@@ -6961,6 +6961,9 @@ h1 {
 a:hover .label {
   text-decoration: none;
 }
+.no {
+  display: none;
+}
 .hero-unit {
   padding-bottom: 40px;
   padding-top: 50px;
@@ -7011,10 +7014,15 @@ a:hover .label {
 .box-versions h3 {
   padding-bottom: 10px;
 }
-.downloads h4 {
+.box-versions .downloads .version {
+  border-bottom: 1px dotted #999999;
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+.box-versions .downloads h4 {
   padding-bottom: 5px;
 }
-.downloads h5 {
+.box-versions .downloads h5 {
   padding-top: 10px;
 }
 .authors-list .author {
