@@ -1,0 +1,26 @@
+{*
+	Addon List Item
+
+	@param $addon 
+*}
+<div class="row addon-list-item">
+	<div class="icon span1">
+		<img src="{$basePath}/images/addon/default-ico.png" width="64" heigth="64" alt="Addon ico" />
+	</div>
+
+	<div class="span8">
+		<h2>{$addon|addonlink}</h2>
+
+		<div class="author">{$addon->user|userlink}</div>
+
+		<div class="description">{$addon->shortDescription}</div>
+
+		<div class="tags">
+			{foreach $addon->related('addons_tags') as $addonTag}
+				{include '../Addon/tag.latte' tag => $addonTag }
+			{/foreach}
+		</div>
+
+	</div>
+
+</div>
