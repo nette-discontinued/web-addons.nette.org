@@ -42,8 +42,8 @@ class AddonVotes extends Table
 
 
 	/**
-	 * @param int $addonId
-	 * @return float|int
+	 * @param $addonId
+	 * @return \stdClass
 	 */
 	public function calculatePopularity($addonId)
 	{
@@ -64,7 +64,11 @@ class AddonVotes extends Table
 			$percents = 50;
 		}
 
-		return $percents;
+		return Nette\ArrayHash::from(array(
+			'plus' => $votesPlus,
+			'minus' => $votesMinus,
+			'percents' => $percents,
+		));
 	}
 
 }
