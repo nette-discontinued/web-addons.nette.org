@@ -11,22 +11,26 @@ use Nette\Utils\Strings;
  */
 class AddVersionForm extends BaseForm
 {
+
 	protected function buildForm()
 	{
 		$this->addText('version', 'Version', 10, 20)
-			->addRule(self::FILLED);
-		$this->addUpload('archive', 'Archive')
-			->addRule(self::FILLED);
-		$this->addText('license', 'License', 20, 100)
-			->addRule(self::FILLED);
+			->setRequired("%label% is required");
 
+		$this->addUpload('archive', 'Archive')
+			->setRequired("%label% is required");
+
+		$this->addText('license', 'License', 20, 100)
+			->setRequired("%label% is required");
 
 		$this->addSubmit('create', 'Create');
-
 		$this->onValidate[] = callback($this, 'validateArchive');
 	}
 
 
+	/**
+	 * @param \NetteAddons\AddVersionForm $form
+	 */
 	public function validateArchive(AddVersionForm $form)
 	{
 		/** @var $file \Nette\Http\FileUpload */
@@ -36,4 +40,5 @@ class AddVersionForm extends BaseForm
 			$form->valid = FALSE;
 		}
 	}
+
 }

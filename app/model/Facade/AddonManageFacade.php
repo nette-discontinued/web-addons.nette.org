@@ -22,16 +22,23 @@ class AddonManageFacade extends Nette\Object
 	 */
 	private $addons;
 
+	/**
+	 * @var string
+	 */
+	private $uploadDir;
+
 
 
 	/**
 	 * @param \NetteAddons\Model\AddonUpdater $updater
 	 * @param \NetteAddons\Model\Addons $addons
+	 * @param string $uploadDir
 	 */
-	public function __construct(Model\AddonUpdater $updater, Model\Addons $addons)
+	public function __construct(Model\AddonUpdater $updater, Model\Addons $addons, $uploadDir)
 	{
 		$this->updater = $updater;
 		$this->addons = $addons;
+		$this->uploadDir = $uploadDir;
 	}
 
 
@@ -72,25 +79,72 @@ class AddonManageFacade extends Nette\Object
 
 
 	/**
-	 * @param \NetteAddons\Model\IAddonImporter $importer
-	 * @param $values
-	 * @param \Nette\Security\Identity $owner
+	 * @param \NetteAddons\Model\RepositoryImporter $importer
+	 * @param \Nette\Security\Identity|\Nette\Database\Table\ActiveRow|null $owner
+	 *
+	 * @throws \NetteAddons\InvalidArgumentException
 	 * @throws \UnexpectedValueException
 	 * @return \NetteAddons\Model\Addon
 	 */
-	public function importRepositoryVersions(Model\IAddonImporter $importer, $values, Nette\Security\Identity $owner)
+	public function importRepositoryVersions(Model\RepositoryImporter $importer, $owner)
 	{
 		/** @var \NetteAddons\Model\Addon $addon */
 		if (NULL === ($addon = $importer->import())) {
 			throw new \UnexpectedValueException("Invalid repository.");
 		}
 
-		if (!isset($addon->repository)) {
-			$addon->repository = Model\GitHub\Repository::normalizeUrl($values->url);
+		// validate owner
+		if ($owner instanceof Nette\Security\Identity) {
+			$addon->userId = $owner->id;
+
+		} elseif ($owner instanceof Nette\Database\Table\ActiveRow) {
+			$addon->userId = $owner->id;
+
+		} else {
+			throw new \NetteAddons\InvalidArgumentException("Invalid owner was provided");
 		}
 
-		$addon->userId = $owner->getId();
+		// normalize repository
+		if (!isset($addon->repository)) {
+			$addon->repository = Model\GitHub\Repository::normalizeUrl($importer->getUrl());
+		}
+
+		$this->updater->update($addon);
 		return $addon;
+	}
+
+
+
+	/**
+	 * @param \NetteAddons\Model\Addon $addon
+	 * @param $values
+	 *
+	 * @throws \NetteAddons\InvalidArgumentException
+	 * @return \NetteAddons\Model\AddonVersion
+	 */
+	public function submitAddonVersion(Model\Addon $addon, $values)
+	{
+		if (!$values->license) {
+			throw new \NetteAddons\InvalidArgumentException("License is mandatory.");
+		}
+
+		if (!$values->license) {
+			throw new \NetteAddons\InvalidArgumentException("Version is mandatory.");
+		}
+
+		$version = new Model\AddonVersion();
+		$version->version = $values->version;
+		$version->license = $values->license;
+
+		/** @var $file \Nette\Http\FileUpload */
+		$file = $values->archive;
+		$filename = $version->getFilename($addon);
+		$file->move($this->uploadDir . '/' . $filename);
+		$version->filename = $filename;
+
+		$addon->versions[] = $version;
+		$this->updater->update($addon);
+		return $version;
 	}
 
 }

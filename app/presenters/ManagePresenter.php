@@ -197,7 +197,6 @@ final class ManagePresenter extends BasePresenter
 	protected function createComponentImportAddonForm()
 	{
 		$form = new ImportAddonForm();
-
 		$form->onSuccess[] = callback($this, 'importAddonFormSubmitted');
 		return $form;
 	}
@@ -209,15 +208,19 @@ final class ManagePresenter extends BasePresenter
 	 */
 	public function importAddonFormSubmitted(ImportAddonForm $form)
 	{
-		$values = $form->getValues();
 		$importer = $this->getContext()->createRepositoryImporter($form->values->url);
 
 		try {
-			$this->addon = $this->manager->importRepositoryVersions($importer, $form->values, $this->user->identity);
+			$this->addon = $this->manager->importRepositoryVersions($importer, $this->user->identity);
 			$this->storeAddon();
 
 		} catch (\UnexpectedValueException $e) {
 			$form->addError($e->getMessage());
+			return;
+
+		} catch (\NetteAddons\InvalidStateException $e) {
+			$form->addError($e->getMessage() . ' Probably missing license?');
+			return;
 		}
 
 		$this->flashMessage('Imported addon.');
@@ -232,42 +235,48 @@ final class ManagePresenter extends BasePresenter
 	{
 		if ($id !== NULL) {
 			$this->addon = Addon::fromActiveRow($this->addons->findOneBy(array('id' => $id)));
-			$this->addon->user = $this->getUser()->getIdentity();
+			$this->addon->userId = $this->getUser()->getId();
 		}
 	}
 
+
+	/**
+	 * @return AddVersionForm
+	 */
 	protected function createComponentAddVersionForm()
 	{
 		$form = new AddVersionForm();
-
 		$form->onSuccess[] = callback($this, 'addVersionFormSubmitted');
 		return $form;
 	}
 
 
+	/**
+	 * @param \NetteAddons\AddVersionForm $form
+	 */
 	public function addVersionFormSubmitted(AddVersionForm $form)
 	{
 		$values = $form->getValues();
 
-		$version = new AddonVersion();
-		$version->version = $values->version;
-		$version->license = $values->license;
+		try {
+			$this->manager->submitAddonVersion($this->addon, $values);
+			$this->storeAddon();
 
-		/** @var $file \Nette\Http\FileUpload */
-		$file = $values->archive;
-		$filename = $version->getFilename($this->addon);
-		$file->move($this->getContext()->parameters['uploadDir'] . '/' . $filename);
-		$version->filename = $filename;
+		} catch (\NetteAddons\InvalidArgumentException $e) {
+			$form->addError($e->getMessage());
+			return;
 
-		$this->addon->versions[] = $version;
-		$this->storeAddon();
-		$this->updater->update($this->addon);
+		} catch (\NetteAddons\InvalidStateException $e) {
+			$form->addError($e->getMessage() . ' Probably missing license?');
+			return;
+		}
 
 		$this->flashMessage('Version created.');
-		if (($id = $this->getParameter('id')) === NULL) {
-			$this->redirect('finish');
-		} else {
+		if (($id = $this->getParameter('id')) !== NULL) {
 			$this->redirect('Detail:', $id);
+
+		} else {
+			$this->redirect('finish');
 		}
 	}
 
@@ -285,17 +294,28 @@ final class ManagePresenter extends BasePresenter
 		if (($this->addonRow = $this->addons->findOneBy(array('id' => $id))) === FALSE) {
 			throw new \Nette\Application\BadRequestException('Invalid addon ID.');
 		}
+
 		$this->addon = Addon::fromActiveRow($this->addonRow);
-		$this->addon->user = $this->getUser()->getIdentity();
+		$this->addon->userId = $this->getUser()->getId();
 
-		$importer = $this->getContext()->createRepositoryImporter($this->addon->repository);
-		$this->addon->versions = $importer->importVersions();
-		$this->updater->update($this->addon);
+		try {
+			$importer = $this->getContext()->createRepositoryImporter($this->addon->repository);
+			$this->addon = $this->manager->importRepositoryVersions($importer, $this->user->identity);
+			$this->addon->versions = $importer->importVersions();
+			$this->updater->update($this->addon);
 
-		$this->flashMessage('Addon version successfully updated.');
-		$this->redirect(':Detail:default', array('id' => $id));
+			$this->flashMessage('Addon version successfully updated.');
+
+		} catch (\NetteAddons\InvalidStateException $e) {
+			$this->flashMessage($e->getMessage() . ' Maybe missing license?');
+			$this->redirect('Detail:default', $id);
+		}
 	}
 
+
+	/**
+	 *
+	 */
 	public function handleImportVersions()
 	{
 		$importer = $this->getContext()->createRepositoryImporter($this->addon->repository);

@@ -12,8 +12,17 @@ use Nette;
  */
 class RepositoryImporter extends Nette\Object implements IAddonImporter
 {
-	/** @var callable */
+	/**
+	 * @var \NetteAddons\Model\GitHub\Repository
+	 */
 	private $loader;
+
+	/**
+	 * @var string
+	 */
+	private $url;
+
+
 
 	/**
 	 * @param callable
@@ -21,8 +30,21 @@ class RepositoryImporter extends Nette\Object implements IAddonImporter
 	 */
 	public function __construct($repositoryFactory, $url)
 	{
+		$this->url = $url;
 		$this->loader = callback($repositoryFactory)->invoke($url);
 	}
+
+
+
+	/**
+	 * @return string
+	 */
+	public function getUrl()
+	{
+		return $this->url;
+	}
+
+
 
 	/**
 	 * @return Addon
@@ -32,6 +54,8 @@ class RepositoryImporter extends Nette\Object implements IAddonImporter
 		return $this->loader->getMainMetadata();
 	}
 
+
+
 	/**
 	 * @return AddonVersion[]
 	 */
@@ -39,4 +63,5 @@ class RepositoryImporter extends Nette\Object implements IAddonImporter
 	{
 		return $this->loader->getVersionsMetadatas();
 	}
+
 }

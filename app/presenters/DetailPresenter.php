@@ -13,6 +13,10 @@ class DetailPresenter extends BasePresenter
 	 */
 	public $id;
 
+
+	/**
+	 * @param $id
+	 */
 	public function renderDefault($id)
 	{
 		$addons = $this->context->addons;
@@ -32,13 +36,13 @@ class DetailPresenter extends BasePresenter
 								where(array('addon_id'=> $addon->id ,
 											'vote'=> 1))->fetch()->c;
 
-		
+
 		if (($votesPlus + $votesMinus) > 0){
 			$percents =  $votesPlus / ( $votesMinus + $votesPlus ) * 100;
 		} else {
 			$percents = 50;
 		}
-		
+
 
 		$this->template->plus = $votesPlus;
 		$this->template->minus = $votesMinus;
