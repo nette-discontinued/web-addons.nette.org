@@ -30,48 +30,35 @@ class Authorizator extends Nette\Object
 	 */
 	public function isAllowed($resource, $action)
 	{
-		/*
-		if ($resource instanceof Nette\Database\Table\ActiveRow) {
-			$resource = $this->fromActiveRow($resource);
+		if ($resource instanceof Addon) {
+			$ownerId = $resource->userId;
+			$resource = 'addon';
+
+		} elseif ($resource instanceof Nette\Database\Table\ActiveRow) {
+			$ownerId = $resource->user->id;
+			$resource = 'addon';
+
+		} else {
+			throw new \NetteAddons\InvalidArgumentException();
 		}
 
-		if ($resource instanceof Addon) {
+		if ($resource === 'addon') {
 			if ($action === 'view') {
 				return TRUE;
 
 			} elseif ($action === 'manage') {
 				return (
-					($this->user->isLoggedIn() && $resource->userId === $this->user->getIdentity()->id) ||
+					($this->user->isLoggedIn() && $ownerId === $this->user->getId()) ||
 					$this->user->isInRole('moderator')
 				);
 
 			} elseif ($action === 'vote') {
 				// you can't vote for your own addons
-				return ($this->user->isLoggedIn() && $resource->userId !== $this->user->getIdentity()->id);
-			}
+				return ($this->user->isLoggedIn() && $ownerId !== $this->user->getId());
 
-		} elseif ($resource === 'addon') {
-			if ($action === 'create') {
+			} elseif ($action === 'create') {
 				return $this->user->isLoggedIn();
 			}
-		}
-
-		throw new \NetteAddons\InvalidArgumentException();
-		*/
-		return TRUE;
-	}
-
-	/**
-	 * Convers ActiveRow to entity
-	 *
-	 * @param  Nette\Database\Table\ActiveRow
-	 * @return mixed
-	 * @throws \NetteAddons\InvalidArgumentException
-	 */
-	private function fromActiveRow(Nette\Database\Table\ActiveRow $row)
-	{
-		if ($row->getTable()->getName() === 'addon') {
-			return Addon::fromActiveRow($row);
 		}
 
 		throw new \NetteAddons\InvalidArgumentException();
