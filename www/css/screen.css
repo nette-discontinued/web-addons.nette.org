@@ -7023,6 +7023,8 @@ a:hover .label {
 .user-icon {
   border: 1px solid #999999;
   padding: 2px;
+  margin: 4px;
+  border-radius: 2px;
 }
 .box-create-addon {
   text-align: center;

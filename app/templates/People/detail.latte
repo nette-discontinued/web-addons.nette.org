@@ -2,8 +2,8 @@
 
 <div class="row">
 	<div class="span9">
-		<h1>{$author->name}</h1>
-		<img class="user-ico" src="{$basePath}/images/user.png" alt="{$author->name}" />
+		<h1><img class="user-icon" src="{$basePath}/images/user.png" alt="{$author->name}" /> {$author->name}</h1>
+		
 
 		{foreach $author->related('addons') as $addon}
 			{$addon|addonlink}{sep}, {/sep}
