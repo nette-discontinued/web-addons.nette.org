@@ -315,8 +315,9 @@ final class ManagePresenter extends BasePresenter
 
 		} catch (\NetteAddons\InvalidStateException $e) {
 			$this->flashMessage($e->getMessage() . ' Maybe missing license?');
-			$this->redirect('Detail:default', $id);
 		}
+
+		$this->redirect('Detail:default', $id);
 	}
 
 
