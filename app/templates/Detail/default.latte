@@ -89,7 +89,7 @@
 					<a n:if="$user->loggedIn" n:class="btn, btn-danger, btn-mini, ($my < 0) ? disabled" n:href="vote! ($my < 0) ? cancel : down"><i class="icon-thumb_down"></i></a>
 					
 					{if $percents !== FALSE}
-						<div class="progress progress-striped">
+						<div class="progress {if $percents > 50}progress-success{elseif $percents < 50}progress-danger{/if}">
 							<div class="bar" style="width: {$percents}%;"></div>
 						</div>
 					{/if}
