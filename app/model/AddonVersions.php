@@ -24,10 +24,15 @@ class AddonVersions extends Table
 	 * @param \Nette\Database\Table\ActiveRow $addon
 	 * @param \NetteAddons\Model\AddonVersion $version
 	 *
+	 * @throws \NetteAddons\InvalidArgumentException
 	 * @return \Nette\Database\Table\ActiveRow
 	 */
 	public function setAddonVersion(ActiveRow $addon, AddonVersion $version)
 	{
+		if (!$version->license) {
+			throw new \NetteAddons\InvalidArgumentException("License must be specified");
+		}
+
 		return $this->createOrUpdate(array(
 			'addon_id' => $addon->getPrimary(),
 			'version' => $version->version,

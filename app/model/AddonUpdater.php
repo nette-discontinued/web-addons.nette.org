@@ -81,8 +81,13 @@ class AddonUpdater extends Nette\Object
 		}
 
 		foreach ($addon->versions as $version) {
-			$versionRow = $this->versions->setAddonVersion($addonRow, $version);
-			$this->dependencies->setVersionDependencies($versionRow, $version);
+			try {
+				$versionRow = $this->versions->setAddonVersion($addonRow, $version);
+				$this->dependencies->setVersionDependencies($versionRow, $version);
+
+			} catch (\NetteAddons\InvalidArgumentException $e) {
+				throw new \NetteAddons\InvalidStateException("Cannot create version {$version->version}.", NULL, $e);
+			}
 		}
 
 		return $addonRow;
