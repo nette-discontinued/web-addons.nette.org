@@ -121,7 +121,7 @@ class AddonManageFacade extends Nette\Object
 			throw new \NetteAddons\InvalidArgumentException("License is mandatory.");
 		}
 
-		if (!$values->license) {
+		if (!$values->version) {
 			throw new \NetteAddons\InvalidArgumentException("Version is mandatory.");
 		}
 
