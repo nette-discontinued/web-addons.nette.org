@@ -10,7 +10,7 @@ class GitHubHelpersTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * @return array
 	 */
-	public function dataNormalizeGitHubUrl()
+	public static function dataNormalizeGitHubUrl()
 	{
 		return array(
 			array('https://github.com/nette/nette', 'https://github.com/nette/nette'),
