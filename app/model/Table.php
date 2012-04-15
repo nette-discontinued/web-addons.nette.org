@@ -93,20 +93,6 @@ abstract class Table extends Nette\Object
 
 
 	/**
-	 * Updates user with values
-	 *
-	 * @param \Nette\Database\Table\ActiveRow $user
-	 * @param array $values
-	 */
-	public function update(ActiveRow $user, array $values)
-	{
-		$user->update($values);
-		return TRUE;
-	}
-
-
-
-	/**
 	 * @param \Nette\Database\Table\ActiveRow|\Nette\Database\Table\Selection $selection
 	 * @throws \NetteAddons\InvalidArgumentException
 	 * @return bool
