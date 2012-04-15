@@ -220,6 +220,14 @@ final class ManagePresenter extends BasePresenter
 
 	/*************** Create a new version ****************/
 
+	public function actionVersionCreate($id = NULL)
+	{
+		if ($id !== NULL) {
+			$this->addon = Addon::fromActiveRow($this->addons->findOneBy(array('id' => $id)));
+			$this->addon->user = $this->getUser()->getIdentity();
+		}
+	}
+
 	protected function createComponentAddVersionForm()
 	{
 		$form = new AddVersionForm();
@@ -235,12 +243,17 @@ final class ManagePresenter extends BasePresenter
 
 		$version = new AddonVersion();
 		$version->version = $values->version;
+		$version->license = $values->license;
 		$this->addon->versions[] = $version;
 		$this->storeAddon();
 		$this->updater->update($this->addon);
 
 		$this->flashMessage('Version created.');
-		$this->redirect('finish');
+		if (($id = $this->getParameter('id')) === NULL) {
+			$this->redirect('Detail:', $id);
+		} else {
+			$this->redirect('finish');
+		}
 	}
 
 
