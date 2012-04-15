@@ -6,7 +6,7 @@ namespace NetteAddons;
 
 class EditAddonForm extends AddAddonForm
 {
-	public function buildForm()
+	protected function buildForm()
 	{
 		parent::buildForm();
 
