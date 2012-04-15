@@ -70,6 +70,7 @@ class Composer extends \Nette\Object
 			'url' => $this->addons->getZipUrl($addon, $version),
 			'type' => 'zip',
 		);
+		$composer['license'] = array_map('trim', explode(',', $version->license));
 
 		return $composer;
 	}
@@ -80,6 +81,9 @@ class Composer extends \Nette\Object
 			'name' => $addon->composerName,
 			'tags' => $addon->tags,
 			'description' => $addon->shortDescription,
+			'autoload' => array(
+				'classmap' => array('')
+			),
 		);
 
 		foreach (array('require', 'suggest', 'provide', 'replace', 'conflict') as $section) {
