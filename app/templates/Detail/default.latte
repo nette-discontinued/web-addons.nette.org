@@ -10,11 +10,11 @@
 
 		<div class="row box-edit">
 			<div class="span5  box-edit-left">
-				{ifset $addon->repository}
+				{if isset($addon->repository) && $addon->repository != NULL}
 				<a n:href=":Manage:checkVersions $addon->id" class="btn btn-info">Check updates</a>
 				{else}
 				<a n:href=":Manage:versionCreate $addon->id" class="btn btn-success">Add new version</a>
-				{/ifset}
+				{/if}
 			</div>
 
 			<div class="span4 box-edit-right">
