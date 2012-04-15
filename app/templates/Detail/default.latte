@@ -86,11 +86,7 @@
 						<tr>
 							<td class="thumb">
 								<span class="num">{$plus}×</span>
-								{if $user->loggedIn}
-									<a n:class="btn, btn-success, btn-mini, ($my > 0) ? disabled" n:href="vote! ($my > 0) ? cancel : up"><i class="icon-thumb_up"></i></a>
-								{else}
-									<i class="icon-thumb_up"></i>
-								{/if}
+								<a n:tag-if="$auth->isAllowed($addon, 'vote')" n:class="btn, btn-success, btn-mini, ($my > 0) ? disabled" n:href="vote! ($my > 0) ? cancel : up"><i class="icon-thumb_up"></i></a>
 							</td>
 							<td class="wrap-progress">
 								
@@ -101,11 +97,7 @@
 							</td>
 							<td class="thumb">
 								<span class="num">{$minus}×</span>
-								{if $user->loggedIn}
-									<a n:class="btn, btn-danger, btn-mini, ($my < 0) ? disabled" n:href="vote! ($my < 0) ? cancel : down"><i class="icon-thumb_down"></i></a>
-								{else}
-									<i class="icon-thumb_down"></i>
-								{/if}
+								<a n:tag-if="$auth->isAllowed($addon, 'vote')" n:class="btn, btn-danger, btn-mini, ($my < 0) ? disabled" n:href="vote! ($my < 0) ? cancel : down"><i class="icon-thumb_down"></i></a>
 							</td>
 						</tr>
 					</table>
