@@ -25,7 +25,7 @@
 				<div class="description">{$addon->short_description}</div>
 
 				<div class="tags">
-					{foreach $addon->related('addon_tag') as $addonTag}
+					{foreach $addon->related('addons_tags') as $addonTag}
 						{include '../Addon/tag.latte' tag => $addonTag }
 					{/foreach}
 				</div>

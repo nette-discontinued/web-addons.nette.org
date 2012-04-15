@@ -22,7 +22,7 @@ class Addons extends Table
 	/**
 	 * @var string
 	 */
-	protected $tableName = 'addon';
+	protected $tableName = 'addons';
 
 
 	public function setUploadUri($uploadUri, Http\IRequest $request)
@@ -39,7 +39,7 @@ class Addons extends Table
 	 */
 	public function filterByTag(Selection $addons, $tag)
 	{
-		$addonIds = $this->connection->table('addon_tag')
+		$addonIds = $this->connection->table('addons_tags')
 			->where('tag_id = ?', $tag)->select('addon_id');
 
 		$addons->where('id', $addonIds);
@@ -79,7 +79,7 @@ class Addons extends Table
 	 */
 	public function findVersionDependencies(ActiveRow $addonVersion)
 	{
-		return $addonVersion->related('addon_dependency');
+		return $addonVersion->related('addons_dependencies');
 	}
 
 
@@ -91,7 +91,7 @@ class Addons extends Table
 	 */
 	public function findAddonTags(ActiveRow $addon)
 	{
-		return $addon->related('addon_tag');
+		return $addon->related('addons_tags');
 	}
 
 
@@ -103,7 +103,7 @@ class Addons extends Table
 	 */
 	public function findAddonVersions(ActiveRow $addon)
 	{
-		return $addon->related('addon_version');
+		return $addon->related('addons_versions');
 	}
 
 }
