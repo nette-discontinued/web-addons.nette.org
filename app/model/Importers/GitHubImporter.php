@@ -11,6 +11,8 @@ class GitHubImporter extends \Nette\Object implements \NetteAddons\Model\IAddonI
 {
 	/** @var GitHub\Repository */
 	private $repository;
+	/** @var string */
+	private $url;
 
 	/**
 	 * @param callable
@@ -18,7 +20,17 @@ class GitHubImporter extends \Nette\Object implements \NetteAddons\Model\IAddonI
 	 */
 	public function __construct($repositoryFactory, $url)
 	{
+		$this->url = $url;
 		$this->repository = callback($repositoryFactory)->invoke($url);
+	}
+
+	/**
+	 * @todo remove!
+	 * @return string
+	 */
+	public function getUrl()
+	{
+		return $this->url;
 	}
 
 	/**
