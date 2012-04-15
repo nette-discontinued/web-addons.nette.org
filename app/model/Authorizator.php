@@ -39,7 +39,7 @@ class Authorizator extends Nette\Object
 			if ($action === 'view') {
 				return TRUE;
 
-			} elseif ($action === 'edit') {
+			} elseif ($action === 'manage') {
 				return (
 					$resource->userId === $this->user->getIdentity()->id ||
 					$this->user->isInRole('moderator')
