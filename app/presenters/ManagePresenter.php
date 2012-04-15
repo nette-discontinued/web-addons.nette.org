@@ -307,7 +307,7 @@ final class ManagePresenter extends BasePresenter
 
 		try {
 			$importer = $this->getContext()->createRepositoryImporter($this->addon->repository);
-			$this->addon = $this->manager->importRepositoryVersions($importer, $this->user->identity);
+			$this->addon = $this->manager->importRepository($importer, $this->user->identity);
 			$this->addon->versions = $importer->importVersions();
 			$this->updater->update($this->addon);
 
