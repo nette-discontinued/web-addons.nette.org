@@ -20,15 +20,14 @@ class DetailPresenter extends BasePresenter
 	public function renderDefault($id)
 	{
 		$addons = $this->context->addons;
-		$addon = $addons->find($id);
-
-		if (!$addon) {
+		if (!$addon = $addons->find($id)) {
 			$this->error('Addon not found!');
 		}
 
-		$this->template->plus = $votesPlus;
-		$this->template->minus = $votesMinus;
-		$this->template->percents = $this->context->addonVotes->calculatePopularity($addon->id);
+		$popularity = $this->context->addonVotes->calculatePopularity($addon->id);
+		$this->template->plus = $popularity->plus;
+		$this->template->minus = $popularity->minus;
+		$this->template->percents = $popularity->percents;
 
 		$this->template->addon = $addon;
 		$this->template->registerHelper('downloadlink', function ($version) use ($addons, $addon) {
