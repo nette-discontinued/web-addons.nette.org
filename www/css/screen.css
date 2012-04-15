@@ -7038,6 +7038,17 @@ a:hover .label {
 .box-versions .downloads h5 {
   padding-top: 10px;
 }
+.table-vote .thumb {
+  padding: 0 7px;
+}
+.table-vote .num {
+  font-size: 13px;
+  color: #999999;
+}
+.table-vote td.wrap-progress {
+  width: 300px;
+  padding-top: 20px;
+}
 .authors-list .author {
   position: relative;
 }
