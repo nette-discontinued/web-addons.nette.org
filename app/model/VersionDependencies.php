@@ -60,7 +60,7 @@ class VersionDependencies extends Table
 	 */
 	private function findAddon($composerName)
 	{
-		return $this->connection->table('addon')
+		return $this->connection->table('addons')
 			->where('composerName = ?', $composerName)
 			->limit(1)->fetch();
 	}

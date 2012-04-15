@@ -66,7 +66,7 @@ class Users extends Table
 
 	public function findAuthors()
 	{
-		$users = $this->connection->table('addon')->select('DISTINCT(userId)');
+		$users = $this->connection->table('addons')->select('DISTINCT(userId)');
 		return $this->findAll()->where('id', $users);
 	}
 
