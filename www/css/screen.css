@@ -7000,6 +7000,10 @@ a:hover .label {
 .progress-yesno .bar {
   border-right: 1px solid #dbdfcc;
 }
+.user-icon {
+  border: 1px solid #999999;
+  padding: 2px;
+}
 .box-create-addon {
   text-align: center;
 }
