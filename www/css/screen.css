@@ -6968,6 +6968,9 @@ a:hover .label {
 .small {
   font-size: 11px;
 }
+.box-create-addon {
+  text-align: center;
+}
 .homepage-addons h2 {
   padding-bottom: 10px;
 }
@@ -6979,9 +6982,6 @@ a:hover .label {
 .addon-list-item .icon img {
   display: block;
   margin: 10px auto auto;
-}
-.box-create-addon {
-  text-align: center;
 }
 .addon-detail .icon {
   padding-top: 20px;
