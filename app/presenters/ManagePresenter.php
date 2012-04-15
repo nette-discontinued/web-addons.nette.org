@@ -256,9 +256,9 @@ final class ManagePresenter extends BasePresenter
 
 		$this->flashMessage('Version created.');
 		if (($id = $this->getParameter('id')) === NULL) {
-			$this->redirect('Detail:', $id);
-		} else {
 			$this->redirect('finish');
+		} else {
+			$this->redirect('Detail:', $id);
 		}
 	}
 
