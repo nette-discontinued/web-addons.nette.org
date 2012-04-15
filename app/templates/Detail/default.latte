@@ -116,47 +116,48 @@
 
 		</div>
 
-		<div class="box-versions">
+		{if $addon->related('addons_versions')->count() > 0}
+			<div class="box-versions">
 
-			<div class="row">
-				<div class="span9">
-					<h3><a href="javascript:;" class="action-toggle" data-for="#versions">Other Versions <i class="icon-chevron-down"></i></a></h3>
+				<div class="row">
+					<div class="span9">
+						<h3><a href="javascript:;" class="action-toggle" data-for="#versions">Other Versions <i class="icon-chevron-down"></i></a></h3>
+					</div>
+				</div>
+
+				<div class="downloads no" id="versions">
+					{foreach $addon->related('addons_versions') as $version}
+						<div class="row version">
+							<div class="span1">
+								<a href="{$version|downloadlink}" class="btn">Download</a><br>
+							</div>
+							<div class="span8">
+								<h4>{$version->version}</h4>
+								<p>{$version->license|replace:',',', '}</p>
+
+								{if $version->related('addons_dependencies')->count() > 0}
+									<h5><a href="javascript:;" class="action-toggle" data-for="#ver-{$version->version|webalize}">Dependencies</a></h5>
+									<ul class="no" id="ver-{$version->version|webalize}">
+										{foreach $version->related('addons_dependencies') as $dep}
+											<li class="small">
+												{if $dep->dependency_id}
+													<a n:href="this, $dep->dependency->id">{$dep->dependency->name}</a>
+												{else}
+													{$dep->package_name}
+												{/if}
+												| {$dep->version}
+											</li>
+										{/foreach}
+									</ul>
+								{/if}
+							</div>
+
+						</div>
+					{/foreach}
+
 				</div>
 			</div>
-
-			<div class="downloads no" id="versions">
-				{foreach $addon->related('addons_versions') as $version}
-					<div class="row version">
-						<div class="span1">
-							<a href="{$version|downloadlink}" class="btn">Download</a><br>
-						</div>
-						<div class="span8">
-							<h4>{$version->version}</h4>
-							<p>{$version->license|replace:',',', '}</p>
-
-							{if $version->related('addons_dependencies')->count() > 0}
-								<h5><a href="javascript:;" class="action-toggle" data-for="#ver-{$version->version|webalize}">Dependencies</a></h5>
-								<ul class="no" id="ver-{$version->version|webalize}">
-									{foreach $version->related('addons_dependencies') as $dep}
-										<li class="small">
-											{if $dep->dependency_id}
-												<a n:href="this, $dep->dependency->id">{$dep->dependency->name}</a>
-											{else}
-												{$dep->package_name}
-											{/if}
-											| {$dep->version}
-										</li>
-									{/foreach}
-								</ul>
-							{/if}
-						</div>
-
-					</div>
-				{/foreach}
-
-			</div>
-		</div>
-
+		{/if}
 
 
 
