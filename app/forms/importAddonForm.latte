@@ -1,3 +1,4 @@
 {form $form, class => "form-horizontal form-inline well"}
+	<div n:foreach="$form->errors as $error" class="alert alert-error">{$error}</div>
     {input url, placeholder => 'URL repozitáře'} {input import, class => "btn btn-primary"}
 {/form}
