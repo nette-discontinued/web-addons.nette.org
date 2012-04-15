@@ -42,7 +42,7 @@ class DetailPresenter extends BasePresenter
 
 		$this->template->plus = $votesPlus;
 		$this->template->minus = $votesMinus;
-		$this->template->percents = $percents;
+		$this->template->percents = (int) $percents;
 
 		$this->template->addon = $addon;
 		$this->template->registerHelper('downloadlink', function ($version) use ($addons, $addon) {
