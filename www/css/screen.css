@@ -7008,6 +7008,9 @@ a:hover .label {
 .box-versions {
   margin-top: 20px;
 }
+.box-versions h3 {
+  padding-bottom: 10px;
+}
 .downloads h4 {
   padding-bottom: 5px;
 }

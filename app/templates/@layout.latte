@@ -65,6 +65,10 @@
 
 	<script type="text/javascript">
 		$(".alert").alert();
+
+		$('.btn-dependencies').on('click', function() {
+			$($(this).data('for')).toggleClass('invisible');
+		});
 	</script>
 </body>
 </html>
