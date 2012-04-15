@@ -36,7 +36,7 @@ class DetailPresenter extends BasePresenter
 		if (($votesPlus + $votesMinus) > 0){
 			$percents =  $votesPlus / ( $votesMinus + $votesPlus ) * 100;
 		} else {
-			$percents = FALSE;
+			$percents = 50;
 		}
 		
 

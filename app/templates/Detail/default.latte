@@ -81,18 +81,38 @@
 						{var $my = $vote ? $vote->vote : 0}
 					{/if}
 
-					{$plus}x ............ {$minus}x
-					<a n:if="$user->loggedIn" n:class="btn, btn-success, btn-mini, ($my > 0) ? disabled" n:href="vote! ($my > 0) ? cancel : up"><i class="icon-thumb_up"></i></a>
+					
 					{* sum plusu a minusu 
 						<span class="votes">{$addon->related('votes')->aggregation('SUM(vote)') ?: 0}</span>
 					*}
-					<a n:if="$user->loggedIn" n:class="btn, btn-danger, btn-mini, ($my < 0) ? disabled" n:href="vote! ($my < 0) ? cancel : down"><i class="icon-thumb_down"></i></a>
 					
-					{if $percents !== FALSE}
-						<div class="progress {if $percents > 50}progress-success{elseif $percents < 50}progress-danger{/if}">
-							<div class="bar" style="width: {$percents}%;"></div>
-						</div>
-					{/if}
+					<table class="table-vote">
+						<tr>
+							<td class="thumb">
+								<span class="num">{$plus}x</span>
+								{if $user->loggedIn}
+									<a n:class="btn, btn-success, btn-mini, ($my > 0) ? disabled" n:href="vote! ($my > 0) ? cancel : up"><i class="icon-thumb_up"></i></a>
+								{else}
+									<i class="icon-thumb_up"></i>
+								{/if}
+							</td>
+							<td class="wrap-progress">
+								<div class="progress {if $percents > 50}progress-success{elseif $percents < 50}progress-danger{else}progress-warning{/if}">
+									<div class="bar" title="{$percents} %" style="width: {$percents}%;"></div>
+								</div>
+							</td>
+							<td class="thumb">
+								<span class="num">{$minus}x</span>
+								{if $user->loggedIn}
+									<a n:class="btn, btn-danger, btn-mini, ($my < 0) ? disabled" n:href="vote! ($my < 0) ? cancel : down"><i class="icon-thumb_down"></i></a>
+								{else}
+									<i class="icon-thumb_down"></i>
+								{/if}
+							</td>
+						</tr>
+					</table>
+				
+					
 				</div>
 
 
