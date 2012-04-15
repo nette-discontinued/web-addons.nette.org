@@ -58,8 +58,6 @@ services:
 
 	# github
 	curl: NetteAddons\Curl( 50000 )
-	githubApi: NetteAddons\Model\GitHub\ApiService( @curl, 'https://api.github.com' )
-	githubBlob: NetteAddons\Model\GitHub\BlobService( @curl, 'https://raw.github.com' )
 
 	composer: NetteAddons\Model\Composer
 
@@ -69,19 +67,15 @@ services:
 factories:
 	repository:
 		parameters: [vendor, name]
-		class: NetteAddons\Model\GitHub\Repository( @githubApi, @fileFactory, %vendor%, %name% )
+		class: NetteAddons\Model\Importers\GitHub\Repository( @curl, %vendor%, %name% )
 
 	repositoryFromUrl:
 		parameters: [url]
-		class: NetteAddons\Model\GitHub\Repository
-		factory: NetteAddons\Model\GitHub\Repository::createFromUrl( @githubApi, @fileFactory, %url% )
-
-	file:
-		parameters: [vendor, name, commit]
-		class: NetteAddons\Model\GitHub\File( @githubBlob , %vendor%, %name%, %commit% )
+		class: NetteAddons\Model\Importers\GitHub\Repository
+		factory: NetteAddons\Model\Importers\GitHub\Helpers::createRepositoryFromUrl( @curl, %url% )
 
 	repositoryImporter:
-		class: NetteAddons\Model\RepositoryImporter( @repositoryFromUrlFactory, %url%)
+		class: NetteAddons\Model\Importers\GitHubImporter( @repositoryFromUrlFactory, %url%)
 		parameters: [url]
 
 	archiveImporter:

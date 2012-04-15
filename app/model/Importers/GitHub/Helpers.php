@@ -50,7 +50,7 @@ class Helpers extends \Nette\Object
 	 * @param bool
 	 * @return stdClass|NULL
 	 */
-	public static function responseToJson($input, $asArray = NULL)
+	public static function decodeJSON($input, $asArray = NULL)
 	{
 		$output = json_decode($input, $asArray);
 
@@ -59,5 +59,18 @@ class Helpers extends \Nette\Object
 		}
 
 		return $output;
+	}
+
+	/**
+	 * @param \NetteAddons\Curl
+	 * @param string
+	 * @return Repository
+	 */
+	public static function createRepositoryFromUrl(\NetteAddons\Curl $curl, $url)
+	{
+		$url = new Url(self::normalizeRepositoryUrl($url));
+		$path = substr($url->getPath(), 1);
+		list($vendor, $name) = explode('/', $path);
+		return new Repository($curl, $vendor, $name);
 	}
 }
