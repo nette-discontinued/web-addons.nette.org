@@ -78,14 +78,14 @@ class AddonUpdater extends Nette\Object
 
 		try {
 			$addonRow = $this->addons->createOrUpdate(array(
-				'composer_name' => $addon->composerName,
+				'composerName' => $addon->composerName,
 				'name' => $addon->name,
 				'repository' => $addon->repository,
 				'description' => $addon->description ? : "",
-				'short_description' => $addon->shortDescription ? : "",
+				'shortDescription' => $addon->shortDescription ? : "",
 				'demo' => $addon->demo ? : NULL,
-				'updated_at' => new \Datetime('now'),
-				'user_id' => $addon->userId
+				'updatedAt' => new \Datetime('now'),
+				'userId' => $addon->userId
 			));
 
 			foreach ($addon->tags as $tag) {
