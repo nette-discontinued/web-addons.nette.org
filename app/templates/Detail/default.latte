@@ -8,7 +8,7 @@
 
 	<div class="span9">
 
-		<div class="row box-edit">
+		<div class="row box-edit" n:if="$auth->isAllowed($addon, 'edit')">
 			<div class="span5  box-edit-left">
 				{if isset($addon->repository) && $addon->repository != NULL}
 				<a n:href=":Manage:checkVersions $addon->id" class="btn btn-info">Check updates</a>
