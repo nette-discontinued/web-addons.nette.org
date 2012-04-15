@@ -140,7 +140,7 @@
 									<ul class="no" id="ver-{$version->version|webalize}">
 										{foreach $version->related('addons_dependencies') as $dep}
 											<li class="small">
-												{if $dep->dependency_id}
+												{if $dep->dependencyId}
 													<a n:href="this, $dep->dependency->id">{$dep->dependency->name}</a>
 												{else}
 													{$dep->packageName}
