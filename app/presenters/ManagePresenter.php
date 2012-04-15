@@ -6,7 +6,8 @@ use NetteAddons\Model\Addon,
 	NetteAddons\Model\Addons,
 	NetteAddons\Model\AddonVersion,
 	NetteAddons\Model\AddonUpdater,
-	NetteAddons\Model\IAddonImporter;
+	NetteAddons\Model\IAddonImporter,
+	NetteAddons\Model\Facade\AddonManageFacade;
 use Nette\Http\Session,
 	Nette\Http\SessionSection;
 
@@ -16,6 +17,9 @@ final class ManagePresenter extends BasePresenter
 {
 	/** @var SessionSection */
 	private $session;
+
+	/** @var \NetteAddons\Model\Facade\AddonManageFacade */
+	private $manager;
 
 	/** @var AddonUpdater */
 	private $updater;
@@ -37,8 +41,15 @@ final class ManagePresenter extends BasePresenter
 
 
 
-	public function setContext(AddonUpdater $updater, Addons $addons, Session $session)
+	/**
+	 * @param \NetteAddons\Model\Facade\AddonManageFacade $manager
+	 * @param \NetteAddons\Model\AddonUpdater $updater
+	 * @param \NetteAddons\Model\Addons $addons
+	 * @param \Nette\Http\Session $session
+	 */
+	public function setContext(AddonManageFacade $manager, AddonUpdater $updater, Addons $addons, Session $session)
 	{
+		$this->manager = $manager;
 		$this->updater = $updater;
 		$this->addons = $addons;
 		$this->session = $session->getSection('NetteAddons.ManagePresenter');
@@ -56,7 +67,6 @@ final class ManagePresenter extends BasePresenter
 		}
 
 		$this->restoreAddon();
-		bd($this->addon);
 	}
 
 
@@ -71,7 +81,6 @@ final class ManagePresenter extends BasePresenter
 	{
 		$this->token = base_convert(md5(lcg_value()), 16, 36);
 	}
-
 
 
 	/**
@@ -89,12 +98,12 @@ final class ManagePresenter extends BasePresenter
 	}
 
 
-
 	/**
 	 * Stores the addon object into the session.
 	 */
 	protected function storeAddon()
 	{
+		$this->addon->userId = $this->getUser()->getId();
 		$this->session[$this->getSessionKey()] = $this->addon;
 	}
 
@@ -105,18 +114,19 @@ final class ManagePresenter extends BasePresenter
 	protected function restoreAddon()
 	{
 		if ($this->token !== NULL && isset($this->session[$this->getSessionKey()])) {
+			$this->addon->userId = $this->getUser()->getId();
 			$this->addon = $this->session[$this->getSessionKey()];
 		}
 	}
 
 
+	/**
+	 */
 	protected function removeStoredAddon()
 	{
 		$this->addon = NULL;
 		unset($this->session[$this->getSessionKey()]);
 	}
-
-
 
 
 	/*************** Addon creation ****************/
@@ -146,39 +156,27 @@ final class ManagePresenter extends BasePresenter
 	 */
 	public function addAddonFormSubmitted(AddAddonForm $form)
 	{
-		$values = $form->getValues();
-
 		if ($this->addon === NULL) {
 			$this->addon = new Addon();
 		}
-		$this->addon->name = $values->name;
-		$this->addon->shortDescription = $values->shortDescription;
-		$this->addon->description = $values->description;
-		$this->addon->demo = $values->demo;
-		$this->addon->user = $this->getUser()->getIdentity();
 
-		if ($this->addon->composerName === NULL) {
-			$this->addon->buildComposerName();
-		}
+		try {
+			// fill addon with values
+			$this->manager->buildAddonFromValues($this->addon, $form->values, $this->user->identity);
+			$this->storeAddon();
 
-		if ($this->addons->findOneBy(array('composer_name' => $this->addon->composerName)) !== FALSE) {
-			$message = 'Addon with same composer package already exists. ';
+		} catch (DuplicateEntryException $e) {
 			if ($this->addon->repository) {
-				$message .= 'Please specify another package to import.';
-				$this->flashMessage($message);
+				$this->flashMessage($e->getMessage());
 				$this->redirect('add');
+
 			} else {
-				$message .= 'Please specify another addon name.';
-				$form->addError($message);
+				$form->addError($e->getMessage());
 				return;
 			}
 		}
 
-		$this->updater->update($this->addon);
-		$this->storeAddon();
-
 		$this->flashMessage('Addon created.');
-
 		if ($this->addon->repository) {
 			$this->redirect('versionImport');
 
@@ -189,9 +187,13 @@ final class ManagePresenter extends BasePresenter
 
 
 
-
 	/*************** Addon import ****************/
 
+
+
+	/**
+	 * @return ImportAddonForm
+	 */
 	protected function createComponentImportAddonForm()
 	{
 		$form = new ImportAddonForm();
@@ -201,23 +203,22 @@ final class ManagePresenter extends BasePresenter
 	}
 
 
+
+	/**
+	 * @param \NetteAddons\ImportAddonForm $form
+	 */
 	public function importAddonFormSubmitted(ImportAddonForm $form)
 	{
 		$values = $form->getValues();
-		$importer = $this->getContext()->createRepositoryImporter($values->url);
-		$this->addon = $importer->import();
+		$importer = $this->getContext()->createRepositoryImporter($form->values->url);
 
-		if ($this->addon === NULL) {
-			$form->addError('Invalid repository.');
-			return;
+		try {
+			$this->addon = $this->manager->importRepositoryVersions($importer, $form->values, $this->user->identity);
+			$this->storeAddon();
+
+		} catch (\UnexpectedValueException $e) {
+			$form->addError($e->getMessage());
 		}
-
-		if (!isset($this->addon->repository)) {
-			$this->addon->repository = \NetteAddons\Model\GitHub\Repository::normalizeUrl($values->url);
-		}
-		$this->storeAddon();
-
-		$this->addon->user = $this->getUser()->getIdentity();
 
 		$this->flashMessage('Imported addon.');
 		$this->redirect('create');
@@ -225,6 +226,7 @@ final class ManagePresenter extends BasePresenter
 
 
 	/*************** Create a new version ****************/
+
 
 	public function actionVersionCreate($id = NULL)
 	{
