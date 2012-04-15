@@ -7027,6 +7027,12 @@ a:hover .label {
   margin: 4px;
   border-radius: 2px;
 }
+.main-tags {
+  margin-top: 7px;
+}
+.main-tags li {
+  margin-bottom: 5px;
+}
 .box-create-addon {
   text-align: center;
 }
