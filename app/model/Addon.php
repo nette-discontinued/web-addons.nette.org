@@ -23,11 +23,6 @@ class Addon extends Nette\Object
 	public $composerName;
 
 	/**
-	 * @var \Nette\Security\Identity
-	 */
-	public $user;
-
-	/**
 	 * @var int
 	 */
 	public $userId;
@@ -63,7 +58,12 @@ class Addon extends Nette\Object
 	public $tags = array();
 
 
-	public static function fromActiveRow(\Nette\Database\Table\ActiveRow $row)
+
+	/**
+	 * @param \Nette\Database\Table\ActiveRow|\stdClass $row
+	 * @return Addon
+	 */
+	public static function fromActiveRow(Nette\Database\Table\ActiveRow $row)
 	{
 		$addon = new static;
 		$addon->name = $row->name;
@@ -72,17 +72,19 @@ class Addon extends Nette\Object
 		$addon->description = $row->description;
 		$addon->demo = $row->demo;
 		$addon->repository = $row->repository;
-		$addon->userId = (int) $row->user->id;
+		$addon->userId = (int)$row->user->id;
 
 		foreach ($row->related('addon_tag') as $addonTag) {
 			$addon->tags[] = $addonTag->tag->name;
 		}
 
+		/** @var \Nette\Database\Table\ActiveRow|\stdClass $versionRow */
 		foreach ($row->related('addon_version') as $versionRow) {
 			$version = new AddonVersion();
 			$version->version = $versionRow->version;
 			$version->license = $versionRow->license;
 
+			/** @var \Nette\Database\Table\ActiveRow|\stdClass $dependencyRow */
 			foreach ($versionRow->related('addon_dependency') as $dependencyRow) {
 				$type = $dependencyRow->type;
 
@@ -103,17 +105,33 @@ class Addon extends Nette\Object
 	}
 
 
+
 	/**
 	 * Sets the composer name.
-	 * It is built from the current package name and specifed username.
+	 * It is built from the current package name and specified username.
+	 *
+	 * Requires owner in form of Identity or ActiveRow that has name.
+	 *
+	 * @param \Nette\Security\Identity|\Nette\Database\Table\ActiveRow $owner
+	 * @throws \Nette\InvalidArgumentException
+	 * @return void
 	 */
-	public function buildComposerName()
+	public function buildComposerName($owner)
 	{
-		$this->composerName = $this->trimPackageName($this->user->name) . '/' . $this->trimPackageName($this->name);
+		$owner = !is_object($owner) ? (object)$owner : $owner;
+		if (!isset($owner->name)) {
+			throw new Nette\InvalidArgumentException("Owner has no name!");
+		}
+
+		$this->composerName = $this->trimPackageName($owner->name) . '/' . $this->trimPackageName($this->name);
 	}
 
 
 
+	/**
+	 * @param $string
+	 * @return mixed
+	 */
 	private function trimPackageName($string)
 	{
 		$name = Strings::toAscii($string);
