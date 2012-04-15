@@ -29,6 +29,10 @@ class Curl extends \Nette\Object
 	 */
 	protected function create()
 	{
+		if (!defined('CURLOPT_TIMEOUT_MS')) {
+			define('CURLOPT_TIMEOUT_MS', 155);
+		}
+
 		$ch = curl_init();
 
 		curl_setopt($ch, CURLOPT_USERAGENT, self::UA);
