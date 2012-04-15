@@ -66,12 +66,9 @@ function d($var)
  * @param    mixed $var, ...       optional additional variable(s) to dump
  * @return   mixed                 the first dumped variable
  */
-function bd($var)
+function bd($var, $title = NULL)
 {
-	if (func_num_args() > 1) $var = func_get_args();
-	else if (is_array($var)) $var = array(NULL => $var);
-	Debugger::barDump($var);
-	return func_get_arg(0);
+	return Debugger::barDump($var, $title);
 }
 
 /**
