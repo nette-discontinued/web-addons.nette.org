@@ -39,4 +39,6 @@ $container->router[] = new Route('<presenter>[/<action>][/<id>]', array(
 
 
 // Configure and run the application!
-$container->application->run();
+if (!$container->parameters['consoleMode']) {
+	$container->application->run();
+}
