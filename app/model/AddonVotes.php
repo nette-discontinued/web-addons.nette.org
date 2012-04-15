@@ -31,7 +31,7 @@ class AddonVotes extends Table
 	{
 		$this->connection->query('
 			INSERT INTO ' . $this->tableName . '
-			(`addon_id`, `user_id`, `vote`, `comment`)
+			(`addonId`, `userId`, `vote`, `comment`)
 			VALUES (?, ?, ?, ?)
 			ON DUPLICATE KEY UPDATE `vote` = ?',
 			$addonId, $userId, $vote, $comment,
@@ -48,12 +48,12 @@ class AddonVotes extends Table
 	public function calculatePopularity($addonId)
 	{
 		$votesMinus = $this->findAll()->select('COUNT(*) AS c')
-			->where('addon_id', $addonId)
+			->where('addonId', $addonId)
 			->where('vote', -1)
 			->fetch()->c;
 
 		$votesPlus = $this->findAll()->select('COUNT(*) AS c')
-			->where('addon_id', $addonId)
+			->where('addonId', $addonId)
 			->where('vote', 1)
 			->fetch()->c;
 

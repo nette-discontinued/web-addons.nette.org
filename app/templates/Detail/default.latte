@@ -31,10 +31,10 @@
 
 				<div class="span6">
 
-					<h4 class="vendor">{$addon->composer_name}</h4>
+					<h4 class="vendor">{$addon->composerName}</h4>
 					<h1>{$addon->name}</h1>
 
-					<p>{$addon->short_description}</p>
+					<p>{$addon->shortDescription}</p>
 
 					{*$addon->license*}
 				</div>
@@ -52,7 +52,7 @@
 			<div class="span5">
 				<div class="author">
 					<i class="icon-user"></i> {$addon->user|userlink}
-					<span class="date">(Last update: {$addon->updated_at|date:'%d.%m.%Y'})</span>
+					<span class="date">(Last update: {$addon->updatedAt|date:'%d.%m.%Y'})</span>
 				</div>
 
 
@@ -73,7 +73,7 @@
 			<div class="span4">
 				<div class="box-vote">
 					{if $user->loggedIn}
-						{var $vote = $addon->related('votes')->where('user_id = ?', $user->id)->fetch()}
+						{var $vote = $addon->related('votes')->where('userId = ?', $user->id)->fetch()}
 						{var $my = $vote ? $vote->vote : 0}
 					{/if}
 
@@ -143,7 +143,7 @@
 												{if $dep->dependency_id}
 													<a n:href="this, $dep->dependency->id">{$dep->dependency->name}</a>
 												{else}
-													{$dep->package_name}
+													{$dep->packageName}
 												{/if}
 												| {$dep->version}
 											</li>

@@ -342,7 +342,7 @@ final class ManagePresenter extends BasePresenter
 			$this->flashMessage('Addon was successfully saved.');
 
 		} catch (\NetteAddons\InvalidStateException $e) {
-			$row = $this->addons->findBy(array('composer_name' => $this->addon->composerName));
+			$row = $this->addons->findBy(array('composerName' => $this->addon->composerName));
 			$this->flashMessage("Addon cannot be imported.", 'danger');
 		}
 		$this->removeStoredAddon();
@@ -392,7 +392,7 @@ final class ManagePresenter extends BasePresenter
 		$values = $form->getValues();
 
 		$this->addonRow->name = $values->name;
-		$this->addonRow->short_description = $values->shortDescription;
+		$this->addonRow->shortDescription = $values->shortDescription;
 		$this->addonRow->description = $values->description;
 		$this->addonRow->demo = $values->demo;
 		$this->addonRow->update();

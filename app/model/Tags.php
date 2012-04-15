@@ -56,8 +56,8 @@ class Tags extends Table
 
 		try {
 			$this->getAddonTags()->insert(array(
-				'addon_id' => $addon->id,
-				'tag_id' => $tag->id
+				'addonId' => $addon->id,
+				'tagId' => $tag->id
 			));
 		} catch (\PDOException $e) {
 			// duplicate entry is not an error in this case

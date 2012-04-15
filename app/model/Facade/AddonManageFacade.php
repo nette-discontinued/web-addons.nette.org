@@ -62,7 +62,7 @@ class AddonManageFacade extends Nette\Object
 			$addon->buildComposerName($owner);
 		}
 
-		if ($this->addons->findOneBy(array('composer_name' => $addon->composerName)) !== FALSE) {
+		if ($this->addons->findOneBy(array('composerName' => $addon->composerName)) !== FALSE) {
 			$message = 'Addon with same composer package already exists. ';
 			if ($addon->repository) {
 				throw new \NetteAddons\DuplicateEntryException($message . 'Please specify another package to import.');
