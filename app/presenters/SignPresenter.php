@@ -32,7 +32,11 @@ class SignPresenter extends BasePresenter
 				$this->getUser()->setExpiration('+ 20 minutes', TRUE);
 			}
 			$this->getUser()->login($values->username, $values->password);
-			$this->redirect('Homepage:');
+			if (($backlink = $this->getParameter('backlink')) === NULL) {
+				$this->redirect('Homepage:');
+			} else {
+				$this->restoreRequest($backlink);
+			}
 
 		} catch (NS\AuthenticationException $e) {
 			$form->addError($e->getMessage());
