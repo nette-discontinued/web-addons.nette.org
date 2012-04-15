@@ -8,6 +8,7 @@ use Nette\Utils\Strings;
 
 
 /**
+ * @link http://semver.org/ for version specification
  */
 class Version extends Nette\Object
 {
