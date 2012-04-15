@@ -39,4 +39,32 @@ class AddonVotes extends Table
 		);
 	}
 
+
+
+	/**
+	 * @param int $addonId
+	 * @return float|int
+	 */
+	public function calculatePopularity($addonId)
+	{
+		$votesMinus = $this->findAll()->select('COUNT(*) AS c')
+			->where('addon_id', $addonId)
+			->where('vote', -1)
+			->fetch()->c;
+
+		$votesPlus = $this->findAll()->select('COUNT(*) AS c')
+			->where('addon_id', $addonId)
+			->where('vote', 1)
+			->fetch()->c;
+
+		if (($votesPlus + $votesMinus) > 0) {
+			$percents = $votesPlus / ($votesMinus + $votesPlus) * 100;
+
+		} else {
+			$percents = 50;
+		}
+
+		return $percents;
+	}
+
 }
