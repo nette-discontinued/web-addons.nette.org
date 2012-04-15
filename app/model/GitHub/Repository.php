@@ -99,18 +99,23 @@ class Repository extends \Nette\Object
 	 */
 	public function getMainMetadata()
 	{
-		$addon = new \NetteAddons\Model\Addon;
-
 		try {
 			$repo = $this->service->exec("/repos/{$this->vendor}/{$this->name}");
 		} catch(\NetteAddons\InvalidStateException $e) {
 			if ($e->getCode() == 404) {
-				return $addon;
+				return NULL;
 			}
 			throw $e;
 		}
 		$branch = isset($repo->master_branch) ? $repo->master_branch : 'master';
 
+		$addon = new \NetteAddons\Model\Addon;
+		$addon->name = $this->vendor." ".$this->name;
+		$addon->description = $this->getReadme($branch);
+		if (isset($repo->description)) {
+			$addon->shortDescription = Strings::truncate($repo->description, 250);
+		}
+		
 		$data = json_decode($this->getComposerJson($branch));
 		if ($data) {
 			$addon->repository = "http://github.com/{$this->vendor}/{$this->name}";
@@ -126,7 +131,6 @@ class Repository extends \Nette\Object
 			}
 		}
 
-		$addon->description = $this->getReadme($branch);
 		return $addon;
 	}
 
