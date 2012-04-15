@@ -93,34 +93,6 @@ abstract class Table extends Nette\Object
 
 
 	/**
-	 * @param \Nette\Database\Table\ActiveRow|\Nette\Database\Table\Selection $selection
-	 * @throws \NetteAddons\InvalidArgumentException
-	 * @return bool
-	 */
-	public function remove($selection)
-	{
-		if ($selection instanceof Selection) {
-			if ($selection->getName() !== $this->tableName) {
-				throw new \NetteAddons\InvalidArgumentException;
-			}
-
-			/** @var Selection $selection */
-			$selection->delete();
-
-		} elseif ($selection instanceof ActiveRow) {
-			/** @var ActiveRow $selection */
-			$selection->delete();
-
-		} else {
-			throw new \NetteAddons\InvalidArgumentException;
-		}
-
-		return TRUE;
-	}
-
-
-
-	/**
 	 * @param array $values
 	 * @return \Nette\Database\Table\ActiveRow
 	 */
