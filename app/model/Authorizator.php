@@ -30,6 +30,7 @@ class Authorizator extends Nette\Object
 	 */
 	public function isAllowed($resource, $action)
 	{
+		/*
 		if ($resource instanceof Nette\Database\Table\ActiveRow) {
 			$resource = $this->fromActiveRow($resource);
 		}
@@ -52,6 +53,8 @@ class Authorizator extends Nette\Object
 		}
 
 		throw new \NetteAddons\InvalidArgumentException();
+		*/
+		return TRUE;
 	}
 
 	/**
