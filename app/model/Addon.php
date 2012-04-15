@@ -28,6 +28,11 @@ class Addon extends Nette\Object
 	public $user;
 
 	/**
+	 * @var int
+	 */
+	public $userId;
+
+	/**
 	 * @var string
 	 */
 	public $shortDescription;
@@ -67,6 +72,7 @@ class Addon extends Nette\Object
 		$addon->description = $row->description;
 		$addon->demo = $row->demo;
 		$addon->repository = $row->repository;
+		$addon->userId = (int) $row->user->id;
 
 		foreach ($row->related('addon_tag') as $addonTag) {
 			$addon->tags[] = $addonTag->tag->name;
