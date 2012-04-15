@@ -45,8 +45,9 @@ class GitHubImporter extends \Nette\Object implements \NetteAddons\Model\IAddonI
 			$addon->shortDescription = Strings::truncate($repo->description, 250);
 		}
 
-		$composer = GitHub\Helpers::decodeJSON($this->repository->getComposerJson());
-		if ($composer) {
+		$data = $this->repository->getComposerJson();
+		if ($data) {
+			$composer = GitHub\Helpers::decodeJSON($data);
 			$addon->repository = "http://github.com/{$this->repository->getVendor()}/{$this->repository->getName()}";
 			if (isset($composer->name)) {
 				$addon->composerName = $composer->name;
