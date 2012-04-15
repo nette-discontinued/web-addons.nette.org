@@ -32,6 +32,9 @@ final class ManagePresenter extends BasePresenter
 	/** @var Addon from the session. */
 	private $addon;
 
+	/** @var \Nette\Database\Table\ActiveRow Low-level database row. */
+	private $addonRow;
+
 
 
 	public function setContext(AddonUpdater $updater, Addons $addons, Session $session)
@@ -129,11 +132,7 @@ final class ManagePresenter extends BasePresenter
 		$form->onSuccess[] = callback($this, 'addAddonFormSubmitted');
 
 		if ($this->addon !== NULL) {
-			$form->setDefaults(array(
-				'name' => $this->addon->name,
-				'shortDescription' => $this->addon->shortDescription,
-				'description' => $this->addon->description
-			));
+			$form->setAddonDefaults($this->addon);
 		}
 
 		return $form;
@@ -271,6 +270,42 @@ final class ManagePresenter extends BasePresenter
 		} else {
 			$this->redirect('create');
 		}
+	}
+
+
+
+	/*************** Addon editing ****************/
+
+	public function actionEdit($id)
+	{
+		if (($this->addonRow = $this->addons->findOneBy(array('id' => $id))) === FALSE) {
+			throw new \Nette\Application\BadRequestException('Invalid addon ID.');
+		}
+		$this->addon = Addon::fromActiveRow($this->addonRow);
+	}
+
+
+	protected function createComponentEditAddonForm()
+	{
+		$form = new EditAddonForm();
+		$form->setAddonDefaults($this->addon);
+		$form->onSuccess[] = callback($this, 'editAddonFormSubmitted');
+		return $form;
+	}
+
+
+	public function editAddonFormSubmitted(EditAddonForm $form)
+	{
+		$values = $form->getValues();
+
+		$this->addonRow->name = $values->name;
+		$this->addonRow->short_description = $values->shortDescription;
+		$this->addonRow->description = $values->description;
+		$this->addonRow->demo = $values->demo;
+		$this->addonRow->update();
+
+		$this->flashMessage('Addon saved.');
+		$this->redirect('Detail:', $this->addonRow->id);
 	}
 
 }
