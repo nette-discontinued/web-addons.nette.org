@@ -10,8 +10,6 @@ use Nette\Database\Table\Selection;
 
 /**
  * Represents repository for database table
- *
- * @property \Nette\Database\Table\Selection $table
  */
 abstract class Table extends Nette\Object
 {
@@ -93,8 +91,11 @@ abstract class Table extends Nette\Object
 
 
 	/**
-	 * @param array $values
-	 * @return \Nette\Database\Table\ActiveRow
+	 * Creates and inserts new row to database.
+	 *
+	 * @param  array row values
+	 * @return \Nette\Database\Table\ActiveRow created row
+	 * @throws \NetteAddons\DuplicateEntryException
 	 */
 	protected function createRow(array $values)
 	{
@@ -113,8 +114,10 @@ abstract class Table extends Nette\Object
 
 
 	/**
-	 * @param array $values
-	 * @return \Nette\Database\Table\ActiveRow
+	 * Insert row in database or update existing one.
+	 *
+	 * @param  array
+	 * @return \Nette\Database\Table\ActiveRow automatically found based on first "column => value" pair in $values
 	 */
 	public function createOrUpdate(array $values)
 	{
@@ -135,4 +138,3 @@ abstract class Table extends Nette\Object
 	}
 
 }
-

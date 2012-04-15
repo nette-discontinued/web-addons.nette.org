@@ -2,6 +2,8 @@
 
 namespace NetteAddons\Model;
 
+
+
 /**
  * Generating JSON for Composer API
  *
@@ -10,10 +12,14 @@ namespace NetteAddons\Model;
 class Composer extends \Nette\Object
 {
 
+	/** @var Addons addons repository */
 	private $addons;
 
 
 
+	/**
+	 * @param Addons addons repository
+	 */
 	public function __construct(Addons $addons)
 	{
 		$this->addons = $addons;
@@ -24,7 +30,7 @@ class Composer extends \Nette\Object
 	/**
 	 * Generate packages.json data
 	 *
-	 * @param Addon[] $addons
+	 * @param  Addon[]
 	 * @return array
 	 */
 	public function createPackages(array $addons)
@@ -57,8 +63,8 @@ class Composer extends \Nette\Object
 	/**
 	 * Generate composer.json data
 	 *
-	 * @param Addon $addon
-	 * @param AddonVersion $version
+	 * @param  Addon
+	 * @param  AddonVersion
 	 * @return array
 	 */
 	public function createComposerJson(Addon $addon, AddonVersion $version)
