@@ -212,6 +212,7 @@ final class ManagePresenter extends BasePresenter
 
 		try {
 			$this->addon = $this->manager->importRepositoryVersions($importer, $this->user->identity);
+			$this->updater->update($this->addon);
 			$this->storeAddon();
 
 		} catch (\UnexpectedValueException $e) {
