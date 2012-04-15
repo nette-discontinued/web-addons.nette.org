@@ -53,7 +53,7 @@ class AddonManageFacade extends Nette\Object
 		$addon->demo = $values->demo;
 
 		if ($addon->composerName === NULL) {
-			$addon->buildComposerName($owner);
+			$addon->updateComposerName($owner);
 		}
 
 		if ($this->addons->findOneBy(array('composerName' => $addon->composerName)) !== FALSE) {

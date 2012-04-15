@@ -18,14 +18,14 @@ class AddonTest extends \PHPUnit_Framework_TestCase
 		$this->object = new Addon();
 	}
 
-	public function testBuildComposerName()
+	public function testUpdateComposerName()
 	{
 		$this->object->name = 'Muj Plugínek';
 		$author = (object) array(
 			'name' => 'Honzík Marků',
 		);
 		$expected = 'HonzikMarku/MujPluginek';
-		$this->object->buildComposerName($author);
+		$this->object->updateComposerName($author);
 
 		$this->assertEquals($expected, $this->object->composerName);
 	}

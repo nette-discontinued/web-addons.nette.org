@@ -116,14 +116,13 @@ class Addon extends Nette\Object
 	 * @throws \Nette\InvalidArgumentException
 	 * @return void
 	 */
-	public function buildComposerName($owner)
+	public function updateComposerName($owner)
 	{
-		$owner = !is_object($owner) ? (object)$owner : $owner;
 		if (!isset($owner->name)) {
 			throw new Nette\InvalidArgumentException("Owner has no name!");
 		}
 
-		$this->composerName = $this->trimPackageName($owner->name) . '/' . $this->trimPackageName($this->name);
+		$this->composerName = $this->sanitizeName($owner->name) . '/' . $this->sanitizeName($this->name);
 	}
 
 
@@ -132,7 +131,7 @@ class Addon extends Nette\Object
 	 * @param $string
 	 * @return mixed
 	 */
-	private function trimPackageName($string)
+	private function sanitizeName($string)
 	{
 		$name = Strings::toAscii($string);
 		return preg_replace('#[^A-Za-z0-9]#i', '', $name);
