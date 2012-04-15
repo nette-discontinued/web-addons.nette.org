@@ -37,10 +37,13 @@
 					<ul class="nav">
 						<li n:class="$presenter->name === 'Homepage' ? active"><a n:href="Homepage:">Home</a></li>
 						<li n:class="$presenter->name === 'List' ? active"><a n:href="List:">Browse all</a></li>
+						{if $user->isLoggedIn()}
+							<li><a n:href="People:detail $user->identity->id">My Addons</a></li>
+						{/if}
 					</ul>
 					<p class="navbar-text pull-right">
 						{if $user->isLoggedIn()}
-							Logged in as <a href="javascript:;">{$user->identity->name}</a> / <a n:href="Sign:out">Log out</a>
+							Logged in as <a n:href="People:detail $user->identity->id">{$user->identity->name}</a> / <a n:href="Sign:out">Log out</a>
 						{else}
 							<a n:href="Sign:in">Log in</a>
 						{/if}
