@@ -41,7 +41,10 @@ services:
 
     # tables
 	users: NetteAddons\Model\Users
-	addons: NetteAddons\Model\Addons
+	addons:
+		class: NetteAddons\Model\Addons
+		setup:
+			- setUploadUri(%uploadUri%)
 	tags: NetteAddons\Model\Tags
 	addonVersions: NetteAddons\Model\AddonVersions
 	addonVotes: NetteAddons\Model\AddonVotes

@@ -5,6 +5,7 @@ namespace NetteAddons\Model;
 use Nette;
 use Nette\Database\Table\ActiveRow;
 use Nette\Database\Table\Selection;
+use Nette\Http;
 
 
 
@@ -13,11 +14,21 @@ use Nette\Database\Table\Selection;
  */
 class Addons extends Table
 {
+	/**
+	 * @var string Prefix where the uploaded files are stored.
+	 */
+	private $uploadUri;
 
 	/**
 	 * @var string
 	 */
 	protected $tableName = 'addon';
+
+
+	public function setUploadUri($uploadUri, Http\IRequest $request)
+	{
+		$this->uploadUri = rtrim($request->getUrl()->getBaseUrl(), '/') . $uploadUri;
+	}
 
 
 
@@ -48,7 +59,7 @@ class Addons extends Table
 		if ($addon->repository) {
 			return $addon->repository . '/zipball/' . $version->version;
 		} else {
-			return '#';
+			return $this->uploadUri . '/' . $version->filename;
 		}
 	}
 
