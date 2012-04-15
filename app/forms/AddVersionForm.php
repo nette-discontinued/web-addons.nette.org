@@ -15,7 +15,8 @@ class AddVersionForm extends BaseForm
 	protected function buildForm()
 	{
 		$this->addText('version', 'Version', 10, 20)
-			->setRequired("%label is required");
+			->setRequired("%label is required")
+			->addRule(callback($this, 'validateVersion'), 'Invalid version.');
 
 		$this->addUpload('archive', 'Archive')
 			->setRequired("%label is required");
@@ -39,6 +40,19 @@ class AddVersionForm extends BaseForm
 			$form['archive']->addError('Only ZIP files are allowed.');
 			$form->valid = FALSE;
 		}
+	}
+
+	/**
+	 * Checks whether version is in valid format.
+	 *
+	 * @author Jan Tvrdík
+	 * @param  \Nette\Forms\Controls\TextInput
+	 * @return bool
+	 */
+	public function validateVersion(\Nette\Forms\Controls\TextInput $control)
+	{
+		$version = new Model\Version($control->getValue());
+		return $version->isValid();
 	}
 
 }
