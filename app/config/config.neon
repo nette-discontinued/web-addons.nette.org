@@ -51,7 +51,7 @@ services:
 	versionDependencies: NetteAddons\Model\VersionDependencies
 
 	# logic
-	manageFacade: NetteAddons\Model\Facade\AddonManageFacade
+	manageFacade: NetteAddons\Model\Facade\AddonManageFacade(2: %uploadDir%)
 
 	# importing
 	addonUpdater: NetteAddons\Model\AddonUpdater

@@ -52,29 +52,26 @@ class AddonUpdater extends Nette\Object
 
 	/**
 	 * @param \NetteAddons\Model\Addon $addon
+	 * @throws \NetteAddons\InvalidArgumentException
+	 * @throws \NetteAddons\InvalidStateException
 	 * @return \Nette\Database\Table\ActiveRow
 	 */
 	public function update(Addon $addon)
 	{
-		$package = array(
-			'composer_name' => $addon->composerName
-		);
-
-		if (!$addon->userId) {
+		if (!$addon->userId || !$addon->composerName) {
 			throw new \NetteAddons\InvalidArgumentException;
 		}
 
-		if (!$addonRow = $this->addons->findOneBy($package)) {
-			$addonRow = $this->addons->createRow($package + array(
-				'name' => $addon->name,
-				'repository' => $addon->repository,
-				'description' => $addon->description ?: "",
-				'short_description' => $addon->shortDescription ? : "",
-				'demo' => $addon->demo ?: NULL,
-				'updated_at' => new \Datetime('now'),
-				'user_id' => $addon->userId
-			));
-		}
+		$addonRow = $this->addons->createOrUpdate(array(
+			'composer_name' => $addon->composerName,
+			'name' => $addon->name,
+			'repository' => $addon->repository,
+			'description' => $addon->description ? : "",
+			'short_description' => $addon->shortDescription ? : "",
+			'demo' => $addon->demo ? : NULL,
+			'updated_at' => new \Datetime('now'),
+			'user_id' => $addon->userId
+		));
 
 		foreach ($addon->tags as $tag) {
 			$this->tags->addAddonTag($addonRow, $tag);
