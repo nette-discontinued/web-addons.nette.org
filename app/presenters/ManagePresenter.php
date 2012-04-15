@@ -273,6 +273,27 @@ final class ManagePresenter extends BasePresenter
 
 	/*************** Import versions ****************/
 
+
+	/**
+	 * @param int
+	 * @throws \Nette\Application\BadRequestException
+	 */
+	public function actionCheckVersions($id)
+	{
+		if (($this->addonRow = $this->addons->findOneBy(array('id' => $id))) === FALSE) {
+			throw new \Nette\Application\BadRequestException('Invalid addon ID.');
+		}
+		$this->addon = Addon::fromActiveRow($this->addonRow);
+		$this->addon->user = $this->getUser()->getIdentity();
+
+		$importer = $this->getContext()->createRepositoryImporter($this->addon->repository);
+		$this->addon->versions = $importer->importVersions();
+		$this->updater->update($this->addon);
+
+		$this->flashMessage('Addon version successfully updated.');
+		$this->redirect(':Detail:default', array('id' => $id));
+	}
+
 	public function handleImportVersions()
 	{
 		$importer = $this->getContext()->createRepositoryImporter($this->addon->repository);
