@@ -57,7 +57,6 @@ class AddonUpdater extends Nette\Object
 	public function update(Addon $addon)
 	{
 		$package = array(
-			'name' => $addon->name,
 			'composer_name' => $addon->composerName
 		);
 
@@ -67,6 +66,7 @@ class AddonUpdater extends Nette\Object
 
 		if (!$addonRow = $this->addons->findOneBy($package)) {
 			$addonRow = $this->addons->createRow($package + array(
+				'name' => $addon->name,
 				'repository' => $addon->repository,
 				'description' => $addon->description ?: "",
 				'short_description' => $addon->shortDescription ? : "",
