@@ -208,7 +208,13 @@ final class ManagePresenter extends BasePresenter
 	 */
 	public function importAddonFormSubmitted(ImportAddonForm $form)
 	{
-		$importer = $this->getContext()->createRepositoryImporter($form->values->url);
+		try {
+			$importer = $this->getContext()->createRepositoryImporter($form->values->url);
+
+		} catch (InvalidArgumentException $e) {
+			$form['url']->addError('Invalid GitHub URL');
+			return;
+		}
 
 		try {
 			$this->addon = $this->manager->importRepositoryVersions($importer, $this->user->identity);
