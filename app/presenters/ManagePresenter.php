@@ -114,8 +114,8 @@ final class ManagePresenter extends BasePresenter
 	protected function restoreAddon()
 	{
 		if ($this->token !== NULL && isset($this->session[$this->getSessionKey()])) {
-			$this->addon->userId = $this->getUser()->getId();
 			$this->addon = $this->session[$this->getSessionKey()];
+			$this->addon->userId = $this->getUser()->getId();
 		}
 	}
 

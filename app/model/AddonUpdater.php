@@ -60,7 +60,7 @@ class AddonUpdater extends Nette\Object
 			'composer_name' => $addon->composerName
 		);
 
-		if (!$addon->user instanceof Nette\Security\Identity) {
+		if (!$addon->userId) {
 			throw new \NetteAddons\InvalidArgumentException;
 		}
 
@@ -72,7 +72,7 @@ class AddonUpdater extends Nette\Object
 				'short_description' => $addon->shortDescription ? : "",
 				'demo' => $addon->demo ?: NULL,
 				'updated_at' => new \Datetime('now'),
-				'user_id' => $addon->user->getId()
+				'user_id' => $addon->userId
 			));
 		}
 
