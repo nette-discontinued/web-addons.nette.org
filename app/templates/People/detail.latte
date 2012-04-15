@@ -4,15 +4,13 @@
 	<div class="span9">
 		<h1><img class="user-icon" src="{$basePath}/images/user.png" alt="{$author->name}" /> {$author->name}</h1>
 
-
-		{foreach $author->related('addons') as $addon}
-
-			{include '../Addon/listItem.latte' addon=>$addon}
+		<h2>User addons</h2>
 		
+		{foreach $author->related('addons') as $addon}
+			{include '../Addon/listItem.latte' addon=>$addon}
 		{/foreach}
 		
-	</div>
-	
+	</div>	
 
 	<div class="span3">
 		{include '../Layout/sidebar.latte'}
