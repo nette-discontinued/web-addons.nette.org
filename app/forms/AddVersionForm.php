@@ -15,13 +15,13 @@ class AddVersionForm extends BaseForm
 	protected function buildForm()
 	{
 		$this->addText('version', 'Version', 10, 20)
-			->setRequired("%label% is required");
+			->setRequired("%label is required");
 
 		$this->addUpload('archive', 'Archive')
-			->setRequired("%label% is required");
+			->setRequired("%label is required");
 
 		$this->addText('license', 'License', 20, 100)
-			->setRequired("%label% is required");
+			->setRequired("%label is required");
 
 		$this->addSubmit('create', 'Create');
 		$this->onValidate[] = callback($this, 'validateArchive');
