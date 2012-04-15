@@ -138,7 +138,7 @@ abstract class Table extends Nette\Object
 	 * @param array $values
 	 * @return \Nette\Database\Table\ActiveRow
 	 */
-	public function createRow(array $values)
+	protected function createRow(array $values)
 	{
 		try {
 			return $this->getTable()->insert($values);
