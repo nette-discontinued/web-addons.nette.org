@@ -11,6 +11,11 @@ php:
 	# zlib.output_compression: yes
 
 
+parameters:
+	uploadUri: '/upload'
+	uploadDir: '%wwwDir%%uploadUri%'
+
+
 nette:
 	session:
 		expiration: '+ 14 days'

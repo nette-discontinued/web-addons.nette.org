@@ -131,3 +131,8 @@ ALTER TABLE `addon`
 	ALTER `repository` DROP DEFAULT;
 ALTER TABLE `addon`
 	CHANGE COLUMN `repository` `repository` VARCHAR(250) NULL COMMENT 'repository url (git or svn)' AFTER `user_id`;
+
+
+-- added filename for version
+ALTER TABLE `addon_version`
+	ADD COLUMN `filename` VARCHAR(250) NULL COMMENT 'filename on local filesystem' AFTER `composer_json`;

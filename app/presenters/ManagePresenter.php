@@ -250,6 +250,13 @@ final class ManagePresenter extends BasePresenter
 		$version = new AddonVersion();
 		$version->version = $values->version;
 		$version->license = $values->license;
+
+		/** @var $file \Nette\Http\FileUpload */
+		$file = $values->archive;
+		$filename = $version->getFilename($this->addon);
+		$file->move($this->getContext()->parameters['uploadDir'] . '/' . $filename);
+		$version->filename = $filename;
+
 		$this->addon->versions[] = $version;
 		$this->storeAddon();
 		$this->updater->update($this->addon);

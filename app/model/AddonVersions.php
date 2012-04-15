@@ -31,7 +31,8 @@ class AddonVersions extends Table
 		return $this->createOrUpdate(array(
 			'addon_id' => $addon->getPrimary(),
 			'version' => $version->version,
-			'license' => $version->license
+			'license' => $version->license,
+			'filename' => $version->filename
 		));
 	}
 
