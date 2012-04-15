@@ -6,7 +6,6 @@ use Nette;
 use Nette\Utils\Strings;
 
 
-
 /**
  * @author Filip Procházka <filip.prochazka@kdyby.org>
  */
@@ -59,13 +58,14 @@ class Addon extends Nette\Object
 	public $tags = array();
 
 
-
 	public static function fromActiveRow(\Nette\Database\Table\ActiveRow $row)
 	{
 		$addon = new static;
 		$addon->name = $row->name;
 		$addon->composerName = $row->composer_name;
-		$addon->description = $row->short_description;
+		$addon->shortDescription = $row->short_description;
+		$addon->description = $row->description;
+		$addon->demo = $row->demo;
 
 		foreach ($row->related('addon_tag') as $addonTag) {
 			$addon->tags[] = $addonTag->tag->name;
@@ -74,6 +74,7 @@ class Addon extends Nette\Object
 		foreach ($row->related('addon_version') as $versionRow) {
 			$version = new AddonVersion();
 			$version->version = $versionRow->version;
+			$version->license = $versionRow->license;
 
 			foreach ($versionRow->related('addon_dependency') as $dependencyRow) {
 				$type = $dependencyRow->type;
@@ -93,7 +94,6 @@ class Addon extends Nette\Object
 
 		return $addon;
 	}
-
 
 
 	/**
