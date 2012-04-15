@@ -10,8 +10,11 @@
 
 		<div class="row box-edit">
 			<div class="span5  box-edit-left">
-				<a href="javascript:;" class="btn btn-success">Add new version</a>
-				<a href="javascript:;" class="btn btn-info">Check updates</a>
+				{ifset $addon->repository}
+				<a n:href=":Manage:checkVersions $addon->id" class="btn btn-info">Check updates</a>
+				{else}
+				<a n:href=":Manage:versionCreate $addon->id" class="btn btn-success">Add new version</a>
+				{/ifset}
 			</div>
 
 			<div class="span4 box-edit-right">
