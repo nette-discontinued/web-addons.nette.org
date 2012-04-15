@@ -6986,6 +6986,12 @@ a:hover .label {
   display: block;
   margin: 10px auto auto;
 }
+.box-edit {
+  margin-bottom: 20px;
+}
+.box-edit-right {
+  text-align: right;
+}
 .addon-detail .icon {
   padding-top: 20px;
 }
