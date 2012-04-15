@@ -120,7 +120,7 @@
 
 				<div class="box-tags">
 					<h3>Tags</h3>
-					{foreach $addon->related('addon_tag') as $addonTag}
+					{foreach $addon->related('addons_tags') as $addonTag}
 						{include '../Addon/tag.latte' tag => $addonTag }
 					{/foreach}
 				</div>
@@ -137,7 +137,7 @@
 			</div>
 
 			<div class="downloads no" id="versions">
-				{foreach $addon->related('addon_version') as $version}
+				{foreach $addon->related('addons_versions') as $version}
 					<div class="row version">
 						<div class="span1">
 							<a href="{$version|downloadlink}" class="btn">Download</a><br>
@@ -146,10 +146,10 @@
 							<h4>{$version->version}</h4>
 							<p>{$version->license|replace:',',', '}</p>
 
-							{if $version->related('addon_dependency')->count() > 0}
+							{if $version->related('addons_dependencies')->count() > 0}
 								<h5><a href="javascript:;" class="action-toggle" data-for="#ver-{$version->version|webalize}">Dependencies</a></h5>
 								<ul class="no" id="ver-{$version->version|webalize}">
-									{foreach $version->related('addon_dependency') as $dep}
+									{foreach $version->related('addons_dependencies') as $dep}
 										<li class="small">
 											{if $dep->dependency_id}
 												<a n:href="this, $dep->dependency->id">{$dep->dependency->name}</a>

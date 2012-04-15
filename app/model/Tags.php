@@ -21,7 +21,7 @@ class Tags extends Table
 	/**
 	 * @var string
 	 */
-	protected $tableName = 'tag';
+	protected $tableName = 'tags';
 
 
 	/**

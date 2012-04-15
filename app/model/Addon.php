@@ -74,23 +74,23 @@ class Addon extends Nette\Object
 		$addon->repository = $row->repository;
 		$addon->userId = (int)$row->user->id;
 
-		foreach ($row->related('addon_tag') as $addonTag) {
+		foreach ($row->related('addons_tags') as $addonTag) {
 			$addon->tags[] = $addonTag->tag->name;
 		}
 
 		/** @var \Nette\Database\Table\ActiveRow|\stdClass $versionRow */
-		foreach ($row->related('addon_version') as $versionRow) {
+		foreach ($row->related('addons_versions') as $versionRow) {
 			$version = new AddonVersion();
 			$version->version = $versionRow->version;
 			$version->license = $versionRow->license;
 
 			/** @var \Nette\Database\Table\ActiveRow|\stdClass $dependencyRow */
-			foreach ($versionRow->related('addon_dependency') as $dependencyRow) {
+			foreach ($versionRow->related('addons_dependencies') as $dependencyRow) {
 				$type = $dependencyRow->type;
 
 				if (isset($dependencyRow->dependency_id)) {
-					$dependency = $dependencyRow->ref('addon_version')->via('dependency_id');
-					$dependencyAddon = $dependencyRow->ref($dependency->ref('addon'));
+					$dependency = $dependencyRow->ref('addons_versions')->via('dependency_id');
+					$dependencyAddon = $dependencyRow->ref($dependency->ref('addons'));
 					$dependencyName = $dependencyAddon->composer_name;
 					$version->{$type}[$dependencyName] = $dependencyRow->version;
 				} else {

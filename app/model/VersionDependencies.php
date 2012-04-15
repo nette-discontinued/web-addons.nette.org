@@ -16,7 +16,7 @@ class VersionDependencies extends Table
 	/**
 	 * @var string
 	 */
-	protected $tableName = 'addon_dependency';
+	protected $tableName = 'addons_dependencies';
 
 
 

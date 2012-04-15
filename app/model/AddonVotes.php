@@ -16,7 +16,7 @@ class AddonVotes extends Table
 {
 
 	/** @var string */
-	protected $tableName = 'addon_votes';
+	protected $tableName = 'addons_votes';
 
 	/**
 	 * Votes as given user for given addon with optional comment.
@@ -30,7 +30,7 @@ class AddonVotes extends Table
 	public function vote($addonId, $userId, $vote, $comment = NULL)
 	{
 		$this->connection->query('
-			INSERT INTO `addon_votes`
+			INSERT INTO ' . $this->tableName . '
 			(`addon_id`, `user_id`, `vote`, `comment`)
 			VALUES (?, ?, ?, ?)
 			ON DUPLICATE KEY UPDATE `vote` = ?',
