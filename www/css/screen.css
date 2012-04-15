@@ -7000,7 +7000,8 @@ a:hover .label {
 .progress-yesno .bar {
   border-right: 1px solid #dbdfcc;
 }
-.progress-disabled {
+.progress-disabled,
+.progress-disabled .bar {
   background-color: #afafaf;
   background-image: -moz-linear-gradient(top, #bfbfbf, #979797);
   background-image: -ms-linear-gradient(top, #bfbfbf, #979797);

@@ -89,11 +89,10 @@
 								<a n:tag-if="$auth->isAllowed($addon, 'vote')" n:class="btn, btn-success, btn-mini, ($my > 0) ? disabled" n:href="vote! ($my > 0) ? cancel : up"><i class="icon-thumb_up"></i></a>
 							</td>
 							<td class="wrap-progress">
-								
-								<div class="progress progress-yesno progress-success">
-									<div class="bar" title="{$percents} %" style="width: {$percents}%;"></div>	
-								</div>
 
+									<div class="progress progress-yesno progress-success {if $plus == 0 && $minus == 0}progress-disabled{/if}">
+										<div class="bar" title="{$percents} %" style="width: {$percents}%;"></div>	
+									</div>
 							</td>
 							<td class="thumb">
 								<span class="num">{$minus}×</span>
