@@ -306,25 +306,42 @@ final class ManagePresenter extends BasePresenter
 
 
 
-	/*************** Finish the addon creation ****************/
-
+	/**
+	 * Finish the addon creation
+	 */
 	public function actionFinish()
 	{
-		if ($this->addon !== NULL) {
-			$this->addon->user = $this->getUser()->getIdentity();
-			$row = $this->updater->update($this->addon);
-			$this->removeStoredAddon();
-			$this->flashMessage('Addon sucessfuly saved.');
-			$this->redirect('Detail:', $row->id);
-		} else {
+		if ($this->addon === NULL) {
 			$this->redirect('create');
+		}
+
+		try {
+			$this->addon->userId = $this->getUser()->getId();
+			$row = $this->updater->update($this->addon);
+			$this->flashMessage('Addon was successfully saved.');
+
+		} catch (\NetteAddons\InvalidStateException $e) {
+			$row = $this->addons->findBy(array('composer_name' => $this->addon->composerName));
+			$this->flashMessage("Addon cannot be imported.", 'danger');
+		}
+		$this->removeStoredAddon();
+
+		if (isset($row->id)) {
+			$this->redirect('Detail:', $row->id);
+
+		} else {
+			$this->redirect('Homepage:');
 		}
 	}
 
 
-
 	/*************** Addon editing ****************/
 
+
+	/**
+	 * @param $id
+	 * @throws \Nette\Application\BadRequestException
+	 */
 	public function actionEdit($id)
 	{
 		if (($this->addonRow = $this->addons->findOneBy(array('id' => $id))) === FALSE) {
@@ -334,6 +351,9 @@ final class ManagePresenter extends BasePresenter
 	}
 
 
+	/**
+	 * @return EditAddonForm
+	 */
 	protected function createComponentEditAddonForm()
 	{
 		$form = new EditAddonForm();
@@ -343,6 +363,9 @@ final class ManagePresenter extends BasePresenter
 	}
 
 
+	/**
+	 * @param \NetteAddons\EditAddonForm $form
+	 */
 	public function editAddonFormSubmitted(EditAddonForm $form)
 	{
 		$values = $form->getValues();
