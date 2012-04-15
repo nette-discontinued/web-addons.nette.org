@@ -25,6 +25,7 @@ class Addons extends Table
 	protected $tableName = 'addons';
 
 
+
 	public function setUploadUri($uploadUri, Http\IRequest $request)
 	{
 		$this->uploadUri = rtrim($request->getUrl()->getBaseUrl(), '/') . $uploadUri;
@@ -33,18 +34,18 @@ class Addons extends Table
 
 
 	/**
-	 * @param \Nette\Database\Table\Selection $addons
-	 * @param string $tag
-	 * @return \Nette\Database\Table\Selection
+	 * Filter addons selection by tag.
+	 *
+	 * @param  \Nette\Database\Table\Selection
+	 * @param  int tag id
+	 * @return \Nette\Database\Table\Selection for fluent interface
 	 */
-	public function filterByTag(Selection $addons, $tag)
+	public function filterByTag(Selection $addons, $tagId)
 	{
 		$addonIds = $this->connection->table('addons_tags')
-			->where('tagId = ?', $tag)->select('addonId');
+			->where('tagId = ?', $tagId)->select('addonId');
 
-		$addons->where('id', $addonIds);
-
-		return $addons;
+		return $addons->where('id', $addonIds);
 	}
 
 
@@ -65,10 +66,17 @@ class Addons extends Table
 
 
 
+	/**
+	 * Filter addon selection by some text.
+	 *
+	 * @param  \Nette\Database\Table\Selection
+	 * @param  string
+	 * @return \Nette\Database\Table\Selection for fluent interface
+	 */
 	public function filterByString(Selection $addons, $string)
 	{
 		$string = "%$string%";
-		$addons->where('name LIKE ? OR shortDescription LIKE ?', $string, $string);
+		return $addons->where('name LIKE ? OR shortDescription LIKE ?', $string, $string);
 	}
 
 }
