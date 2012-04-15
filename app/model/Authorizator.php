@@ -15,10 +15,17 @@ class Authorizator extends Nette\Object
 	/** @var \Nette\Security\User */
 	private $user;
 
+
+
+	/**
+	 * @param \Nette\Security\User
+	 */
 	public function __construct(\Nette\Security\User $user)
 	{
 		$this->user = $user;
 	}
+
+
 
 	/**
 	 * Is user allowed to perform given action with given resource.

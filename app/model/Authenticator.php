@@ -12,6 +12,7 @@ use Nette\Security as NS;
  */
 class Authenticator extends Object implements NS\IAuthenticator
 {
+
 	/** @var Users */
 	private $users;
 
@@ -31,7 +32,6 @@ class Authenticator extends Object implements NS\IAuthenticator
 	 * Performs an authentication
 	 *
 	 * @param  array
-	 *
 	 * @return \Nette\Security\Identity
 	 * @throws \Nette\Security\AuthenticationException
 	 */

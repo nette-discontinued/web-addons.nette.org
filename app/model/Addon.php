@@ -6,6 +6,7 @@ use Nette;
 use Nette\Utils\Strings;
 
 
+
 /**
  * @author Filip Procházka <filip.prochazka@kdyby.org>
  */
