@@ -7000,6 +7000,26 @@ a:hover .label {
 .progress-yesno .bar {
   border-right: 1px solid #dbdfcc;
 }
+.progress-disabled {
+  background-color: #afafaf;
+  background-image: -moz-linear-gradient(top, #bfbfbf, #979797);
+  background-image: -ms-linear-gradient(top, #bfbfbf, #979797);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#bfbfbf), to(#979797));
+  background-image: -webkit-linear-gradient(top, #bfbfbf, #979797);
+  background-image: -o-linear-gradient(top, #bfbfbf, #979797);
+  background-image: linear-gradient(top, #bfbfbf, #979797);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#bfbfbf', endColorstr='#979797', GradientType=0);
+  background-color: #afafaf;
+  background-image: -moz-linear-gradient(top, #bfbfbf, #979797);
+  background-image: -ms-linear-gradient(top, #bfbfbf, #979797);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#bfbfbf), to(#979797));
+  background-image: -webkit-linear-gradient(top, #bfbfbf, #979797);
+  background-image: -o-linear-gradient(top, #bfbfbf, #979797);
+  background-image: linear-gradient(top, #bfbfbf, #979797);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#bfbfbf', endColorstr='#979797', GradientType=0);
+}
 .user-icon {
   border: 1px solid #999999;
   padding: 2px;
