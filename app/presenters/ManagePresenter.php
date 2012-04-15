@@ -212,7 +212,6 @@ final class ManagePresenter extends BasePresenter
 
 		try {
 			$this->addon = $this->manager->importRepositoryVersions($importer, $this->user->identity);
-			$this->updater->update($this->addon);
 			$this->storeAddon();
 
 		} catch (\UnexpectedValueException $e) {
@@ -261,6 +260,7 @@ final class ManagePresenter extends BasePresenter
 
 		try {
 			$this->manager->submitAddonVersion($this->addon, $values);
+			$this->updater->update($this->addon);
 			$this->storeAddon();
 
 		} catch (\NetteAddons\InvalidArgumentException $e) {
@@ -342,8 +342,8 @@ final class ManagePresenter extends BasePresenter
 			$this->flashMessage('Addon was successfully saved.');
 
 		} catch (\NetteAddons\InvalidStateException $e) {
-			$row = $this->addons->findBy(array('composerName' => $this->addon->composerName));
-			$this->flashMessage("Addon cannot be imported.", 'danger');
+			$row = $this->addons->findBy(array('composer_name' => $this->addon->composerName));
+			$this->flashMessage("Addon cannot be imported. " . $e->getMessage(), 'danger');
 		}
 		$this->removeStoredAddon();
 
