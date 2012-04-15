@@ -82,24 +82,33 @@
 				</div>
 			</div>
 
-			<div class="row downloads">
+			<div class="downloads">
 				{foreach $addon->related('addon_version') as $version}
-					<div class="version span2">
-						<h4>{$version->version}</h4>
-						<button class="btn">Download</button><br>
-						<h5>Dependencies</h5>
-						<ul>
-							{foreach $version->related('addon_dependency') as $dep}
-								<li class="small">
-									{if $dep->dependency_id}
-										<a n:href="this, $dep->dependency->id">{$dep->dependency->name}</a>
-									{else}
-										{$dep->package_name}
-									{/if}
-									| {$dep->version}
-								</li>
-							{/foreach}
-						</ul>
+					<div class="row version">
+						<div class="span1">
+							<button class="btn">Download</button><br>
+						</div>
+						<div class="span8">
+							<h4>{$version->version}</h4>
+							<p>{$version->license|replace:',',', '}</p>
+
+							{if $version->related('addon_dependency')->count() > 0}
+								<h5><a href="javascript:;" class="btn-dependencies" data-for="#ver-{$version->version|webalize}">Dependencies</a></h5>
+								<ul class="invisible" id="ver-{$version->version|webalize}">
+									{foreach $version->related('addon_dependency') as $dep}
+										<li class="small">
+											{if $dep->dependency_id}
+												<a n:href="this, $dep->dependency->id">{$dep->dependency->name}</a>
+											{else}
+												{$dep->package_name}
+											{/if}
+											| {$dep->version}
+										</li>
+									{/foreach}
+								</ul>
+							{/if}
+						</div>
+						
 					</div>
 				{/foreach}
 
