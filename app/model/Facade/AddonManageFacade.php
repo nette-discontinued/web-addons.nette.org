@@ -109,7 +109,6 @@ class AddonManageFacade extends Nette\Object
 			$addon->repository = Model\GitHub\Repository::normalizeUrl($importer->getUrl());
 		}
 
-		$this->updater->update($addon);
 		return $addon;
 	}
 
