@@ -41,7 +41,7 @@ class DetailPresenter extends BasePresenter
 			$this->error('not logged in', 403); // TODO: better
 		}
 
-		$this->context->addonVotes->vote($this->user->id, $this->id, $vote);
+		$this->context->addonVotes->vote($this->id, $this->user->id, $vote);
 		$this->flashMessage('Voting was successfull!');
 		$this->redirect('this');
 	}
