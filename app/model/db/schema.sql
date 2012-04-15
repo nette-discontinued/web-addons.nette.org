@@ -125,3 +125,9 @@ ADD `demo` varchar(500) COLLATE 'utf8_general_ci' NULL COMMENT 'url to demo' AFT
 
 ALTER TABLE `addon`
 ADD UNIQUE (`composer_name`);
+
+-- nullable repository
+ALTER TABLE `addon`
+	ALTER `repository` DROP DEFAULT;
+ALTER TABLE `addon`
+	CHANGE COLUMN `repository` `repository` VARCHAR(250) NULL COMMENT 'repository url (git or svn)' AFTER `user_id`;
