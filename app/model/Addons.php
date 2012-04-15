@@ -26,13 +26,6 @@ class Addons extends Table
 
 
 
-	public function setUploadUri($uploadUri, Http\IRequest $request)
-	{
-		$this->uploadUri = rtrim($request->getUrl()->getBaseUrl(), '/') . $uploadUri;
-	}
-
-
-
 	/**
 	 * Filter addons selection by tag.
 	 *
@@ -51,6 +44,28 @@ class Addons extends Table
 
 
 	/**
+	 * Filter addon selection by some text.
+	 *
+	 * @param  \Nette\Database\Table\Selection
+	 * @param  string
+	 * @return \Nette\Database\Table\Selection for fluent interface
+	 */
+	public function filterByString(Selection $addons, $string)
+	{
+		$string = "%$string%";
+		return $addons->where('name LIKE ? OR shortDescription LIKE ?', $string, $string);
+	}
+
+
+
+	public function setUploadUri($uploadUri, Http\IRequest $request)
+	{
+		$this->uploadUri = rtrim($request->getUrl()->getBaseUrl(), '/') . $uploadUri;
+	}
+
+
+
+	/**
 	 * @param Addon|ActiveRow $addon
 	 * @param AddonVersion|ActiveRow $version
 	 * @return string
@@ -62,21 +77,6 @@ class Addons extends Table
 		} else {
 			return $this->uploadUri . '/' . $version->filename;
 		}
-	}
-
-
-
-	/**
-	 * Filter addon selection by some text.
-	 *
-	 * @param  \Nette\Database\Table\Selection
-	 * @param  string
-	 * @return \Nette\Database\Table\Selection for fluent interface
-	 */
-	public function filterByString(Selection $addons, $string)
-	{
-		$string = "%$string%";
-		return $addons->where('name LIKE ? OR shortDescription LIKE ?', $string, $string);
 	}
 
 }
