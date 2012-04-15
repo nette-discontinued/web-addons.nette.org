@@ -38,6 +38,22 @@ class Addons extends Table
 
 
 
+	/**
+	 * @param Addon|ActiveRow $addon
+	 * @param AddonVersion|ActiveRow $version
+	 * @return string
+	 */
+	public function getZipUrl($addon, $version)
+	{
+		if ($addon->repository) {
+			return $addon->repository . '/zipball/' . $version->version;
+		} else {
+			return '#';
+		}
+	}
+
+
+
 	public function filterByString(Selection $addons, $string)
 	{
 		$string = "%$string%";

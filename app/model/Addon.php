@@ -66,6 +66,7 @@ class Addon extends Nette\Object
 		$addon->shortDescription = $row->short_description;
 		$addon->description = $row->description;
 		$addon->demo = $row->demo;
+		$addon->repository = $row->repository;
 
 		foreach ($row->related('addon_tag') as $addonTag) {
 			$addon->tags[] = $addonTag->tag->name;
@@ -99,12 +100,12 @@ class Addon extends Nette\Object
 	/**
 	 * Sets the composer name.
 	 * It is built from the current package name and specifed username.
-	 * @param $username
 	 */
 	public function buildComposerName()
 	{
 		$this->composerName = $this->trimPackageName($this->user->name) . '/' . $this->trimPackageName($this->name);
 	}
+
 
 
 	private function trimPackageName($string)

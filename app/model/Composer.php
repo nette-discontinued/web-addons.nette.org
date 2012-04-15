@@ -10,6 +10,17 @@ namespace NetteAddons\Model;
 class Composer extends \Nette\Object
 {
 
+	private $addons;
+
+
+
+	public function __construct(Addons $addons)
+	{
+		$this->addons = $addons;
+	}
+
+
+
 	/**
 	 * Generate packages.json data
 	 *
@@ -32,7 +43,7 @@ class Composer extends \Nette\Object
 			$packages[] = array(
 				$addonName => array(
 					'name' => $addonName,
-					'description' => $addon->description,
+					'description' => $addon->shortDescription,
 					'versions' => $versions,
 				),
 			);
@@ -53,17 +64,22 @@ class Composer extends \Nette\Object
 	public function createComposerJson(Addon $addon, AddonVersion $version)
 	{
 		// use default version
-		if ($version->composerJson) {
-			$composer = $version->composerJson;
-			$composer['version'] = $version->version;
-			return $composer;
-		}
+		$composer = $version->composerJson ?: $this->createDefaultComposerJson($addon, $version);
+		$composer['version'] = $version->version;
+		$composer['dist'] = array(
+			'url' => $this->addons->getZipUrl($addon, $version),
+			'type' => 'zip',
+		);
 
+		return $composer;
+	}
+
+	private function createDefaultComposerJson(Addon $addon, AddonVersion $version)
+	{
 		$data = array(
 			'name' => $addon->composerName,
 			'tags' => $addon->tags,
 			'description' => $addon->shortDescription,
-			'version' => $version->version,
 		);
 
 		foreach (array('require', 'suggest', 'provide', 'replace', 'conflict') as $section) {

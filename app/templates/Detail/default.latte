@@ -85,7 +85,7 @@
 				{foreach $addon->related('addon_version') as $version}
 					<div class="row version">
 						<div class="span1">
-							<button class="btn">Download</button><br>
+							<a href="{$version|downloadlink}" class="btn">Download</a><br>
 						</div>
 						<div class="span8">
 							<h4>{$version->version}</h4>
