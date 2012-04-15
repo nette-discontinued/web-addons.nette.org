@@ -73,14 +73,14 @@ class AddonManageFacade extends Nette\Object
 
 
 	/**
-	 * @param \NetteAddons\Model\RepositoryImporter $importer
+	 * @param \NetteAddons\Model\Importers\GitHubImporter
 	 * @param \Nette\Security\Identity|\Nette\Database\Table\ActiveRow|null $owner
 	 *
 	 * @throws \NetteAddons\InvalidArgumentException
 	 * @throws \UnexpectedValueException
 	 * @return \NetteAddons\Model\Addon
 	 */
-	public function importRepositoryVersions(Model\RepositoryImporter $importer, $owner)
+	public function importRepositoryVersions(Model\Importers\GitHubImporter $importer, $owner)
 	{
 		/** @var \NetteAddons\Model\Addon $addon */
 		if (NULL === ($addon = $importer->import())) {
