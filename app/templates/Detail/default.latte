@@ -97,9 +97,11 @@
 								{/if}
 							</td>
 							<td class="wrap-progress">
-								<div class="progress {if $percents > 50}progress-success{elseif $percents < 50}progress-danger{else}progress-warning{/if}">
-									<div class="bar" title="{$percents} %" style="width: {$percents}%;"></div>
+								
+								<div class="progress progress-yesno progress-success">
+									<div class="bar" title="{$percents} %" style="width: {$percents}%;"></div>	
 								</div>
+
 							</td>
 							<td class="thumb">
 								<span class="num">{$minus}x</span>
