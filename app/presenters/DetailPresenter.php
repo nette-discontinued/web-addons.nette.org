@@ -27,7 +27,7 @@ class DetailPresenter extends BasePresenter
 		$popularity = $this->context->addonVotes->calculatePopularity($addon->id);
 		$this->template->plus = $popularity->plus;
 		$this->template->minus = $popularity->minus;
-		$this->template->percents = $popularity->percents;
+		$this->template->percents = $popularity->percent;
 
 		$this->template->addon = $addon;
 		$this->template->registerHelper('downloadlink', function ($version) use ($addons, $addon) {

@@ -23,12 +23,16 @@ class AddonVotes extends Table
 	 *
 	 * @param  int addon id
 	 * @param  int user id
-	 * @param  int +1 or -1
+	 * @param  int +1 or -1 or 0 (means cancel vote)
 	 * @param  string optional comment
 	 * @return void
 	 */
 	public function vote($addonId, $userId, $vote, $comment = NULL)
 	{
+		if (abs($vote) !== 1 && $vote !== 0) {
+			throw new \NetteAddons\InvalidArgumentException('Vote can be only +1, -1 or 0.');
+		}
+
 		$this->connection->query('
 			INSERT INTO ' . $this->tableName . '
 			(`addonId`, `userId`, `vote`, `comment`)
@@ -42,33 +46,31 @@ class AddonVotes extends Table
 
 
 	/**
-	 * @param $addonId
+	 * Calculates addon popularity.
+	 *
+	 * @param  int addon id
 	 * @return \stdClass
 	 */
 	public function calculatePopularity($addonId)
 	{
-		$votesMinus = $this->findAll()->select('COUNT(*) AS c')
+		$minus = $this->findAll()->select('COUNT(*) AS c')
 			->where('addonId', $addonId)
 			->where('vote', -1)
 			->fetch()->c;
 
-		$votesPlus = $this->findAll()->select('COUNT(*) AS c')
+		$plus = $this->findAll()->select('COUNT(*) AS c')
 			->where('addonId', $addonId)
 			->where('vote', 1)
 			->fetch()->c;
 
-		if (($votesPlus + $votesMinus) > 0) {
-			$percents = $votesPlus / ($votesMinus + $votesPlus) * 100;
+		$total = $minus + $plus;
+		$percent = ($total > 0 ? ($plus / $total) : 0.5) * 100;
 
-		} else {
-			$percents = 50;
-		}
-
-		return Nette\ArrayHash::from(array(
-			'plus' => $votesPlus,
-			'minus' => $votesMinus,
-			'percents' => $percents,
-		));
+		return (object) array(
+			'plus' => $plus, // count of likes
+			'minus' => $minus, // count of dislikes
+			'percent' => $percent, // percent of likes
+		);
 	}
 
 }
