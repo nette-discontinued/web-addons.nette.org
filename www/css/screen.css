@@ -6971,6 +6971,12 @@ a:hover .label {
 .small {
   font-size: 11px;
 }
+.icon-thumb_down {
+  background: url(img/thumb_down.png) no-repeat;
+}
+.icon-thumb_up {
+  background: url(img/thumb_up.png) no-repeat;
+}
 .box-create-addon {
   text-align: center;
 }
@@ -7007,7 +7013,8 @@ a:hover .label {
 }
 .box-vote {
   padding-bottom: 15px;
-  text-align: center;
+  text-align: right;
+  padding-right: 15px;
 }
 .box-vote .votes {
   padding: 10px;
