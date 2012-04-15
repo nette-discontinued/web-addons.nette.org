@@ -12,7 +12,7 @@
 <div class="row">
 	<div class="span9">
 		<div class="row authors-list">
-		
+
 			<div class="span2 author" n:foreach="$authors as $author">
 				<img src="http://forum.nette.org/cs/img/avatars/2118.jpg" alt="{$author->name}" />
 				<h2>{$author|userlink}  <span class="label label-success">{$author->related('addon')->count('id')}</span></h2>
@@ -31,7 +31,7 @@
 			</ul>
 		</div>
 
-		
+
 	</div>
 	<div class="span3">
 		{include '../Layout/sidebar.latte'}
