@@ -44,6 +44,10 @@ class Authorizator extends Nette\Object
 					($this->user->isLoggedIn() && $resource->userId === $this->user->getIdentity()->id) ||
 					$this->user->isInRole('moderator')
 				);
+
+			} elseif ($action === 'vote') {
+				// you can't vote for your own addons
+				return ($this->user->isLoggedIn() && $resource->userId !== $this->user->getIdentity()->id);
 			}
 
 		} elseif ($resource === 'addon') {
