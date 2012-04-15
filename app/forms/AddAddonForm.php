@@ -2,6 +2,8 @@
 
 namespace NetteAddons;
 
+use NetteAddons\Model\Addon;
+
 
 
 class AddAddonForm extends BaseForm
@@ -20,6 +22,17 @@ class AddAddonForm extends BaseForm
 			->setAttribute('class', 'span6');
 
 		$this->addSubmit('create', 'Next');
+	}
+
+
+	public function setAddonDefaults(Addon $addon)
+	{
+		$this->setDefaults(array(
+			'name' => $addon->name,
+			'shortDescription' => $addon->shortDescription,
+			'description' => $addon->description,
+			'demo' => $addon->demo
+		));
 	}
 
 }
