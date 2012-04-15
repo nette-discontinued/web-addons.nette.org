@@ -57,6 +57,8 @@ services:
 
 	composer: NetteAddons\Model\Composer
 
+	reinstall: NetteAddons\Model\Reinstall
+
 
 factories:
 	repository:
