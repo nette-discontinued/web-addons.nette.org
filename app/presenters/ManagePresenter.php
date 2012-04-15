@@ -52,7 +52,7 @@ final class ManagePresenter extends BasePresenter
 
 		if (!$this->user->isLoggedIn()) {
 			$this->flashMessage('Please sign in to continue.');
-			$this->redirect('Homepage:');
+			$this->redirect('Sign:in', $this->application->storeRequest());
 		}
 
 		$this->restoreAddon();

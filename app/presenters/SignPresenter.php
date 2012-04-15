@@ -7,6 +7,11 @@ use Nette\Security as NS;
 class SignPresenter extends BasePresenter
 {
 
+	public function renderIn($backlink)
+	{
+
+	}
+
 	protected function createComponentSignInForm()
 	{
 		$form = new SignInForm();
