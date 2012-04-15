@@ -21,7 +21,7 @@ class Reinstall extends \Nette\Object
 
 
 
-	public function reinstall()
+	public function recreateDatabase()
 	{
 		$connection = $this->db;
 
