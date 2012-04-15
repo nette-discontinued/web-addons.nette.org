@@ -174,7 +174,15 @@ class Repository extends \Nette\Object
 	 */
 	public function getVersions()
 	{
-		return array_merge($this->getTags(), $this->getBranches());
+		$versions = array($this->getMasterBranch() => $this->getMasterBranch());
+		foreach ($this->getTags() as $v => $hash) {
+			$version = \NetteAddons\Model\Version::create($v);
+			if ($version->isValid()) {
+				$versions[$v] = $hash;
+			}
+		}
+
+		return $versions;
 	}
 
 	/**
