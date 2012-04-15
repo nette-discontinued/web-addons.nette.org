@@ -22,6 +22,28 @@ class DetailPresenter extends BasePresenter
 			$this->error('Addon not found!');
 		}
 
+		$votesMinus = $this->context->addonVotes->findAll()->
+								select('COUNT(*) AS c')->
+								where(array('addon_id'=> $addon->id ,
+											'vote' => -1))->fetch()->c;
+
+		$votesPlus = $this->context->addonVotes->findAll()->
+								select('COUNT(*) AS c')->
+								where(array('addon_id'=> $addon->id ,
+											'vote'=> 1))->fetch()->c;
+
+		
+		if (($votesPlus + $votesMinus) > 0){
+			$percents =  $votesPlus / ( $votesMinus + $votesPlus ) * 100;
+		} else {
+			$percents = FALSE;
+		}
+		
+
+		$this->template->plus = $votesPlus;
+		$this->template->minus = $votesMinus;
+		$this->template->percents = $percents;
+
 		$this->template->addon = $addon;
 		$this->template->registerHelper('downloadlink', function ($version) use ($addons, $addon) {
 			return $addons->getZipUrl($addon, $version);
