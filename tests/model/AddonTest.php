@@ -1,6 +1,6 @@
 <?php
 
-namespace NetteAddons;
+namespace NetteAddons\Test;
 
 use NetteAddons\Model\Addon;
 
