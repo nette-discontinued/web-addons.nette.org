@@ -106,7 +106,7 @@ class AddonManageFacade extends Nette\Object
 
 		// normalize repository
 		if (!isset($addon->repository)) {
-			$addon->repository = Model\GitHub\Repository::normalizeUrl($importer->getUrl());
+			$addon->repository = \NetteAddons\Model\Importers\GitHub\Helpers::normalizeRepositoryUrl($importer->getUrl());
 		}
 
 		return $addon;
