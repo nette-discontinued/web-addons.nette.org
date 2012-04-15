@@ -177,7 +177,7 @@ class Repository extends \Nette\Object
 		$versions = array($this->getMasterBranch() => $this->getMasterBranch());
 		foreach ($this->getTags() as $v => $hash) {
 			$version = \NetteAddons\Model\Version::create($v);
-			if ($version->isValid()) {
+			if ($version && $version->isValid()) {
 				$versions[$v] = $hash;
 			}
 		}
