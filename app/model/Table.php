@@ -120,7 +120,7 @@ abstract class Table extends Nette\Object
 	{
 		$pairs = array();
 		foreach ($values as $key => $value) {
-			$pairs[] = "`$key` = ?";
+			$pairs[] = "`$key` = ?"; // warning: SQL injection possible if $values infected!
 		}
 
 		$pairs = implode(', ', $pairs);
