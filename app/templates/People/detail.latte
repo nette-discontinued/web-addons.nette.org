@@ -5,7 +5,7 @@
 		<h1>{$author->name}</h1>
 		<img src="http://forum.nette.org/cs/img/avatars/2118.jpg" alt="{$author->name}" />
 
-		{foreach $author->related('addon') as $addon}
+		{foreach $author->related('addons') as $addon}
 			{$addon|addonlink}{sep}, {/sep}
 		{/foreach}
 		

@@ -73,7 +73,7 @@ class Tags extends Table
 	 */
 	protected function getAddonTags()
 	{
-		return $this->connection->table('addon_tag');
+		return $this->connection->table('addons_tags');
 	}
 
 	public function isCategory(ActiveRow $tag)
