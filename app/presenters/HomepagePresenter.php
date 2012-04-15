@@ -15,7 +15,7 @@ class HomepagePresenter extends BasePresenter
 
 	public function handleReinstall()
 	{
-		$this->context->reinstall->reinstall();
+		$this->context->reinstall->recreateDatabase();
 
 		$this->flashMessage('Fuk yea!');
 		$this->redirect('this');
