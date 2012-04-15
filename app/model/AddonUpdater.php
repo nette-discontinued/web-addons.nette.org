@@ -32,6 +32,11 @@ class AddonUpdater extends Nette\Object
 	 */
 	private $dependencies;
 
+	/**
+	 * @var \Nette\Database\Connection
+	 */
+	private $connection;
+
 
 
 	/**
@@ -39,13 +44,20 @@ class AddonUpdater extends Nette\Object
 	 * @param \NetteAddons\Model\Tags $tags
 	 * @param \NetteAddons\Model\AddonVersions $versions
 	 * @param \NetteAddons\Model\VersionDependencies $dependencies
+	 * @param \Nette\Database\Connection $connection
 	 */
-	public function __construct(Addons $addons, Tags $tags, AddonVersions $versions, VersionDependencies $dependencies)
+	public function __construct(
+		Addons $addons,
+		Tags $tags,
+		AddonVersions $versions,
+		VersionDependencies $dependencies,
+		Nette\Database\Connection $connection)
 	{
 		$this->addons = $addons;
 		$this->tags = $tags;
 		$this->versions = $versions;
 		$this->dependencies = $dependencies;
+		$this->connection = $connection;
 	}
 
 
@@ -62,29 +74,40 @@ class AddonUpdater extends Nette\Object
 			throw new \NetteAddons\InvalidArgumentException;
 		}
 
-		$addonRow = $this->addons->createOrUpdate(array(
-			'composerName' => $addon->composerName,
-			'name' => $addon->name,
-			'repository' => $addon->repository,
-			'description' => $addon->description ? : "",
-			'shortDescription' => $addon->shortDescription ? : "",
-			'demo' => $addon->demo ? : NULL,
-			'updatedAt' => new \Datetime('now'),
-			'userId' => $addon->userId
-		));
+		$this->connection->beginTransaction();
 
-		foreach ($addon->tags as $tag) {
-			$this->tags->addAddonTag($addonRow, $tag);
-		}
+		try {
+			$addonRow = $this->addons->createOrUpdate(array(
+				'composer_name' => $addon->composerName,
+				'name' => $addon->name,
+				'repository' => $addon->repository,
+				'description' => $addon->description ? : "",
+				'short_description' => $addon->shortDescription ? : "",
+				'demo' => $addon->demo ? : NULL,
+				'updated_at' => new \Datetime('now'),
+				'user_id' => $addon->userId
+			));
 
-		foreach ($addon->versions as $version) {
-			try {
-				$versionRow = $this->versions->setAddonVersion($addonRow, $version);
-				$this->dependencies->setVersionDependencies($versionRow, $version);
-
-			} catch (\NetteAddons\InvalidArgumentException $e) {
-				throw new \NetteAddons\InvalidStateException("Cannot create version {$version->version}.", NULL, $e);
+			foreach ($addon->tags as $tag) {
+				$this->tags->addAddonTag($addonRow, $tag);
 			}
+
+
+			foreach ($addon->versions as $version) {
+				try {
+					$versionRow = $this->versions->setAddonVersion($addonRow, $version);
+					$this->dependencies->setVersionDependencies($versionRow, $version);
+
+				} catch (\NetteAddons\InvalidArgumentException $e) {
+					throw new \NetteAddons\InvalidStateException("Cannot create version {$version->version}.", NULL, $e);
+				}
+			}
+
+			$this->connection->commit();
+
+		} catch (\Exception $e) {
+			$this->connection->rollBack();
+			throw $e;
 		}
 
 		return $addonRow;

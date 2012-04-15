@@ -12,10 +12,6 @@ use NetteAddons\Model;
  */
 class AddonManageFacade extends Nette\Object
 {
-	/**
-	 * @var \NetteAddons\Model\AddonUpdater
-	 */
-	private $updater;
 
 	/**
 	 * @var \NetteAddons\Model\Addons
@@ -30,13 +26,11 @@ class AddonManageFacade extends Nette\Object
 
 
 	/**
-	 * @param \NetteAddons\Model\AddonUpdater $updater
 	 * @param \NetteAddons\Model\Addons $addons
 	 * @param string $uploadDir
 	 */
-	public function __construct(Model\AddonUpdater $updater, Model\Addons $addons, $uploadDir)
+	public function __construct(Model\Addons $addons, $uploadDir)
 	{
-		$this->updater = $updater;
 		$this->addons = $addons;
 		$this->uploadDir = $uploadDir;
 	}
@@ -48,6 +42,7 @@ class AddonManageFacade extends Nette\Object
 	 * @param $values
 	 * @param \Nette\Security\Identity $owner
 	 *
+	 * @throws \NetteAddons\DuplicateEntryException
 	 * @return \Nette\Security\Identity
 	 */
 	public function buildAddonFromValues(Model\Addon $addon, $values, Nette\Security\Identity $owner)
@@ -56,7 +51,6 @@ class AddonManageFacade extends Nette\Object
 		$addon->shortDescription = $values->shortDescription;
 		$addon->description = $values->description;
 		$addon->demo = $values->demo;
-		$addon->userId = $owner->getId();
 
 		if ($addon->composerName === NULL) {
 			$addon->buildComposerName($owner);
@@ -72,7 +66,7 @@ class AddonManageFacade extends Nette\Object
 			}
 		}
 
-		$this->updater->update($addon);
+		$addon->userId = $owner->getId();
 		return $addon;
 	}
 
@@ -142,7 +136,6 @@ class AddonManageFacade extends Nette\Object
 		$version->filename = $filename;
 
 		$addon->versions[] = $version;
-		$this->updater->update($addon);
 		return $version;
 	}
 
