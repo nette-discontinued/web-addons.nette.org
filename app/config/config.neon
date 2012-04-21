@@ -16,6 +16,10 @@ parameters:
 
 
 nette:
+	application:
+		mapping:
+			*: NetteAddons\*\*Presenter
+
 	session:
 		expiration: '+ 14 days'
 
@@ -31,7 +35,6 @@ nette:
 
 
 services:
-	nette.presenterFactory: NetteAddons\PresenterFactory(%appDir%, @container)
 	templateFactory: NetteAddons\TemplateFactory(@nette.templateCacheStorage)
 
     # security
