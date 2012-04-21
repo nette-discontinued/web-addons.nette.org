@@ -14,7 +14,7 @@ use Nette;
 class PresenterFactory extends Nette\Application\PresenterFactory
 {
 	/** Base namespace for whole application */
-	const BASE_NAMESPACE = __NAMESPACE__; 
+	const BASE_NAMESPACE = __NAMESPACE__;
 
 	/**
 	 * Formats presenter class name from its name.

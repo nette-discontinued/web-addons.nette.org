@@ -77,11 +77,11 @@
 						{var $my = $vote ? $vote->vote : 0}
 					{/if}
 
-					
-					{* sum plusu a minusu 
+
+					{* sum plusu a minusu
 						<span class="votes">{$addon->related('votes')->aggregation('SUM(vote)') ?: 0}</span>
 					*}
-					
+
 					<table class="table-vote">
 						<tr>
 							<td class="thumb">
@@ -91,7 +91,7 @@
 							<td class="wrap-progress">
 
 									<div class="progress progress-yesno progress-success {if $plus == 0 && $minus == 0}progress-disabled{/if}">
-										<div class="bar" title="{$percents} %" style="width: {$percents}%;"></div>	
+										<div class="bar" title="{$percents} %" style="width: {$percents}%;"></div>
 									</div>
 							</td>
 							<td class="thumb">
@@ -100,8 +100,8 @@
 							</td>
 						</tr>
 					</table>
-				
-					
+
+
 				</div>
 
 
