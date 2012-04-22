@@ -4,5 +4,22 @@
 	bootstrap="bootstrap.php"
 	convertErrorsToExceptions="true"
 	convertNoticesToExceptions="true"
-	convertWarningsToExceptions="true">
+	convertWarningsToExceptions="true"
+	colors="true">
+	<testsuites>
+		<testsuite name="Nette Addons Test Suite">
+			<directory suffix="Test.php">./</directory>
+		</testsuite>
+	</testsuites>
+
+	<filter>
+		<blacklist>
+			<directory suffix=".php">./../temp</directory>
+			<directory suffix=".php">./temp</directory>
+			<directory suffix=".php">./../libs</directory>
+		</blacklist>
+		<whitelist addUncoveredFilesFromWhitelist="true">
+			<directory suffix=".php">./../app</directory>
+		</whitelist>
+	</filter>
 </phpunit>
