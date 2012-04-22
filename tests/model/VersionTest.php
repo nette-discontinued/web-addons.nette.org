@@ -8,7 +8,9 @@ class VersionTest extends \PHPUnit_Framework_TestCase
 {
 
 
-
+	/**
+	 * @return array
+	 */
 	public static function validVersions()
 	{
 		return array(
@@ -33,7 +35,9 @@ class VersionTest extends \PHPUnit_Framework_TestCase
 	}
 
 
-
+	/**
+	 * @return array
+	 */
 	public static function invalidVersions()
 	{
 		return array(
@@ -44,20 +48,33 @@ class VersionTest extends \PHPUnit_Framework_TestCase
 
 
 
+	/**
+	 * @return array
+	 */
 	public static function matchPairs()
 	{
 		return array(
 			array('=1.11.0', '1.11.0'),
 			array('<1.0.0-alpha.1', '1.0.0-alpha'),
+			array('<=1.0.0-alpha.1', '1.0.0-alpha'),
 			array('>1.0.0-beta.2', '1.0.0-alpha.1'),
+			array('>=1.0.0-beta.2', '1.0.0-alpha.1'),
 			array('>1.0.0-beta.11', '1.0.0-beta.2'),
+			array('>=1.0.0-beta.11', '1.0.0-beta.2'),
 			array('>1.0.0-rc.1', '1.0.0-beta.11'),
+			array('>=1.0.0-rc.1', '1.0.0-beta.11'),
 			array('>1.0.0-rc.1+build.1', '1.0.0-rc.1'),
+			array('>=1.0.0-rc.1+build.1', '1.0.0-rc.1'),
 			array('<1.0.0', '1.0.0-rc.1+build.1'),
+			array('<=1.0.0', '1.0.0-rc.1+build.1'),
 			array('>1.0.0+0.3.7', '1.0.0'),
+			array('>=1.0.0+0.3.7', '1.0.0'),
 			array('>1.3.7+build', '1.0.0+0.3.7'),
+			array('>=1.3.7+build', '1.0.0+0.3.7'),
 			array('>1.3.7+build.2.b8f12d7', '1.3.7+build'),
+			array('>=1.3.7+build.2.b8f12d7', '1.3.7+build'),
 			array('>1.3.7+build.11.e0f985a', '1.3.7+build.2.b8f12d7'),
+			array('>=1.3.7+build.11.e0f985a', '1.3.7+build.2.b8f12d7'),
 		);
 	}
 

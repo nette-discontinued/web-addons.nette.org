@@ -33,6 +33,8 @@ class DetailPresenter extends BasePresenter
 		$this->template->registerHelper('downloadlink', function ($version) use ($addons, $addon) {
 			return $addons->getZipUrl($addon, $version);
 		});
+
+		$this->template->currentVersion = $this->context->addonVersions->findAddonCurrentVersion($addon);
 	}
 
 	/**

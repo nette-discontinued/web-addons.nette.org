@@ -41,4 +41,29 @@ class AddonVersions extends Table
 		));
 	}
 
+
+
+	/**
+	 * @param \Nette\Database\Table\ActiveRow $addon
+	 */
+	public function findAddonCurrentVersion(ActiveRow $addon)
+	{
+		$versions = $addon->related('addons_versions')->fetchPairs('id', 'version');
+		$hasMasterBranch = in_array('master', $versions);
+		$versions = array_filter($versions, function ($ver) {
+			return (bool)Version::create($ver);
+		});
+
+		if (!$versions && $hasMasterBranch) {
+			return "master";
+		}
+
+		usort($versions, function ($me, $him) {
+			$me = Version::create('>=' . $me);
+			return $me->match($him) ? 1 : -1;
+		});
+
+		return end($versions);
+	}
+
 }
