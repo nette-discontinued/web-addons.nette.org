@@ -11,10 +11,10 @@ class AddAddonForm extends BaseForm
 	protected function buildForm()
 	{
 		$this->addText('name', 'Name', 40, 100)
-			->addRule(self::FILLED);
+			->setRequired();
 		$this->addTextArea('shortDescription', 'Short description', 60, 4)
 			->setAttribute('class', 'span4')
-			->addRule(self::FILLED);
+			->setRequired();
 		$this->addTextArea('description', 'Description', 80, 20)
 			->setAttribute('class', 'span6');
 
@@ -25,6 +25,12 @@ class AddAddonForm extends BaseForm
 	}
 
 
+
+	/**
+	 * Sets default values. Used when importing from GitHub.
+	 *
+	 * @param Addon
+	 */
 	public function setAddonDefaults(Addon $addon)
 	{
 		$this->setDefaults(array(
@@ -34,5 +40,4 @@ class AddAddonForm extends BaseForm
 			'demo' => $addon->demo
 		));
 	}
-
 }

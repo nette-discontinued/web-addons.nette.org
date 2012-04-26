@@ -11,30 +11,19 @@ use Nette;
  */
 class AddonUpdater extends Nette\Object
 {
-
-	/**
-	 * @var Addons
-	 */
+	/** @var Addons */
 	private $addons;
 
-	/**
-	 * @var Tags
-	 */
+	/** @var Tags */
 	private $tags;
 
-	/**
-	 * @var AddonVersions
-	 */
+	/** @var AddonVersions */
 	private $versions;
 
-	/**
-	 * @var VersionDependencies
-	 */
+	/** @var VersionDependencies */
 	private $dependencies;
 
-	/**
-	 * @var \Nette\Database\Connection
-	 */
+	/** @var \Nette\Database\Connection */
 	private $connection;
 
 
@@ -112,5 +101,4 @@ class AddonUpdater extends Nette\Object
 
 		return $addonRow;
 	}
-
 }

@@ -2,6 +2,8 @@
 
 namespace NetteAddons\Model\Importers\GitHub;
 
+
+
 /**
  * @author	Patrik Votoček
  */
@@ -9,10 +11,13 @@ class File extends \Nette\Object
 {
 	/** @var \NetteAddons\Curl */
 	private $curl;
+
 	/** @var string */
 	private $vendor;
+
 	/** @var string */
 	private $name;
+
 	/** @var string */
 	public $baseUrl = 'https://raw.github.com';
 
@@ -29,9 +34,9 @@ class File extends \Nette\Object
 	}
 
 	/**
-	 * Call remote API
+	 * Calls remote API.
 	 *
-	 * @param string
+	 * @param  string
 	 * @return string
 	 */
 	protected function exec($path)

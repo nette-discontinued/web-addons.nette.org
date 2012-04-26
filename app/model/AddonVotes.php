@@ -14,9 +14,10 @@ use Nette\Database\Table\ActiveRow;
  */
 class AddonVotes extends Table
 {
-
 	/** @var string */
 	protected $tableName = 'addons_votes';
+
+
 
 	/**
 	 * Votes as given user for given addon with optional comment.
@@ -72,5 +73,4 @@ class AddonVotes extends Table
 			'percent' => $percent, // percent of likes
 		);
 	}
-
 }

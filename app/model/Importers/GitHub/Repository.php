@@ -4,6 +4,8 @@ namespace NetteAddons\Model\Importers\GitHub;
 
 use Nette\Utils\Strings;
 
+
+
 /**
  * Get repository metadata from GitHub
  *
@@ -15,12 +17,16 @@ class Repository extends \Nette\Object
 
 	/** @var \NetteAddons\Curl */
 	private $curl;
+
 	/** @var string */
 	private $vendor;
+
 	/** @var string */
 	private $name;
+
 	/** @var string */
 	public $baseUrl = 'https://api.github.com';
+
 	/** @var array */
 	private $cache = array();
 
@@ -45,7 +51,7 @@ class Repository extends \Nette\Object
 	}
 
 	/**
-	 * Call remote API
+	 * Calls remote API.
 	 *
 	 * @param string
 	 * @return string

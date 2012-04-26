@@ -12,21 +12,16 @@ use NetteAddons\Model;
  */
 class AddonManageFacade extends Nette\Object
 {
-
-	/**
-	 * @var \NetteAddons\Model\Addons
-	 */
+	/** @var Model\Addons */
 	private $addons;
 
-	/**
-	 * @var string
-	 */
+	/** @var string */
 	private $uploadDir;
 
 
 
 	/**
-	 * @param \NetteAddons\Model\Addons $addons
+	 * @param Model\Addons $addons
 	 * @param string $uploadDir
 	 */
 	public function __construct(Model\Addons $addons, $uploadDir)
@@ -38,10 +33,9 @@ class AddonManageFacade extends Nette\Object
 
 
 	/**
-	 * @param \NetteAddons\Model\Addon $addon
-	 * @param $values
-	 * @param \Nette\Security\Identity $owner
-	 *
+	 * @param  Model\Addon $addon
+	 * @param  array
+	 * @param  \Nette\Security\Identity $owner
 	 * @throws \NetteAddons\DuplicateEntryException
 	 * @return \Nette\Security\Identity
 	 */
@@ -57,7 +51,7 @@ class AddonManageFacade extends Nette\Object
 		}
 
 		if ($this->addons->findOneBy(array('composerName' => $addon->composerName)) !== FALSE) {
-			$message = 'Addon with same composer package already exists. ';
+			$message = 'Addon with same composer package already exists.';
 			if ($addon->repository) {
 				throw new \NetteAddons\DuplicateEntryException($message . 'Please specify another package to import.');
 
@@ -73,16 +67,18 @@ class AddonManageFacade extends Nette\Object
 
 
 	/**
-	 * @param \NetteAddons\Model\Importers\GitHubImporter
+	 * @todo  throw better exceptions
+	 *
+	 * @param Model\Importers\GitHubImporter
 	 * @param \Nette\Security\Identity|\Nette\Database\Table\ActiveRow|null $owner
 	 *
 	 * @throws \NetteAddons\InvalidArgumentException
 	 * @throws \UnexpectedValueException
-	 * @return \NetteAddons\Model\Addon
+	 * @return Model\Addon
 	 */
 	public function importRepository(Model\Importers\GitHubImporter $importer, $owner)
 	{
-		/** @var \NetteAddons\Model\Addon $addon */
+		/** @var Model\Addon $addon */
 		if (NULL === ($addon = $importer->import())) {
 			throw new \UnexpectedValueException("Invalid repository.");
 		}
@@ -100,7 +96,7 @@ class AddonManageFacade extends Nette\Object
 
 		// normalize repository
 		if (!isset($addon->repository)) {
-			$addon->repository = \NetteAddons\Model\Importers\GitHub\Helpers::normalizeRepositoryUrl($importer->getUrl());
+			$addon->repository = Model\Importers\GitHub\Helpers::normalizeRepositoryUrl($importer->getUrl());
 		}
 
 		return $addon;
@@ -109,11 +105,11 @@ class AddonManageFacade extends Nette\Object
 
 
 	/**
-	 * @param \NetteAddons\Model\Addon $addon
+	 * @param Model\Addon $addon
 	 * @param $values
 	 *
 	 * @throws \NetteAddons\InvalidArgumentException
-	 * @return \NetteAddons\Model\AddonVersion
+	 * @return Model\AddonVersion
 	 */
 	public function submitAddonVersion(Model\Addon $addon, $values)
 	{

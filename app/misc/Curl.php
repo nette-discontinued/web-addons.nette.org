@@ -12,8 +12,10 @@ class Curl extends \Nette\Object
 	/** @var int */
 	private $timeout;
 
+
+
 	/**
-	 * @param int
+	 * @param int The maximum number of milliseconds to allow cURL functions to execute.
 	 */
 	public function __construct($timeout = 500)
 	{
@@ -23,6 +25,8 @@ class Curl extends \Nette\Object
 
 		$this->timeout = $timeout;
 	}
+
+
 
 	/**
 	 * @return resource
@@ -40,15 +44,17 @@ class Curl extends \Nette\Object
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 		curl_setopt($ch, CURLOPT_TIMEOUT_MS, $this->timeout);
 
-		if (PHP_OS == 'WINNT') {
+		if (PHP_OS === 'WINNT') {
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 		}
 
 		return $ch;
 	}
 
+
+
 	/**
-	 * @param string|\Nette\Http\Url
+	 * @param  string|\Nette\Http\Url
 	 * @return string
 	 * @throws InvalidStateException
 	 */
@@ -56,7 +62,7 @@ class Curl extends \Nette\Object
 	{
 		$ch = $this->create();
 
-		curl_setopt($ch, CURLOPT_URL, (string)$url);
+		curl_setopt($ch, CURLOPT_URL, (string) $url);
 		curl_setopt($ch, CURLOPT_HTTPGET, TRUE);
 
 		$data = curl_exec($ch);

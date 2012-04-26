@@ -2,6 +2,8 @@
 
 namespace NetteAddons\Model;
 
+use Nette;
+
 
 
 /**
@@ -9,9 +11,8 @@ namespace NetteAddons\Model;
  *
  * @author Jan Marek
  */
-class Composer extends \Nette\Object
+class Composer extends Nette\Object
 {
-
 	/** @var Addons addons repository */
 	private $addons;
 
@@ -28,7 +29,7 @@ class Composer extends \Nette\Object
 
 
 	/**
-	 * Generate packages.json data
+	 * Generates packages.json data
 	 *
 	 * @param  Addon[]
 	 * @return array
@@ -61,7 +62,7 @@ class Composer extends \Nette\Object
 	}
 
 	/**
-	 * Generate composer.json data
+	 * Generates composer.json data
 	 *
 	 * @param  Addon
 	 * @param  AddonVersion
@@ -100,5 +101,4 @@ class Composer extends \Nette\Object
 
 		return $data;
 	}
-
 }

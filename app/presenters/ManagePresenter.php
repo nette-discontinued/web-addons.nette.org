@@ -18,7 +18,7 @@ final class ManagePresenter extends BasePresenter
 	/** @var SessionSection */
 	private $session;
 
-	/** @var \NetteAddons\Model\Facade\AddonManageFacade */
+	/** @var AddonManageFacade */
 	private $manager;
 
 	/** @var AddonUpdater */
@@ -36,7 +36,7 @@ final class ManagePresenter extends BasePresenter
 	/** @var Addon from the session. */
 	private $addon;
 
-	/** @var \Nette\Database\Table\ActiveRow Low-level database row. */
+	/** @var \Nette\Database\Table\ActiveRow low-level database row. */
 	private $addonRow;
 
 
@@ -113,9 +113,12 @@ final class ManagePresenter extends BasePresenter
 	 */
 	protected function restoreAddon()
 	{
-		if ($this->token !== NULL && isset($this->session[$this->getSessionKey()])) {
-			$this->addon = $this->session[$this->getSessionKey()];
-			$this->addon->userId = $this->getUser()->getId();
+		if ($this->token !== NULL) {
+			$key = $this->getSessionKey();
+			if (isset($this->session[$key])) {
+				$this->addon = $this->session[$key];
+				$this->addon->userId = $this->getUser()->getId();
+			}
 		}
 	}
 
@@ -125,7 +128,8 @@ final class ManagePresenter extends BasePresenter
 	protected function removeStoredAddon()
 	{
 		$this->addon = NULL;
-		unset($this->session[$this->getSessionKey()]);
+		$key = $this->getSessionKey();
+		unset($this->session[$key]);
 	}
 
 
@@ -152,7 +156,8 @@ final class ManagePresenter extends BasePresenter
 
 	/**
 	 * Handles the new addon form submission.
-	 * @param \NetteAddons\AddAddonForm $form
+	 *
+	 * @param AddAddonForm
 	 */
 	public function addAddonFormSubmitted(AddAddonForm $form)
 	{
@@ -229,7 +234,7 @@ final class ManagePresenter extends BasePresenter
 			return;
 		}
 
-		$this->flashMessage('Imported addon.');
+		$this->flashMessage('Addon has been successfully imported.');
 		$this->redirect('create');
 	}
 
@@ -346,7 +351,7 @@ final class ManagePresenter extends BasePresenter
 		try {
 			$this->addon->userId = $this->getUser()->getId();
 			$row = $this->updater->update($this->addon);
-			$this->flashMessage('Addon was successfully saved.');
+			$this->flashMessage('Addon was successfully registered.');
 
 		} catch (\NetteAddons\InvalidStateException $e) {
 			$row = $this->addons->findBy(array('composerName' => $this->addon->composerName));

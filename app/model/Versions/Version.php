@@ -15,24 +15,16 @@ class Version extends Nette\Object
 
 	const REGEXP = '^(=?>=?|=?<=?|==?)?v?((?:(?:\\*|\d{1,3})\\.?){3,4})(?:[-.]?(?P<pre>[-.a-z0-9]+))?(?:[+.]?(?P<build>[-.a-z0-9]+))?$';
 
-	/**
-	 * @var string
-	 */
+	/** @var string */
 	private $version;
 
-	/**
-	 * @var string
-	 */
+	/** @var string */
 	private $comparator;
 
-	/**
-	 * @var string
-	 */
+	/** @var string */
 	private $preRelease;
 
-	/**
-	 * @var string
-	 */
+	/** @var string */
 	private $build;
 
 

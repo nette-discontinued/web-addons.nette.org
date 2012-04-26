@@ -11,7 +11,6 @@ use Nette;
  */
 class Authorizator extends Nette\Object
 {
-
 	/** @var \Nette\Security\User */
 	private $user;
 
@@ -70,5 +69,4 @@ class Authorizator extends Nette\Object
 
 		throw new \NetteAddons\InvalidArgumentException();
 	}
-
 }

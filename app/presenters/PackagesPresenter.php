@@ -4,12 +4,13 @@ namespace NetteAddons;
 
 use Nette\Application\Responses\JsonResponse;
 
+
+
 /**
  * @author Jan Marek
  */
 class PackagesPresenter extends BasePresenter
 {
-
 	public function renderDefault()
 	{
 		$packages = $this->context->addons->findAll();
@@ -18,5 +19,4 @@ class PackagesPresenter extends BasePresenter
 
 		$this->sendResponse(new JsonResponse($data));
 	}
-
 }

@@ -14,14 +14,10 @@ use Nette\Http;
  */
 class Addons extends Table
 {
-	/**
-	 * @var string Prefix where the uploaded files are stored.
-	 */
+	/** @var string Prefix where the uploaded files are stored. */
 	private $uploadUri;
 
-	/**
-	 * @var string
-	 */
+	/** @var string */
 	protected $tableName = 'addons';
 
 

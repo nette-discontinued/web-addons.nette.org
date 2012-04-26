@@ -12,7 +12,6 @@ use Nette\Security as NS;
  */
 class Authenticator extends Object implements NS\IAuthenticator
 {
-
 	/** @var Users */
 	private $users;
 
@@ -63,5 +62,4 @@ class Authenticator extends Object implements NS\IAuthenticator
 	{
 		return sha1($password);
 	}
-
 }

@@ -13,10 +13,11 @@ use Nette\Database\Table\ActiveRow;
 class AddonVersions extends Table
 {
 
-	/**
-	 * @var string
-	 */
+	/** @var string */
 	protected $tableName = 'addons_versions';
+
+
+
 
 
 

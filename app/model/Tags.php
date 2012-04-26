@@ -4,6 +4,7 @@ namespace NetteAddons\Model;
 
 use Nette;
 use Nette\Database\Table\ActiveRow;
+use Nette\Database\Table\Selection as TableSelection;
 use Nette\Utils\Strings;
 
 
@@ -13,19 +14,19 @@ use Nette\Utils\Strings;
  */
 class Tags extends Table
 {
-
 	const LEVEL_CATEGORY = 1;
 	const LEVEL_SUBCATEGORY = 2;
 	const LEVEL_ORDINARY_TAG = 9;
 
-	/**
-	 * @var string
-	 */
+	/** @var string */
 	protected $tableName = 'tags';
 
 
+
 	/**
-	 * @return \Nette\Database\Table\Selection
+	 * Returns tags which represent main catagories.
+	 *
+	 * @return TableSelection
 	 */
 	public function findMainTags()
 	{
@@ -33,15 +34,17 @@ class Tags extends Table
 	}
 
 
+
 	/**
-	 * @param \Nette\Database\Table\ActiveRow $addon
-	 * @param string|\Nette\Database\Table\ActiveRow $tag
+	 * @param  ActiveRow
+	 * @param  string|ActiveRow
+	 * @return bool
 	 */
 	public function addAddonTag(ActiveRow $addon, $tag)
 	{
 		if (!$tag instanceof ActiveRow) {
 			$tag = $this->getTable()
-				->where('name = ? OR slug = ? OR id = ?', $tag, $tag, $tag)
+				->where('name = ? OR slug = ? OR id = ?', $tag, $tag, $tag) // JT: I don't like this.
 				->limit(1)->fetch();
 
 			if (!$tag) {
@@ -49,7 +52,7 @@ class Tags extends Table
 					'name' => func_get_arg(1),
 					'slug' => Strings::webalize(func_get_arg(1)),
 					'level' => self::LEVEL_ORDINARY_TAG,
-					'visible' => true,
+					'visible' => TRUE,
 				));
 			}
 		}
@@ -61,6 +64,7 @@ class Tags extends Table
 			));
 		} catch (\PDOException $e) {
 			// duplicate entry is not an error in this case
+			// TODO: Rethrow the exception if inserting fails for different reason.
 		}
 
 		return TRUE;
@@ -69,21 +73,36 @@ class Tags extends Table
 
 
 	/**
-	 * @return \Nette\Database\Table\Selection
+	 * @return TableSelection
 	 */
 	protected function getAddonTags()
 	{
 		return $this->connection->table('addons_tags');
 	}
 
+
+
+	/**
+	 * Checks whether given tag represents main category.
+	 *
+	 * @param  ActiveRow
+	 * @return bool
+	 */
 	public function isCategory(ActiveRow $tag)
 	{
 		return $tag->level == Static::LEVEL_CATEGORY;
 	}
 
+
+
+	/**
+	 * Checks whether given tag represents subcategory.
+	 *
+	 * @param  ActiveRow
+	 * @return bool
+	 */
 	public function isSubCategory(ActiveRow $tag)
 	{
 		return $tag->level == Static::LEVEL_SUBCATEGORY;
 	}
-
 }

@@ -20,8 +20,8 @@ class GitHubImporter extends \Nette\Object implements \NetteAddons\Model\IAddonI
 	 */
 	public function __construct($repositoryFactory, $url)
 	{
-		$this->url = $url;
 		$this->repository = callback($repositoryFactory)->invoke($url);
+		$this->url = $url;
 	}
 
 	/**
@@ -51,7 +51,7 @@ class GitHubImporter extends \Nette\Object implements \NetteAddons\Model\IAddonI
 		}
 
 		$addon = new \NetteAddons\Model\Addon;
-		$addon->name = $this->repository->getVendor()." ".$this->repository->getName();
+		$addon->name = $this->repository->getVendor() . ' ' . $this->repository->getName();
 		$addon->description = $this->repository->getReadme();
 		if (isset($repo->description)) {
 			$addon->shortDescription = Strings::truncate($repo->description, 250);
@@ -82,7 +82,7 @@ class GitHubImporter extends \Nette\Object implements \NetteAddons\Model\IAddonI
 	public function importVersions()
 	{
 		$versions = array();
-		foreach($this->repository->getVersionsComposersJson() as $v => $data) {
+		foreach ($this->repository->getVersionsComposersJson() as $v => $data) {
 			$composer = GitHub\Helpers::decodeJSON($data);
 			$version = new \NetteAddons\Model\AddonVersion;
 			$version->version = Strings::startsWith($v, 'v') ? Strings::substring($v, 1) : $v;

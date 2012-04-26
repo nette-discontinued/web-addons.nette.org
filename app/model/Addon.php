@@ -13,49 +13,31 @@ use Nette\Utils\Strings;
 class Addon extends Nette\Object
 {
 
-	/**
-	 * @var string
-	 */
+	/** @var string */
 	public $name;
 
-	/**
-	 * @var string
-	 */
+	/** @var string */
 	public $composerName;
 
-	/**
-	 * @var int
-	 */
+	/** @var int */
 	public $userId;
 
-	/**
-	 * @var string
-	 */
+	/** @var string */
 	public $shortDescription;
 
-	/**
-	 * @var string
-	 */
+	/** @var string */
 	public $description;
 
-	/**
-	 * @var string
-	 */
+	/** @var string */
 	public $repository;
 
-	/**
-	 * @var string URL to addon demo.
-	 */
+	/** @var string URL to addon demo. */
 	public $demo;
 
-	/**
-	 * @var array|AddonVersion[]
-	 */
+	/** @var AddonVersion[] */
 	public $versions = array();
 
-	/**
-	 * @var array|string[]
-	 */
+	/** @var string[] */
 	public $tags = array();
 
 

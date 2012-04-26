@@ -13,14 +13,10 @@ use Nette\Utils\Strings;
 class VersionConstraint extends Nette\Object
 {
 
-	/**
-	 * @var Version
-	 */
+	/** @var Version */
 	private $version;
 
-	/**
-	 * @var string
-	 */
+	/** @var string */
 	private $comparator;
 
 

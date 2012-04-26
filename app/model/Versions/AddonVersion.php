@@ -12,49 +12,31 @@ use Nette\Utils\Strings;
 class AddonVersion extends Nette\Object
 {
 
-	/**
-	 * @var string
-	 */
+	/** @var string */
 	public $version;
 
-	/**
-	 * @var string
-	 */
+	/** @var string */
 	public $license;
 
-	/**
-	 * @var string Name of the ZIP file.
-	 */
+	/** @var string Name of the ZIP file. */
 	public $filename;
 
-	/**
-	 * @var array|string[]
-	 */
+	/** @var string[] */
 	public $require = array();
 
-	/**
-	 * @var array|string[]
-	 */
+	/** @var string[] */
 	public $suggest = array();
 
-	/**
-	 * @var array|string[]
-	 */
+	/** @var string[] */
 	public $provide = array();
 
-	/**
-	 * @var array|string[]
-	 */
+	/** @var string[] */
 	public $replace = array();
 
-	/**
-	 * @var array|string[]
-	 */
+	/** @var string[] */
 	public $conflict = array();
 
-	/**
-	 * @var array|string[]
-	 */
+	/** @var string[] */
 	public $recommend = array();
 
 	/** @var array */

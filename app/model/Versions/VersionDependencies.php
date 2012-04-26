@@ -13,9 +13,7 @@ use Nette\Database\Table\ActiveRow;
 class VersionDependencies extends Table
 {
 
-	/**
-	 * @var string
-	 */
+	/** @var string */
 	protected $tableName = 'addons_dependencies';
 
 
