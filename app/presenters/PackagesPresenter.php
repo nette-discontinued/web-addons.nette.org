@@ -17,6 +17,8 @@ class PackagesPresenter extends BasePresenter
 		$packages = array_map('NetteAddons\Model\Addon::fromActiveRow', iterator_to_array($packages));
 		$data = $this->context->composer->createPackages($packages);
 
-		$this->sendResponse(new JsonResponse($data));
+		$this->sendResponse(new JsonResponse(array(
+			'packages' => $data,
+		)));
 	}
 }

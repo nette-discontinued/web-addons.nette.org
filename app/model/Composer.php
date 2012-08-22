@@ -37,28 +37,12 @@ class Composer extends Nette\Object
 	public function createPackages(array $addons)
 	{
 		$packages = array();
-
 		foreach ($addons as $addon) {
-			$addonName = $addon->composerName;
-
-			$versions = array();
-
 			foreach ($addon->versions as $version) {
-				$versions[$version->version] = $this->createComposerJson($addon, $version);
+				$packages[$addon->composerName][$version->version] = $this->createComposerJson($addon, $version);
 			}
-
-			$packages[] = array(
-				$addonName => array(
-					'name' => $addonName,
-					'description' => $addon->shortDescription,
-					'versions' => $versions,
-				),
-			);
 		}
-
-		return array(
-			'packages' => $packages,
-		);
+		return $packages;
 	}
 
 	/**
