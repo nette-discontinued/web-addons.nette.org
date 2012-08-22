@@ -136,3 +136,7 @@ ALTER TABLE `addons`
 -- added filename for version
 ALTER TABLE `addons_versions`
 	ADD COLUMN `filename` VARCHAR(250) NULL COMMENT 'filename on local filesystem' AFTER `composerJson`;
+
+-- addons_versions.composerJson can no longer be NULL
+ALTER TABLE `addons_versions`
+CHANGE `composerJson` `composerJson` text COLLATE 'utf8_general_ci' NOT NULL AFTER `license`;
