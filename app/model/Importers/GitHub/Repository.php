@@ -134,24 +134,30 @@ class Repository extends \Nette\Object
 	}
 
 	/**
-	 * @return string
+	 * Returns readme content or NULL if readme does not exist.
+	 *
+	 * @return string|NULL
+	 * @throws \NetteAddons\IOException
 	 */
 	public function getReadme()
 	{
-		if (isset($this->cache['readme'])) {
+		if (array_key_exists('readme', $this->cache)) { // $this->cache['readme'] may contain NULL
 			return $this->cache['readme'];
 		}
 
 		$loader = $this->createBlobLoader();
-		$data = $this->getTree($this->getMasterBranch());
+		$branch = $this->getMasterBranch();
+		$data = $this->getTree($branch);
 
 		if (isset($data->tree)) {
 			foreach ($data->tree as $item) {
 				if (Strings::startsWith(Strings::lower($item->path), 'readme')) {
-					return $this->cache['readme'] = $loader->get($this->getMasterBranch(), $item->path);
+					return $this->cache['readme'] = $loader->get($branch, $item->path);
 				}
 			}
 		}
+
+		$this->cache['readme'] = NULL; // means readme not found
 	}
 
 	/**
