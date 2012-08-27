@@ -38,27 +38,33 @@ class File extends \Nette\Object
 	 *
 	 * @param  string
 	 * @return string
+	 * @throws \NetteAddons\IOException
 	 */
 	protected function exec($path)
 	{
-		$url = new \Nette\Http\Url($this->baseUrl);
-		$url->setPath($path);
-		return $this->curl->get($url);
+		try {
+			$url = new \Nette\Http\Url($this->baseUrl);
+			$url->setPath($path);
+			return $this->curl->get($url);
+
+		} catch (\NetteAddons\CurlException $e) {
+			throw new \NetteAddons\IOException('cURL execution failed.', NULL, $e);
+
+		} catch (\NetteAddons\InvalidStateException $e) {
+			throw new \NetteAddons\IOException();
+		}
 	}
 
 	/**
-	 * @param string
-	 * @param string
+	 * Gets raw content of specified file.
+	 *
+	 * @param  string commit sha-1 hash
+	 * @param  string file path
+	 * @return string file raw content
+	 * @throws \NetteAddons\IOException
 	 */
 	public function get($hash, $path)
 	{
-		try {
-			return $this->exec("/{$this->vendor}/{$this->name}/{$hash}/$path");
-		} catch(\NetteAddons\InvalidStateException $e) {
-			if ($e->getCode() == 404) {
-				return NULL;
-			}
-			throw $e;
-		}
+		return $this->exec("/{$this->vendor}/{$this->name}/{$hash}/$path");
 	}
 }
