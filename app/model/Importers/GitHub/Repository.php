@@ -53,14 +53,27 @@ class Repository extends \Nette\Object
 	/**
 	 * Calls remote API.
 	 *
-	 * @param string
-	 * @return string
+	 * @param  string
+	 * @return mixed json-decoded result
+	 * @throws \NetteAddons\IOException
 	 */
 	protected function exec($path)
 	{
-		$url = new \Nette\Http\Url($this->baseUrl);
-		$url->setPath($path);
-		return $this->curl->get($url);
+		try {
+			$url = new \Nette\Http\Url($this->baseUrl);
+			$url->setPath($path);
+			$json = $this->curl->get($url);
+			return \Nette\Utils\Json::decode($json);
+
+		} catch (\NetteAddons\CurlException $e) {
+			throw new \NetteAddons\IOException('cURL execution failed.', NULL, $e);
+
+		} catch (\NetteAddons\InvalidStateException $e) {
+			throw new \NetteAddons\IOException();
+
+		} catch (\Nette\Utils\JsonException $e) {
+			throw new \NetteAddons\IOException('GitHub API returned invalid JSON.', NULL, $e);
+		}
 	}
 
 	/**
@@ -80,7 +93,11 @@ class Repository extends \Nette\Object
 	}
 
 	/**
-	 * @return stdClass
+	 * Returns repository metadata.
+	 *
+	 * @link http://developer.github.com/v3/repos/#get GitHub API documentation
+	 * @return \stdClass
+	 * @throws \NetteAddons\IOException
 	 */
 	public function getMetadata()
 	{
@@ -88,30 +105,32 @@ class Repository extends \Nette\Object
 			return $this->cache['repository'];
 		}
 
-		return $this->cache['repository'] = Helpers::decodeJSON($this->exec("/repos/{$this->vendor}/{$this->name}"));
+		return $this->cache['repository'] = $this->exec("/repos/{$this->vendor}/{$this->name}");
 	}
 
 	/**
-	 * Get default repository branch
+	 * Gets default repository branch.
 	 *
-	 * @return NULL|string
+	 * @return string
+	 * @throws \NetteAddons\IOException
 	 */
 	public function getMasterBranch()
 	{
 		$repo = $this->getMetadata();
-		if (!$repo) {
-			return NULL;
-		}
 		return isset($repo->master_branch) ? $repo->master_branch : 'master';
 	}
 
 	/**
-	 * @param string
-	 * @return stdClass
+	 * Returns Git "tree" specified by hash.
+	 *
+	 * @link http://developer.github.com/v3/git/trees/#get-a-tree
+	 * @param  string sha-1 hash
+	 * @return \stdClass
+	 * @throws \NetteAddons\IOException
 	 */
 	public function getTree($hash)
 	{
-		return Helpers::decodeJSON($this->exec("/repos/{$this->vendor}/{$this->name}/git/trees/$hash"));
+		return $this->exec("/repos/{$this->vendor}/{$this->name}/git/trees/$hash");
 	}
 
 	/**
@@ -150,11 +169,18 @@ class Repository extends \Nette\Object
 	}
 
 	/**
-	 * @return array
+	 * Returns list of repository tags.
+	 *
+	 * @return array (tagName => commitHash)
+	 * @throws \NetteAddons\IOException
 	 */
 	public function getTags()
 	{
-		$data = Helpers::decodeJSON($this->exec("/repos/{$this->vendor}/{$this->name}/tags")) ?: array();
+		$data = $this->exec("/repos/{$this->vendor}/{$this->name}/tags");
+		if (!is_array($data)) {
+			throw new \NetteAddons\IOException('GitHub API returned unexpected value.');
+		}
+
 		$tags = array();
 		foreach ($data as $tag) {
 			$tags[$tag->name] = $tag->commit->sha;
@@ -163,14 +189,21 @@ class Repository extends \Nette\Object
 	}
 
 	/**
-	 * @return array
+	 * Returns list of repository branches.
+	 *
+	 * @return array (branchName => commitHash)
+	 * @throws \NetteAddons\IOException
 	 */
 	public function getBranches()
 	{
-		$data = Helpers::decodeJSON($this->exec("/repos/{$this->vendor}/{$this->name}/branches")) ?: array();
+		$data = $this->exec("/repos/{$this->vendor}/{$this->name}/branches");
+		if (!is_array($data)) {
+			throw new \NetteAddons\IOException('GitHub API returned unexpected value.');
+		}
+
 		$branches = array();
-		foreach ($data as $branche) {
-			$branches[$branche->name] = $branche->commit->sha;
+		foreach ($data as $branch) {
+			$branches[$branch->name] = $branch->commit->sha;
 		}
 		return $branches;
 	}
