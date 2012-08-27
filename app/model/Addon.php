@@ -4,6 +4,7 @@ namespace NetteAddons\Model;
 
 use Nette;
 use Nette\Utils\Strings;
+use Nette\DateTime;
 
 
 
@@ -12,6 +13,8 @@ use Nette\Utils\Strings;
  */
 class Addon extends Nette\Object
 {
+	/** @var int */
+	public $id;
 
 	/** @var string */
 	public $name;
@@ -22,17 +25,23 @@ class Addon extends Nette\Object
 	/** @var int */
 	public $userId;
 
-	/** @var string */
+	/** @var string single line description */
 	public $shortDescription;
 
 	/** @var string */
 	public $description;
 
-	/** @var string */
+	/** @var string default license for new versions */
+	public $defaultLicense;
+
+	/** @var string|NULL repository URL	 */
 	public $repository;
 
-	/** @var string URL to addon demo. */
+	/** @var string|NULL URL to addon demo. */
 	public $demo;
+
+	/** @var DateTime */
+	public $updatedAt;
 
 	/** @var AddonVersion[] */
 	public $versions = array();
@@ -43,45 +52,34 @@ class Addon extends Nette\Object
 
 
 	/**
-	 * @param \Nette\Database\Table\ActiveRow|\stdClass $row
+	 * Creates Addon entity from Nette\Database row.
+	 *
+	 * @todo   Consider lazy loading for versions and tags.
+	 *
+	 * @param  Nette\Database\Table\ActiveRow
 	 * @return Addon
 	 */
 	public static function fromActiveRow(Nette\Database\Table\ActiveRow $row)
 	{
 		$addon = new static;
+		$addon->id = (int) $row->id;
 		$addon->name = $row->name;
 		$addon->composerName = $row->composerName;
+		$addon->userId = (int) $row->user->id;
 		$addon->shortDescription = $row->shortDescription;
 		$addon->description = $row->description;
-		$addon->demo = $row->demo;
+		$addon->defaultLicense = $row->defaultLicense;
 		$addon->repository = $row->repository;
-		$addon->userId = (int)$row->user->id;
+		$addon->demo = $row->demo;
+		$addon->updatedAt = ($row->updatedAt ? DateTime::from($row->updatedAt) : NULL);
 
-		foreach ($row->related('addons_tags') as $addonTag) {
-			$addon->tags[] = $addonTag->tag->name;
+		foreach ($row->related('versions') as $versionRow) {
+			$version = AddonVersion::fromActiveRow($versionRow);
+			$addon->versions[$version->version] = $version;
 		}
 
-		/** @var \Nette\Database\Table\ActiveRow|\stdClass $versionRow */
-		foreach ($row->related('addons_versions') as $versionRow) {
-			$version = new AddonVersion();
-			$version->version = $versionRow->version;
-			$version->license = $versionRow->license;
-
-			/** @var \Nette\Database\Table\ActiveRow|\stdClass $dependencyRow */
-			foreach ($versionRow->related('addons_dependencies') as $dependencyRow) {
-				$type = $dependencyRow->type;
-
-				if (isset($dependencyRow->dependencyId)) {
-					$dependency = $dependencyRow->ref('addons_versions')->via('dependencyId');
-					$dependencyAddon = $dependencyRow->ref($dependency->ref('addons'));
-					$dependencyName = $dependencyAddon->composerName;
-					$version->{$type}[$dependencyName] = $dependencyRow->version;
-				} else {
-					$version->{$type}[$dependencyRow->packageName] = $dependencyRow->version;
-				}
-			}
-
-			$addon->versions[$version->version] = $version;
+		foreach ($row->related('tags') as $addonTag) {
+			$addon->tags[] = $addonTag->tag->name;
 		}
 
 		return $addon;
@@ -119,5 +117,4 @@ class Addon extends Nette\Object
 		$name = Strings::toAscii($string);
 		return preg_replace('#[^A-Za-z0-9]#i', '', $name);
 	}
-
 }

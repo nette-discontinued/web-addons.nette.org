@@ -34,6 +34,7 @@ class GitHubImporter extends \Nette\Object implements \NetteAddons\Model\IAddonI
 	}
 
 	/**
+	 * @todo   validate composer structure
 	 * @return Addon
 	 */
 	public function import()
@@ -71,6 +72,9 @@ class GitHubImporter extends \Nette\Object implements \NetteAddons\Model\IAddonI
 			if (isset($composer->keywords)) {
 				$addon->tags = $composer->keywords;
 			}
+			if (isset($composer->license)) {
+				$addon->defaultLicense = implode(',', (array) $composer->license);
+			}
 		}
 
 		return $addon;
@@ -89,10 +93,7 @@ class GitHubImporter extends \Nette\Object implements \NetteAddons\Model\IAddonI
 			$version->composerJson = GitHub\Helpers::decodeJSON($data, TRUE);
 
 			if (isset($composer->license)) {
-				$version->license = is_array($composer->license)
-					? implode(',', $composer->license) : $composer->license;
-			} else {
-				//@todo throw exception!
+				$version->license = implode(',', (array) $composer->license);
 			}
 			if (isset($composer->require)) {
 				$version->require = $version->composerJson['require'];

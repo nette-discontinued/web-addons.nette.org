@@ -2,9 +2,11 @@
 
 namespace NetteAddons\Model;
 
+use NetteAddons;
 use Nette;
 use Nette\Database\Table\ActiveRow;
 use Nette\Database\Table\Selection;
+use Nette\DateTime;
 use Nette\Http;
 
 
@@ -20,7 +22,25 @@ class Addons extends Table
 	/** @var string */
 	protected $tableName = 'addons';
 
+	/** @var AddonVersions versions repository */
+	private $versions;
 
+	/** @var Tags tags repository */
+	private $tags;
+
+
+
+	public function __construct(Nette\Database\Connection $dbConn, AddonVersions $versions, Tags $tags)
+	{
+		parent::__construct($dbConn);
+		$this->versions = $versions;
+		$this->tags = $tags;
+	}
+
+
+
+
+// === Selecting addons ========================================================
 
 	/**
 	 * Filter addons selection by tag.
@@ -50,6 +70,66 @@ class Addons extends Table
 	{
 		$string = "%$string%";
 		return $addons->where('name LIKE ? OR shortDescription LIKE ?', $string, $string);
+	}
+
+
+
+// === CRUD ====================================================================
+
+	/**
+	 * Saves addos to database.
+	 *
+	 * @author Jan Tvrdík
+	 * @param  Addon
+	 * @return \Nette\Database\Table\ActiveRow created row
+	 * @throws \NetteAddons\DuplicateEntryException if addons with given composer name already exists
+	 */
+	public function add(Addon $addon)
+	{
+		if ($addon->id !== NULL) {
+			throw new \NetteAddons\InvalidArgumentException('Addon already has an ID.');
+		}
+
+		if (count($addon->versions) < 1) {
+			throw new \NetteAddons\InvalidArgumentException('Addon must have at least one version.');
+		}
+
+		$this->connection->beginTransaction();
+
+		try {
+			$addonRow = $this->createRow(array(
+				'name'             => $addon->name,
+				'composerName'     => $addon->composerName,
+				'userId'           => $addon->userId, // author
+				'shortDescription' => $addon->shortDescription,
+				'description'      => $addon->description,
+				'defaultLicense'   => $addon->defaultLicense,
+				'repository'       => $addon->repository,
+				'demo'             => $addon->demo,
+				'updatedAt'        => new Datetime('now'),
+			));
+
+			foreach ($addon->versions as $version) {
+				try {
+					$versionRow = $this->versions->add($addon, $version);
+					// $this->dependencies->setVersionDependencies($versionRow, $version); // move to versions
+
+				} catch (\NetteAddons\InvalidArgumentException $e) {
+					throw new \NetteAddons\InvalidStateException("Cannot create version {$version->version}.", NULL, $e);
+				}
+			}
+
+			foreach ($addon->tags as $tag) {
+				$this->tags->addAddonTag($addonRow, $tag);
+			}
+
+			$this->connection->commit();
+			return $addonRow;
+
+		} catch (\Exception $e) {
+			$this->connection->rollBack();
+			throw $e;
+		}
 	}
 
 

@@ -138,6 +138,7 @@ final class ManagePresenter extends BasePresenter
 
 	/**
 	 * Creates a new form for basic addon info.
+	 *
 	 * @return AddAddonForm
 	 */
 	protected function createComponentAddAddonForm()
@@ -147,6 +148,9 @@ final class ManagePresenter extends BasePresenter
 
 		if ($this->addon !== NULL) {
 			$form->setAddonDefaults($this->addon);
+			if ($this->addon->defaultLicense) {
+				$form->removeComponent($form['license']);
+			}
 		}
 
 		return $form;
@@ -350,7 +354,8 @@ final class ManagePresenter extends BasePresenter
 
 		try {
 			$this->addon->userId = $this->getUser()->getId();
-			$row = $this->updater->update($this->addon);
+			$this->addons->add($this->addon);
+			//$row = $this->updater->update($this->addon);
 			$this->flashMessage('Addon was successfully registered.');
 
 		} catch (\NetteAddons\InvalidStateException $e) {

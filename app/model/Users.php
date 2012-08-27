@@ -42,6 +42,7 @@ class Users extends Table
 	 */
 	public function register(array $values)
 	{
+		throw new \NetteAddons\DeprecatedException('This should not be used at all.');
 		return $this->createRow($values);
 	}
 

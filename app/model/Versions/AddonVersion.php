@@ -4,6 +4,7 @@ namespace NetteAddons\Model;
 
 use Nette;
 use Nette\Utils\Strings;
+use Nette\Database\Table\ActiveRow;
 
 
 /**
@@ -11,15 +12,14 @@ use Nette\Utils\Strings;
  */
 class AddonVersion extends Nette\Object
 {
-
 	/** @var string */
 	public $version;
 
 	/** @var string */
 	public $license;
 
-	/** @var string Name of the ZIP file. */
-	public $filename;
+	/** @var string URL where this version can be downloaded */
+	public $link;
 
 	/** @var string[] */
 	public $require = array();
@@ -45,13 +45,38 @@ class AddonVersion extends Nette\Object
 
 
 	/**
+	 * Creates AddonVersion entity from Nette\Database row.
+	 *
+	 * @author Filip Procházka
+	 * @author Jan Tvrdík
+	 * @param  ActiveRow
+	 * @return AddonVersion
+	 */
+	public static function fromActiveRow(ActiveRow $row)
+	{
+		$version = new static;
+		$version->version = $row->version;
+		$version->license = $row->license;
+		$version->link = $row->link;
+		$version->composerJson = $row->composerJson;
+
+		foreach ($row->related('dependencies') as $dependencyRow) {
+			$type = $dependencyRow->type;
+			$version->{$type}[$dependencyRow->packageName] = $dependencyRow->version;
+		}
+
+		return $version;
+	}
+
+
+
+	/**
 	 * Builds the filename.
 	 * @param \NetteAddons\Model\Addon $addon
 	 * @return string
 	 */
-	public function getFilename(Addon $addon)
+	/*public function getFilename(Addon $addon)
 	{
 		return Strings::webalize($addon->composerName) . '-' . $this->version . '.zip';
-	}
-
+	}*/
 }

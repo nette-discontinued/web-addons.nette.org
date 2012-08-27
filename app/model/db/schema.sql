@@ -140,3 +140,25 @@ ALTER TABLE `addons_versions`
 -- addons_versions.composerJson can no longer be NULL
 ALTER TABLE `addons_versions`
 CHANGE `composerJson` `composerJson` text COLLATE 'utf8_general_ci' NOT NULL AFTER `license`;
+
+-- addons_versions.filename replaced by link
+ALTER TABLE `addons_versions`
+CHANGE `filename` `link` varchar(250) COLLATE 'utf8_general_ci' NOT NULL COMMENT 'download link' AFTER `composerJson`;
+
+-- added default license for addon
+ALTER TABLE `addons`
+ADD `defaultLicense` varchar(100) NOT NULL COMMENT 'used as default for new versions' AFTER `updatedAt`;
+
+-- packageID if required for each dependency
+ALTER TABLE `addons_dependencies`
+CHANGE `packageName` `packageName` varchar(100) COLLATE 'utf8_general_ci' NOT NULL AFTER `dependencyId`;
+
+-- updated unique key for dependencies and removed useless addonId key
+ALTER TABLE `addons_dependencies`
+ADD UNIQUE `addonId_packageName_version` (`addonId`, `packageName`, `version`),
+DROP INDEX `addonId_dependencyId_packageName_version`,
+DROP INDEX `addonId`;
+
+-- tags.slug must be unique
+ALTER TABLE `tags`
+ADD UNIQUE (`slug`);

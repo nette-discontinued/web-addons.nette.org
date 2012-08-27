@@ -54,8 +54,7 @@ class Composer extends Nette\Object
 	 */
 	public function createComposerJson(Addon $addon, AddonVersion $version)
 	{
-		// use default version
-		$composer = $version->composerJson ?: $this->createDefaultComposerJson($addon, $version);
+		$composer = $version->composerJson;
 		$composer['version'] = $version->version;
 		$composer['dist'] = array(
 			'url' => $this->addons->getZipUrl($addon, $version),
@@ -68,6 +67,8 @@ class Composer extends Nette\Object
 
 	private function createDefaultComposerJson(Addon $addon, AddonVersion $version)
 	{
+		throw new \NetteAddons\DeprecatedException('This should not be called at all!');
+
 		$data = array(
 			'name' => $addon->composerName,
 			'tags' => $addon->tags,

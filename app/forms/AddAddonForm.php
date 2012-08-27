@@ -6,6 +6,10 @@ use NetteAddons\Model\Addon;
 
 
 
+/**
+ * Form for new addon registration. When importing from GitHub, most of the field should be prefilled.
+ * The license input won't be visible when composer.json is available.
+ */
 class AddAddonForm extends BaseForm
 {
 	protected function buildForm()
@@ -17,10 +21,11 @@ class AddAddonForm extends BaseForm
 			->setRequired();
 		$this->addTextArea('description', 'Description', 80, 20)
 			->setAttribute('class', 'span6');
-
+		$this->addText('license')
+			->setRequired();
 		$this->addText('demo', 'Demo URL:', 60, 500)
 			->setAttribute('class', 'span6');
-
+		// $this->addText('tags');
 		$this->addSubmit('create', 'Next');
 	}
 

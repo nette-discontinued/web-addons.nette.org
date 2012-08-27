@@ -19,10 +19,10 @@ class VersionDependencies extends Table
 
 
 	/**
-	 * @param \Nette\Database\Table\ActiveRow $addon
-	 * @param \NetteAddons\Model\AddonVersion $version
+	 * @param Addon
+	 * @param AddonVersion
 	 */
-	public function setVersionDependencies(ActiveRow $addon, AddonVersion $version)
+	public function setVersionDependencies(Addon $addon, AddonVersion $version)
 	{
 		foreach (array('require', 'suggest', 'provide', 'replace', 'conflict', 'recommend') as $type) {
 			foreach ($version->$type as $packageName => $versionName) {
@@ -41,7 +41,7 @@ class VersionDependencies extends Table
 				}
 
 				$this->createOrUpdate(array(
-					'addonId' => $addon->getPrimary(),
+					'addonId' => $addon->id,
 					'version' => $versionName,
 					'type' => $type,
 				) + $insert);
