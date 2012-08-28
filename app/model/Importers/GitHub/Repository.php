@@ -63,9 +63,6 @@ class Repository extends \Nette\Object
 		} catch (\NetteAddons\CurlException $e) {
 			throw new \NetteAddons\IOException('cURL execution failed.', NULL, $e);
 
-		} catch (\NetteAddons\InvalidStateException $e) {
-			throw new \NetteAddons\IOException();
-
 		} catch (\Nette\Utils\JsonException $e) {
 			throw new \NetteAddons\IOException('GitHub API returned invalid JSON.', NULL, $e);
 		}

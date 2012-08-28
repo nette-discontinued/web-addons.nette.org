@@ -57,7 +57,7 @@ class Curl extends \Nette\Object
 	 * @param  string|\Nette\Http\Url
 	 * @return string
 	 * @throws CurlException if cURL execution fails, see http://curl.haxx.se/libcurl/c/libcurl-errors.html
-	 * @throws InvalidStateException
+	 * @throws HttpException if server returns HTTP code other than 200 OK
 	 */
 	public function get($url)
 	{
@@ -72,10 +72,8 @@ class Curl extends \Nette\Object
 		}
 
 		$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-		if ($httpCode != 200) {
-			// This will probably never happen, because CURLOPT_FOLLOWLOCATION is enabled
-			// and any http code >= 400 will cause CURLE_HTTP_RETURNED_ERROR.
-			throw new \NetteAddons\InvalidStateException("Server error", $httpCode);
+		if ($httpCode !== 200) {
+			throw new \NetteAddons\HttpException("Server returned HTTP code other than 200 OK.", $httpCode);
 		}
 
 		curl_close($ch);
@@ -90,6 +88,11 @@ class Curl extends \Nette\Object
  * @link http://curl.haxx.se/libcurl/c/libcurl-errors.html
  */
 class CurlException extends \RuntimeException
+{
+
+}
+
+class HttpException extends \NetteAddons\IOException
 {
 
 }
