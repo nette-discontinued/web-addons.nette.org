@@ -171,6 +171,18 @@ class RepositoryTest extends TestCase
 
 
 
+	public function testGetReadmeNotExist()
+	{
+		$this->curl->shouldReceive('get')->once()
+			->with('https://api.github.com/repos/smith/browser/readme?ref=cb3a02f')
+			->andThrow('NetteAddons\HttpException', NULL, 404);
+
+		$s = $this->repo->getReadme('cb3a02f');
+		$this->assertNull($s);
+	}
+
+
+
 	public function testGetTags()
 	{
 		$this->curl->shouldReceive('get')->once()

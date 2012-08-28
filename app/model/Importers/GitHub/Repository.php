@@ -146,7 +146,16 @@ class Repository extends \Nette\Object
 	 */
 	public function getReadme($hash)
 	{
-		$data = $this->exec("/repos/{$this->vendor}/{$this->name}/readme?ref=$hash");
+		try {
+			$data = $this->exec("/repos/{$this->vendor}/{$this->name}/readme?ref=$hash");
+
+		} catch (\NetteAddons\HttpException $e) {
+			if ($e->getCode() === 404) {
+				return NULL;
+			}
+			throw $e;
+		}
+
 		return $this->processContentResponse($data);
 	}
 
