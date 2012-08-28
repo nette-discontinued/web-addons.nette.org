@@ -7,14 +7,16 @@ use Nette\Utils\Strings;
 
 
 /**
- * Get repository metadata from GitHub
+ * GitHub repository API implementation.
  *
- * @author	Patrik Votoček
+ * This class is not aware how it will be used.
+ *
+ * @link http://developer.github.com/v3/ GitHub API documentation
+ * @author Patrik Votoček
+ * @author Jan Tvrdík
  */
 class Repository extends \Nette\Object
 {
-	const COMPOSER_JSON = 'composer.json';
-
 	/** @var \NetteAddons\Curl */
 	private $curl;
 
@@ -27,9 +29,6 @@ class Repository extends \Nette\Object
 	/** @var string */
 	public $baseUrl = 'https://api.github.com';
 
-	/** @var array */
-	private $cache = array();
-
 	/**
 	 * @param \NetteAddons\Curl
 	 * @param string
@@ -40,14 +39,6 @@ class Repository extends \Nette\Object
 		$this->curl = $curl;
 		$this->vendor = $vendor;
 		$this->name = $name;
-	}
-
-	/**
-	 * @return File
-	 */
-	private function createBlobLoader()
-	{
-		return new File($this->curl, $this->vendor, $this->name);
 	}
 
 	/**
@@ -95,36 +86,20 @@ class Repository extends \Nette\Object
 	/**
 	 * Returns repository metadata.
 	 *
-	 * @link http://developer.github.com/v3/repos/#get GitHub API documentation
+	 * @link http://developer.github.com/v3/repos/#get
 	 * @return \stdClass
 	 * @throws \NetteAddons\IOException
 	 */
 	public function getMetadata()
 	{
-		if (isset($this->cache['repository'])) {
-			return $this->cache['repository'];
-		}
-
-		return $this->cache['repository'] = $this->exec("/repos/{$this->vendor}/{$this->name}");
-	}
-
-	/**
-	 * Gets default repository branch.
-	 *
-	 * @return string
-	 * @throws \NetteAddons\IOException
-	 */
-	public function getMasterBranch()
-	{
-		$repo = $this->getMetadata();
-		return isset($repo->master_branch) ? $repo->master_branch : 'master';
+		return $this->exec("/repos/{$this->vendor}/{$this->name}");
 	}
 
 	/**
 	 * Returns Git "tree" specified by hash.
 	 *
 	 * @link http://developer.github.com/v3/git/trees/#get-a-tree
-	 * @param  string sha-1 hash
+	 * @param  string commit or tree hash, branch or tag
 	 * @return \stdClass
 	 * @throws \NetteAddons\IOException
 	 */
@@ -134,49 +109,55 @@ class Repository extends \Nette\Object
 	}
 
 	/**
-	 * Returns readme content or NULL if readme does not exist.
+	 * Gets file content.
 	 *
-	 * @return string|NULL
+	 * @link http://developer.github.com/v3/repos/contents/#get-contents
+	 * @param  string commit hash, branch or tag
+	 * @param  string
+	 * @return string
 	 * @throws \NetteAddons\IOException
 	 */
-	public function getReadme()
+	public function getFileContent($hash, $path)
 	{
-		if (array_key_exists('readme', $this->cache)) { // $this->cache['readme'] may contain NULL
-			return $this->cache['readme'];
-		}
-
-		$loader = $this->createBlobLoader();
-		$branch = $this->getMasterBranch();
-		$data = $this->getTree($branch);
-
-		if (isset($data->tree)) {
-			foreach ($data->tree as $item) {
-				if (Strings::startsWith(Strings::lower($item->path), 'readme')) {
-					return $this->cache['readme'] = $loader->get($branch, $item->path);
-				}
-			}
-		}
-
-		$this->cache['readme'] = NULL; // means readme not found
+		$data = $this->exec("/repos/{$this->vendor}/{$this->name}/contents/$path?ref=$hash");
+		return $this->processContentResponse($data);
 	}
 
 	/**
-	 * @return string
+	 * Returns readme content or NULL if readme does not exist.
+	 *
+	 * @link http://developer.github.com/v3/repos/contents/#get-the-readme
+	 * @param  string commit hash, branch or tag
+	 * @return string|NULL
+	 * @throws \NetteAddons\IOException
 	 */
-	public function getComposerJson()
+	public function getReadme($hash)
 	{
-		if (isset($this->cache['composer'])) {
-			return $this->cache['composer'];
+		$data = $this->exec("/repos/{$this->vendor}/{$this->name}/readme?ref=$hash");
+		return $this->processContentResponse($data);
+	}
+
+	protected function processContentResponse($data)
+	{
+		if (!$data instanceof \stdClass || !isset($data->encoding, $data->content)) {
+			throw new \NetteAddons\IOException('GitHub API returned unexpected response.');
 		}
 
-		$loader = $this->createBlobLoader();
+		if ($data->encoding === 'base64') {
+			return base64_decode($data->content);
 
-		return $this->cache['composer'] = $loader->get($this->getMasterBranch(), static::COMPOSER_JSON);
+		} elseif ($data->encoding === 'utf-8') {
+			return $data->content;
+
+		} else {
+			throw new \NetteAddons\IOException('GitHub API returned file content in unknown encoding.');
+		}
 	}
 
 	/**
 	 * Returns list of repository tags.
 	 *
+	 * @link http://developer.github.com/v3/repos/#list-tags
 	 * @return array (tagName => commitHash)
 	 * @throws \NetteAddons\IOException
 	 */
@@ -197,6 +178,7 @@ class Repository extends \Nette\Object
 	/**
 	 * Returns list of repository branches.
 	 *
+	 * @link http://developer.github.com/v3/repos/#list-branches
 	 * @return array (branchName => commitHash)
 	 * @throws \NetteAddons\IOException
 	 */
@@ -212,39 +194,5 @@ class Repository extends \Nette\Object
 			$branches[$branch->name] = $branch->commit->sha;
 		}
 		return $branches;
-	}
-
-	/**
-	 * @return array
-	 */
-	public function getVersions()
-	{
-		$versions = array($this->getMasterBranch() => $this->getMasterBranch());
-		foreach ($this->getTags() as $v => $hash) {
-			$version = \NetteAddons\Model\Version::create($v);
-			if ($version && $version->isValid()) {
-				$versions[$v] = $hash;
-			}
-		}
-
-		return $versions;
-	}
-
-	/**
-	 * @return array
-	 */
-	public function getVersionsComposersJson()
-	{
-		$loader = $this->createBlobLoader();
-
-		$versions = array();
-		foreach ($this->getVersions() as $v => $hash) {
-			$composer = $loader->get($hash, static::COMPOSER_JSON);
-			if ($composer) {
-				$versions[$v] = $composer;
-			}
-		}
-
-		return $versions;
 	}
 }
