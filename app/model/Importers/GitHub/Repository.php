@@ -57,7 +57,7 @@ class Repository extends \Nette\Object
 		try {
 			$url = new \Nette\Http\Url($this->baseUrl);
 			$url->setPath($path);
-			$json = $this->curl->get($url);
+			$json = $this->curl->get((string) $url);
 			return \Nette\Utils\Json::decode($json);
 
 		} catch (\NetteAddons\CurlException $e) {
