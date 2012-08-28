@@ -29,6 +29,8 @@ class Repository extends \Nette\Object
 	/** @var string */
 	public $baseUrl = 'https://api.github.com';
 
+
+
 	/**
 	 * @param \NetteAddons\Curl
 	 * @param string
@@ -40,6 +42,8 @@ class Repository extends \Nette\Object
 		$this->vendor = $vendor;
 		$this->name = $name;
 	}
+
+
 
 	/**
 	 * Calls remote API.
@@ -67,6 +71,8 @@ class Repository extends \Nette\Object
 		}
 	}
 
+
+
 	/**
 	 * @return string
 	 */
@@ -75,6 +81,8 @@ class Repository extends \Nette\Object
 		return $this->vendor;
 	}
 
+
+
 	/**
 	 * @return string
 	 */
@@ -82,6 +90,8 @@ class Repository extends \Nette\Object
 	{
 		return $this->name;
 	}
+
+
 
 	/**
 	 * Returns repository metadata.
@@ -95,6 +105,8 @@ class Repository extends \Nette\Object
 		return $this->exec("/repos/{$this->vendor}/{$this->name}");
 	}
 
+
+
 	/**
 	 * Returns Git "tree" specified by hash.
 	 *
@@ -107,6 +119,8 @@ class Repository extends \Nette\Object
 	{
 		return $this->exec("/repos/{$this->vendor}/{$this->name}/git/trees/$hash");
 	}
+
+
 
 	/**
 	 * Gets file content.
@@ -123,6 +137,8 @@ class Repository extends \Nette\Object
 		return $this->processContentResponse($data);
 	}
 
+
+
 	/**
 	 * Returns readme content or NULL if readme does not exist.
 	 *
@@ -136,6 +152,8 @@ class Repository extends \Nette\Object
 		$data = $this->exec("/repos/{$this->vendor}/{$this->name}/readme?ref=$hash");
 		return $this->processContentResponse($data);
 	}
+
+
 
 	protected function processContentResponse($data)
 	{
@@ -153,6 +171,8 @@ class Repository extends \Nette\Object
 			throw new \NetteAddons\IOException('GitHub API returned file content in unknown encoding.');
 		}
 	}
+
+
 
 	/**
 	 * Returns list of repository tags.
@@ -174,6 +194,8 @@ class Repository extends \Nette\Object
 		}
 		return $tags;
 	}
+
+
 
 	/**
 	 * Returns list of repository branches.
