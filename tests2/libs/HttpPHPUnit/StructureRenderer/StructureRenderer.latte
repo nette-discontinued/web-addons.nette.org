@@ -1,0 +1,41 @@
+{**
+ * @author Petr Prochazka
+ * @author Jan Tvrdík
+ * @param bool $isAll
+ * @param string $basePath
+ * @param array $structure
+ *}
+
+<div id="structure" class="filetree treeview">
+
+	<p n:if="!$isAll" id="backToAll"><a href="?run">« Back to all</a></p>
+	<img class="structure-placeholder" src="{$basePath}/assets/images/ajax-loader.gif">
+
+	<ul n:block="#render" style="display: none;">
+		{foreach $structure as $dir => $content}
+			<li>
+				<span n:class="node, $content->mode, $content->open ? open">
+					<a class="name" href="?test={$content->relative}">{$content->name}</a>
+					<span class="actions">
+						<a class="editor" n:if="$content->editor" href="{$content->editor}">(open in editor)</a>
+					</span>
+				</span>
+
+				{if $content->structure}
+					{include #render structure => $content->structure}
+				{/if}
+			</li>
+		{/foreach}
+	</ul>
+
+	<div id="help">
+		<p>
+			Use <strong>shift + click</strong> to open a file in editor.<br>
+			Use <strong>double click</strong> to run a specific folder or file.
+		</p>
+	</div>
+
+</div>
+
+{* Assets 2 (úmyslně za definicí #structure) *}
+<script type="text/javascript" src="{$basePath}/assets/js/structure.js"></script>

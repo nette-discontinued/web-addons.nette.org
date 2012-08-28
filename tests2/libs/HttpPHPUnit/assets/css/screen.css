@@ -1,0 +1,198 @@
+body {
+	font-family: Calibri, sans-serif;
+	font-size: 12px;
+	margin: 0;
+	padding: 0;
+	border: none;
+	background-color: white;
+	color: black;
+}
+
+header {
+	padding: 20px 30px;
+	background-color: #EDEDED;
+	position: relative;
+}
+
+header small.version {
+	position: absolute;
+	top: 0px;
+	right: 10px;
+	font-size: 100%;
+}
+
+header .progressBar {
+	width: 0%;
+	height: 5px;
+	background-color: black;
+	position: absolute;
+	left: 0px;
+	bottom: 0px;;
+}
+
+header.ok {
+	background-color: #1AA022;
+	color: white;
+}
+
+header.failure {
+	background-color: #CD1818;
+	color: white;
+}
+
+header.unknown {
+	background-color: #FBEB83;
+	color: black;
+}
+
+header h1 {
+	font: normal 24px Verdana, sans-serif;
+	text-shadow: 1px 1px 0 rgba(0, 0, 0, .4);
+	margin: 0;
+	word-wrap: break-word;
+}
+
+header h2 {
+	font: normal 17px Verdana, sans-serif;
+	margin-bottom: 0;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+#content {
+	padding: 10px;
+}
+
+#backToAll {
+	margin: 3px 0 5px 0;
+}
+
+#backToAll a {
+	color: inherit;
+	text-decoration: none;
+}
+
+#backToAll a:hover {
+	color: #e00;
+}
+
+#content h2 {
+	font-size: 24px;
+	font-weight: bold;
+	margin: 20px 0px 5px 0px;
+}
+
+#content h3 {
+	font-size: 18px;
+	font-weight: bold;
+}
+
+h1, h2, h3 {
+	font-family: Calibri, sans-serif;
+}
+
+small.editor {
+	padding-left: 20px;
+	background-image: url('../images/editor.png');
+	background-repeat: no-repeat;
+	font-weight: normal;
+	line-height: 16px;
+	font-size: inherit;
+	display: inline-block; /* Jinak nefunguje line-height */
+}
+
+small.editor a {
+	color: inherit;
+}
+
+small.editor a:hover {
+	color: red;
+}
+
+#structure {
+	width: 300px; /* Znemožní klikání po celé šířce stránky */
+	float: left;
+}
+
+#structure {
+	word-wrap: break-word;
+}
+
+#structure .node {
+	/*height: 14px;*/
+}
+
+#structure .node a.name:hover {
+	color: #e00;
+}
+
+#structure .node.open a.name {
+	font-weight: bold;
+}
+
+#structure .node a.name {
+	color: inherit;
+	text-decoration: none;
+}
+
+#structure .node .actions .editor {
+	display: none;
+	color: inherit;
+	padding-left: 10px;
+}
+
+#structure .node:hover .actions .editor {
+	/*display: inline;*/
+}
+
+#output {
+	margin-left: 320px;
+}
+
+#output h2 {
+	margin-top: 0;
+}
+
+#output > pre {
+	margin: 0;
+}
+
+div.failure, div.error {
+	margin-left: 30px;
+}
+
+div.failure a, div.error a {
+	color: inherit;
+}
+
+div.failure h3, div.error h3 {
+	margin-left: -30px;
+	margin-top: 10px;
+	margin-bottom: 5px;
+}
+
+div.failure .editor, div.error .editor {
+	font-size: 12px;
+}
+
+#summary {
+	font-family: Calibri, sans-serif;
+}
+
+#summary #sentence {
+	display: none;
+}
+
+#summary h3 {
+	margin: 10px 0 5px 0px;
+	font-weight: normal;
+	/*font-size: inherit;*/
+}
+
+#summary .details {
+	margin-left: 20px;
+}
+
+#summary .details > a {
+	color: #00e;
+}

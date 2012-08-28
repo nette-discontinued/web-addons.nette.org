@@ -1,0 +1,58 @@
+{**
+ * @author Petr Prochazka
+ * @param string $testDir
+ * @param string|NULL $method
+ * @param Closure $onBefore
+ * @param Closure|false $run
+ * @param Closure $onAfter
+ * @param string $basePath
+ *}
+<!DOCTYPE HTML>
+<meta charset="utf-8">
+<script type="text/javascript" src="{$basePath}/assets/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="{$basePath}/assets/plugins/jQuery.TreeView/jquery.treeview.js"></script>
+<link rel="stylesheet" type="text/css" href="{$basePath}/assets/plugins/jQuery.TreeView/jquery.treeview.css">
+
+<link rel="stylesheet" type="text/css" href="{$basePath}/assets/css/screen.css">
+<script type="text/javascript" src="{$basePath}/assets/js/init.js"></script>
+<script type="text/javascript" src="{$basePath}/assets/js/listeners.js"></script>
+<link rel="icon" type="image/x-icon" href="{$basePath}/assets/images/favicon.ico">
+<title>Tests | in progress</title>
+<header>
+	<small class="version">{=PHPUnit_TextUI_TestRunner::printVersionString()}</small>
+	<h1>
+		{if $testDir}
+			{$testDir}{if $method}&nbsp;::&nbsp;{$method}{/if}
+		{else}
+			All tests
+		{/if}
+	</h1>
+	<h2>
+		<em>
+			in progress
+			<img src="{$basePath}/assets/images/ajax-loader.gif">
+			<span class="info" style="display: none;">
+				<span class="count">?</span> / <span class="countAll">?</span>
+				<span class="text"></span>
+			</span>
+		</em>
+		<div class="progressBar"></div>
+	</h2>
+</header>
+<div id="content">
+
+	<?php $onBefore(); ?>
+
+	<div id="output">
+
+		{if $run}
+			<pre><?php $run(); ?></pre>
+		{else}
+			<h2><a href="{$startUri}">START</a></h2>
+			<p style="display: none;" id="sentence" data-state="waiting">Waiting for start</p>
+		{/if}
+
+		<?php $onAfter(); ?>
+
+	</div>
+</div>
