@@ -51,8 +51,8 @@ class AddonVersion extends Nette\Object
 	/** @var string|NULL Git, Mercurial or SVN reference (usually branch or tag name) */
 	public $sourceReference;
 
-	/** @var array */
-	public $composerJson = array();
+	/** @var \stdClass composer.json with "source" and/or "dist" fields */
+	public $composerJson;
 
 
 
