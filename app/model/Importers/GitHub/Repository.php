@@ -91,6 +91,19 @@ class Repository extends \Nette\Object
 
 
 	/**
+	 * Returns URL to this repository.
+	 *
+	 * @todo   Use GitHub API?
+	 * @return string
+	 */
+	public function getUrl()
+	{
+		return "https://github.com/{$this->vendor}/{$this->name}";
+	}
+
+
+
+	/**
 	 * Returns repository metadata.
 	 *
 	 * @link http://developer.github.com/v3/repos/#get

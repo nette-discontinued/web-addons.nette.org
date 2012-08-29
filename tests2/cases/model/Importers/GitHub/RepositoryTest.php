@@ -38,6 +38,16 @@ class RepositoryTest extends TestCase
 
 
 
+	public function testGetUrl()
+	{
+		$this->assertSame(
+			'https://github.com/smith/browser',
+			$this->repo->getUrl()
+		);
+	}
+
+
+
 	public function testGetMetadata()
 	{
 		$this->curl->shouldReceive('get')->once()
