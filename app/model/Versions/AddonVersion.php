@@ -3,6 +3,7 @@
 namespace NetteAddons\Model;
 
 use Nette;
+use Nette\Utils\Json;
 use Nette\Utils\Strings;
 use Nette\Database\Table\ActiveRow;
 
@@ -63,6 +64,7 @@ class AddonVersion extends Nette\Object
 	 * @author Jan Tvrdík
 	 * @param  ActiveRow
 	 * @return AddonVersion
+	 * @throws \Nette\Utils\JsonException if $row->composerJson contains invalid JSON
 	 */
 	public static function fromActiveRow(ActiveRow $row)
 	{
@@ -70,7 +72,7 @@ class AddonVersion extends Nette\Object
 		$version->version = $row->version;
 		$version->license = $row->license;
 		$version->link = $row->link;
-		$version->composerJson = $row->composerJson;
+		$version->composerJson = Json::decode($row->composerJson);
 
 		foreach ($row->related('dependencies') as $dependencyRow) {
 			$type = $dependencyRow->type;
