@@ -55,6 +55,9 @@ class AddonVersion extends Nette\Object
 	/** @var \stdClass composer.json with "source" and/or "dist" fields */
 	public $composerJson;
 
+	/** @var Addon|NULL */
+	public $addon;
+
 
 
 	/**
