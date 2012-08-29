@@ -18,9 +18,6 @@ class AddonVersion extends Nette\Object
 	/** @var string */
 	public $license;
 
-	/** @var string URL where this version can be downloaded */
-	public $link;
-
 	/** @var string[] */
 	public $require = array();
 
@@ -38,6 +35,21 @@ class AddonVersion extends Nette\Object
 
 	/** @var string[] */
 	public $recommend = array();
+
+	/** @var string type of distribution archive ('zip' or 'tarball') */
+	public $distType;
+
+	/** @var string URL of distribution archive */
+	public $distUrl;
+
+	/** @var string|NULL VCS type ('git', 'hg' or 'svn') */
+	public $sourceType;
+
+	/** @var string|NULL repository URL */
+	public $sourceUrl;
+
+	/** @var string|NULL Git, Mercurial or SVN reference (usually branch or tag name) */
+	public $sourceReference;
 
 	/** @var array */
 	public $composerJson = array();

@@ -162,3 +162,23 @@ DROP INDEX `addonId`;
 -- tags.slug must be unique
 ALTER TABLE `tags`
 ADD UNIQUE (`slug`);
+
+-- added "source fields" to addons_versions
+ALTER TABLE `addons_versions`
+ADD `sourceType` enum('git','hg','svn') COLLATE 'utf8_general_ci' NULL COMMENT 'VCS type' AFTER `link`,
+ADD `sourceUrl` varchar(500) COLLATE 'utf8_general_ci' NULL COMMENT 'repository URL, usually the same as addon.repository' AFTER `sourceType`,
+ADD `sourceReference` varchar(100) COLLATE 'utf8_general_ci' NULL COMMENT 'Git, Mercurial or SVN reference (usually branch or tag name)' AFTER `sourceUrl`;
+
+-- changed columns order (composerJson moved to end)
+ALTER TABLE `addons_versions`
+CHANGE `link` `link` varchar(250) COLLATE 'utf8_general_ci' NOT NULL COMMENT 'download link' AFTER `license`,
+CHANGE `sourceType` `sourceType` enum('git','hg','svn') COLLATE 'utf8_general_ci' NULL COMMENT 'VCS type' AFTER `link`,
+CHANGE `sourceUrl` `sourceUrl` varchar(500) COLLATE 'utf8_general_ci' NULL COMMENT 'repository URL, usually the same as addon.repository' AFTER `sourceType`,
+CHANGE `sourceReference` `sourceReference` varchar(100) COLLATE 'utf8_general_ci' NULL COMMENT 'Git, Mercurial or SVN reference (usually branch or tag name)' AFTER `sourceUrl`,
+CHANGE `composerJson` `composerJson` text COLLATE 'utf8_general_ci' NOT NULL COMMENT 'composer.json (with source & dist) cache' AFTER `sourceReference`;
+
+-- addons_versions.link replaced by distType & distUrl
+ALTER TABLE `addons_versions`
+ADD `distType` enum('zip','tarball') COLLATE 'utf8_general_ci' NOT NULL COMMENT 'type of distribution archive' AFTER `license`,
+ADD `distUrl` varchar(500) COLLATE 'utf8_general_ci' NOT NULL COMMENT 'link to distribution archive' AFTER `distType`,
+DROP `link`;
