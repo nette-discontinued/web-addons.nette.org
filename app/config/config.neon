@@ -59,8 +59,6 @@ services:
 	# github
 	curl: NetteAddons\Curl( 50000 )
 
-	composer: NetteAddons\Model\Composer
-
 	reinstall: NetteAddons\Model\Reinstall
 
 
