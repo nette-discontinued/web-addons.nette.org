@@ -83,6 +83,19 @@ class AddonVersion extends Nette\Object
 
 
 	/**
+	 * Returns known types of package links.
+	 *
+	 * @link http://getcomposer.org/doc/04-schema.md#package-links
+	 * @return array
+	 */
+	public static function getLinkTypes()
+	{
+		return array('require', 'replace', 'conflict', 'provide', /*'require-dev', */'suggest');
+	}
+
+
+
+	/**
 	 * Builds the filename.
 	 * @param \NetteAddons\Model\Addon $addon
 	 * @return string
