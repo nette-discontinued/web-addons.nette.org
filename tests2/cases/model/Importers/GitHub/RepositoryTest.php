@@ -226,4 +226,17 @@ class RepositoryTest extends TestCase
 			'branchB' => 'a630f70',
 		), $this->repo->getBranches());
 	}
+
+
+
+	public function testGetArchiveLink()
+	{
+		$this->assertSame(
+			'https://github.com/smith/browser/zipball/cb3a02f',
+			$this->repo->getArchiveLink('zip', 'cb3a02f')
+		);
+
+		$this->setExpectedException('NetteAddons\NotSupportedException');
+		$this->repo->getArchiveLink('rar', 'cb3a02f');
+	}
 }

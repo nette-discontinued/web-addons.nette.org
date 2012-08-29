@@ -223,4 +223,25 @@ class Repository extends \Nette\Object
 		}
 		return $branches;
 	}
+
+
+
+	/**
+	 * Returns download link.
+	 *
+	 * @todo Implement it using GitHub API?
+	 * @param  string
+	 * @param  string
+	 * @return string
+	 * @throws \NetteAddons\NotSupportedException if $type is other than 'zip'
+	 */
+	public function getArchiveLink($type, $hash)
+	{
+		if ($type === 'zip') {
+			return "https://github.com/{$this->vendor}/{$this->name}/zipball/$hash";
+
+		} else {
+			throw new \NetteAddons\NotSupportedException();
+		}
+	}
 }
