@@ -16,8 +16,11 @@ interface IAddonImporter
 	 */
 	public function import();
 
+
+
 	/**
+	 * @param  Addon
 	 * @return AddonVersion[]
 	 */
-	public function importVersions();
+	public function importVersions(Addon $addon);
 }
