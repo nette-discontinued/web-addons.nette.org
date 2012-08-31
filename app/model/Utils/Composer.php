@@ -5,6 +5,7 @@ namespace NetteAddons\Model\Utils;
 use NetteAddons\Model\Addon;
 use NetteAddons\Model\AddonVersion;
 use Nette\Utils\Json;
+use JsonSchema;
 use stdClass;
 
 
@@ -28,6 +29,39 @@ class Composer
 	final public function __construct()
 	{
 		throw new \NetteAddons\StaticClassException();
+	}
+
+
+
+	/**
+	 * Validates composer.json structure using JSON Schema.
+	 *
+	 * @link https://github.com/composer/composer/blob/master/res/composer-schema.json
+	 * @link https://github.com/justinrainbow/json-schema/
+	 * @link http://json-schema.org/
+	 * @author Jan Tvrdík
+	 * @param  stdClass|mixed
+	 * @return bool
+	 * @throws \NetteAddons\InvalidStateException
+	 */
+	public static function isValid($composer)
+	{
+		if (!$composer instanceof stdClass) {
+			return FALSE;
+		}
+
+		try {
+			$schema = file_get_contents(__DIR__ . '/composer-schema.json');
+			$schema = Json::decode($schema);
+
+		} catch (\Nette\Utils\JsonException $e) {
+			throw new \NetteAddons\InvalidStateException('composer-schema.json is not valid JSON file.', NULL, $e);
+		}
+
+		$validator = new JsonSchema\Validator();
+		$validator->check($composer, $schema);
+
+		return $validator->isValid();
 	}
 
 
@@ -64,6 +98,10 @@ class Composer
 			/*$composer->authors = array(
 				'name' => $addon->author->name,
 			);*/
+		}
+
+		if (!self::isValid($composer)) {
+			throw new \NetteAddons\InvalidStateException();
 		}
 
 		$composer->dist = (object) array(

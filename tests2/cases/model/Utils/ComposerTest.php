@@ -23,6 +23,26 @@ class ComposerTest extends TestCase
 
 
 
+	public function testIsValid()
+	{
+		$valid = (object) array(
+			'name' => 'smith/browser',
+			'description' => 'Smith\'s Browser',
+		);
+
+		$this->assertTrue(Composer::isValid($valid));
+
+		$this->assertFalse(Composer::isValid('foo'));
+		$this->assertFalse(Composer::isValid(new stdClass));
+		$this->assertFalse(Composer::isValid((object) array('name' => '...')));
+
+		$invalid = clone $valid;
+		$invalid->foo = 'bar';
+		$this->assertFalse(Composer::isValid($invalid));
+	}
+
+
+
 	/**
 	 * @todo Improve this test. Try createComposerJson without second parameter.
 	 */
@@ -61,6 +81,9 @@ class ComposerTest extends TestCase
 		$this->assertSame('smith/browser', $comp->name);
 		$this->assertSame('desc2', $comp->description);
 		$this->assertSame(array('GPL'), $comp->license);
+
+		unset($comp->dist, $comp->source); // dist and source are not part of composer.json schema
+		$this->assertTrue(Composer::isValid($comp));
 	}
 
 
