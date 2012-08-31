@@ -39,7 +39,7 @@ class AddonManageFacade extends Nette\Object
 	 * @throws \NetteAddons\DuplicateEntryException
 	 * @return \Nette\Security\Identity
 	 */
-	public function buildAddonFromValues(Model\Addon $addon, $values, Nette\Security\Identity $owner)
+	public function fillAddonWithValues(Model\Addon $addon, $values, Nette\Security\Identity $owner)
 	{
 		$addon->name = $values->name;
 		$addon->shortDescription = $values->shortDescription;

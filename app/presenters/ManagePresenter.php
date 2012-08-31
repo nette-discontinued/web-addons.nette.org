@@ -171,7 +171,7 @@ final class ManagePresenter extends BasePresenter
 
 		try {
 			// fill addon with values
-			$this->manager->buildAddonFromValues($this->addon, $form->values, $this->user->identity);
+			$this->manager->fillAddonWithValues($this->addon, $form->values, $this->user->identity);
 			$this->storeAddon();
 
 		} catch (DuplicateEntryException $e) {
