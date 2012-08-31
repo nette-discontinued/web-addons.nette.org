@@ -2,17 +2,31 @@
 
 namespace NetteAddons\Model\Importers;
 
+use NetteAddons\Model;
+use NetteAddons\Model\Addon;
+use NetteAddons\Model\AddonVersion;
+use NetteAddons\Model\IAddonImporter;
+use NetteAddons\Model\Utils;
+use Nette;
+use Nette\Utils\Json;
 use Nette\Utils\Strings;
+use stdClass;
+
+
 
 /**
- * @author	Patrik Votoček
+ * @author Patrik Votoček
+ * @author Jan Tvrdík
  */
-class GitHubImporter extends \Nette\Object implements \NetteAddons\Model\IAddonImporter
+class GitHubImporter extends Nette\Object implements IAddonImporter
 {
 	/** @var GitHub\Repository */
 	private $repository;
+
 	/** @var string */
 	private $url;
+
+
 
 	/**
 	 * @param callable
@@ -24,6 +38,8 @@ class GitHubImporter extends \Nette\Object implements \NetteAddons\Model\IAddonI
 		$this->url = $url;
 	}
 
+
+
 	/**
 	 * @todo remove!
 	 * @return string
@@ -33,90 +49,168 @@ class GitHubImporter extends \Nette\Object implements \NetteAddons\Model\IAddonI
 		return $this->url;
 	}
 
+
+
 	/**
-	 * @todo   validate composer structure
+	 * Imports addon from GitHub repository.
+	 *
 	 * @return Addon
+	 * @throws \NetteAddons\IOException
 	 */
 	public function import()
 	{
-		try {
-			$repo = $this->repository->getMetadata();
-			if (!$repo) {
-				return NULL;
-			}
-		} catch(\NetteAddons\InvalidStateException $e) {
-			if ($e->getCode() == 404) {
-				return NULL;
-			}
-			throw $e;
+		$info = $this->repository->getMetadata();
+		if (!isset($info->master_branch, $info->name, $info->description)) {
+			throw new \NetteAddons\IOException('GitHub returned invalid response.');
 		}
 
-		$addon = new \NetteAddons\Model\Addon;
-		$addon->name = $this->repository->getVendor() . ' ' . $this->repository->getName();
-		$addon->description = $this->repository->getReadme();
-		if (isset($repo->description)) {
-			$addon->shortDescription = Strings::truncate($repo->description, 250);
+		$readme = $this->repository->getReadme($info->master_branch);
+		$composer = $this->getComposerJson($info->master_branch);
+
+		$addon = new Addon();
+
+		// name
+		$addon->name = $info->name;
+
+		// composerName
+		if ($composer) {
+			$addon->composerName = $composer->name;
 		}
 
-		$data = $this->repository->getComposerJson();
-		if ($data) {
-			$composer = GitHub\Helpers::decodeJSON($data);
-			$addon->repository = "http://github.com/{$this->repository->getVendor()}/{$this->repository->getName()}";
-			if (isset($composer->name)) {
-				$addon->composerName = $composer->name;
-				$addon->name = str_replace('/', ' ', $composer->name);
-			}
-			if (isset($composer->description)) {
-				$addon->shortDescription = Strings::truncate($composer->description, 250);
-			}
-			if (isset($composer->keywords)) {
-				$addon->tags = $composer->keywords;
-			}
-			if (isset($composer->license)) {
-				$addon->defaultLicense = implode(',', (array) $composer->license);
-			}
+		// shortDescription
+		if ($composer) {
+			$addon->shortDescription = Strings::truncate($composer->description, 250);
+		} elseif (!empty($info->description)) {
+			$addon->shortDescription = Strings::truncate($info->description, 250);
+		}
+
+		// description
+		if ($readme) {
+			$addon->description = $readme;
+		}
+
+		// default license
+		if ($composer && isset($composer->license)) {
+			$addon->defaultLicense = implode(',', (array) $composer->license);
+		}
+
+		// repository
+		$addon->repository = $this->repository->getUrl();
+
+		// tags
+		if ($composer && isset($composer->keywords)) {
+			$addon->tags = $composer->keywords;
 		}
 
 		return $addon;
 	}
 
+
+
 	/**
+	 * Imports versions from GitHub repository.
+	 *
+	 * @param  Addon
 	 * @return AddonVersion[]
 	 */
-	public function importVersions()
+	public function importVersions(Addon $addon)
 	{
 		$versions = array();
-		foreach ($this->repository->getVersionsComposersJson() as $v => $data) {
-			$composer = GitHub\Helpers::decodeJSON($data);
-			$version = new \NetteAddons\Model\AddonVersion;
-			$version->version = Strings::startsWith($v, 'v') ? Strings::substring($v, 1) : $v;
-			$version->composerJson = GitHub\Helpers::decodeJSON($data, TRUE);
 
-			if (isset($composer->license)) {
+		foreach ($this->getVersions() as $v => $hash) {
+			$composer = $this->getComposerJson($hash);
+
+			$version = new AddonVersion();
+			$version->addon = $addon;
+
+			// version
+			if ($composer && isset($composer->version)) {
+				$version->version = $composer->version;
+			} else {
+				$version->version = $v;
+			}
+
+			// license
+			if ($composer && isset($composer->license)) {
 				$version->license = implode(',', (array) $composer->license);
-			}
-			if (isset($composer->require)) {
-				$version->require = $version->composerJson['require'];
-			}
-			if (isset($composer->recommend)) {
-				$version->recommend = $version->composerJson['recommend'];
-			}
-			if (isset($composer->suggest)) {
-				$version->suggest = $version->composerJson['suggest'];
-			}
-			if (isset($composer->conflict)) {
-				$version->conflict = $version->composerJson['conflict'];
-			}
-			if (isset($composer->replace)) {
-				$version->replace = $version->composerJson['replace'];
-			}
-			if (isset($composer->provide)) {
-				$version->provide = $version->composerJson['provide'];
+			} else {
+				$version->license = $addon->defaultLicense;
 			}
 
-			$versions[$v] = $version;
+			// package links
+			if ($composer) {
+				foreach (AddonVersion::getLinkTypes() as $link) {
+					if (!empty($composer->$link)) {
+						$version->$link = $composer->$link;
+					}
+				}
+			}
+
+			// dist
+			$version->distType = 'zip';
+			$version->distUrl = $this->repository->getArchiveLink('zip', $hash);
+
+			// source
+			$version->sourceType = 'git';
+			$version->sourceUrl = $addon->repository;
+			$version->sourceReference = $hash;
+
+			// composer.json
+			$version->composerJson = Utils\Composer::createComposerJson($version, $composer);
+
+			$versions[] = $version;
 		}
 
 		return $versions;
+	}
+
+
+
+	/**
+	 * Returns list of version in repository.
+	 *
+	 * @return array (version => hash)
+	 */
+	private function getVersions()
+	{
+		$tags = $this->repository->getTags();
+		$versions = array();
+		foreach ($tags as $tag => $hash) {
+			$version = Model\Version::create($tag);
+			if ($version && $version->isValid()) {
+				$versions[$version->getVersion()] = $hash;
+			}
+		}
+		return $versions;
+	}
+
+
+
+	/**
+	 * Returns composer.json or NULL if composer.json does not exist or is invalid.
+	 *
+	 * @param  string commit hash, brach or tag name
+	 * @return stdClass|NULL
+	 * @throws \NetteAddons\IOException
+	 */
+	private function getComposerJson($hash)
+	{
+		try {
+			$content = $this->repository->getFileContent($hash, Utils\Composer::FILENAME);
+			$composer = Json::decode($content);
+			if (!Utils\Composer::isValid($composer)) {
+				return NULL; // invalid composer.json
+			}
+			return $composer;
+
+		} catch (\NetteAddons\HttpException $e) {
+			if ($e->getCode() === 404) {
+				return NULL;
+			}
+			throw $e;
+
+		} catch (\Nette\Utils\JsonException $e) {
+			return NULL;
+		}
 	}
 }
