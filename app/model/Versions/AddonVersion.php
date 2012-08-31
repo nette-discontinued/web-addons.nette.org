@@ -74,8 +74,12 @@ class AddonVersion extends Nette\Object
 		$version = new static;
 		$version->version = $row->version;
 		$version->license = $row->license;
-		$version->link = $row->link;
-		$version->composerJson = Json::decode($row->composerJson);
+		$version->distType = $row->distType;
+		$version->distUrl = $row->distUrl;
+		$version->sourceType = $row->sourceType;
+		$version->sourceUrl = $row->sourceUrl;
+		$version->sourceReference = $row->sourceReference;
+		$version->composerJson = Json::decode($row->composerJson); // this may fail
 
 		foreach ($row->related('dependencies') as $dependencyRow) {
 			$type = $dependencyRow->type;
