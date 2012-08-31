@@ -97,16 +97,4 @@ class AddonVersion extends Nette\Object
 	{
 		return array('require', 'replace', 'conflict', 'provide', /*'require-dev', */'suggest');
 	}
-
-
-
-	/**
-	 * Builds the filename.
-	 * @param \NetteAddons\Model\Addon $addon
-	 * @return string
-	 */
-	/*public function getFilename(Addon $addon)
-	{
-		return Strings::webalize($addon->composerName) . '-' . $this->version . '.zip';
-	}*/
 }

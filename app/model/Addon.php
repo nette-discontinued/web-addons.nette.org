@@ -78,8 +78,8 @@ class Addon extends Nette\Object
 			$addon->versions[$version->version] = $version;
 		}
 
-		foreach ($row->related('tags') as $addonTag) {
-			$addon->tags[] = $addonTag->tag->name;
+		foreach ($row->related('tags') as $tagRow) {
+			$addon->tags[] = $tagRow->tag->name;
 		}
 
 		return $addon;
