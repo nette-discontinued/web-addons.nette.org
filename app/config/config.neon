@@ -75,7 +75,3 @@ factories:
 	repositoryImporter:
 		class: NetteAddons\Model\Importers\GitHubImporter( @repositoryFromUrlFactory, %url%)
 		parameters: [url]
-
-	archiveImporter:
-		class: NetteAddons\Model\ArchiveImporter(%archiveFile%)
-		parameters: [archiveFile]
