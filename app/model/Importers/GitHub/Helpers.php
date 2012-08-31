@@ -43,23 +43,7 @@ class Helpers extends \Nette\Object
 		return (string)$normalized;
 	}
 
-	/**
-	 * JSON string to stdClass or asoc. array
-	 *
-	 * @param string
-	 * @param bool
-	 * @return stdClass|NULL
-	 */
-	public static function decodeJSON($input, $asArray = NULL)
-	{
-		$output = json_decode($input, $asArray);
 
-		if ($output === NULL) {
-			throw new \NetteAddons\InvalidStateException("Invalid JSON");
-		}
-
-		return $output;
-	}
 
 	/**
 	 * @param \NetteAddons\Curl
