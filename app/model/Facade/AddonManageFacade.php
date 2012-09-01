@@ -8,7 +8,6 @@ use Nette\Utils\Strings;
 
 
 
-
 /**
  * @author Filip Procházka <filip.prochazka@kdyby.org>
  * @author Jan Tvrdík
@@ -90,13 +89,12 @@ class AddonManageFacade extends Nette\Object
 
 	/**
 	 * Fills addon with values (usually from form). Those value must be already validated.
-	 * Returned addon is fully valid (except for versions).
 	 *
 	 * @param  Model\Addon
 	 * @param  array
 	 * @param  Nette\Security\Identity
-	 * @throws \NetteAddons\InvalidArgumentException
 	 * @return Model\Addon
+	 * @throws \NetteAddons\InvalidArgumentException
 	 */
 	public function fillAddonWithValues(Model\Addon $addon, array $values, Nette\Security\Identity $owner)
 	{
@@ -132,8 +130,8 @@ class AddonManageFacade extends Nette\Object
 	/**
 	 * Creates new addon version from values and adds it to addon.
 	 *
-	 * @param Model\Addon
-	 * @param array
+	 * @param  Model\Addon
+	 * @param  array
 	 * @return Model\AddonVersion
 	 * @throws \NetteAddons\InvalidArgumentException
 	 */

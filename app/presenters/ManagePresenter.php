@@ -48,10 +48,10 @@ final class ManagePresenter extends BasePresenter
 	 */
 	public function setContext(AddonUpdater $updater, Addons $addons, Session $session)
 	{
-		$this->manager = $this->createAddonManageFacade($addons);
 		$this->updater = $updater;
 		$this->addons = $addons;
 		$this->session = $session->getSection('NetteAddons.ManagePresenter');
+		$this->manager = $this->createAddonManageFacade($addons);
 	}
 
 
@@ -60,9 +60,9 @@ final class ManagePresenter extends BasePresenter
 	{
 		parent::startup();
 
-		if (!$this->user->isLoggedIn()) {
+		if (!$this->getUser()->isLoggedIn()) {
 			$this->flashMessage('Please sign in to continue.');
-			$this->redirect('Sign:in', $this->application->storeRequest());
+			$this->redirect('Sign:in', $this->getApplication()->storeRequest());
 		}
 
 		$this->restoreAddon();
@@ -177,7 +177,7 @@ final class ManagePresenter extends BasePresenter
 			$this->manager->fillAddonWithValues($this->addon, $form->getValues(TRUE), $this->user->identity);
 			$this->storeAddon();
 
-		} catch (DuplicateEntryException $e) {
+		} catch (\NetteAddons\DuplicateEntryException $e) {
 			if ($this->addon->repository) {
 				$this->flashMessage($e->getMessage());
 				$this->redirect('add');
@@ -189,8 +189,8 @@ final class ManagePresenter extends BasePresenter
 		}
 
 		if ($this->addon->repository) {
-			$this->redirect('versionImport');
 			$this->flashMessage('Addon created.');
+			$this->redirect('versionImport');
 
 		} else {
 			$this->flashMessage('Addon created. Now it\'s time to add the first version.');
