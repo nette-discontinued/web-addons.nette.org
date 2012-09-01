@@ -1,8 +1,39 @@
 {var $robots = noindex}
+{var $title = 'Log in'}
 
-{block #content}
+{block main}
+<div id="main">
+	<div id="content">
+		{foreach $flashes as $flash}<div class="flash {$flash->type}">{$flash->message}</div>{/foreach}
 
-<h1>Sign in</h1>
+		<div class="prettyform centered">
+			{form signInForm}
+			<h1>Log in</h1>
 
+			<p>Use the same login information as you have in the forum.</p>
 
-{include '../@form.latte', form => $control['signInForm']}
+			<hr />
+
+			<div>
+				{label username /}{input username}
+			</div>
+
+			<div>
+				{label password /}{input password}
+			</div>
+
+			<div class="nolabel">
+				<label for="{$_form['remember']->htmlId}">{input remember} Remember me?</label>
+			</div>
+
+			<div class="nolabel">
+				{input login class => 'button'}
+			</div>
+
+			<hr class="bottom" />
+
+			<p><a href="http://forum.nette.org/en/register.php">Create an account</a> | <a href="http://forum.nette.org/en/login.php?action=forget">Forgot your password?</a></p>
+			{/form}
+		</div>
+	</div>
+</div> <!-- /main -->
