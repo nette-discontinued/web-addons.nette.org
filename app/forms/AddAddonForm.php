@@ -3,6 +3,8 @@
 namespace NetteAddons;
 
 use NetteAddons\Model\Addon;
+use Nette;
+use Nette\Utils\Html;
 
 
 
@@ -22,7 +24,14 @@ class AddAddonForm extends BaseForm
 		$this->addTextArea('description', 'Description', 80, 20)
 			->setAttribute('class', 'span6');
 		$this->addText('license', 'License')
-			->setRequired();
+			->setRequired()
+			->addRule($this->validateLicense, 'Invalid license identifier.')
+			->setOption(
+				'description',
+				Html::el()->setHtml(
+					'See <a href="http://www.spdx.org/licenses/">SPDX Open Source License Registry</a> for list of possible identifiers.'
+				)
+			);
 		$this->addText('demo', 'Demo URL:', 60, 500)
 			->setAttribute('class', 'span6');
 		// $this->addText('tags');
@@ -44,5 +53,17 @@ class AddAddonForm extends BaseForm
 			'description' => $addon->description,
 			'demo' => $addon->demo
 		));
+	}
+
+
+
+	/**
+	 * @param  Nette\Forms\IControl
+	 * @return bool
+	 */
+	public function validateLicense(Nette\Forms\IControl $control)
+	{
+		$validator = new \Composer\Util\SpdxLicenseIdentifier();
+		return $validator->validate($control->getValue());
 	}
 }
