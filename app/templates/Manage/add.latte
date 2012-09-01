@@ -5,13 +5,13 @@
 <ol>
 	<li id="fromGitHub">
 		<a href="#">Import from Git repository</a><br/><br/>
-		<div>
+		<div n:class="$presenter['addAddonForm']->submitted ? hide">
 			{control importAddonForm}
 		</div>
 	</li>
 	<li id="manualCreate">
 		<a href="#">Manually create the addon</a><br><br>
-		<div class="hide">
+		<div n:class="!$presenter['addAddonForm']->submitted ? hide">
 			{control addAddonForm}
 		</div>
 	</li>
