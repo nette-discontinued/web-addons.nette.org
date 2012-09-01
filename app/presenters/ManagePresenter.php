@@ -314,8 +314,7 @@ final class ManagePresenter extends BasePresenter
 		$this->addon->userId = $this->getUser()->getId();
 
 		try {
-			$importer = $this->getContext()->createRepositoryImporter($this->addon->repository);
-			//$this->addon = $this->manager->importRepository($importer, $this->user->identity);
+			$importer = $this->getContext()->repositoryImporterFactory->createFromUrl($this->addon->repository);
 			$this->addon->versions = $importer->importVersions();
 			$this->updater->update($this->addon);
 
@@ -334,8 +333,8 @@ final class ManagePresenter extends BasePresenter
 	 */
 	public function handleImportVersions()
 	{
-		$importer = $this->getContext()->createRepositoryImporter($this->addon->repository);
-		$this->addon->versions = $importer->importVersions();
+		$importer = $this->getContext()->repositoryImporterFactory->createFromUrl($this->addon->repository);
+		$this->addon->versions = $importer->importVersions($this->addon);
 		$this->storeAddon();
 		$this->redirect('finish');
 	}
