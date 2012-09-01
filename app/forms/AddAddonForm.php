@@ -36,7 +36,7 @@ class AddAddonForm extends BaseForm
 					'See <a href="http://www.spdx.org/licenses/">SPDX Open Source License Registry</a> for list of possible identifiers.'
 				)
 			);
-		$this->addText('demo', 'Demo URL:', 60, 500)
+		$this->addText('demo', 'Demo URL', 60, 500)
 			->setAttribute('class', 'span6');
 		// $this->addText('tags');
 		$this->addSubmit('create', 'Next');
