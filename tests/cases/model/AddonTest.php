@@ -4,12 +4,13 @@ namespace NetteAddons\Test;
 
 use NetteAddons\Model\Addon;
 
+
+
 /**
  * @author Jan Marek
  */
 class AddonTest extends \PHPUnit_Framework_TestCase
 {
-
 	/** @var Addon */
 	private $object;
 
@@ -17,6 +18,8 @@ class AddonTest extends \PHPUnit_Framework_TestCase
 	{
 		$this->object = new Addon();
 	}
+
+
 
 	public function testUpdateComposerName()
 	{
@@ -29,5 +32,4 @@ class AddonTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertEquals($expected, $this->object->composerName);
 	}
-
 }

@@ -4,10 +4,14 @@ namespace NetteAddons\Test;
 
 use NetteAddons\Model\Version;
 
+
+
+/**
+ * @author Filip Procházka
+ * @author Jan Marek
+ */
 class VersionTest extends \PHPUnit_Framework_TestCase
 {
-
-
 	/**
 	 * @return array
 	 */
@@ -33,6 +37,7 @@ class VersionTest extends \PHPUnit_Framework_TestCase
 			array('1.0.0-rc.1+build.1'),
 		);
 	}
+
 
 
 	/**
@@ -107,5 +112,4 @@ class VersionTest extends \PHPUnit_Framework_TestCase
 	{
 		$this->assertTrue(Version::create($v1)->match($v2));
 	}
-
 }
