@@ -58,6 +58,27 @@ class AddonManageFacade extends Nette\Object
 
 
 
+	public function importVersions(Model\Addon $addon, Model\IAddonImporter $importer, Nette\Security\Identity $owner)
+	{
+		$addon->versions = $importer->importVersions($addon);
+
+		// add information about author if missing
+		foreach ($addon->versions as $version) {
+			if (empty($version->composerJson->authors)) {
+				$version->composerJson->authors = array(
+					(object) array(
+						'name' => $owner->name,
+						'email' => $owner->email,
+					)
+				);
+			}
+		}
+
+		return $addon->versions;
+	}
+
+
+
 	/**
 	 * Fills addon with values (usually from form). Those value must be already validated.
 	 * Returned addon is fully valid (except for versions).

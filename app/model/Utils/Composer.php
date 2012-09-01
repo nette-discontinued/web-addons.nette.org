@@ -93,13 +93,6 @@ class Composer
 		$composer->version = $version->version;
 		$composer->license = array_map('trim', explode(',', $version->license));
 
-		if (empty($composer->authors)) {
-			throw new \NetteAddons\NotImplementedException();
-			/*$composer->authors = array(
-				'name' => $addon->author->name,
-			);*/
-		}
-
 		if (!self::isValid($composer)) {
 			throw new \NetteAddons\InvalidStateException();
 		}
