@@ -21,7 +21,7 @@ class AddAddonForm extends BaseForm
 			->setRequired();
 		$this->addTextArea('description', 'Description', 80, 20)
 			->setAttribute('class', 'span6');
-		$this->addText('license')
+		$this->addText('license', 'License')
 			->setRequired();
 		$this->addText('demo', 'Demo URL:', 60, 500)
 			->setAttribute('class', 'span6');
