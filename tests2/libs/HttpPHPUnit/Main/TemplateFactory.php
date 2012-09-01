@@ -26,13 +26,9 @@ class TemplateFactory extends Object
 
 	public static function getBasePath()
 	{
-		$dir = realpath(__DIR__ . '/..');
-		$documentRoot = realpath($_SERVER['DOCUMENT_ROOT']);
-		if (!$documentRoot) throw new Exception;
-		$documentRoot = rtrim($documentRoot, DIRECTORY_SEPARATOR);
-		$tmp = $documentRoot . DIRECTORY_SEPARATOR;
-		if ($documentRoot != $dir AND strncmp($dir, $tmp, strlen($tmp)) !== 0) throw new Exception;
-		return str_replace('\\', '/', substr($dir, strlen($documentRoot)));
+		$httpReqFaq = new \Nette\Http\RequestFactory();
+		$httpReq = $httpReqFaq->setEncoding('utf-8')->createHttpRequest();
+		return rtrim($httpReq->url->basePath, '/') . '/libs/HttpPHPUnit';
 	}
 
 }
