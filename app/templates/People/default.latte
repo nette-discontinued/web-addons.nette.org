@@ -1,45 +1,24 @@
-{*
-	People : default
+{var $title = 'Authors'}
 
-	@param $authors
-*}
-{block title}Addons Authors{/block}
-
-{block content}
-
-
-
-
-<div class="row">
-	<div class="span9">
-
-
-		<h1>Addons Authors</h1>
-
-
-		<div class="row authors-list">
-
-			<div class="span2 author" n:foreach="$authors as $author">
-				<img class="user-icon" src="{$basePath}/images/user.png" alt="{$author->name}" />
-				<h2>{$author|userlink}  <span class="label label-success">{$author->related('addons')->count('id')}</span></h2>
-			</div>
+{block main}
+<div id="main">
+	<div id="content">
+		<div id="breadcrumbs">
+			<a href="http://nette.org/en/">Nette Framework</a> »
+			<a n:href=":Homepage:">Addons, plugins and components</a> »
+			<span>{$title}</span>
 		</div>
 
+		{foreach $flashes as $flash}<div class="flash {$flash->type}">{$flash->message}</div>{/foreach}
 
-		<div class="pagination">
-			<ul>
-				<li><a href="#">Prev</a></li>
-				<li class="active"><a href="#">1</a></li>
-				<li><a href="#">2</a></li>
-				<li><a href="#">3</a></li>
-				<li><a href="#">4</a></li>
-				<li><a href="#">Next</a></li>
-			</ul>
+		<h1>{$title}</h1>
+
+		{foreach $authors as $author}
+		<div>
+			<h3><a n:href=":People:detail id => $author->id" title="$author->name">{$author->name}</a></h3>
+			<img src="http://forum.nette.org/cs/img/avatars/2118.jpg" class="avatar" alt="Avatar">
+			<p>{$author->related('addons', 'userId')->count('id')}</p>
 		</div>
-
-
-	</div>
-	<div class="span3">
-		{include '../Layout/sidebar.latte'}
+		{/foreach}
 	</div>
 </div>

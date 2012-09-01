@@ -1,18 +1,31 @@
-{block content}
+{var $title = 'Author: ' . $author->name}
 
-<div class="row">
-	<div class="span9">
-		<h1><img class="user-icon" src="{$basePath}/images/user.png" alt="{$author->name}" /> {$author->name}</h1>
+{block main}
+<div id="main">
+	<div id="content">
+		<div id="breadcrumbs">
+			<a href="http://nette.org/en/">Nette Framework</a> »
+			<a n:href=":Homepage:">Addons, plugins and components</a> »
+			<a n:href=":People:">Authors</a> »
+			<span>{$author->name}</span>
+		</div>
 
-		<h2>User addons</h2>
+		{foreach $flashes as $flash}<div class="flash {$flash->type}">{$flash->message}</div>{/foreach}
 
-		{foreach $author->related('addons') as $addon}
-			{include '../Addon/listItem.latte' addon=>$addon}
-		{/foreach}
+		<h1>{$author->name}</h1>
+		<img src="http://forum.nette.org/cs/img/avatars/2118.jpg" class="avatar" alt="Avatar">
 
-	</div>
+		<h2>List addons</h2>
 
-	<div class="span3">
-		{include '../Layout/sidebar.latte'}
+		<table>
+			<tbody>
+				{foreach $author->related('addons', 'userId') as $addon}
+				<tr n:class="$iterator->odd ? alt">
+					<td><a title="{$addon->name}" n:href=":Detail: id => $addon->id">{$addon->name}</a></td>
+					<td>{$addon->shortDescription}</td>
+				</tr>
+				{/foreach}
+			</tbody>
+		</table>
 	</div>
 </div>
