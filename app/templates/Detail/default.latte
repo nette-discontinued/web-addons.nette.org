@@ -1,177 +1,100 @@
-{block title}
-	{$addon->name} Nette Addon
+{var $title = $addon->name}
+{var $disableAdd = TRUE}
+{var $themeicon = 'box-full'}{* todo addon icon *}
+{block content}
+<div id="breadcrumbs">
+	<a href="http://nette.org/en/">Nette Framework</a> »
+	<a n:href=":Homepage:">Addons, plugins and components</a> »
+	<span>{$addon->name}</span>
+</div>
+
+<h1 id="toc-addons-plugins-and-components">{$addon->name}</h1>
+
+{******************************************************** TODO ************************************************************* }
+<p class="addon-download">
+	<a n:if="$addon->demo" class="btn btn-success btn-large" href="{$addon->demo}"><i class="icon-eye-open icon-white"></i> Demo</a>
+	<a class="btn btn-primary btn-large" href="javascript:;"><i class="icon-download icon-white"></i> Download</a>
+</p>
+{******************************************************** TODO *************************************************************}
+
+<p class="perex">{$addon->shortDescription}</p>
+
+{!$addon->description|texy}
 {/block}
 
-{block content}
+{block sidebar}
+<div class="info">
+	{default $disableAdd = false}
+	<h3 n:if="!$disableAdd">
+		<a n:href="Manage:add" class="btn btn-large btn-success">Create New Addon</a>
+	</h3>
 
-<div class="row">
-
-	<div class="span9">
-
-		<div class="row box-edit" n:if="$auth->isAllowed($addon, 'manage')">
-			<div class="span5  box-edit-left">
-				{if isset($addon->repository) && $addon->repository != NULL}
-				<a n:href=":Manage:checkVersions $addon->id" class="btn btn-info">Check updates</a>
-				{else}
-				<a n:href=":Manage:versionCreate $addon->id" class="btn btn-success">Add new version</a>
-				{/if}
-			</div>
-
-			<div class="span4 box-edit-right">
-				<a n:href=":Manage:edit $addon->id" class="btn btn-info">Edit</a>
-			</div>
-		</div>
-
-		<div class="hero-unit addon-detail">
-
-			<div class="row">
-				<div class="span1 icon">
-					<img src="{$basePath}/images/addon/default-ico.png" width="64" heigth="64" alt="{$addon->name}" />
-				</div>
-
-				<div class="span6">
-
-					<h4 class="vendor">{$addon->composerName}</h4>
-					<h1>{$addon->name}</h1>
-
-					<p>{$addon->shortDescription}</p>
-
-					{*$addon->license*}
-				</div>
-			</div>
-
-			<p class="addon-download">
-				<a n:if="$addon->demo" class="btn btn-success btn-large" href="{$addon->demo}"><i class="icon-eye-open icon-white"></i> Demo</a>
-				<a class="btn btn-primary btn-large" href="javascript:;"><i class="icon-download icon-white"></i> Download</a>
-			</p>
-
-		</div>
-
-		<div class="row">
-
-			<div class="span5">
-				<div class="author">
-					<i class="icon-user"></i> {$addon->user|userlink}
-					<span class="date">(Last update: {$addon->updatedAt|date:'%d.%m.%Y'})</span>
-				</div>
+	<div style="margin-bottom:2em">
+		Author
+		<h3><a n:href=":People:detail id => $addon->user->id" title="$addon->user->name">{$addon->user->name}</a></h3>
+		<img src="http://forum.nette.org/cs/img/avatars/2118.jpg" class="avatar" alt="Avatar">
+	</div>
 
 
-				<div n:if="$addon->repository" class="repository">
-					Repository: <br>
-					<a href="{$addon->repository}">{$addon->repository}</a>
-				</div>
+	<h3>Composer name</h3>
 
-				{*if $addon->license}
-					<div class="license">
-						License: <br>
-						{$addon->license|replace:',',', '}
-					</div>
-				{/if*}
+	<p>{$addon->composerName}</p>
 
-			</div>
+	{if $auth->isAllowed($addon, 'manage')}
+	<h3>Manage</h3>
 
-			<div class="span4">
-				<div class="box-vote">
-					{if $user->loggedIn}
-						{var $vote = $addon->related('votes')->where('userId = ?', $user->id)->fetch()}
-						{var $my = $vote ? $vote->vote : 0}
-					{/if}
+	<ul class="nostyle">
+		<li>
+			{if isset($addon->repository) && $addon->repository != NULL}
+			<a n:href=":Manage:checkVersions $addon->id" class="btn btn-info">Check updates</a>
+			{else}
+			<a n:href=":Manage:versionCreate $addon->id" class="btn btn-success">Add new version</a>
+			{/if}
+		</li>
+		<li><a n:href=":Manage:edit $addon->id" class="btn btn-info">Edit</a></li>
+	</ul>
+	{/if}
 
+	<h3>Info</h3>
 
-					{* sum plusu a minusu
-						<span class="votes">{$addon->related('votes')->aggregation('SUM(vote)') ?: 0}</span>
-					*}
+	<ul class="nostyle">
+		<li>Last update: {$addon->updatedAt|date:'%d.%m.%Y'}</li>
+		{*<li>License: {$addon->license|replace:',',', '}</li>*}
+		<li n:if="$addon->repository"><a href="{$addon->repository}">Repository</a></li>
+	</ul>
 
-					<table class="table-vote">
-						<tr>
-							<td class="thumb">
-								<span class="num">{$plus}×</span>
-								<a n:tag-if="$auth->isAllowed($addon, 'vote')" n:class="btn, btn-success, btn-mini, ($my > 0) ? disabled" n:href="vote! ($my > 0) ? cancel : up"><i class="icon-thumb_up"></i></a>
-							</td>
-							<td class="wrap-progress">
-
-									<div class="progress progress-yesno progress-success {if $plus == 0 && $minus == 0}progress-disabled{/if}">
-										<div class="bar" title="{$percents} %" style="width: {$percents}%;"></div>
-									</div>
-							</td>
-							<td class="thumb">
-								<span class="num">{$minus}×</span>
-								<a n:tag-if="$auth->isAllowed($addon, 'vote')" n:class="btn, btn-danger, btn-mini, ($my < 0) ? disabled" n:href="vote! ($my < 0) ? cancel : down"><i class="icon-thumb_down"></i></a>
-							</td>
-						</tr>
-					</table>
-
-
-				</div>
-
-
-				<div class="box-tags">
-					<h3>Tags</h3>
-					{foreach $addon->related('addons_tags') as $addonTag}
-						{include '../Addon/tag.latte' tag => $addonTag }
-					{/foreach}
-				</div>
-			</div>
-
-		</div>
-
-		{if $addon->related('addons_versions')->count() > 1}
-			<div class="box-versions">
-
-				<div class="row">
-					<div class="span9">
-						<h3><a href="javascript:;" class="action-toggle" data-for="#versions">All Versions <i class="icon-chevron-down"></i></a></h3>
-					</div>
-				</div>
-
-				<div class="downloads no" id="versions">
-					{foreach $addon->related('addons_versions') as $version}
-						<div class="row version">
-							<div class="span1">
-								<a href="{$version|downloadlink}" class="btn">Download</a><br>
-							</div>
-							<div class="span8">
-								<h4>{$version->version}</h4>
-								<p>{$version->license|replace:',',', '}</p>
-
-								{if $version->related('addons_dependencies')->count() > 0}
-									<h5><a href="javascript:;" class="action-toggle" data-for="#ver-{$version->version|webalize}">Dependencies</a></h5>
-									<ul class="no" id="ver-{$version->version|webalize}">
-										{foreach $version->related('addons_dependencies') as $dep}
-											<li class="small">
-												{if $dep->dependencyId}
-													<a n:href="this, $dep->dependency->id">{$dep->dependency->name}</a>
-												{else}
-													{$dep->packageName}
-												{/if}
-												| {$dep->version}
-											</li>
-										{/foreach}
-									</ul>
-								{/if}
-							</div>
-
-						</div>
-					{/foreach}
-
-				</div>
-			</div>
+	{******************************************************** TODO ************************************************************* }
+	<div class="box-vote">
+		{if $user->loggedIn}
+			{var $vote = $addon->related('votes')->where('userId = ?', $user->id)->fetch()}
+			{var $my = $vote ? $vote->vote : 0}
 		{/if}
 
 
+		{* sum plusu a minusu
+			<span class="votes">{$addon->related('votes')->aggregation('SUM(vote)') ?: 0}</span>
+		* }
 
-		<div class="description">
+		<table class="table-vote">
+			<tr>
+				<td class="thumb">
+					<span class="num">{$plus}×</span>
+					<a n:tag-if="$auth->isAllowed($addon, 'vote')" n:class="btn, btn-success, btn-mini, ($my > 0) ? disabled" n:href="vote! ($my > 0) ? cancel : up"><i class="icon-thumb_up"></i></a>
+				</td>
+				<td class="wrap-progress">
 
-			{!$addon->description|texy}
-		</div>
-
+						<div class="progress progress-yesno progress-success {if $plus == 0 && $minus == 0}progress-disabled{/if}">
+							<div class="bar" title="{$percents} %" style="width: {$percents}%;"></div>
+						</div>
+				</td>
+				<td class="thumb">
+					<span class="num">{$minus}×</span>
+					<a n:tag-if="$auth->isAllowed($addon, 'vote')" n:class="btn, btn-danger, btn-mini, ($my < 0) ? disabled" n:href="vote! ($my < 0) ? cancel : down"><i class="icon-thumb_down"></i></a>
+				</td>
+			</tr>
+		</table>
 
 
 	</div>
-	<div class="span3">
-
-		{include '../Layout/sidebar.latte' disableAdd => true}
-
-	</div>
-
+	{******************************************************** TODO *************************************************************}
 </div>
