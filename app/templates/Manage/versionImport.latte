@@ -1,21 +1,27 @@
+{var $robots = noindex}
+{var $title = 'Importing versions'}
 
-{block content}
+{block main}
+<div id="main">
+	<div id="content">
+		{foreach $flashes as $flash}<div class="flash {$flash->type}">{$flash->message}</div>{/foreach}
 
-<div class="well">
-	Importing repository versions, please wait for the operation to complete.
+		<h1>{$title}</h1>
 
-	<div class="progress progress-striped active">
-	  <div class="bar" style="width: 100%;"></div>
+		<p>Importing repository versions, please wait for the operation to complete.</p>
+
+		<div style="margin: 0 auto; width: 400px;">
+			<img src="{$basePath}/images/500.jpg" alt="image" />
+		</div>
 	</div>
 </div>
 
-
-<script type="text/javascript">
-	$(function () {
-		$.post({link importVersions!}, function (data) {
-			if (data.redirect) {
-				window.location.href = data.redirect;
-			}
-		}, 'json');
-	});
+<script>
+$(function () {
+	$.post({link importVersions!}, function (data) {
+		if (data.redirect) {
+			window.location.href = data.redirect;
+		}
+	}, 'json');
+});
 </script>

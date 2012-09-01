@@ -388,6 +388,11 @@ final class ManagePresenter extends BasePresenter
 		$this->addon = Addon::fromActiveRow($this->addonRow);
 	}
 
+	public function renderEdit()
+	{
+		$this->template->addon = $this->addon;
+	}
+
 
 	/**
 	 * @return EditAddonForm

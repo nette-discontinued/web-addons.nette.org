@@ -1,5 +1,19 @@
+{var $robots = noindex}
+{var $title = 'Create new addon'}
 
+{block main}
+<div id="main">
+	<div id="content">
+		<div id="breadcrumbs">
+			<a href="http://nette.org/en/">Nette Framework</a> »
+			<a n:href=":Homepage:">Addons, plugins and components</a> »
+			<span>{$title}</span>
+		</div>
 
-{block content}
+		{foreach $flashes as $flash}<div class="flash {$flash->type}">{$flash->message}</div>{/foreach}
 
-{control addAddonForm}
+		<h1>{$title}</h1>
+
+		{control addAddonForm}
+	</div>
+</div>

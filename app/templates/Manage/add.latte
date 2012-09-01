@@ -1,35 +1,34 @@
-{block #content}
+{var $robots = noindex}
+{var $title = 'Add new addon'}
 
-<p>Please select an option:</p>
-
-<ol>
-	<li id="fromGitHub">
-		<a href="#">Import from GitHub repository</a><br/><br/>
-		<div n:class="$presenter['addAddonForm']->submitted ? hide">
-			{control importAddonForm}
+{block main}
+<div id="main">
+	<div id="content">
+		<div id="breadcrumbs">
+			<a href="http://nette.org/en/">Nette Framework</a> »
+			<a n:href=":Homepage:">Addons, plugins and components</a> »
+			<span>{$title}</span>
 		</div>
-	</li>
-	<li id="manualCreate">
-		<a href="#">Manually create the addon</a><br><br>
-		<div n:class="!$presenter['addAddonForm']->submitted ? hide">
-			{control addAddonForm}
-		</div>
-	</li>
-</ol>
 
+		{foreach $flashes as $flash}<div class="flash {$flash->type}">{$flash->message}</div>{/foreach}
 
-<script>
-	$(function () {
-		$('#manualCreate a').on('click', function (e) {
-			$('#manualCreate > div').slideDown();
-			$('#fromGitHub > div').slideUp();
-			return false;
-		});
+		<h1>{$title}</h1>
 
-		$('#fromGitHub a').on('click', function (e) {
-			$('#manualCreate > div').slideUp();
-			$('#fromGitHub > div').slideDown();
-			return false;
-		});
-	});
-</script>
+		<p>Please select an option:</p>
+
+		<ol>
+			<li>
+				<a href="#" rel="#fromGitHub" data-addons-toggle="#manualCreate">Import from GitHub repository</a><br/><br/>
+				<div id="fromGitHub" n:class="$presenter['addAddonForm']->submitted ? hide">
+					{control importAddonForm}
+				</div>
+			</li>
+			<li>
+				<a href="#" rel="#manualCreate" data-addons-toggle="#fromGitHub">Manually create the addon</a><br><br>
+				<div id="manualCreate" n:class="!$presenter['addAddonForm']->submitted ? hide">
+					{control addAddonForm}
+				</div>
+			</li>
+		</ol>
+	</div>
+</div>
