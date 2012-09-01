@@ -18,6 +18,10 @@ class AddAddonForm extends BaseForm
 	{
 		$this->addText('name', 'Name', 40, 100)
 			->setRequired();
+		$this->addText('composerName', 'Composer name')
+			->setRequired()
+			->addRule(self::PATTERN, 'Invalid composer name', '^[a-z]+(-[a-z]+)*/[a-z]+(-[a-z]+)*$')
+			->setOption('description', '<vendor>/<project-name>, only lowercase letters and dash separation is allowed');
 		$this->addText('shortDescription', 'Short description', 60, 4)
 			->setAttribute('class', 'span4')
 			->setRequired();
