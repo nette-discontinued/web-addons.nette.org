@@ -1,13 +1,14 @@
 <?php
 
-namespace NetteAddons\Test;
+namespace NetteAddons\Model;
+
+
 
 /**
  * @author Jan Marek
  */
 class HomepageTest extends SeleniumTestCase
 {
-
 	public function testHomepage()
 	{
 		$this->reinstallDb();
@@ -16,5 +17,4 @@ class HomepageTest extends SeleniumTestCase
 
 		$this->assertContains('Addons', $this->title());
 	}
-
 }

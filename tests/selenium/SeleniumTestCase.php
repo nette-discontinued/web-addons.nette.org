@@ -1,15 +1,17 @@
 <?php
 
-namespace NetteAddons\Test;
+namespace NetteAddons\Model;
+
+
 
 /**
  * @author Jan Marek
  */
 abstract class SeleniumTestCase extends \PHPUnit_Extensions_Selenium2TestCase
 {
-
 	/** @var \SystemContainer */
 	protected $context;
+
 
 
 
@@ -34,5 +36,4 @@ abstract class SeleniumTestCase extends \PHPUnit_Extensions_Selenium2TestCase
 	{
 		$this->context->reinstall->recreateDatabase();
 	}
-
 }

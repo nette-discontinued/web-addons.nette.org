@@ -1,13 +1,14 @@
 <?php
 
-namespace NetteAddons\Test;
+namespace NetteAddons\Model;
+
+
 
 /**
  * @author Jan Marek
  */
 class DetailTest extends SeleniumTestCase
 {
-
 	protected function setUp()
 	{
 		parent::setUp();
@@ -32,5 +33,4 @@ class DetailTest extends SeleniumTestCase
 			$this->using('css selector')->value('div.box-tags a.label')
 		), 'Wrong count of tags');
 	}
-
 }

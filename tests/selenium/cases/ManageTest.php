@@ -1,6 +1,7 @@
 <?php
 
-namespace NetteAddons\Test;
+namespace NetteAddons\Model;
+
 
 
 /**
