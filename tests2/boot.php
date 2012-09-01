@@ -13,5 +13,4 @@ $configurator->createRobotLoader()
 	->addDirectory(LIBS_DIR)
 	->addDirectory(__DIR__ . '/cases')
 	->addDirectory(__DIR__ . '/../app')
-	->addDirectory(__DIR__ . '/../libs')
 	->register();
