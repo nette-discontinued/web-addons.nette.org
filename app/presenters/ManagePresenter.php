@@ -188,11 +188,12 @@ final class ManagePresenter extends BasePresenter
 			}
 		}
 
-		$this->flashMessage('Addon created.');
 		if ($this->addon->repository) {
 			$this->redirect('versionImport');
+			$this->flashMessage('Addon created.');
 
 		} else {
+			$this->flashMessage('Addon created. Now it\'s time to add the first version.');
 			$this->redirect('versionCreate');
 		}
 	}
