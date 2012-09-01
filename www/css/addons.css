@@ -1,0 +1,37 @@
+form .form label {
+	display: block;
+}
+form .form .required {
+	color: black;
+}
+form .form .required small {
+	font-weight: normal;
+}
+
+.hide {
+	display: none;
+}
+
+.sidebar .info {
+	clear: both;
+	color: #666;
+}
+.sidebar .info h3 {
+	color: #26374e;
+	margin: 0 0 .2em;
+}
+.sidebar .info ul {
+	margin:0;
+}
+.sidebar .info ul.nostyle {
+	list-style: none;
+}
+.sidebar .info ul.nostyle li {
+	margin: .2em 0 .2em 0;
+}
+.sidebar .info ul.nostyle ul {
+	list-style: disc;
+}
+.sidebar .info ul.nostyle ul li {
+	margin: .2em 0 .2em 1.70em;
+}
