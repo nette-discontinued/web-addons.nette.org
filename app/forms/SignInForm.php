@@ -15,9 +15,9 @@ class SignInForm extends BaseForm
 		$this->addPassword('password', 'Password:')
 			->setRequired('Please provide a password.');
 
-		$this->addCheckbox('remember', 'Remember me on this computer');
+		$this->addCheckbox('remember', 'Remember me?');
 
-		$this->addSubmit('send', 'Sign in');
+		$this->addSubmit('login', 'Login');
 	}
 
 }
