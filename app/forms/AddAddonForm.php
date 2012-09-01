@@ -22,7 +22,7 @@ class AddAddonForm extends BaseForm
 			->setRequired()
 			->addRule(self::PATTERN, 'Invalid composer name', '^[a-z]+(-[a-z]+)*/[a-z]+(-[a-z]+)*$')
 			->setOption('description', '<vendor>/<project-name>, only lowercase letters and dash separation is allowed');
-		$this->addText('shortDescription', 'Short description', 60, 4)
+		$this->addText('shortDescription', 'Short description', NULL, 250)
 			->setAttribute('class', 'span4')
 			->setRequired();
 		$this->addTextArea('description', 'Description', 80, 20)
