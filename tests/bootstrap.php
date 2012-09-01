@@ -1,6 +1,10 @@
 <?php
 
+require_once __DIR__ . '/../libs/autoload.php';
+
 define('LIBS_DIR', __DIR__ . '/libs');
+
+require_once LIBS_DIR . '/Access/Init.php';
 
 use Nette\Config\Configurator;
 
