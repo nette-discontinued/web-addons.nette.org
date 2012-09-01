@@ -113,10 +113,13 @@ class AddonManageFacade extends Nette\Object
 
 		foreach ($ifEmpty as $field => $required) {
 			if (empty($addon->$field)) {
-				if (empty($values[$field]) && $required) {
-					throw new \NetteAddons\InvalidArgumentException("Values does not contain field '$field'.");
+				if (empty($values[$field])) {
+					if ($required) {
+						throw new \NetteAddons\InvalidArgumentException("Values does not contain field '$field'.");
+					}
+				} else {
+					$addon->$field = $values[$field];
 				}
-				$addon->$field = $values[$field];
 			}
 		}
 
