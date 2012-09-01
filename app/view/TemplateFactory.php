@@ -53,8 +53,6 @@ class TemplateFactory extends Nette\Object
 		// Helpers
 		$template->registerHelperLoader('Nette\Templating\Helpers::loader');
 		$template->registerHelper('texy', new TexyHelper());
-		$template->registerHelper('userlink', new UserLinkHelper($control));
-		$template->registerHelper('addonlink', new AddonLinkHelper($control));
 
 		if ($this->translator)
 		{
