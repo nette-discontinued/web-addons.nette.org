@@ -23,7 +23,7 @@ class AddAddonForm extends BaseForm
 			->setRequired();
 		$this->addTextArea('description', 'Description', 80, 20)
 			->setAttribute('class', 'span6');
-		$this->addText('license', 'License')
+		$this->addText('defaultLicense', 'License')
 			->setRequired()
 			->addRule($this->validateLicense, 'Invalid license identifier.')
 			->setOption(
