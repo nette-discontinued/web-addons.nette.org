@@ -1,45 +1,59 @@
+{var $themeicon = 'box-full'}
+{block title}Addons, plugins and components | Nette Framework{/block}
 {block content}
+<div id="breadcrumbs">
+	<a href="http://nette.org/en/">Nette Framework</a> »
+	<span>Addons, plugins and components</span>
+</div>
 
-<div class="row">
+<h1 id="toc-addons-plugins-and-components">Addons, plugins and components</h1>
 
-	<div class="span9">
+<p class="warning">
+	<b>This is DEVELOPMENT version new Nette Framework Addons Portal</b><br>
+	Please login as demo user. Username: <i>demo</i> Password: <i>123</i> | <a n:href="reinstall!">Reinstall</a>
+</p>
 
-		<div class="hero-unit">
-			<h1>Nette Addons!</h1>
-			<p>
-				Please login as demo user. Username: <i>demo</i> Password: <i>123</i><br>
-				This is a template for a simple marketing or informational website. It includes a large callout called the hero unit and three supporting pieces of content. Use it as a starting point to create something more unique.
-			</p>
-			<p><a n:href="reinstall!" class="btn btn-primary btn-large">Reinstall</a></p>
-		</div>
+<p class="perex">All extensions for Nette Framework in one place. Addons for latest version of Nette are highlighted.</p>
 
+<p>Do you want to contribute? Take a look at <a title="Vzorový plugin" href="http://addons.nette.org/cs/vzorovy-plugin" lang="cs">example plugin</a>.</p>
 
-		<div class="addons-recently homepage-addons">
-			<h2>Recently updated (<a n:href="List:">All</a>) <a href="javascript:;" title="Feed recent"><i class="icon-fire"></i></a></h2>
+<p class="tip">If you're author of addons, please consider publishing it via package system <a href="http://getcomposer.org">Composer</a>. Find out <a title="Create new page" class="new" href="http://doc.nette.org/cs/composer" lang="cs">more</a>.</p>
 
-			<div class="row">
-				{foreach $updatedAddons as $addon}
-					{include ../Addon/homepageDetail.latte addon => $addon}
-				{/foreach}
-			</div>
-		</div>
+<h2>Recently updated</h2>
 
-		{*
-		<div class="addons-recently homepage-addons">
-			<h2>Most downloaded (<a n:href="List:">All</a>)</h2>
+<table>
+	<tbody>
+		{foreach $updatedAddons as $addon}
+		<tr n:class="$iterator->odd ? alt">
+			<td><a title="{$addon->name}" n:href=":Detail: id => $addon->id">{$addon->name}</a></td>
+			<td>{$addon->shortDescription}</td>
+		</tr>
+		{/foreach}
+	</tbody>
+</table>
+{/block}
 
-			<div class="row">
-				{foreach $mostDownloadedAddons as $addon}
-					{include ../Addon/homepageDetail.latte addon => $addon}
-				{/foreach}
-			</div>
-		</div>
-		*}
-	</div>
-	<div class="span3">
+{block sidebar}
+<div class="info">
+	{default $disableAdd = false}
+	<h3 n:if="!$disableAdd">
+		<a n:href="Manage:add" class="btn btn-large btn-success">Create New Addon</a>
+	</h3>
 
-		{include '../Layout/sidebar.latte'}
+	<h3>Categories</h3>
 
-	</div>
+	<ul class="nostyle">
+		<li><a n:href=":List:">All</a></li>
+		<li n:foreach="$categories as $category">
+			<a n:href=":List: tag => $category->id">{$category->name}</a>
+		</li>
+	</ul>
 
+	<h3>Resources</h3>
+
+	<ul class="nostyle">
+		<li><a n:href=":Page:howToAddPlugin">How to Add a Plugin</a></li>
+		<li><a n:href=":Page:pluginWritingGuidelines">Plugin Writing Guidelines</a></li>
+		<li><a n:href=":Page:sendFeedback">Send Feedback</a></li>
+	</ul>
 </div>
