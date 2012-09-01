@@ -223,27 +223,27 @@ final class ManagePresenter extends BasePresenter
 	{
 		try {
 			$importer = $this->getContext()->repositoryImporterFactory->createFromUrl($form->values->url);
-
 		} catch (\NetteAddons\NotSupportedException $e) {
-			$form['url']->addError('Invalid GitHub URL');
+			$form['url']->addError("'{$form->values->url}' is not valid GitHub URL.");
 			return;
 		}
 
 		try {
 			$this->addon = $this->manager->import($importer, $this->user->identity);
 			$this->storeAddon();
+			$this->flashMessage('Addon has been successfully imported.');
+			$this->redirect('create');
 
-		} catch (\UnexpectedValueException $e) {
-			$form->addError($e->getMessage());
-			return;
+		} catch (\NetteAddons\HttpException $e) {
+			if ($e->getCode() === 404) {
+				$form['url']->addError("Repository with URL '{$form->values->url}' does not exist.");
+			} else {
+				$form['url']->addError("Importing failed because GitHub returned HTTP error #" . $e->getCode() . ".");
+			}
 
-		} catch (\NetteAddons\InvalidStateException $e) {
-			$form->addError($e->getMessage() . ' Probably missing license?');
-			return;
+		} catch (\NetteAddons\IOException $e) {
+			$form['url']->addError("Importing failed. Try again later.");
 		}
-
-		$this->flashMessage('Addon has been successfully imported.');
-		$this->redirect('create');
 	}
 
 
