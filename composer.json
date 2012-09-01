@@ -6,6 +6,7 @@
 		"php": ">=5.3.0",
 		"nette/nette": "2.0.5",
 		"dg/texy": "2.2.*",
-		"justinrainbow/json-schema": "1.1.*"
-	}
+        "composer/composer": "dev-master"
+	},
+    "minimum-stability":"dev"
 }
