@@ -334,7 +334,8 @@ final class ManagePresenter extends BasePresenter
 	public function handleImportVersions()
 	{
 		$importer = $this->getContext()->repositoryImporterFactory->createFromUrl($this->addon->repository);
-		$this->addon->versions = $importer->importVersions($this->addon);
+		$this->manager->importVersions($this->addon, $importer, $this->getUser()->getIdentity());
+
 		$this->storeAddon();
 		$this->redirect('finish');
 	}
