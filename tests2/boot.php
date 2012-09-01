@@ -2,9 +2,7 @@
 
 define('LIBS_DIR', __DIR__ . '/libs');
 
-use Nette\Diagnostics\Debugger as Debug;
 use Nette\Config\Configurator;
-use Nette\Loaders\RobotLoader;
 
 $configurator = new Configurator();
 $configurator->setDebugMode();
