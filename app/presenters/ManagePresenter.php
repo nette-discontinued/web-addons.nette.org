@@ -222,7 +222,7 @@ final class ManagePresenter extends BasePresenter
 	public function importAddonFormSubmitted(ImportAddonForm $form)
 	{
 		try {
-			$importer = $this->getContext()->repositoryImporterFactory->createFromUrl($form->values->url);
+			$importer = $this->createAddonImporter($form->values->url);
 		} catch (\NetteAddons\NotSupportedException $e) {
 			$form['url']->addError("'{$form->values->url}' is not valid GitHub URL.");
 			return;
@@ -319,7 +319,7 @@ final class ManagePresenter extends BasePresenter
 		$this->addon->userId = $this->getUser()->getId();
 
 		try {
-			$importer = $this->getContext()->repositoryImporterFactory->createFromUrl($this->addon->repository);
+			$importer = $this->createAddonImporter($this->addon->repository);
 			$this->addon->versions = $importer->importVersions();
 			$this->updater->update($this->addon);
 
@@ -338,7 +338,7 @@ final class ManagePresenter extends BasePresenter
 	 */
 	public function handleImportVersions()
 	{
-		$importer = $this->getContext()->repositoryImporterFactory->createFromUrl($this->addon->repository);
+		$importer = $this->createAddonImporter($this->addon->repository);
 		$this->manager->importVersions($this->addon, $importer, $this->getUser()->getIdentity());
 
 		$this->storeAddon();
@@ -420,6 +420,20 @@ final class ManagePresenter extends BasePresenter
 
 		$this->flashMessage('Addon saved.');
 		$this->redirect('Detail:', $this->addonRow->id);
+	}
+
+
+
+	/**
+	 * Addon importer factory
+	 *
+	 * @param  string
+	 * @return Model\IAddonImporter
+	 * @throws \NetteAddons\NotSupportedException
+	 */
+	private function createAddonImporter($url)
+	{
+		return $this->getContext()->repositoryImporterFactory->createFromUrl($url);
 	}
 
 
