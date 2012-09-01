@@ -134,6 +134,7 @@ class AddonManageFacade extends Nette\Object
 	 * @param  array
 	 * @return Model\AddonVersion
 	 * @throws \NetteAddons\InvalidArgumentException
+	 * @throws \NetteAddons\IOException
 	 */
 	public function addVersionFromValues(Model\Addon $addon, $values)
 	{
@@ -154,9 +155,12 @@ class AddonManageFacade extends Nette\Object
 		$fileDest = $this->uploadDir . '/' . $fileName;
 		$fileUrl = $this->uploadUrl . '/' . $fileName;
 
-		/** @var $file \Nette\Http\FileUpload */
-		$file = $values->archive;
-		$file->move($fileDest);
+		try {
+			$file = $values->archive;
+			$file->move($fileDest);
+		} catch (\Nette\InvalidStateException $e) {
+			throw new \NetteAddons\IOException($e->getMessage(), NULL, $e);
+		}
 
 		$version->distType = 'zip';
 		$version->distUrl = $fileUrl;
