@@ -16,7 +16,7 @@ class AddAddonForm extends BaseForm
 	{
 		$this->addText('name', 'Name', 40, 100)
 			->setRequired();
-		$this->addTextArea('shortDescription', 'Short description', 60, 4)
+		$this->addText('shortDescription', 'Short description', 60, 4)
 			->setAttribute('class', 'span4')
 			->setRequired();
 		$this->addTextArea('description', 'Description', 80, 20)
