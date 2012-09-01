@@ -282,12 +282,8 @@ final class ManagePresenter extends BasePresenter
 			$this->updater->update($this->addon);
 			$this->storeAddon();
 
-		} catch (\NetteAddons\InvalidArgumentException $e) {
-			$form->addError($e->getMessage());
-			return;
-
-		} catch (\NetteAddons\InvalidStateException $e) {
-			$form->addError($e->getMessage() . ' Probably missing license?');
+		} catch (\NetteAddons\IOException $e) {
+			$form['archive']->addError('Uploading file failed.');
 			return;
 		}
 
