@@ -79,7 +79,7 @@ class AddonVersionTest extends TestCase
 	public function testGetLinkTypes()
 	{
 		$types = AddonVersion::getLinkTypes();
-		$this->assertType('array', $types);
+		$this->assertInternalType('array', $types);
 		$this->assertTrue(\Nette\Utils\Validators::isList($types));
 	}
 }

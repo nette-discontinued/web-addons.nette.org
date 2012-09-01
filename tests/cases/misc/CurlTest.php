@@ -28,7 +28,7 @@ class CurlTest extends TestCase
 	public function testOK()
 	{
 		$s = $this->curl->get('http://httpstat.us/200');
-		$this->assertType('string', $s);
+		$this->assertInternalType('string', $s);
 	}
 
 
