@@ -8,7 +8,7 @@ use Nette\Loaders\RobotLoader;
 
 $configurator = new Configurator();
 $configurator->enableDebugger();
-$configurator->setTempDirectory(__DIR__ . '/tmp');
+$configurator->setTempDirectory(__DIR__ . '/temp');
 $configurator->createRobotLoader()
 	->addDirectory(LIBS_DIR)
 	->addDirectory(__DIR__ . '/cases')
