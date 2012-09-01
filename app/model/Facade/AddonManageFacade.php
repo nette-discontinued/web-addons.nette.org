@@ -58,6 +58,14 @@ class AddonManageFacade extends Nette\Object
 
 
 
+	/**
+	 * Imports versions using addon importer.
+	 *
+	 * @param  Model\Addon
+	 * @param  Model\IAddonImporter
+	 * @param  Nette\Security\Identity
+	 * @return Model\AddonVersion[]
+	 */
 	public function importVersions(Model\Addon $addon, Model\IAddonImporter $importer, Nette\Security\Identity $owner)
 	{
 		$addon->versions = $importer->importVersions($addon);
@@ -68,7 +76,7 @@ class AddonManageFacade extends Nette\Object
 				$version->composerJson->authors = array(
 					(object) array(
 						'name' => $owner->name,
-						'email' => $owner->email,
+						'email' => $owner->email, // Note: Some users may not like disclosing their e-mail.
 					)
 				);
 			}
@@ -94,7 +102,7 @@ class AddonManageFacade extends Nette\Object
 		$always = array('name', 'shortDescription', 'description', 'demo');
 		$ifEmpty = array('composerName' => TRUE, 'defaultLicense' => TRUE, 'repository' => FALSE);
 
-		$addon->userId = $owner->getId();
+		$addon->userId = $owner->getId(); // TODO: this is duplicite to self::import()
 
 		foreach ($always as $field) {
 			if (!array_key_exists($field, $values)) {
