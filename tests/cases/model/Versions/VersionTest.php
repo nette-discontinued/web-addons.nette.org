@@ -110,6 +110,7 @@ class VersionTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testMatch($v1, $v2)
 	{
+		$this->markTestSkipped('Current implementation is deprecated and will be soon replaced.');
 		$this->assertTrue(Version::create($v1)->match($v2));
 	}
 }
