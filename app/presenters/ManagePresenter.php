@@ -42,14 +42,13 @@ final class ManagePresenter extends BasePresenter
 
 
 	/**
-	 * @param \NetteAddons\Model\Facade\AddonManageFacade $manager
 	 * @param \NetteAddons\Model\AddonUpdater $updater
 	 * @param \NetteAddons\Model\Addons $addons
 	 * @param \Nette\Http\Session $session
 	 */
-	public function setContext(AddonManageFacade $manager, AddonUpdater $updater, Addons $addons, Session $session)
+	public function setContext(AddonUpdater $updater, Addons $addons, Session $session)
 	{
-		$this->manager = $manager;
+		$this->manager = $this->createAddonManageFacade($addons);
 		$this->updater = $updater;
 		$this->addons = $addons;
 		$this->session = $session->getSection('NetteAddons.ManagePresenter');
@@ -274,7 +273,7 @@ final class ManagePresenter extends BasePresenter
 		$values = $form->getValues();
 
 		try {
-			$this->manager->submitAddonVersion($this->addon, $values);
+			$this->manager->addVersionFromValues($this->addon, $values);
 			$this->updater->update($this->addon);
 			$this->storeAddon();
 
@@ -416,5 +415,16 @@ final class ManagePresenter extends BasePresenter
 
 		$this->flashMessage('Addon saved.');
 		$this->redirect('Detail:', $this->addonRow->id);
+	}
+
+
+
+	private function createAddonManageFacade($addons)
+	{
+		return new AddonManageFacade(
+			$addons,
+			$this->context->parameters['uploadDir'],
+			$this->getHttpRequest()->getUrl()->getBasePath() . $this->context->parameters['uploadUri']
+		);
 	}
 }

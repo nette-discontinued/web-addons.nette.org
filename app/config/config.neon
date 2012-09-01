@@ -50,9 +50,6 @@ services:
 	addonVotes: NetteAddons\Model\AddonVotes
 	versionDependencies: NetteAddons\Model\VersionDependencies
 
-	# logic
-	manageFacade: NetteAddons\Model\Facade\AddonManageFacade(..., %uploadDir%)
-
 	# importing
 	addonUpdater: NetteAddons\Model\AddonUpdater
 

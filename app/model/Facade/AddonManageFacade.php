@@ -2,13 +2,16 @@
 
 namespace NetteAddons\Model\Facade;
 
-use Nette;
 use NetteAddons\Model;
+use Nette;
+use Nette\Utils\Strings;
+
 
 
 
 /**
  * @author Filip Procházka <filip.prochazka@kdyby.org>
+ * @author Jan Tvrdík
  */
 class AddonManageFacade extends Nette\Object
 {
@@ -18,100 +21,90 @@ class AddonManageFacade extends Nette\Object
 	/** @var string */
 	private $uploadDir;
 
+	/** @var string */
+	private $uploadUrl;
+
 
 
 	/**
-	 * @param Model\Addons $addons
-	 * @param string $uploadDir
+	 * @param Model\Addons
+	 * @param string
+	 * @param string
 	 */
-	public function __construct(Model\Addons $addons, $uploadDir)
+	public function __construct(Model\Addons $addons, $uploadDir, $uploadUrl)
 	{
 		$this->addons = $addons;
 		$this->uploadDir = $uploadDir;
+		$this->uploadUrl = $uploadUrl;
 	}
 
 
 
 	/**
-	 * @param  Model\Addon $addon
-	 * @param  array
-	 * @param  \Nette\Security\Identity $owner
-	 * @throws \NetteAddons\DuplicateEntryException
-	 * @return \Nette\Security\Identity
+	 * Imports addon using addon importer.
+	 *
+	 * @param  Model\IAddonImporter
+	 * @param  Nette\Security\IIdentity
+	 * @return Model\Addon
+	 * @throws \NetteAddons\RuntimeException
 	 */
-	public function fillAddonWithValues(Model\Addon $addon, $values, Nette\Security\Identity $owner)
+	public function import(Model\IAddonImporter $importer, Nette\Security\IIdentity $owner)
 	{
-		$addon->name = $values->name;
-		$addon->shortDescription = $values->shortDescription;
-		$addon->description = $values->description;
-		$addon->demo = $values->demo;
+		$addon = $importer->import();
+		$addon->userId = $owner->getId();
 
-		if ($addon->composerName === NULL) {
-			$addon->updateComposerName($owner);
+		return $addon;
+	}
+
+
+
+	/**
+	 * Fills addon with values (usually from form). Those value must be already validated.
+	 * Returned addon is fully valid (except for versions).
+	 *
+	 * @param  Model\Addon
+	 * @param  array
+	 * @param  Nette\Security\Identity
+	 * @throws \NetteAddons\InvalidArgumentException
+	 * @return Model\Addon
+	 */
+	public function fillAddonWithValues(Model\Addon $addon, array $values, Nette\Security\Identity $owner)
+	{
+		$always = array('name', 'shortDescription', 'description', 'demo');
+		$ifEmpty = array('composerName' => TRUE, 'defaultLicense' => TRUE, 'repository' => FALSE);
+
+		$addon->userId = $owner->getId();
+
+		foreach ($always as $field) {
+			if (!array_key_exists($field, $values)) {
+				throw new \NetteAddons\InvalidArgumentException("Values does not contain field '$field'.");
+			}
+			$addon->$field = $values[$field];
 		}
 
-		if ($this->addons->findOneBy(array('composerName' => $addon->composerName)) !== FALSE) {
-			$message = 'Addon with same composer package already exists.';
-			if ($addon->repository) {
-				throw new \NetteAddons\DuplicateEntryException($message . 'Please specify another package to import.');
-
-			} else {
-				throw new \NetteAddons\DuplicateEntryException($message . 'Please specify another addon name.');
+		foreach ($ifEmpty as $field => $required) {
+			if (empty($addon->$field)) {
+				if (empty($values[$field]) && $required) {
+					throw new \NetteAddons\InvalidArgumentException("Values does not contain field '$field'.");
+				}
+				$addon->$field = $values[$field];
 			}
 		}
 
-		$addon->userId = $owner->getId();
 		return $addon;
 	}
 
 
 
 	/**
-	 * @todo  throw better exceptions
+	 * Creates new addon version from values and adds it to addon.
 	 *
-	 * @param Model\Importers\GitHubImporter
-	 * @param \Nette\Security\Identity|\Nette\Database\Table\ActiveRow|null $owner
-	 *
-	 * @throws \NetteAddons\InvalidArgumentException
-	 * @throws \UnexpectedValueException
-	 * @return Model\Addon
-	 */
-	public function importRepository(Model\Importers\GitHubImporter $importer, $owner)
-	{
-		/** @var Model\Addon $addon */
-		if (NULL === ($addon = $importer->import())) {
-			throw new \UnexpectedValueException("Invalid repository.");
-		}
-
-		// validate owner
-		if ($owner instanceof Nette\Security\Identity) {
-			$addon->userId = $owner->id;
-
-		} elseif ($owner instanceof Nette\Database\Table\ActiveRow) {
-			$addon->userId = $owner->id;
-
-		} else {
-			throw new \NetteAddons\InvalidArgumentException("Invalid owner was provided");
-		}
-
-		// normalize repository
-		if (!isset($addon->repository)) {
-			$addon->repository = Model\Importers\GitHub\Helpers::normalizeRepositoryUrl($importer->getUrl());
-		}
-
-		return $addon;
-	}
-
-
-
-	/**
-	 * @param Model\Addon $addon
-	 * @param $values
-	 *
-	 * @throws \NetteAddons\InvalidArgumentException
+	 * @param Model\Addon
+	 * @param array
 	 * @return Model\AddonVersion
+	 * @throws \NetteAddons\InvalidArgumentException
 	 */
-	public function submitAddonVersion(Model\Addon $addon, $values)
+	public function addVersionFromValues(Model\Addon $addon, $values)
 	{
 		if (!$values->license) {
 			throw new \NetteAddons\InvalidArgumentException("License is mandatory.");
@@ -122,17 +115,39 @@ class AddonManageFacade extends Nette\Object
 		}
 
 		$version = new Model\AddonVersion();
+		$version->addon = $addon;
 		$version->version = $values->version;
 		$version->license = $values->license;
 
+		$fileName = $this->getFileName($version);
+		$fileDest = $this->uploadDir . '/' . $fileName;
+		$fileUrl = $this->uploadUrl . '/' . $fileName;
+
 		/** @var $file \Nette\Http\FileUpload */
 		$file = $values->archive;
-		$filename = $version->getFilename($addon);
-		$file->move($this->uploadDir . '/' . $filename);
-		$version->filename = $filename;
+		$file->move($fileDest);
+
+		$version->distType = 'zip';
+		$version->distUrl = $fileUrl;
 
 		$addon->versions[] = $version;
+
 		return $version;
 	}
 
+
+
+	/**
+	 * Returns filename for addon version.
+	 *
+	 * @param  Model\AddonVersion
+	 * @return string
+	 */
+	private function getFileName(Model\AddonVersion $version)
+	{
+		$name = Strings::webalize($version->addon->composerName)
+		      . '-' . $version->version . '.zip';
+
+		return $name;
+	}
 }
