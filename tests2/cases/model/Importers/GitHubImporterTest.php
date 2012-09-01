@@ -25,23 +25,8 @@ class GitHubImporterTest extends TestCase
 	{
 		parent::setUp();
 
-		$test = $this;
-		$repo = Mockery::mock('GitHub\Repository');
-		$repoUrl = 'https://github.com/smith/browser';
-		$repoFactory = function ($url) use ($test, $repo, $repoUrl) {
-			$test->assertSame($repoUrl, $url);
-			return $repo;
-		};
-
-		$this->repo = $repo;
-		$this->imp = new GitHubImporter($repoFactory, $repoUrl);
-	}
-
-
-
-	public function testGetUrl()
-	{
-		$this->assertSame('https://github.com/smith/browser', $this->imp->getUrl());
+		$this->repo = Mockery::mock('NetteAddons\Model\Importers\GitHub\Repository');;
+		$this->imp = new GitHubImporter($this->repo);
 	}
 
 

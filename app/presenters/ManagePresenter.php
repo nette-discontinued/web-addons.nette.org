@@ -218,9 +218,9 @@ final class ManagePresenter extends BasePresenter
 	public function importAddonFormSubmitted(ImportAddonForm $form)
 	{
 		try {
-			$importer = $this->getContext()->createRepositoryImporter($form->values->url);
+			$importer = $this->getContext()->repositoryImporterFactory->createFromUrl($form->values->url);
 
-		} catch (InvalidArgumentException $e) {
+		} catch (\NetteAddons\NotSupportedException $e) {
 			$form['url']->addError('Invalid GitHub URL');
 			return;
 		}
@@ -417,5 +417,4 @@ final class ManagePresenter extends BasePresenter
 		$this->flashMessage('Addon saved.');
 		$this->redirect('Detail:', $this->addonRow->id);
 	}
-
 }

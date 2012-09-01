@@ -61,17 +61,17 @@ services:
 
 	reinstall: NetteAddons\Model\Reinstall
 
+	repositoryImporterFactory:
+		class: NetteAddons\Model\Importers\RepositoryImporterFactory
+		arguments: [{
+			github: @ghImporterFactory
+		}]
 
 factories:
-	repository:
+	ghRepository:
 		parameters: [vendor, name]
 		class: NetteAddons\Model\Importers\GitHub\Repository( @curl, %vendor%, %name% )
 
-	repositoryFromUrl:
-		parameters: [url]
-		class: NetteAddons\Model\Importers\GitHub\Repository
-		factory: NetteAddons\Model\Importers\GitHub\Helpers::createRepositoryFromUrl( @curl, %url% )
-
-	repositoryImporter:
-		class: NetteAddons\Model\Importers\GitHubImporter( @repositoryFromUrlFactory, %url%)
-		parameters: [url]
+	ghImporter:
+		parameters: [vendor, name]
+		class: NetteAddons\Model\Importers\GitHubImporter( @ghRepository(%vendor%, %name%) )
