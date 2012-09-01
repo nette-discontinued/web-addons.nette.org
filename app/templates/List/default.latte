@@ -1,39 +1,46 @@
+{var $title = 'List addons'}
+{var $themeicon = 'box-full'}
 {block content}
+<div id="breadcrumbs">
+	<a href="http://nette.org/en/">Nette Framework</a> »
+	<a n:href=":Homepage:">Addons, plugins and components</a> »
+	<span>Addons</span>
+</div>
 
 <h1>Addons</h1>
 
-<div class="row">
+<h2>Filter</h2>
+{control filterForm}
 
-	<div class="span9">
+<h2>List addons</h2>
 
-		<div class="well box-filter-addons">
-			<h3>Filter</h3>
-			{control filterForm}
-		</div>
-
-		{* List *}
+<table>
+	<tbody>
 		{foreach $addons as $addon}
-			{include '../Addon/listItem.latte' addon=>$addon}
+		<tr n:class="$iterator->odd ? alt">
+			<td><a title="{$addon->name}" n:href=":Detail: id => $addon->id">{$addon->name}</a></td>
+			<td>{$addon->shortDescription}</td>
+		</tr>
 		{/foreach}
+	</tbody>
+</table>
 
+<p if="!count($addons)">No addons found.</p>
+{/block}
 
-		<div class="pagination">
-			<ul>
-				<li><a href="#">Prev</a></li>
-				<li class="active"><a href="#">1</a></li>
-				<li><a href="#">2</a></li>
-				<li><a href="#">3</a></li>
-				<li><a href="#">4</a></li>
-				<li><a href="#">Next</a></li>
-			</ul>
-		</div>
+{block sidebar}
+<div class="info">
+	{default $disableAdd = false}
+	<h3 n:if="!$disableAdd">
+		<a n:href="Manage:add" class="btn btn-large btn-success">Create New Addon</a>
+	</h3>
 
-		{* /List *}
-	</div>
-	<div class="span3">
+	<h3>Categories</h3>
 
-		{include '../Layout/sidebar.latte'}
-
-	</div>
-
+	<ul class="nostyle">
+		<li><a n:href=":List:">All</a></li>
+		<li n:foreach="$categories as $category">
+			<a n:href=":List: tag => $category->id">{$category->name}</a>
+		</li>
+	</ul>
 </div>
