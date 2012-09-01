@@ -37,7 +37,9 @@ class AddAddonForm extends BaseForm
 				)
 			);
 		$this->addText('demo', 'Demo URL', 60, 500)
-			->setAttribute('class', 'span6');
+			->setAttribute('class', 'span6')
+			->addCondition(self::FILLED)
+				->addRule(self::URL);
 		// $this->addText('tags');
 		$this->addSubmit('create', 'Next');
 	}
