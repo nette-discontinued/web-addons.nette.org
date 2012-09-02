@@ -4,6 +4,7 @@ namespace NetteAddons\Model;
 
 use Nette;
 use Nette\Database\Table\ActiveRow;
+use Nette\Utils\Json;
 
 
 
@@ -41,6 +42,7 @@ class AddonVersions extends Table
 	 * @return ActiveRow created row
 	 * @throws \NetteAddons\DuplicateEntryException
 	 * @throws \PDOException
+	 * @throws \Nette\Utils\JsonException
 	 */
 	public function add(AddonVersion $version)
 	{
@@ -53,7 +55,7 @@ class AddonVersions extends Table
 			'sourceType' => $version->sourceType,
 			'sourceUrl' => $version->sourceUrl,
 			'sourceReference' => $version->sourceReference,
-			'composerJson' => $version->composerJson,
+			'composerJson' => Json::encode($version->composerJson),
 		));
 
 		$this->dependencies->setVersionDependencies($version);
