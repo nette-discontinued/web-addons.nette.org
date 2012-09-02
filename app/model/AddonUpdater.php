@@ -78,15 +78,15 @@ class AddonUpdater extends Nette\Object
 				'defaultLicense' => $addon->defaultLicense,
 			));
 
+			$addon->id = $addonRow->id;
+
 			foreach ($addon->tags as $tag) {
 				$this->tags->addAddonTag($addonRow, $tag);
 			}
 
-
 			foreach ($addon->versions as $version) {
 				try {
-					$versionRow = $this->versions->setAddonVersion($addonRow, $version);
-					$this->dependencies->setVersionDependencies($versionRow, $version);
+					$versionRow = $this->versions->add($version);
 
 				} catch (\NetteAddons\InvalidArgumentException $e) {
 					throw new \NetteAddons\InvalidStateException("Cannot create version {$version->version}.", NULL, $e);
