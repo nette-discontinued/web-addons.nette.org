@@ -2,7 +2,7 @@
 /**
  * PHPUnit
  *
- * Copyright (c) 2002-2011, Sebastian Bergmann <sebastian@phpunit.de>.
+ * Copyright (c) 2001-2012, Sebastian Bergmann <sebastian@phpunit.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,8 +37,9 @@
  * @package    PHPUnit
  * @subpackage Framework
  * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @copyright  2002-2011 Sebastian Bergmann <sebastian@phpunit.de>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @author     Bernhard Schussek <bschussek@2bepublished.at>
+ * @copyright  2001-2012 Sebastian Bergmann <sebastian@phpunit.de>
+ * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
  * @link       http://www.phpunit.de/
  * @since      File available since Release 2.0.0
  */
@@ -49,160 +50,118 @@
  * @package    PHPUnit
  * @subpackage Framework
  * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @copyright  2002-2011 Sebastian Bergmann <sebastian@phpunit.de>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.5.14
+ * @author     Bernhard Schussek <bschussek@2bepublished.at>
+ * @copyright  2001-2012 Sebastian Bergmann <sebastian@phpunit.de>
+ * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
+ * @version    Release: 3.7.0RC2
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 2.0.0
  */
-abstract class PHPUnit_Framework_ComparisonFailure extends PHPUnit_Framework_AssertionFailedError
+class PHPUnit_Framework_ComparisonFailure extends PHPUnit_Framework_AssertionFailedError
 {
-	/**
-	 * Expected value of the retrieval which does not match $actual.
-	 * @var mixed
-	 */
-	protected $expected;
+    /**
+     * Expected value of the retrieval which does not match $actual.
+     * @var mixed
+     */
+    protected $expected;
 
-	/**
-	 * Actually retrieved value which does not match $expected.
-	 * @var mixed
-	 */
-	protected $actual;
+    /**
+     * Actually retrieved value which does not match $expected.
+     * @var mixed
+     */
+    protected $actual;
 
-	/**
-	 * @var boolean
-	 */
-	protected $identical;
+    /**
+     * The string representation of the expected value
+     * @var string
+     */
+    protected $expectedAsString;
 
-	/**
-	 * Optional message which is placed in front of the first line
-	 * returned by toString().
-	 * @var string
-	 */
-	protected $message;
+    /**
+     * The string representation of the actual value
+     * @var string
+     */
+    protected $actualAsString;
 
-	/**
-	 * Initialises with the expected value and the actual value.
-	 *
-	 * @param mixed $expected Expected value retrieved.
-	 * @param mixed $actual Actual value retrieved.
-	 * @param boolean $identical
-	 * @param string $message A string which is prefixed on all returned lines
-	 *                        in the difference output.
-	 */
-	public function __construct($expected, $actual, $identical = FALSE, $message = '')
-	{
-		$this->expected  = $expected;
-		$this->actual    = $actual;
-		$this->identical = $identical;
-		$this->message   = $message;
-	}
+    /**
+     * @var boolean
+     */
+    protected $identical;
 
-	/**
-	 * @return mixed
-	 */
-	public function getActual()
-	{
-		return $this->actual;
-	}
+    /**
+     * Optional message which is placed in front of the first line
+     * returned by toString().
+     * @var string
+     */
+    protected $message;
 
-	/**
-	 * @return mixed
-	 */
-	public function getExpected()
-	{
-		return $this->expected;
-	}
+    /**
+     * Initialises with the expected value and the actual value.
+     *
+     * @param mixed $expected Expected value retrieved.
+     * @param mixed $actual Actual value retrieved.
+     * @param string $expectedAsString
+     * @param string $actualAsString
+     * @param boolean $identical
+     * @param string $message A string which is prefixed on all returned lines
+     *                        in the difference output.
+     */
+    public function __construct($expected, $actual, $expectedAsString, $actualAsString, $identical = FALSE, $message = '')
+    {
+        $this->expected         = $expected;
+        $this->actual           = $actual;
+        $this->expectedAsString = $expectedAsString;
+        $this->actualAsString   = $actualAsString;
+        $this->message          = $message;
+    }
 
-	/**
-	 * @return boolean
-	 */
-	public function identical()
-	{
-		return $this->identical;
-	}
+    /**
+     * @return mixed
+     */
+    public function getActual()
+    {
+        return $this->actual;
+    }
 
-	/**
-	 * Figures out which diff class to use for the input types then
-	 * instantiates that class and returns the object.
-	 * @note The diff is type sensitive, if the type differs only the types
-	 *       are shown.
-	 *
-	 * @param mixed $expected Expected value retrieved.
-	 * @param mixed $actual Actual value retrieved.
-	 * @param string $message A string which is prefixed on all returned lines
-	 *                        in the difference output.
-	 * @return PHPUnit_Framework_ComparisonFailure
-	 */
-	public static function diffIdentical($expected, $actual, $message = '')
-	{
-		if (gettype($expected) !== gettype($actual)) {
-			return new PHPUnit_Framework_ComparisonFailure_Type(
-			  $expected, $actual, TRUE, $message
-			);
-		}
+    /**
+     * @return mixed
+     */
+    public function getExpected()
+    {
+        return $this->expected;
+    }
 
-		else if (is_array($expected) && is_array($actual)) {
-			return new PHPUnit_Framework_ComparisonFailure_Array(
-			  $expected, $actual, TRUE, $message
-			);
-		}
+    /**
+     * @return string
+     */
+    public function getActualAsString()
+    {
+        return $this->actualAsString;
+    }
 
-		else if (is_object($expected) && is_object($actual)) {
-			return new PHPUnit_Framework_ComparisonFailure_Object(
-			  $expected, $actual, TRUE, $message
-			);
-		}
+    /**
+     * @return string
+     */
+    public function getExpectedAsString()
+    {
+        return $this->expectedAsString;
+    }
 
-		else if (is_string($expected) && !is_object($actual)) {
-			return new PHPUnit_Framework_ComparisonFailure_String(
-			  $expected, $actual, TRUE, $message
-			);
-		}
+    /**
+     * @return string
+     */
+    public function getDiff()
+    {
+        return $this->actualAsString || $this->expectedAsString
+          ? PHPUnit_Util_Diff::diff($this->expectedAsString, $this->actualAsString)
+          : '';
+    }
 
-		else if (is_null($expected) || is_scalar($expected)) {
-			return new PHPUnit_Framework_ComparisonFailure_Scalar(
-			  $expected, $actual, TRUE, $message
-			);
-		}
-	}
-
-	/**
-	 * Figures out which diff class to use for the input types then
-	 * instantiates that class and returns the object.
-	 * @note The diff is not type sensitive, if the type differs the $actual
-	 *       value will be converted to the same type as the $expected.
-	 *
-	 * @param mixed $expected Expected value retrieved.
-	 * @param mixed $actual Actual value retrieved.
-	 * @param string $message A string which is prefixed on all returned lines
-	 *                        in the difference output.
-	 * @return PHPUnit_Framework_ComparisonFailure
-	 */
-	public static function diffEqual($expected, $actual, $message = '')
-	{
-		if (is_array($expected) && is_array($actual)) {
-			return new PHPUnit_Framework_ComparisonFailure_Array(
-			  $expected, $actual, FALSE, $message
-			);
-		}
-
-		else if (is_object($expected) && is_object($actual)) {
-			return new PHPUnit_Framework_ComparisonFailure_Object(
-			  $expected, $actual, FALSE, $message
-			);
-		}
-
-		else if (is_string($expected) && !is_object($actual)) {
-			return new PHPUnit_Framework_ComparisonFailure_String(
-			  $expected, $actual, FALSE, $message
-			);
-		}
-
-		else if (is_null($expected) || is_scalar($expected)) {
-			return new PHPUnit_Framework_ComparisonFailure_Scalar(
-			  $expected, $actual, FALSE, $message
-			);
-		}
-	}
+    /**
+     * @return string
+     */
+    public function toString()
+    {
+        return $this->message . $this->getDiff();
+    }
 }

@@ -2,7 +2,7 @@
 /**
  * PHP_Timer
  *
- * Copyright (c) 2010, Sebastian Bergmann <sb@sebastian-bergmann.de>.
+ * Copyright (c) 2010-2011, Sebastian Bergmann <sb@sebastian-bergmann.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,7 +37,7 @@
  * @package    PHP
  * @subpackage Timer
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
- * @copyright  2010 Sebastian Bergmann <sb@sebastian-bergmann.de>
+ * @copyright  2010-2011 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link       http://github.com/sebastianbergmann/php-timer
  * @since      File available since Release 1.0.0
@@ -49,91 +49,105 @@
  * @package    PHP
  * @subpackage Timer
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
- * @copyright  2002-2010 Sebastian Bergmann <sb@sebastian-bergmann.de>
+ * @copyright  2010-2011 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 1.0.0
+ * @version    Release: 1.0.2
  * @link       http://github.com/sebastianbergmann/php-timer
  * @since      Class available since Release 1.0.0
  */
 class PHP_Timer
 {
-	protected static $startTimes = array();
+    /**
+     * @var array
+     */
+    protected static $startTimes = array();
 
-	/**
-	 * Starts the timer.
-	 */
-	public static function start()
-	{
-		array_push(self::$startTimes, microtime(TRUE));
-	}
+    /**
+     * @var float
+     */
+    public static $requestTime;
 
-	/**
-	 * Stops the timer and returns the elapsed time.
-	 *
-	 * @return float
-	 */
-	public static function stop()
-	{
-		return microtime(TRUE) - array_pop(self::$startTimes);
-	}
+    /**
+     * Starts the timer.
+     */
+    public static function start()
+    {
+        array_push(self::$startTimes, microtime(TRUE));
+    }
 
-	/**
-	 * Formats the elapsed time as a string.
-	 *
-	 * @param  float $time
-	 * @return string
-	 */
-	public static function secondsToTimeString($time)
-	{
-		$buffer = '';
+    /**
+     * Stops the timer and returns the elapsed time.
+     *
+     * @return float
+     */
+    public static function stop()
+    {
+        return microtime(TRUE) - array_pop(self::$startTimes);
+    }
 
-		$hours   = sprintf('%02d', ($time >= 3600) ? floor($time / 3600) : 0);
-		$minutes = sprintf(
-					 '%02d',
-					 ($time >= 60)   ? floor($time /   60) - 60 * $hours : 0
-				   );
-		$seconds = sprintf('%02d', $time - 60 * 60 * $hours - 60 * $minutes);
+    /**
+     * Formats the elapsed time as a string.
+     *
+     * @param  float $time
+     * @return string
+     */
+    public static function secondsToTimeString($time)
+    {
+        $buffer = '';
 
-		if ($hours == 0 && $minutes == 0) {
-			$seconds = sprintf('%1d', $seconds);
+        $hours   = sprintf('%02d', ($time >= 3600) ? floor($time / 3600) : 0);
+        $minutes = sprintf(
+                     '%02d',
+                     ($time >= 60)   ? floor($time /   60) - 60 * $hours : 0
+                   );
+        $seconds = sprintf('%02d', $time - 60 * 60 * $hours - 60 * $minutes);
 
-			$buffer .= $seconds . ' second';
+        if ($hours == 0 && $minutes == 0) {
+            $seconds = sprintf('%1d', $seconds);
 
-			if ($seconds != '1') {
-				$buffer .= 's';
-			}
-		} else {
-			if ($hours > 0) {
-				$buffer = $hours . ':';
-			}
+            $buffer .= $seconds . ' second';
 
-			$buffer .= $minutes . ':' . $seconds;
-		}
+            if ($seconds != '1') {
+                $buffer .= 's';
+            }
+        } else {
+            if ($hours > 0) {
+                $buffer = $hours . ':';
+            }
 
-		return $buffer;
-	}
+            $buffer .= $minutes . ':' . $seconds;
+        }
 
-	/**
-	 * Formats the elapsed time since the start of the request as a string.
-	 *
-	 * @return string
-	 */
-	public static function timeSinceStartOfRequest()
-	{
-		return self::secondsToTimeString(time() - $_SERVER['REQUEST_TIME']);
-	}
+        return $buffer;
+    }
 
-	/**
-	 * Returns the resources (time, memory) of the request as a string.
-	 *
-	 * @return string
-	 */
-	public static function resourceUsage()
-	{
-		return sprintf(
-		  'Time: %s, Memory: %4.2fMb',
-		  self::timeSinceStartOfRequest(),
-		  memory_get_peak_usage(TRUE) / 1048576
-		);
-	}
+    /**
+     * Formats the elapsed time since the start of the request as a string.
+     *
+     * @return string
+     */
+    public static function timeSinceStartOfRequest()
+    {
+        return self::secondsToTimeString(time() - self::$requestTime);
+    }
+
+    /**
+     * Returns the resources (time, memory) of the request as a string.
+     *
+     * @return string
+     */
+    public static function resourceUsage()
+    {
+        return sprintf(
+          'Time: %s, Memory: %4.2fMb',
+          self::timeSinceStartOfRequest(),
+          memory_get_peak_usage(TRUE) / 1048576
+        );
+    }
+}
+
+if (isset($_SERVER['REQUEST_TIME'])) {
+    PHP_Timer::$requestTime = $_SERVER['REQUEST_TIME'];
+} else {
+    PHP_Timer::$requestTime = time();
 }

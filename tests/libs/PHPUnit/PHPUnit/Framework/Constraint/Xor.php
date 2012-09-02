@@ -2,7 +2,7 @@
 /**
  * PHPUnit
  *
- * Copyright (c) 2002-2011, Sebastian Bergmann <sebastian@phpunit.de>.
+ * Copyright (c) 2001-2012, Sebastian Bergmann <sebastian@phpunit.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,8 +37,9 @@
  * @package    PHPUnit
  * @subpackage Framework_Constraint
  * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @copyright  2002-2011 Sebastian Bergmann <sebastian@phpunit.de>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @author     Bernhard Schussek <bschussek@2bepublished.at>
+ * @copyright  2001-2012 Sebastian Bergmann <sebastian@phpunit.de>
+ * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.0.0
  */
@@ -49,96 +50,114 @@
  * @package    PHPUnit
  * @subpackage Framework_Constraint
  * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @copyright  2002-2011 Sebastian Bergmann <sebastian@phpunit.de>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.5.14
+ * @author     Bernhard Schussek <bschussek@2bepublished.at>
+ * @copyright  2001-2012 Sebastian Bergmann <sebastian@phpunit.de>
+ * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
+ * @version    Release: 3.7.0RC2
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.0.0
  */
 class PHPUnit_Framework_Constraint_Xor extends PHPUnit_Framework_Constraint
 {
-	/**
-	 * @var PHPUnit_Framework_Constraint[]
-	 */
-	protected $constraints = array();
+    /**
+     * @var PHPUnit_Framework_Constraint[]
+     */
+    protected $constraints = array();
 
-	/**
-	 * @param PHPUnit_Framework_Constraint[] $constraints
-	 */
-	public function setConstraints(array $constraints)
-	{
-		$this->constraints = array();
+    /**
+     * @param PHPUnit_Framework_Constraint[] $constraints
+     */
+    public function setConstraints(array $constraints)
+    {
+        $this->constraints = array();
 
-		foreach($constraints as $key => $constraint) {
-			if (!($constraint instanceof PHPUnit_Framework_Constraint)) {
-				$constraint = new PHPUnit_Framework_Constraint_IsEqual(
-				  $constraint
-				);
-			}
+        foreach ($constraints as $key => $constraint) {
+            if (!($constraint instanceof PHPUnit_Framework_Constraint)) {
+                $constraint = new PHPUnit_Framework_Constraint_IsEqual(
+                  $constraint
+                );
+            }
 
-			$this->constraints[] = $constraint;
-		}
-	}
+            $this->constraints[] = $constraint;
+        }
+    }
 
-	/**
-	 * Evaluates the constraint for parameter $other. Returns TRUE if the
-	 * constraint is met, FALSE otherwise.
-	 *
-	 * @param mixed $other Value or object to evaluate.
-	 * @return bool
-	 */
-	public function evaluate($other)
-	{
-		$result = FALSE;
+    /**
+     * Evaluates the constraint for parameter $other
+     *
+     * If $returnResult is set to FALSE (the default), an exception is thrown
+     * in case of a failure. NULL is returned otherwise.
+     *
+     * If $returnResult is TRUE, the result of the evaluation is returned as
+     * a boolean value instead: TRUE in case of success, FALSE in case of a
+     * failure.
+     *
+     * @param  mixed $other Value or object to evaluate.
+     * @param  string $description Additional information about the test
+     * @param  bool $returnResult Whether to return a result or throw an exception
+     * @return mixed
+     * @throws PHPUnit_Framework_ExpectationFailedException
+     */
+    public function evaluate($other, $description = '', $returnResult = FALSE)
+    {
+        $success = TRUE;
+        $lastResult = NULL;
+        $constraint = NULL;
 
-		foreach($this->constraints as $constraint) {
-			if ($constraint->evaluate($other)) {
-				if ( $result )
-				{
-					return FALSE;
-				}
+        foreach ($this->constraints as $constraint) {
+            $result = $constraint->evaluate($other, $description, TRUE);
 
-				$result = TRUE;
-			}
-		}
+            if ($result === $lastResult) {
+                $success = FALSE;
+                break;
+            }
 
-		return $result;
-	}
+            $lastResult = $result;
+        }
 
-	/**
-	 * Returns a string representation of the constraint.
-	 *
-	 * @return string
-	 */
-	public function toString()
-	{
-		$text = '';
+        if ($returnResult) {
+            return $success;
+        }
 
-		foreach($this->constraints as $key => $constraint) {
-			if ($key > 0) {
-				$text .= ' xor ';
-			}
+        if (!$success) {
+            $this->fail($other, $description);
+        }
+    }
 
-			$text .= $constraint->toString();
-		}
+    /**
+     * Returns a string representation of the constraint.
+     *
+     * @return string
+     */
+    public function toString()
+    {
+        $text = '';
 
-		return $text;
-	}
+        foreach ($this->constraints as $key => $constraint) {
+            if ($key > 0) {
+                $text .= ' xor ';
+            }
 
-	/**
-	 * Counts the number of constraint elements.
-	 *
-	 * @return integer
-	 * @since  Method available since Release 3.4.0
-	 */
-	public function count()
-	{
-		$count = 0;
+            $text .= $constraint->toString();
+        }
 
-		foreach ($this->constraints as $constraint) {
-			$count += count($constraint);
-		}
+        return $text;
+    }
 
-		return $count;
-	}
+    /**
+     * Counts the number of constraint elements.
+     *
+     * @return integer
+     * @since  Method available since Release 3.4.0
+     */
+    public function count()
+    {
+        $count = 0;
+
+        foreach ($this->constraints as $constraint) {
+            $count += count($constraint);
+        }
+
+        return $count;
+    }
 }

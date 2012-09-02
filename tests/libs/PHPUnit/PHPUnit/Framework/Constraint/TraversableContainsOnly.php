@@ -2,7 +2,7 @@
 /**
  * PHPUnit
  *
- * Copyright (c) 2002-2011, Sebastian Bergmann <sebastian@phpunit.de>.
+ * Copyright (c) 2001-2012, Sebastian Bergmann <sebastian@phpunit.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,8 +37,9 @@
  * @package    PHPUnit
  * @subpackage Framework_Constraint
  * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @copyright  2002-2011 Sebastian Bergmann <sebastian@phpunit.de>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @author     Bernhard Schussek <bschussek@2bepublished.at>
+ * @copyright  2001-2012 Sebastian Bergmann <sebastian@phpunit.de>
+ * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.1.4
  */
@@ -50,66 +51,86 @@
  * @package    PHPUnit
  * @subpackage Framework_Constraint
  * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @copyright  2002-2011 Sebastian Bergmann <sebastian@phpunit.de>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.5.14
+ * @author     Bernhard Schussek <bschussek@2bepublished.at>
+ * @copyright  2001-2012 Sebastian Bergmann <sebastian@phpunit.de>
+ * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
+ * @version    Release: 3.7.0RC2
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.1.4
  */
 class PHPUnit_Framework_Constraint_TraversableContainsOnly extends PHPUnit_Framework_Constraint
 {
-	/**
-	 * @var PHPUnit_Framework_Constraint
-	 */
-	protected $constraint;
+    /**
+     * @var PHPUnit_Framework_Constraint
+     */
+    protected $constraint;
 
-	/**
-	 * @var string
-	 */
-	protected $type;
+    /**
+     * @var string
+     */
+    protected $type;
 
-	/**
-	 * @param string  $type
-	 * @param boolean $isNativeType
-	 */
-	public function __construct($type, $isNativeType = TRUE)
-	{
-		if ($isNativeType) {
-			$this->constraint = new PHPUnit_Framework_Constraint_IsType($type);
-		} else {
-			$this->constraint = new PHPUnit_Framework_Constraint_IsInstanceOf(
-			  $type
-			);
-		}
+    /**
+     * @param string  $type
+     * @param boolean $isNativeType
+     */
+    public function __construct($type, $isNativeType = TRUE)
+    {
+        if ($isNativeType) {
+            $this->constraint = new PHPUnit_Framework_Constraint_IsType($type);
+        } else {
+            $this->constraint = new PHPUnit_Framework_Constraint_IsInstanceOf(
+              $type
+            );
+        }
 
-		$this->type = $type;
-	}
+        $this->type = $type;
+    }
 
-	/**
-	 * Evaluates the constraint for parameter $other. Returns TRUE if the
-	 * constraint is met, FALSE otherwise.
-	 *
-	 * @param mixed $other Value or object to evaluate.
-	 * @return bool
-	 */
-	public function evaluate($other)
-	{
-		foreach ($other as $item) {
-			if (!$this->constraint->evaluate($item)) {
-				return FALSE;
-			}
-		}
+    /**
+     * Evaluates the constraint for parameter $other
+     *
+     * If $returnResult is set to FALSE (the default), an exception is thrown
+     * in case of a failure. NULL is returned otherwise.
+     *
+     * If $returnResult is TRUE, the result of the evaluation is returned as
+     * a boolean value instead: TRUE in case of success, FALSE in case of a
+     * failure.
+     *
+     * @param  mixed $other Value or object to evaluate.
+     * @param  string $description Additional information about the test
+     * @param  bool $returnResult Whether to return a result or throw an exception
+     * @return mixed
+     * @throws PHPUnit_Framework_ExpectationFailedException
+     */
+    public function evaluate($other, $description = '', $returnResult = FALSE)
+    {
+        $success = TRUE;
+        $constraint = NULL;
 
-		return TRUE;
-	}
+        foreach ($other as $item) {
+            if (!$this->constraint->evaluate($item, '', TRUE)) {
+                $success = FALSE;
+                break;
+            }
+        }
 
-	/**
-	 * Returns a string representation of the constraint.
-	 *
-	 * @return string
-	 */
-	public function toString()
-	{
-		return 'contains only values of type "' . $this->type . '"';
-	}
+        if ($returnResult) {
+            return $success;
+        }
+
+        if (!$success) {
+            $this->fail($other, $description);
+        }
+    }
+
+    /**
+     * Returns a string representation of the constraint.
+     *
+     * @return string
+     */
+    public function toString()
+    {
+        return 'contains only values of type "' . $this->type . '"';
+    }
 }

@@ -2,7 +2,7 @@
 /**
  * PHPUnit
  *
- * Copyright (c) 2002-2011, Sebastian Bergmann <sebastian@phpunit.de>.
+ * Copyright (c) 2001-2012, Sebastian Bergmann <sebastian@phpunit.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,8 +37,9 @@
  * @package    PHPUnit
  * @subpackage Framework_Constraint
  * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @copyright  2002-2011 Sebastian Bergmann <sebastian@phpunit.de>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @author     Bernhard Schussek <bschussek@2bepublished.at>
+ * @copyright  2001-2012 Sebastian Bergmann <sebastian@phpunit.de>
+ * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.0.0
  */
@@ -50,78 +51,103 @@
  * @package    PHPUnit
  * @subpackage Framework_Constraint
  * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @copyright  2002-2011 Sebastian Bergmann <sebastian@phpunit.de>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.5.14
+ * @author     Bernhard Schussek <bschussek@2bepublished.at>
+ * @copyright  2001-2012 Sebastian Bergmann <sebastian@phpunit.de>
+ * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
+ * @version    Release: 3.7.0RC2
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.0.0
  */
 class PHPUnit_Framework_Constraint_TraversableContains extends PHPUnit_Framework_Constraint
 {
-	/**
-	 * @var mixed
-	 */
-	protected $value;
+    /**
+     * @var boolean
+     */
+    protected $checkForObjectIdentity;
 
-	/**
-	 * @param mixed $value
-	 */
-	public function __construct($value)
-	{
-		$this->value = $value;
-	}
+    /**
+     * @var mixed
+     */
+    protected $value;
 
-	/**
-	 * Evaluates the constraint for parameter $other. Returns TRUE if the
-	 * constraint is met, FALSE otherwise.
-	 *
-	 * @param mixed $other Value or object to evaluate.
-	 * @return bool
-	 */
-	public function evaluate($other)
-	{
-		if ($other instanceof SplObjectStorage) {
-			return $other->contains($this->value);
-		}
+    /**
+     * @param  boolean $value
+     * @param  mixed   $checkForObjectIdentity
+     * @throws PHPUnit_Framework_Exception
+     */
+    public function __construct($value, $checkForObjectIdentity = TRUE)
+    {
+        if (!is_bool($checkForObjectIdentity)) {
+            throw PHPUnit_Util_InvalidArgumentHelper::factory(2, 'boolean');
+        }
 
-		if (is_object($this->value)) {
-			foreach ($other as $element) {
-				if ($element === $this->value) {
-					return TRUE;
-				}
-			}
-		} else {
-			foreach ($other as $element) {
-				if ($element == $this->value) {
-					return TRUE;
-				}
-			}
-		}
+        $this->checkForObjectIdentity = $checkForObjectIdentity;
+        $this->value                  = $value;
+    }
 
-		return FALSE;
-	}
+    /**
+     * Evaluates the constraint for parameter $other. Returns TRUE if the
+     * constraint is met, FALSE otherwise.
+     *
+     * @param mixed $other Value or object to evaluate.
+     * @return bool
+     */
+    protected function matches($other)
+    {
+        if ($other instanceof SplObjectStorage) {
+            return $other->contains($this->value);
+        }
 
-	/**
-	 * Returns a string representation of the constraint.
-	 *
-	 * @return string
-	 */
-	public function toString()
-	{
-		if (is_string($this->value) && strpos($this->value, "\n") !== FALSE) {
-			return 'contains "' . $this->value . '"';
-		} else {
-			return 'contains ' . PHPUnit_Util_Type::toString($this->value);
-		}
-	}
+        if (is_object($this->value)) {
+            foreach ($other as $element) {
+                if (($this->checkForObjectIdentity &&
+                     $element === $this->value) ||
+                    (!$this->checkForObjectIdentity &&
+                     $element == $this->value)) {
+                    return TRUE;
+                }
+            }
+        } else {
+            foreach ($other as $element) {
+                if ($element == $this->value) {
+                    return TRUE;
+                }
+            }
+        }
 
-	protected function customFailureDescription($other, $description, $not)
-	{
-		return sprintf(
-		  'Failed asserting that an %s %s.',
+        return FALSE;
+    }
 
-		   is_array($other) ? 'array' : 'iterator',
-		   $this->toString()
-		);
-	}
+    /**
+     * Returns a string representation of the constraint.
+     *
+     * @return string
+     */
+    public function toString()
+    {
+        if (is_string($this->value) && strpos($this->value, "\n") !== FALSE) {
+            return 'contains "' . $this->value . '"';
+        } else {
+            return 'contains ' . PHPUnit_Util_Type::export($this->value);
+        }
+    }
+
+    /**
+     * Returns the description of the failure
+     *
+     * The beginning of failure messages is "Failed asserting that" in most
+     * cases. This method should return the second part of that sentence.
+     *
+     * @param  mixed $other Evaluated value or object.
+     * @return string
+     */
+    protected function failureDescription($other)
+    {
+        return sprintf(
+          'an %s %s',
+
+           is_array($other) ? 'array' : 'iterator',
+           $this->toString()
+        );
+    }
 }

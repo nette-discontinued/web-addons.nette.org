@@ -2,7 +2,7 @@
 /**
  * PHPUnit
  *
- * Copyright (c) 2002-2011, Sebastian Bergmann <sebastian@phpunit.de>.
+ * Copyright (c) 2001-2012, Sebastian Bergmann <sebastian@phpunit.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,8 +37,8 @@
  * @package    PHPUnit
  * @subpackage Framework
  * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @copyright  2002-2011 Sebastian Bergmann <sebastian@phpunit.de>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @copyright  2001-2012 Sebastian Bergmann <sebastian@phpunit.de>
+ * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.5.0
  */
@@ -49,74 +49,74 @@
  * @package    PHPUnit
  * @subpackage Framework
  * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @copyright  2002-2011 Sebastian Bergmann <sebastian@phpunit.de>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.5.14
+ * @copyright  2001-2012 Sebastian Bergmann <sebastian@phpunit.de>
+ * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
+ * @version    Release: 3.7.0RC2
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.5.0
  */
 class PHPUnit_Framework_SyntheticError extends PHPUnit_Framework_AssertionFailedError
 {
-	/**
-	 * The synthetic file.
-	 *
-	 * @var string
-	 */
-	protected $syntheticFile = '';
+    /**
+     * The synthetic file.
+     *
+     * @var string
+     */
+    protected $syntheticFile = '';
 
-	/**
-	 * The synthetic line number.
-	 *
-	 * @var integer
-	 */
-	protected $syntheticLine = 0;
+    /**
+     * The synthetic line number.
+     *
+     * @var integer
+     */
+    protected $syntheticLine = 0;
 
-	/**
-	 * The synthetic trace.
-	 *
-	 * @var array
-	 */
-	protected $syntheticTrace = array();
+    /**
+     * The synthetic trace.
+     *
+     * @var array
+     */
+    protected $syntheticTrace = array();
 
-	/**
-	 * Constructor.
-	 *
-	 * @param string  $message
-	 * @param integer $code
-	 * @param string  $file
-	 * @param integer $line
-	 * @param array   $trace
-	 */
-	public function __construct($message, $code, $file, $line, $trace)
-	{
-		parent::__construct($message, $code);
+    /**
+     * Constructor.
+     *
+     * @param string  $message
+     * @param integer $code
+     * @param string  $file
+     * @param integer $line
+     * @param array   $trace
+     */
+    public function __construct($message, $code, $file, $line, $trace)
+    {
+        parent::__construct($message, $code);
 
-		$this->syntheticFile  = $file;
-		$this->syntheticLine  = $line;
-		$this->syntheticTrace = $trace;
-	}
+        $this->syntheticFile  = $file;
+        $this->syntheticLine  = $line;
+        $this->syntheticTrace = $trace;
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getSyntheticFile()
-	{
-		return $this->syntheticFile;
-	}
+    /**
+     * @return string
+     */
+    public function getSyntheticFile()
+    {
+        return $this->syntheticFile;
+    }
 
-	/**
-	 * @return integer
-	 */
-	public function getSyntheticLine()
-	{
-		return $this->syntheticLine;
-	}
+    /**
+     * @return integer
+     */
+    public function getSyntheticLine()
+    {
+        return $this->syntheticLine;
+    }
 
-	/**
-	 * @return array
-	 */
-	public function getSyntheticTrace()
-	{
-		return $this->syntheticTrace;
-	}
+    /**
+     * @return array
+     */
+    public function getSyntheticTrace()
+    {
+        return $this->syntheticTrace;
+    }
 }

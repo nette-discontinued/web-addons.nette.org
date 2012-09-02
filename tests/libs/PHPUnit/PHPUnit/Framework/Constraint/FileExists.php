@@ -2,7 +2,7 @@
 /**
  * PHPUnit
  *
- * Copyright (c) 2002-2011, Sebastian Bergmann <sebastian@phpunit.de>.
+ * Copyright (c) 2001-2012, Sebastian Bergmann <sebastian@phpunit.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,8 +37,9 @@
  * @package    PHPUnit
  * @subpackage Framework_Constraint
  * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @copyright  2002-2011 Sebastian Bergmann <sebastian@phpunit.de>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @author     Bernhard Schussek <bschussek@2bepublished.at>
+ * @copyright  2001-2012 Sebastian Bergmann <sebastian@phpunit.de>
+ * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.0.0
  */
@@ -51,62 +52,52 @@
  * @package    PHPUnit
  * @subpackage Framework_Constraint
  * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @copyright  2002-2011 Sebastian Bergmann <sebastian@phpunit.de>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.5.14
+ * @author     Bernhard Schussek <bschussek@2bepublished.at>
+ * @copyright  2001-2012 Sebastian Bergmann <sebastian@phpunit.de>
+ * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
+ * @version    Release: 3.7.0RC2
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.0.0
  */
 class PHPUnit_Framework_Constraint_FileExists extends PHPUnit_Framework_Constraint
 {
-	/**
-	 * Evaluates the constraint for parameter $other. Returns TRUE if the
-	 * constraint is met, FALSE otherwise.
-	 *
-	 * @param mixed $other Value or object to evaluate.
-	 * @return bool
-	 */
-	public function evaluate($other)
-	{
-		return file_exists($other);
-	}
+    /**
+     * Evaluates the constraint for parameter $other. Returns TRUE if the
+     * constraint is met, FALSE otherwise.
+     *
+     * @param mixed $other Value or object to evaluate.
+     * @return bool
+     */
+    protected function matches($other)
+    {
+        return file_exists($other);
+    }
 
-	/**
-	 * @param   mixed   $other The value passed to evaluate() which failed the
-	 *                         constraint check.
-	 * @param   string  $description A string with extra description of what was
-	 *                               going on while the evaluation failed.
-	 * @param   boolean $not Flag to indicate negation.
-	 * @throws  PHPUnit_Framework_ExpectationFailedException
-	 */
-	public function fail($other, $description, $not = FALSE)
-	{
-		$failureDescription = sprintf(
-		  'Failed asserting that file "%s" exists.',
+    /**
+     * Returns the description of the failure
+     *
+     * The beginning of failure messages is "Failed asserting that" in most
+     * cases. This method should return the second part of that sentence.
+     *
+     * @param  mixed $other Evaluated value or object.
+     * @return string
+     */
+    protected function failureDescription($other)
+    {
+        return sprintf(
+          'file "%s" exists',
 
-		   $other
-		);
+          $other
+        );
+    }
 
-		if ($not) {
-			$failureDescription = self::negate($failureDescription);
-		}
-
-		if (!empty($description)) {
-			$failureDescription = $description . "\n" . $failureDescription;
-		}
-
-		throw new PHPUnit_Framework_ExpectationFailedException(
-		  $failureDescription
-		);
-	}
-
-	/**
-	 * Returns a string representation of the constraint.
-	 *
-	 * @return string
-	 */
-	public function toString()
-	{
-		return 'file exists';
-	}
+    /**
+     * Returns a string representation of the constraint.
+     *
+     * @return string
+     */
+    public function toString()
+    {
+        return 'file exists';
+    }
 }

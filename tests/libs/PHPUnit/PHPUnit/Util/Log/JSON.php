@@ -2,7 +2,7 @@
 /**
  * PHPUnit
  *
- * Copyright (c) 2002-2011, Sebastian Bergmann <sebastian@phpunit.de>.
+ * Copyright (c) 2001-2012, Sebastian Bergmann <sebastian@phpunit.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,8 +37,8 @@
  * @package    PHPUnit
  * @subpackage Util_Log
  * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @copyright  2002-2011 Sebastian Bergmann <sebastian@phpunit.de>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @copyright  2001-2012 Sebastian Bergmann <sebastian@phpunit.de>
+ * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.0.0
  */
@@ -49,192 +49,207 @@
  * @package    PHPUnit
  * @subpackage Util_Log
  * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @copyright  2002-2011 Sebastian Bergmann <sebastian@phpunit.de>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.5.14
+ * @copyright  2001-2012 Sebastian Bergmann <sebastian@phpunit.de>
+ * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
+ * @version    Release: 3.7.0RC2
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.0.0
  */
 class PHPUnit_Util_Log_JSON extends PHPUnit_Util_Printer implements PHPUnit_Framework_TestListener
 {
-	/**
-	 * @var    string
-	 */
-	protected $currentTestSuiteName = '';
+    /**
+     * @var    string
+     */
+    protected $currentTestSuiteName = '';
 
-	/**
-	 * @var    string
-	 */
-	protected $currentTestName = '';
+    /**
+     * @var    string
+     */
+    protected $currentTestName = '';
 
-	/**
-	 * @var     boolean
-	 * @access  private
-	 */
-	protected $currentTestPass = TRUE;
+    /**
+     * @var     boolean
+     * @access  private
+     */
+    protected $currentTestPass = TRUE;
 
-	/**
-	 * An error occurred.
-	 *
-	 * @param  PHPUnit_Framework_Test $test
-	 * @param  Exception              $e
-	 * @param  float                  $time
-	 */
-	public function addError(PHPUnit_Framework_Test $test, Exception $e, $time)
-	{
-		$this->writeCase(
-		  'error',
-		  $time,
-		  PHPUnit_Util_Filter::getFilteredStacktrace(
-			$e,
-			TRUE,
-			FALSE
-		  ),
-		  $e->getMessage()
-		);
+    /**
+     * An error occurred.
+     *
+     * @param  PHPUnit_Framework_Test $test
+     * @param  Exception              $e
+     * @param  float                  $time
+     */
+    public function addError(PHPUnit_Framework_Test $test, Exception $e, $time)
+    {
+        $this->writeCase(
+          'error',
+          $time,
+          PHPUnit_Util_Filter::getFilteredStacktrace($e, FALSE),
+          $e->getMessage(),
+          $test
+        );
 
-		$this->currentTestPass = FALSE;
-	}
+        $this->currentTestPass = FALSE;
+    }
 
-	/**
-	 * A failure occurred.
-	 *
-	 * @param  PHPUnit_Framework_Test                 $test
-	 * @param  PHPUnit_Framework_AssertionFailedError $e
-	 * @param  float                                  $time
-	 */
-	public function addFailure(PHPUnit_Framework_Test $test, PHPUnit_Framework_AssertionFailedError $e, $time)
-	{
-		$this->writeCase(
-		  'fail',
-		  $time,
-		  PHPUnit_Util_Filter::getFilteredStacktrace(
-			$e,
-			TRUE,
-			FALSE
-		  ),
-		  $e->getMessage()
-		);
+    /**
+     * A failure occurred.
+     *
+     * @param  PHPUnit_Framework_Test                 $test
+     * @param  PHPUnit_Framework_AssertionFailedError $e
+     * @param  float                                  $time
+     */
+    public function addFailure(PHPUnit_Framework_Test $test, PHPUnit_Framework_AssertionFailedError $e, $time)
+    {
+        $this->writeCase(
+          'fail',
+          $time,
+          PHPUnit_Util_Filter::getFilteredStacktrace($e, FALSE),
+          $e->getMessage(),
+          $test
+        );
 
-		$this->currentTestPass = FALSE;
-	}
+        $this->currentTestPass = FALSE;
+    }
 
-	/**
-	 * Incomplete test.
-	 *
-	 * @param  PHPUnit_Framework_Test $test
-	 * @param  Exception              $e
-	 * @param  float                  $time
-	 */
-	public function addIncompleteTest(PHPUnit_Framework_Test $test, Exception $e, $time)
-	{
-		$this->writeCase('error', $time, array(), 'Incomplete Test');
+    /**
+     * Incomplete test.
+     *
+     * @param  PHPUnit_Framework_Test $test
+     * @param  Exception              $e
+     * @param  float                  $time
+     */
+    public function addIncompleteTest(PHPUnit_Framework_Test $test, Exception $e, $time)
+    {
+        $this->writeCase(
+          'error',
+          $time,
+          PHPUnit_Util_Filter::getFilteredStacktrace($e, FALSE),
+          'Incomplete Test: ' . $e->getMessage(),
+          $test
+        );
 
-		$this->currentTestPass = FALSE;
-	}
+        $this->currentTestPass = FALSE;
+    }
 
-	/**
-	 * Skipped test.
-	 *
-	 * @param  PHPUnit_Framework_Test $test
-	 * @param  Exception              $e
-	 * @param  float                  $time
-	 */
-	public function addSkippedTest(PHPUnit_Framework_Test $test, Exception $e, $time)
-	{
-		$this->writeCase('error', $time, array(), 'Skipped Test');
+    /**
+     * Skipped test.
+     *
+     * @param  PHPUnit_Framework_Test $test
+     * @param  Exception              $e
+     * @param  float                  $time
+     */
+    public function addSkippedTest(PHPUnit_Framework_Test $test, Exception $e, $time)
+    {
+        $this->writeCase(
+          'error',
+          $time,
+          PHPUnit_Util_Filter::getFilteredStacktrace($e, FALSE),
+          'Skipped Test: ' . $e->getMessage(),
+          $test
+        );
 
-		$this->currentTestPass = FALSE;
-	}
+        $this->currentTestPass = FALSE;
+    }
 
-	/**
-	 * A testsuite started.
-	 *
-	 * @param  PHPUnit_Framework_TestSuite $suite
-	 */
-	public function startTestSuite(PHPUnit_Framework_TestSuite $suite)
-	{
-		$this->currentTestSuiteName = $suite->getName();
-		$this->currentTestName      = '';
+    /**
+     * A testsuite started.
+     *
+     * @param  PHPUnit_Framework_TestSuite $suite
+     */
+    public function startTestSuite(PHPUnit_Framework_TestSuite $suite)
+    {
+        $this->currentTestSuiteName = $suite->getName();
+        $this->currentTestName      = '';
 
-		$this->write(
-		  array(
-			'event' => 'suiteStart',
-			'suite' => $this->currentTestSuiteName,
-			'tests' => count($suite)
-		  )
-		);
-	}
+        $this->write(
+          array(
+            'event' => 'suiteStart',
+            'suite' => $this->currentTestSuiteName,
+            'tests' => count($suite)
+          )
+        );
+    }
 
-	/**
-	 * A testsuite ended.
-	 *
-	 * @param  PHPUnit_Framework_TestSuite $suite
-	 */
-	public function endTestSuite(PHPUnit_Framework_TestSuite $suite)
-	{
-		$this->currentTestSuiteName = '';
-		$this->currentTestName      = '';
-	}
+    /**
+     * A testsuite ended.
+     *
+     * @param  PHPUnit_Framework_TestSuite $suite
+     */
+    public function endTestSuite(PHPUnit_Framework_TestSuite $suite)
+    {
+        $this->currentTestSuiteName = '';
+        $this->currentTestName      = '';
+    }
 
-	/**
-	 * A test started.
-	 *
-	 * @param  PHPUnit_Framework_Test $test
-	 */
-	public function startTest(PHPUnit_Framework_Test $test)
-	{
-		$this->currentTestName = PHPUnit_Util_Test::describe($test);
-		$this->currentTestPass = TRUE;
+    /**
+     * A test started.
+     *
+     * @param  PHPUnit_Framework_Test $test
+     */
+    public function startTest(PHPUnit_Framework_Test $test)
+    {
+        $this->currentTestName = PHPUnit_Util_Test::describe($test);
+        $this->currentTestPass = TRUE;
 
-		$this->write(
-		  array(
-			'event' => 'testStart',
-			'suite' => $this->currentTestSuiteName,
-			'test'  => $this->currentTestName
-		  )
-		);
-	}
+        $this->write(
+          array(
+            'event' => 'testStart',
+            'suite' => $this->currentTestSuiteName,
+            'test'  => $this->currentTestName
+          )
+        );
+    }
 
-	/**
-	 * A test ended.
-	 *
-	 * @param  PHPUnit_Framework_Test $test
-	 * @param  float                  $time
-	 */
-	public function endTest(PHPUnit_Framework_Test $test, $time)
-	{
-		if ($this->currentTestPass) {
-			$this->writeCase('pass', $time);
-		}
-	}
+    /**
+     * A test ended.
+     *
+     * @param  PHPUnit_Framework_Test $test
+     * @param  float                  $time
+     */
+    public function endTest(PHPUnit_Framework_Test $test, $time)
+    {
+        if ($this->currentTestPass) {
+            $this->writeCase('pass', $time, array(), '', $test);
+        }
+    }
 
-	/**
-	 * @param string $status
-	 * @param float  $time
-	 * @param array  $trace
-	 * @param string $message
-	 */
-	protected function writeCase($status, $time, array $trace = array(), $message = '')
-	{
-		$this->write(
-		  array(
-			'event'   => 'test',
-			'suite'   => $this->currentTestSuiteName,
-			'test'    => $this->currentTestName,
-			'status'  => $status,
-			'time'    => $time,
-			'trace'   => $trace,
-			'message' => $message
-		  )
-		);
-	}
+    /**
+     * @param string $status
+     * @param float  $time
+     * @param array  $trace
+     * @param string $message
+     */
+    protected function writeCase($status, $time, array $trace = array(), $message = '', $test = NULL)
+    {
+        $output = '';
+        if ($test !== NULL && $test->hasOutput()) {
+            $output = $test->getActualOutput();
+        }
+        $this->write(
+          array(
+            'event'   => 'test',
+            'suite'   => $this->currentTestSuiteName,
+            'test'    => $this->currentTestName,
+            'status'  => $status,
+            'time'    => $time,
+            'trace'   => $trace,
+            'message' => PHPUnit_Util_String::convertToUtf8($message),
+            'output'  => $output,
+          )
+        );
+    }
 
-	/**
-	 * @param string $buffer
-	 */
-	public function write($buffer)
-	{
-		parent::write(json_encode($buffer));
-	}
+    /**
+     * @param string $buffer
+     */
+    public function write($buffer)
+    {
+        if (defined('JSON_PRETTY_PRINT')) {
+            parent::write(json_encode($buffer, JSON_PRETTY_PRINT));
+        } else {
+            parent::write(json_encode($buffer));
+        }
+    }
 }

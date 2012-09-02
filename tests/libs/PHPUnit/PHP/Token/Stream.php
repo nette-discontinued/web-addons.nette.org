@@ -2,7 +2,7 @@
 /**
  * php-token-stream
  *
- * Copyright (c) 2009-2010, Sebastian Bergmann <sb@sebastian-bergmann.de>.
+ * Copyright (c) 2009-2012, Sebastian Bergmann <sb@sebastian-bergmann.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,343 +36,533 @@
  *
  * @package   PHP_TokenStream
  * @author    Sebastian Bergmann <sb@sebastian-bergmann.de>
- * @copyright 2009-2010 Sebastian Bergmann <sb@sebastian-bergmann.de>
+ * @copyright 2009-2012 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @since     File available since Release 1.0.0
  */
-
-require_once 'PHP/Token.php';
 
 /**
  * A stream of PHP tokens.
  *
  * @author    Sebastian Bergmann <sb@sebastian-bergmann.de>
- * @copyright 2009-2010 Sebastian Bergmann <sb@sebastian-bergmann.de>
+ * @copyright 2009-2012 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version   Release: 1.0.1
+ * @version   Release: 1.1.3
  * @link      http://github.com/sebastianbergmann/php-token-stream/tree
  * @since     Class available since Release 1.0.0
  */
 class PHP_Token_Stream implements ArrayAccess, Countable, SeekableIterator
 {
-	/**
-	 * @var array
-	 */
-	protected static $customTokens = array(
-	  '(' => 'PHP_Token_OPEN_BRACKET',
-	  ')' => 'PHP_Token_CLOSE_BRACKET',
-	  '[' => 'PHP_Token_OPEN_SQUARE',
-	  ']' => 'PHP_Token_CLOSE_SQUARE',
-	  '{' => 'PHP_Token_OPEN_CURLY',
-	  '}' => 'PHP_Token_CLOSE_CURLY',
-	  ';' => 'PHP_Token_SEMICOLON',
-	  '.' => 'PHP_Token_DOT',
-	  ',' => 'PHP_Token_COMMA',
-	  '=' => 'PHP_Token_EQUAL',
-	  '<' => 'PHP_Token_LT',
-	  '>' => 'PHP_Token_GT',
-	  '+' => 'PHP_Token_PLUS',
-	  '-' => 'PHP_Token_MINUS',
-	  '*' => 'PHP_Token_MULT',
-	  '/' => 'PHP_Token_DIV',
-	  '?' => 'PHP_Token_QUESTION_MARK',
-	  '!' => 'PHP_Token_EXCLAMATION_MARK',
-	  ':' => 'PHP_Token_COLON',
-	  '"' => 'PHP_Token_DOUBLE_QUOTES',
-	  '@' => 'PHP_Token_AT',
-	  '&' => 'PHP_Token_AMPERSAND',
-	  '%' => 'PHP_Token_PERCENT',
-	  '|' => 'PHP_Token_PIPE',
-	  '$' => 'PHP_Token_DOLLAR',
-	  '^' => 'PHP_Token_CARET',
-	  '~' => 'PHP_Token_TILDE',
-	  '`' => 'PHP_Token_BACKTICK'
-	);
+    /**
+     * @var array
+     */
+    protected static $customTokens = array(
+      '(' => 'PHP_Token_OPEN_BRACKET',
+      ')' => 'PHP_Token_CLOSE_BRACKET',
+      '[' => 'PHP_Token_OPEN_SQUARE',
+      ']' => 'PHP_Token_CLOSE_SQUARE',
+      '{' => 'PHP_Token_OPEN_CURLY',
+      '}' => 'PHP_Token_CLOSE_CURLY',
+      ';' => 'PHP_Token_SEMICOLON',
+      '.' => 'PHP_Token_DOT',
+      ',' => 'PHP_Token_COMMA',
+      '=' => 'PHP_Token_EQUAL',
+      '<' => 'PHP_Token_LT',
+      '>' => 'PHP_Token_GT',
+      '+' => 'PHP_Token_PLUS',
+      '-' => 'PHP_Token_MINUS',
+      '*' => 'PHP_Token_MULT',
+      '/' => 'PHP_Token_DIV',
+      '?' => 'PHP_Token_QUESTION_MARK',
+      '!' => 'PHP_Token_EXCLAMATION_MARK',
+      ':' => 'PHP_Token_COLON',
+      '"' => 'PHP_Token_DOUBLE_QUOTES',
+      '@' => 'PHP_Token_AT',
+      '&' => 'PHP_Token_AMPERSAND',
+      '%' => 'PHP_Token_PERCENT',
+      '|' => 'PHP_Token_PIPE',
+      '$' => 'PHP_Token_DOLLAR',
+      '^' => 'PHP_Token_CARET',
+      '~' => 'PHP_Token_TILDE',
+      '`' => 'PHP_Token_BACKTICK'
+    );
 
-	/**
-	 * @var array
-	 */
-	protected $tokens = array();
+    /**
+     * @var string
+     */
+    protected $filename;
 
-	/**
-	 * @var integer
-	 */
-	protected $position = 0;
+    /**
+     * @var array
+     */
+    protected $tokens = array();
 
-	/**
-	 * @var array
-	 */
-	protected $linesOfCode = array('loc' => 0, 'cloc' => 0, 'ncloc' => 0);
+    /**
+     * @var integer
+     */
+    protected $position = 0;
 
-	/**
-	 * @var array
-	 */
-	protected $classes;
+    /**
+     * @var array
+     */
+    protected $linesOfCode = array('loc' => 0, 'cloc' => 0, 'ncloc' => 0);
 
-	/**
-	 * @var array
-	 */
-	protected $functions;
+    /**
+     * @var array
+     */
+    protected $classes;
 
-	/**
-	 * Constructor.
-	 *
-	 * @param string $sourceCode
-	 */
-	public function __construct($sourceCode)
-	{
-		if (is_file($sourceCode)) {
-			$sourceCode = file_get_contents($sourceCode);
-		}
+    /**
+     * @var array
+     */
+    protected $functions;
 
-		$this->scan($sourceCode);
-	}
+    /**
+     * @var array
+     */
+    protected $includes;
 
-	/**
-	 * Scans the source for sequences of characters and converts them into a
-	 * stream of tokens.
-	 *
-	 * @param string $sourceCode
-	 */
-	protected function scan($sourceCode)
-	{
-		$line      = 1;
-		$tokens    = token_get_all($sourceCode);
-		$numTokens = count($tokens);
+    /**
+     * @var array
+     */
+    protected $interfaces;
 
-		for ($i = 0; $i < $numTokens; ++$i) {
-			$token = $tokens[$i];
-			unset($tokens[$i]);
+    /**
+     * @var array
+     */
+    protected $traits;
 
-			if (is_array($token)) {
-				$text       = $token[1];
-				$tokenClass = 'PHP_Token_' . substr(token_name($token[0]), 2);
-			} else {
-				$text       = $token;
-				$tokenClass = self::$customTokens[$token];
-			}
+    /**
+     * Constructor.
+     *
+     * @param string $sourceCode
+     */
+    public function __construct($sourceCode)
+    {
+        if (is_file($sourceCode)) {
+            $this->filename = $sourceCode;
+            $sourceCode     = file_get_contents($sourceCode);
+        }
 
-			$this->tokens[] = new $tokenClass($text, $line, $this, $i);
-			$lines          = substr_count($text, "\n");
-			$line          += $lines;
+        $this->scan($sourceCode);
+    }
 
-			if ($tokenClass == 'PHP_Token_HALT_COMPILER') {
-				break;
-			}
+    /**
+     * Destructor.
+     */
+    public function __destruct()
+    {
+        $this->tokens = array();
+    }
 
-			else if ($tokenClass == 'PHP_Token_COMMENT' ||
-				$tokenClass == 'PHP_Token_DOC_COMMENT') {
-				$this->linesOfCode['cloc'] += $lines + 1;
-			}
-		}
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        $buffer = '';
 
-		$this->linesOfCode['loc']   = substr_count($sourceCode, "\n");
-		$this->linesOfCode['ncloc'] = $this->linesOfCode['loc'] -
-									  $this->linesOfCode['cloc'];
-	}
+        foreach ($this as $token) {
+            $buffer .= $token;
+        }
 
-	/**
-	 * @return string
-	 */
-	public function __toString()
-	{
-		$buffer = '';
+        return $buffer;
+    }
 
-		foreach ($this as $token) {
-			$buffer .= $token;
-		}
+    /**
+     * @return string
+     * @since  Method available since Release 1.1.0
+     */
+    public function getFilename()
+    {
+        return $this->filename;
+    }
 
-		return $buffer;
-	}
+    /**
+     * Scans the source for sequences of characters and converts them into a
+     * stream of tokens.
+     *
+     * @param string $sourceCode
+     */
+    protected function scan($sourceCode)
+    {
+        $line      = 1;
+        $tokens    = token_get_all($sourceCode);
+        $numTokens = count($tokens);
 
-	/**
-	 * @return integer
-	 */
-	public function count()
-	{
-		return count($this->tokens);
-	}
+        for ($i = 0; $i < $numTokens; ++$i) {
+            $token = $tokens[$i];
+            unset($tokens[$i]);
 
-	/**
-	 * @return PHP_Token[]
-	 */
-	public function tokens()
-	{
-		return $this->tokens;
-	}
+            if (is_array($token)) {
+                $text       = $token[1];
+                $tokenClass = 'PHP_Token_' . substr(token_name($token[0]), 2);
+            } else {
+                $text       = $token;
+                $tokenClass = self::$customTokens[$token];
+            }
 
-	/**
-	 * @return array
-	 */
-	public function getClasses()
-	{
-		if ($this->classes !== NULL) {
-			return $this->classes;
-		}
+            $this->tokens[] = new $tokenClass($text, $line, $this, $i);
+            $lines          = substr_count($text, "\n");
+            $line          += $lines;
 
-		$this->parseClassesFunctions();
+            if ($tokenClass == 'PHP_Token_HALT_COMPILER') {
+                break;
+            }
 
-		return $this->classes;
-	}
+            else if ($tokenClass == 'PHP_Token_COMMENT' ||
+                $tokenClass == 'PHP_Token_DOC_COMMENT') {
+                $this->linesOfCode['cloc'] += $lines + 1;
+            }
+        }
 
-	/**
-	 * @return array
-	 */
-	public function getFunctions()
-	{
-		if ($this->functions !== NULL) {
-			return $this->functions;
-		}
+        $this->linesOfCode['loc']   = substr_count($sourceCode, "\n");
+        $this->linesOfCode['ncloc'] = $this->linesOfCode['loc'] -
+                                      $this->linesOfCode['cloc'];
+    }
 
-		$this->parseClassesFunctions();
+    /**
+     * @return integer
+     */
+    public function count()
+    {
+        return count($this->tokens);
+    }
 
-		return $this->functions;
-	}
+    /**
+     * @return PHP_Token[]
+     */
+    public function tokens()
+    {
+        return $this->tokens;
+    }
 
-	protected function parseClassesFunctions()
-	{
-		$this->classes   = array();
-		$this->functions = array();
-		$class           = FALSE;
-		$classEndLine    = FALSE;
+    /**
+     * @return array
+     */
+    public function getClasses()
+    {
+        if ($this->classes !== NULL) {
+            return $this->classes;
+        }
 
-		foreach ($this->tokens as $token) {
-			switch (get_class($token)) {
-				case 'PHP_Token_CLASS': {
-					$class        = $token->getName();
-					$classEndLine = $token->getEndLine();
+        $this->parse();
 
-					$this->classes[$class] = array(
-					  'methods'   => array(),
-					  'docblock'  => $token->getDocblock(),
-					  'startLine' => $token->getLine(),
-					  'endLine'   => $classEndLine
-					);
-				}
-				break;
+        return $this->classes;
+    }
 
-				case 'PHP_Token_FUNCTION': {
-					$name = $token->getName();
-					$tmp  = array(
-					  'docblock'  => $token->getDocblock(),
-					  'signature' => $token->getSignature(),
-					  'startLine' => $token->getLine(),
-					  'endLine'   => $token->getEndLine(),
-					  'ccn'       => $token->getCCN()
-					);
+    /**
+     * @return array
+     */
+    public function getFunctions()
+    {
+        if ($this->functions !== NULL) {
+            return $this->functions;
+        }
 
-					if ($class === FALSE) {
-						$this->functions[$name] = $tmp;
-					} else {
-						$this->classes[$class]['methods'][$name] = $tmp;
-					}
-				}
-				break;
+        $this->parse();
 
-				case 'PHP_Token_CLOSE_CURLY': {
-					if ($classEndLine !== FALSE &&
-						$classEndLine == $token->getLine()) {
-						$class        = FALSE;
-						$classEndLine = FALSE;
-					}
-				}
-				break;
-			}
-		}
-	}
+        return $this->functions;
+    }
 
-	/**
-	 * @return array
-	 */
-	public function getLinesOfCode()
-	{
-		return $this->linesOfCode;
-	}
+    /**
+     * @return array
+     */
+    public function getInterfaces()
+    {
+        if ($this->interfaces !== NULL) {
+            return $this->interfaces;
+        }
 
-	/**
-	 */
-	public function rewind()
-	{
-		$this->position = 0;
-	}
+        $this->parse();
 
-	/**
-	 * @return boolean
-	 */
-	public function valid()
-	{
-		return isset($this->tokens[$this->position]);
-	}
+        return $this->interfaces;
+    }
 
-	/**
-	 * @return integer
-	 */
-	public function key()
-	{
-		return $this->position;
-	}
+    /**
+     * @return array
+     * @since  Method available since Release 1.1.0
+     */
+    public function getTraits()
+    {
+        if ($this->traits !== NULL) {
+            return $this->traits;
+        }
 
-	/**
-	 * @return PHP_Token
-	 */
-	public function current()
-	{
-		return $this->tokens[$this->position];
-	}
+        $this->parse();
 
-	/**
-	 */
-	public function next()
-	{
-		$this->position++;
-	}
+        return $this->traits;
+    }
 
-	/**
-	 * @param mixed $offset
-	 */
-	public function offsetExists($offset)
-	{
-		return isset($this->tokens[$offset]);
-	}
+    /**
+     * Gets the names of all files that have been included
+     * using include(), include_once(), require() or require_once().
+     *
+     * Parameter $categorize set to TRUE causing this function to return a
+     * multi-dimensional array with categories in the keys of the first dimension
+     * and constants and their values in the second dimension.
+     *
+     * Parameter $category allow to filter following specific inclusion type
+     *
+     * @param bool   $categorize OPTIONAL
+     * @param string $category   OPTIONAL Either 'require_once', 'require',
+     *                                           'include_once', 'include'.
+     * @return array
+     * @since  Method available since Release 1.1.0
+     */
+    public function getIncludes($categorize = FALSE, $category = NULL)
+    {
+        if ($this->includes === NULL) {
+            $this->includes = array(
+              'require_once' => array(),
+              'require'      => array(),
+              'include_once' => array(),
+              'include'      => array()
+            );
 
-	/**
-	 * @param  mixed $offset
-	 * @return mixed
-	 */
-	public function offsetGet($offset)
-	{
-		return $this->tokens[$offset];
-	}
+            foreach ($this->tokens as $token) {
+                switch (get_class($token)) {
+                    case 'PHP_Token_REQUIRE_ONCE':
+                    case 'PHP_Token_REQUIRE':
+                    case 'PHP_Token_INCLUDE_ONCE':
+                    case 'PHP_Token_INCLUDE': {
+                        $this->includes[$token->getType()][] = $token->getName();
+                    }
+                    break;
+                }
+            }
+        }
 
-	/**
-	 * @param mixed $offset
-	 * @param mixed $value
-	 */
-	public function offsetSet($offset, $value)
-	{
-		$this->tokens[$offset] = $value;
-	}
+        if (isset($this->includes[$category])) {
+            $includes = $this->includes[$category];
+        }
 
-	/**
-	 * @param mixed $offset
-	 */
-	public function offsetUnset($offset)
-	{
-		unset($this->tokens[$offset]);
-	}
+        else if ($categorize === FALSE) {
+            $includes = array_merge(
+              $this->includes['require_once'],
+              $this->includes['require'],
+              $this->includes['include_once'],
+              $this->includes['include']
+            );
+        } else {
+            $includes = $this->includes;
+        }
 
-	/**
-	 * Seek to an absolute position.
-	 *
-	 * @param  integer $position
-	 * @throws OutOfBoundsException
-	 */
-	public function seek($position)
-	{
-		$this->position = $position;
+        return $includes;
+    }
 
-		if (!$this->valid()) {
-			throw new OutOfBoundsException('Invalid seek position');
-		}
-	}
+    protected function parse()
+    {
+        $this->interfaces = array();
+        $this->classes    = array();
+        $this->traits     = array();
+        $this->functions  = array();
+        $class            = FALSE;
+        $classEndLine     = FALSE;
+        $trait            = FALSE;
+        $traitEndLine     = FALSE;
+        $interface        = FALSE;
+        $interfaceEndLine = FALSE;
+
+        foreach ($this->tokens as $token) {
+            switch (get_class($token)) {
+                case 'PHP_Token_HALT_COMPILER': {
+                    return;
+                }
+                break;
+
+                case 'PHP_Token_INTERFACE': {
+                    $interface        = $token->getName();
+                    $interfaceEndLine = $token->getEndLine();
+
+                    $this->interfaces[$interface] = array(
+                      'methods'   => array(),
+                      'parent'    => $token->getParent(),
+                      'keywords'  => $token->getKeywords(),
+                      'docblock'  => $token->getDocblock(),
+                      'startLine' => $token->getLine(),
+                      'endLine'   => $interfaceEndLine,
+                      'package'   => $token->getPackage(),
+                      'file'      => $this->filename
+                    );
+                }
+                break;
+
+                case 'PHP_Token_CLASS':
+                case 'PHP_Token_TRAIT': {
+                    $tmp = array(
+                      'methods'   => array(),
+                      'parent'    => $token->getParent(),
+                      'interfaces'=> $token->getInterfaces(),
+                      'keywords'  => $token->getKeywords(),
+                      'docblock'  => $token->getDocblock(),
+                      'startLine' => $token->getLine(),
+                      'endLine'   => $token->getEndLine(),
+                      'package'   => $token->getPackage(),
+                      'file'      => $this->filename
+                    );
+
+                    if ($token instanceof PHP_Token_CLASS) {
+                        $class                 = $token->getName();
+                        $classEndLine          = $token->getEndLine();
+                        $this->classes[$class] = $tmp;
+                    } else {
+                        $trait                = $token->getName();
+                        $traitEndLine         = $token->getEndLine();
+                        $this->traits[$trait] = $tmp;
+                    }
+                }
+                break;
+
+                case 'PHP_Token_FUNCTION': {
+                    $name = $token->getName();
+                    $tmp  = array(
+                      'docblock'  => $token->getDocblock(),
+                      'keywords'  => $token->getKeywords(),
+                      'visibility'=> $token->getVisibility(),
+                      'signature' => $token->getSignature(),
+                      'startLine' => $token->getLine(),
+                      'endLine'   => $token->getEndLine(),
+                      'ccn'       => $token->getCCN(),
+                      'file'      => $this->filename
+                    );
+
+                    if ($class === FALSE &&
+                        $trait === FALSE &&
+                        $interface === FALSE) {
+                        $this->functions[$name] = $tmp;
+                    }
+
+                    else if ($class !== FALSE) {
+                        $this->classes[$class]['methods'][$name] = $tmp;
+                    }
+
+                    else if ($trait !== FALSE) {
+                        $this->traits[$trait]['methods'][$name] = $tmp;
+                    }
+
+                    else {
+                        $this->interfaces[$interface]['methods'][$name] = $tmp;
+                    }
+                }
+                break;
+
+                case 'PHP_Token_CLOSE_CURLY': {
+                    if ($classEndLine !== FALSE &&
+                        $classEndLine == $token->getLine()) {
+                        $class        = FALSE;
+                        $classEndLine = FALSE;
+                    }
+
+                    else if ($traitEndLine !== FALSE &&
+                        $traitEndLine == $token->getLine()) {
+                        $trait        = FALSE;
+                        $traitEndLine = FALSE;
+                    }
+
+                    else if ($interfaceEndLine !== FALSE &&
+                        $interfaceEndLine == $token->getLine()) {
+                        $interface        = FALSE;
+                        $interfaceEndLine = FALSE;
+                    }
+                }
+                break;
+            }
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function getLinesOfCode()
+    {
+        return $this->linesOfCode;
+    }
+
+    /**
+     */
+    public function rewind()
+    {
+        $this->position = 0;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function valid()
+    {
+        return isset($this->tokens[$this->position]);
+    }
+
+    /**
+     * @return integer
+     */
+    public function key()
+    {
+        return $this->position;
+    }
+
+    /**
+     * @return PHP_Token
+     */
+    public function current()
+    {
+        return $this->tokens[$this->position];
+    }
+
+    /**
+     */
+    public function next()
+    {
+        $this->position++;
+    }
+
+    /**
+     * @param mixed $offset
+     */
+    public function offsetExists($offset)
+    {
+        return isset($this->tokens[$offset]);
+    }
+
+    /**
+     * @param  mixed $offset
+     * @return mixed
+     */
+    public function offsetGet($offset)
+    {
+        return $this->tokens[$offset];
+    }
+
+    /**
+     * @param mixed $offset
+     * @param mixed $value
+     */
+    public function offsetSet($offset, $value)
+    {
+        $this->tokens[$offset] = $value;
+    }
+
+    /**
+     * @param mixed $offset
+     */
+    public function offsetUnset($offset)
+    {
+        unset($this->tokens[$offset]);
+    }
+
+    /**
+     * Seek to an absolute position.
+     *
+     * @param  integer $position
+     * @throws OutOfBoundsException
+     */
+    public function seek($position)
+    {
+        $this->position = $position;
+
+        if (!$this->valid()) {
+            throw new OutOfBoundsException('Invalid seek position');
+        }
+    }
 }

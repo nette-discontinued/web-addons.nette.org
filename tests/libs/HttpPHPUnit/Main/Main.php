@@ -135,16 +135,17 @@ class Main extends Object
 	 */
 	public function coverage($appDir, $coverageDir)
 	{
-		require_once 'PHP/CodeCoverage.php';
-		$coverage = PHP_CodeCoverage::getInstance();
-		if (!$this->run OR $this->testDir OR !extension_loaded('xdebug'))
+		if (!extension_loaded('xdebug')) {
+			$this->onAfter['coverage'] = function () {
+				echo 'Coverage: The Xdebug extension is not loaded.';
+			};
+			return;
+		}
+
+		$coverage = new PHP_CodeCoverage;
+
+		if (!$this->run OR $this->testDir)
 		{
-			if (!extension_loaded('xdebug'))
-			{
-				$this->onAfter['coverage'] = function () {
-					echo 'Coverage: The Xdebug extension is not loaded.';
-				};
-			}
 			return $coverage;
 		}
 		@mkdir ($coverageDir);

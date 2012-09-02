@@ -2,7 +2,7 @@
 /**
  * PHPUnit
  *
- * Copyright (c) 2002-2011, Sebastian Bergmann <sebastian@phpunit.de>.
+ * Copyright (c) 2001-2012, Sebastian Bergmann <sebastian@phpunit.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,8 +37,8 @@
  * @package    PHPUnit
  * @subpackage Util_TestDox
  * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @copyright  2002-2011 Sebastian Bergmann <sebastian@phpunit.de>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @copyright  2001-2012 Sebastian Bergmann <sebastian@phpunit.de>
+ * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
  * @link       http://www.phpunit.de/
  * @since      File available since Release 2.3.0
  */
@@ -49,76 +49,76 @@
  * @package    PHPUnit
  * @subpackage Util_TestDox
  * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @copyright  2002-2011 Sebastian Bergmann <sebastian@phpunit.de>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.5.14
+ * @copyright  2001-2012 Sebastian Bergmann <sebastian@phpunit.de>
+ * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
+ * @version    Release: 3.7.0RC2
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 2.1.0
  */
 class PHPUnit_Util_TestDox_ResultPrinter_HTML extends PHPUnit_Util_TestDox_ResultPrinter
 {
-	/**
-	 * @var    boolean
-	 */
-	protected $printsHTML = TRUE;
+    /**
+     * @var    boolean
+     */
+    protected $printsHTML = TRUE;
 
-	/**
-	 * Handler for 'start run' event.
-	 *
-	 */
-	protected function startRun()
-	{
-		$this->write('<html><body>');
-	}
+    /**
+     * Handler for 'start run' event.
+     *
+     */
+    protected function startRun()
+    {
+        $this->write('<html><body>');
+    }
 
-	/**
-	 * Handler for 'start class' event.
-	 *
-	 * @param  string $name
-	 */
-	protected function startClass($name)
-	{
-		$this->write(
-		  '<h2 id="' . $name . '">' . $this->currentTestClassPrettified .
-		  '</h2><ul>'
-		);
-	}
+    /**
+     * Handler for 'start class' event.
+     *
+     * @param  string $name
+     */
+    protected function startClass($name)
+    {
+        $this->write(
+          '<h2 id="' . $name . '">' . $this->currentTestClassPrettified .
+          '</h2><ul>'
+        );
+    }
 
-	/**
-	 * Handler for 'on test' event.
-	 *
-	 * @param  string  $name
-	 * @param  boolean $success
-	 */
-	protected function onTest($name, $success = TRUE)
-	{
-		if (!$success) {
-			$strikeOpen  = '<strike>';
-			$strikeClose = '</strike>';
-		} else {
-			$strikeOpen  = '';
-			$strikeClose = '';
-		}
+    /**
+     * Handler for 'on test' event.
+     *
+     * @param  string  $name
+     * @param  boolean $success
+     */
+    protected function onTest($name, $success = TRUE)
+    {
+        if (!$success) {
+            $strikeOpen  = '<strike>';
+            $strikeClose = '</strike>';
+        } else {
+            $strikeOpen  = '';
+            $strikeClose = '';
+        }
 
-		$this->write('<li>' . $strikeOpen . $name . $strikeClose . '</li>');
-	}
+        $this->write('<li>' . $strikeOpen . $name . $strikeClose . '</li>');
+    }
 
-	/**
-	 * Handler for 'end class' event.
-	 *
-	 * @param  string $name
-	 */
-	protected function endClass($name)
-	{
-		$this->write('</ul>');
-	}
+    /**
+     * Handler for 'end class' event.
+     *
+     * @param  string $name
+     */
+    protected function endClass($name)
+    {
+        $this->write('</ul>');
+    }
 
-	/**
-	 * Handler for 'end run' event.
-	 *
-	 */
-	protected function endRun()
-	{
-		$this->write('</body></html>');
-	}
+    /**
+     * Handler for 'end run' event.
+     *
+     */
+    protected function endRun()
+    {
+        $this->write('</body></html>');
+    }
 }

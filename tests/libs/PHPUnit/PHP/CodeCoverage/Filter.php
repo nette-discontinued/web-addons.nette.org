@@ -2,7 +2,7 @@
 /**
  * PHP_CodeCoverage
  *
- * Copyright (c) 2009-2011, Sebastian Bergmann <sb@sebastian-bergmann.de>.
+ * Copyright (c) 2009-2012, Sebastian Bergmann <sb@sebastian-bergmann.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,13 +37,11 @@
  * @category   PHP
  * @package    CodeCoverage
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
- * @copyright  2009-2011 Sebastian Bergmann <sb@sebastian-bergmann.de>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @copyright  2009-2012 Sebastian Bergmann <sb@sebastian-bergmann.de>
+ * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
  * @link       http://github.com/sebastianbergmann/php-code-coverage
  * @since      File available since Release 1.0.0
  */
-
-require_once 'File/Iterator/Factory.php';
 
 /**
  * Filter for blacklisting and whitelisting of code coverage information.
@@ -51,284 +49,311 @@ require_once 'File/Iterator/Factory.php';
  * @category   PHP
  * @package    CodeCoverage
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
- * @copyright  2009-2011 Sebastian Bergmann <sb@sebastian-bergmann.de>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 1.0.4
+ * @copyright  2009-2012 Sebastian Bergmann <sb@sebastian-bergmann.de>
+ * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
+ * @version    Release: 1.2.0RC2
  * @link       http://github.com/sebastianbergmann/php-code-coverage
  * @since      Class available since Release 1.0.0
  */
 class PHP_CodeCoverage_Filter
 {
-	/**
-	 * Source files that are blacklisted.
-	 *
-	 * @var array
-	 */
-	protected $blacklistedFiles = array(
-	  'DEFAULT' => array()
-	);
+    /**
+     * Source files that are blacklisted.
+     *
+     * @var array
+     */
+    protected $blacklistedFiles = array();
 
-	/**
-	 * Source files that are whitelisted.
-	 *
-	 * @var array
-	 */
-	protected $whitelistedFiles = array();
+    /**
+     * Source files that are whitelisted.
+     *
+     * @var array
+     */
+    protected $whitelistedFiles = array();
 
-	/**
-	 * Default PHP_CodeCoverage object.
-	 *
-	 * @var PHP_CodeCoverage
-	 */
-	protected static $instance;
+    /**
+     * Prefills the blacklist with source files used by PHPUnit
+     * and PHP_CodeCoverage.
+     */
+    public function __construct()
+    {
+        $functions = array(
+          'php_codecoverage_autoload',
+          'php_invoker_autoload',
+          'php_timer_autoload',
+          'php_tokenstream_autoload',
+          'phpunit_autoload',
+          'phpunit_dbunit_autoload',
+          'phpunit_mockobject_autoload',
+          'phpunit_selenium_autoload',
+          'phpunit_story_autoload',
+          'text_template_autoload'
+        );
 
-	/**
-	 * Returns the default instance.
-	 *
-	 * @return PHP_CodeCoverage_Filter
-	 */
-	public static function getInstance()
-	{
-		if (self::$instance === NULL) {
-			// @codeCoverageIgnoreStart
-			self::$instance = new PHP_CodeCoverage_Filter;
-		}
-		// @codeCoverageIgnoreEnd
+        foreach ($functions as $function) {
+            if (function_exists($function)) {
+                $this->addFilesToBlacklist($function());
+            }
+        }
 
-		return self::$instance;
-	}
+        $files = array(
+          'Symfony/Component/Finder/Finder.php',
+          'Symfony/Component/Finder/Glob.php',
+          'Symfony/Component/Finder/Iterator/FilterIterator.php',
+          'Symfony/Component/Finder/Iterator/FileTypeFilterIterator.php',
+          'Symfony/Component/Finder/Iterator/FilenameFilterIterator.php',
+          'Symfony/Component/Finder/Iterator/RecursiveDirectoryIterator.php',
+          'Symfony/Component/Finder/Iterator/ExcludeDirectoryFilterIterator.php',
+          'Symfony/Component/Finder/Iterator/MultiplePcreFilterIterator.php',
+          'Symfony/Component/Finder/SplFileInfo.php',
+          'SymfonyComponents/YAML/sfYaml.php',
+          'SymfonyComponents/YAML/sfYamlDumper.php'
+        );
 
-	/**
-	 * Adds a directory to the blacklist (recursively).
-	 *
-	 * @param string $directory
-	 * @param string $suffix
-	 * @param string $prefix
-	 * @param string $group
-	 */
-	public function addDirectoryToBlacklist($directory, $suffix = '.php', $prefix = '', $group = 'DEFAULT')
-	{
-		$files = File_Iterator_Factory::getFileIterator(
-		  $directory, $suffix, $prefix
-		);
+        foreach ($files as $file) {
+            $file = stream_resolve_include_path($file);
 
-		foreach ($files as $file) {
-			$this->addFileToBlacklist($file->getPathName(), $group, FALSE);
-		}
-	}
+            if ($file) {
+                $this->addFileToBlacklist($file);
+            }
+        }
+    }
 
-	/**
-	 * Adds a file to the blacklist.
-	 *
-	 * @param string $filename
-	 * @param string $group
-	 */
-	public function addFileToBlacklist($filename, $group = 'DEFAULT')
-	{
-		$this->blacklistedFiles[$group][realpath($filename)] = TRUE;
-	}
+    /**
+     * Adds a directory to the blacklist (recursively).
+     *
+     * @param string $directory
+     * @param string $suffix
+     * @param string $prefix
+     */
+    public function addDirectoryToBlacklist($directory, $suffix = '.php', $prefix = '')
+    {
+        foreach ($this->findFiles($directory, $prefix, $suffix) as $file) {
+            $this->addFileToBlacklist($file);
+        }
+    }
 
-	/**
-	 * Adds files to the blacklist.
-	 *
-	 * @param array  $files
-	 * @param string $group
-	 */
-	public function addFilesToBlacklist(array $files, $group = 'DEFAULT')
-	{
-		foreach ($files as $file) {
-			$this->addFileToBlacklist($file, $group);
-		}
-	}
+    /**
+     * Adds a file to the blacklist.
+     *
+     * @param string $filename
+     */
+    public function addFileToBlacklist($filename)
+    {
+        $this->blacklistedFiles[realpath($filename)] = TRUE;
+    }
 
-	/**
-	 * Removes a directory from the blacklist (recursively).
-	 *
-	 * @param string $directory
-	 * @param string $suffix
-	 * @param string $prefix
-	 * @param string $group
-	 */
-	public function removeDirectoryFromBlacklist($directory, $suffix = '.php', $prefix = '', $group = 'DEFAULT')
-	{
-		$files = File_Iterator_Factory::getFileIterator(
-		  $directory, $suffix, $prefix
-		);
+    /**
+     * Adds files to the blacklist.
+     *
+     * @param array $files
+     */
+    public function addFilesToBlacklist(array $files)
+    {
+        foreach ($files as $file) {
+            $this->addFileToBlacklist($file);
+        }
+    }
 
-		foreach ($files as $file) {
-			$this->removeFileFromBlacklist($file->getPathName(), $group);
-		}
-	}
+    /**
+     * Removes a directory from the blacklist (recursively).
+     *
+     * @param string $directory
+     * @param string $suffix
+     * @param string $prefix
+     */
+    public function removeDirectoryFromBlacklist($directory, $suffix = '.php', $prefix = '')
+    {
+        foreach ($this->findFiles($directory, $prefix, $suffix) as $file) {
+            $this->removeFileFromBlacklist($file);
+        }
+    }
 
-	/**
-	 * Removes a file from the blacklist.
-	 *
-	 * @param string $filename
-	 * @param string $group
-	 */
-	public function removeFileFromBlacklist($filename, $group = 'DEFAULT')
-	{
-		$filename = realpath($filename);
+    /**
+     * Removes a file from the blacklist.
+     *
+     * @param string $filename
+     */
+    public function removeFileFromBlacklist($filename)
+    {
+        $filename = realpath($filename);
 
-		if (isset($this->blacklistedFiles[$group][$filename])) {
-			unset($this->blacklistedFiles[$group][$filename]);
-		}
-	}
+        if (isset($this->blacklistedFiles[$filename])) {
+            unset($this->blacklistedFiles[$filename]);
+        }
+    }
 
-	/**
-	 * Adds a directory to the whitelist (recursively).
-	 *
-	 * @param string $directory
-	 * @param string $suffix
-	 * @param string $prefix
-	 */
-	public function addDirectoryToWhitelist($directory, $suffix = '.php', $prefix = '')
-	{
-		$files = File_Iterator_Factory::getFileIterator(
-		  $directory, $suffix, $prefix
-		);
+    /**
+     * Adds a directory to the whitelist (recursively).
+     *
+     * @param string $directory
+     * @param string $suffix
+     * @param string $prefix
+     */
+    public function addDirectoryToWhitelist($directory, $suffix = '.php', $prefix = '')
+    {
+        foreach ($this->findFiles($directory, $prefix, $suffix) as $file) {
+            $this->addFileToWhitelist($file);
+        }
+    }
 
-		foreach ($files as $file) {
-			$this->addFileToWhitelist($file->getPathName(), FALSE);
-		}
-	}
+    /**
+     * Adds a file to the whitelist.
+     *
+     * When the whitelist is empty (default), blacklisting is used.
+     * When the whitelist is not empty, whitelisting is used.
+     *
+     * @param string $filename
+     */
+    public function addFileToWhitelist($filename)
+    {
+        $this->whitelistedFiles[realpath($filename)] = TRUE;
+    }
 
-	/**
-	 * Adds a file to the whitelist.
-	 *
-	 * When the whitelist is empty (default), blacklisting is used.
-	 * When the whitelist is not empty, whitelisting is used.
-	 *
-	 * @param string $filename
-	 */
-	public function addFileToWhitelist($filename)
-	{
-		$this->whitelistedFiles[realpath($filename)] = TRUE;
-	}
+    /**
+     * Adds files to the whitelist.
+     *
+     * @param array $files
+     */
+    public function addFilesToWhitelist(array $files)
+    {
+        foreach ($files as $file) {
+            $this->addFileToWhitelist($file);
+        }
+    }
 
-	/**
-	 * Adds files to the whitelist.
-	 *
-	 * @param array $files
-	 */
-	public function addFilesToWhitelist(array $files)
-	{
-		foreach ($files as $file) {
-			$this->addFileToWhitelist($file);
-		}
-	}
+    /**
+     * Removes a directory from the whitelist (recursively).
+     *
+     * @param string $directory
+     * @param string $suffix
+     * @param string $prefix
+     */
+    public function removeDirectoryFromWhitelist($directory, $suffix = '.php', $prefix = '')
+    {
+        foreach ($this->findFiles($directory, $prefix, $suffix) as $file) {
+            $this->removeFileFromWhitelist($file);
+        }
+    }
 
-	/**
-	 * Removes a directory from the whitelist (recursively).
-	 *
-	 * @param string $directory
-	 * @param string $suffix
-	 * @param string $prefix
-	 */
-	public function removeDirectoryFromWhitelist($directory, $suffix = '.php', $prefix = '')
-	{
-		$files = File_Iterator_Factory::getFileIterator(
-		  $directory, $suffix, $prefix
-		);
+    /**
+     * Removes a file from the whitelist.
+     *
+     * @param string $filename
+     */
+    public function removeFileFromWhitelist($filename)
+    {
+        $filename = realpath($filename);
 
-		foreach ($files as $file) {
-			$this->removeFileFromWhitelist($file->getPathName());
-		}
-	}
+        if (isset($this->whitelistedFiles[$filename])) {
+            unset($this->whitelistedFiles[$filename]);
+        }
+    }
 
-	/**
-	 * Removes a file from the whitelist.
-	 *
-	 * @param string $filename
-	 */
-	public function removeFileFromWhitelist($filename)
-	{
-		$filename = realpath($filename);
+    /**
+     * Checks whether a filename is a real filename.
+     *
+     * @param string $filename
+     */
+    public function isFile($filename)
+    {
+        if ($filename == '-' ||
+            strpos($filename, 'eval()\'d code') !== FALSE ||
+            strpos($filename, 'runtime-created function') !== FALSE ||
+            strpos($filename, 'runkit created function') !== FALSE ||
+            strpos($filename, 'assert code') !== FALSE ||
+            strpos($filename, 'regexp code') !== FALSE) {
+            return FALSE;
+        }
 
-		if (isset($this->whitelistedFiles[$filename])) {
-			unset($this->whitelistedFiles[$filename]);
-		}
-	}
+        return TRUE;
+    }
 
-	/**
-	 * Checks whether a filename is a real filename.
-	 *
-	 * @param string $filename
-	 */
-	public static function isFile($filename)
-	{
-		if ($filename == '-' ||
-			strpos($filename, 'eval()\'d code') !== FALSE ||
-			strpos($filename, 'runtime-created function') !== FALSE ||
-			strpos($filename, 'assert code') !== FALSE ||
-			strpos($filename, 'regexp code') !== FALSE) {
-			return FALSE;
-		}
+    /**
+     * Checks whether or not a file is filtered.
+     *
+     * When the whitelist is empty (default), blacklisting is used.
+     * When the whitelist is not empty, whitelisting is used.
+     *
+     * @param  string  $filename
+     * @param  boolean $ignoreWhitelist
+     * @return boolean
+     * @throws PHP_CodeCoverage_Exception
+     */
+    public function isFiltered($filename, $ignoreWhitelist = FALSE)
+    {
+        if (!is_bool($ignoreWhitelist)) {
+            throw PHP_CodeCoverage_Util_InvalidArgumentHelper::factory(
+              1, 'boolean'
+            );
+        }
 
-		return TRUE;
-	}
+        $filename = realpath($filename);
 
-	/**
-	 * Checks whether or not a file is filtered.
-	 *
-	 * When the whitelist is empty (default), blacklisting is used.
-	 * When the whitelist is not empty, whitelisting is used.
-	 *
-	 * @param  string  $filename
-	 * @param  array   $groups
-	 * @param  boolean $ignoreWhitelist
-	 * @return boolean
-	 * @throws InvalidArgumentException
-	 */
-	public function isFiltered($filename, array $groups = array('DEFAULT'), $ignoreWhitelist = FALSE)
-	{
-		if (!is_bool($ignoreWhitelist)) {
-			throw new InvalidArgumentException;
-		}
+        if (!$ignoreWhitelist && !empty($this->whitelistedFiles)) {
+            return !isset($this->whitelistedFiles[$filename]);
+        }
 
-		$filename = realpath($filename);
+        return isset($this->blacklistedFiles[$filename]);
+    }
 
-		if (!$ignoreWhitelist && !empty($this->whitelistedFiles)) {
-			return !isset($this->whitelistedFiles[$filename]);
-		}
+    /**
+     * Returns the list of blacklisted files.
+     *
+     * @return array
+     */
+    public function getBlacklist()
+    {
+        return array_keys($this->blacklistedFiles);
+    }
 
-		$blacklistedFiles = array();
+    /**
+     * Returns the list of whitelisted files.
+     *
+     * @return array
+     */
+    public function getWhitelist()
+    {
+        return array_keys($this->whitelistedFiles);
+    }
 
-		foreach ($groups as $group) {
-			if (isset($this->blacklistedFiles[$group])) {
-				$blacklistedFiles = array_merge(
-				  $blacklistedFiles,
-				  $this->blacklistedFiles[$group]
-				);
-			}
-		}
+    /**
+     * Returns whether this filter has a whitelist.
+     *
+     * @return boolean
+     * @since  Method available since Release 1.1.0
+     */
+    public function hasWhitelist()
+    {
+        return !empty($this->whitelistedFiles);
+    }
 
-		return isset($blacklistedFiles[$filename]);
-	}
+    /**
+     * @param  string $directory
+     * @param  string $prefix
+     * @param  string $suffix
+     * @return array
+     * @since  Method available since Release 1.2.0
+     */
+    protected function findFiles($directory, $prefix, $suffix)
+    {
+        $finder = new Symfony\Component\Finder\Finder;
+        $finder->in($directory);
 
-	/**
-	 * Returns the list of blacklisted files.
-	 *
-	 * @return array
-	 */
-	public function getBlacklist()
-	{
-		$blacklistedFiles = array();
+        if (!empty($prefix)) {
+            $finder->name($prefix . '*');
+        }
 
-		foreach ($this->blacklistedFiles as $group => $list) {
-			$blacklistedFiles[$group] = array_keys($list);
-		}
+        if (!empty($suffix)) {
+            $finder->name('*' . $suffix);
+        }
 
-		return $blacklistedFiles;
-	}
+        $files = array();
 
-	/**
-	 * Returns the list of whitelisted files.
-	 *
-	 * @return array
-	 */
-	public function getWhitelist()
-	{
-		return array_keys($this->whitelistedFiles);
-	}
+        foreach ($finder as $file) {
+            $files[] = $file->getRealpath();
+        }
+
+        return $files;
+    }
 }

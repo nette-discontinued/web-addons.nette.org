@@ -2,7 +2,7 @@
 /**
  * PHPUnit
  *
- * Copyright (c) 2002-2011, Sebastian Bergmann <sebastian@phpunit.de>.
+ * Copyright (c) 2001-2012, Sebastian Bergmann <sebastian@phpunit.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,8 +37,8 @@
  * @package    PHPUnit
  * @subpackage Extensions
  * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @copyright  2002-2011 Sebastian Bergmann <sebastian@phpunit.de>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @copyright  2001-2012 Sebastian Bergmann <sebastian@phpunit.de>
+ * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.3.0
  */
@@ -58,43 +58,43 @@
  * @package    PHPUnit
  * @subpackage Extensions
  * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @copyright  2002-2011 Sebastian Bergmann <sebastian@phpunit.de>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.5.14
+ * @copyright  2001-2012 Sebastian Bergmann <sebastian@phpunit.de>
+ * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
+ * @version    Release: 3.7.0RC2
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.3.0
  */
 class PHPUnit_Extensions_GroupTestSuite extends PHPUnit_Framework_TestSuite
 {
-	public function __construct(PHPUnit_Framework_TestSuite $suite, array $groups)
-	{
-		$groupSuites = array();
-		$name        = $suite->getName();
+    public function __construct(PHPUnit_Framework_TestSuite $suite, array $groups)
+    {
+        $groupSuites = array();
+        $name        = $suite->getName();
 
-		foreach ($groups as $group) {
-			$groupSuites[$group] = new PHPUnit_Framework_TestSuite($name . ' - ' . $group);
-			$this->addTest($groupSuites[$group]);
-		}
+        foreach ($groups as $group) {
+            $groupSuites[$group] = new PHPUnit_Framework_TestSuite($name . ' - ' . $group);
+            $this->addTest($groupSuites[$group]);
+        }
 
-		$tests = new RecursiveIteratorIterator(
-		  new PHPUnit_Util_TestSuiteIterator($suite),
-		  RecursiveIteratorIterator::LEAVES_ONLY
-		);
+        $tests = new RecursiveIteratorIterator(
+          new PHPUnit_Util_TestSuiteIterator($suite),
+          RecursiveIteratorIterator::LEAVES_ONLY
+        );
 
-		foreach ($tests as $test) {
-			if ($test instanceof PHPUnit_Framework_TestCase) {
-				$testGroups = PHPUnit_Util_Test::getGroups(
-				  get_class($test), $test->getName(FALSE)
-				);
+        foreach ($tests as $test) {
+            if ($test instanceof PHPUnit_Framework_TestCase) {
+                $testGroups = PHPUnit_Util_Test::getGroups(
+                  get_class($test), $test->getName(FALSE)
+                );
 
-				foreach ($groups as $group) {
-					foreach ($testGroups as $testGroup) {
-						if ($group == $testGroup) {
-							$groupSuites[$group]->addTest($test);
-						}
-					}
-				}
-			}
-		}
-	}
+                foreach ($groups as $group) {
+                    foreach ($testGroups as $testGroup) {
+                        if ($group == $testGroup) {
+                            $groupSuites[$group]->addTest($test);
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

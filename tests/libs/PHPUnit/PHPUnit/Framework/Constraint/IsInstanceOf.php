@@ -2,7 +2,7 @@
 /**
  * PHPUnit
  *
- * Copyright (c) 2002-2011, Sebastian Bergmann <sebastian@phpunit.de>.
+ * Copyright (c) 2001-2012, Sebastian Bergmann <sebastian@phpunit.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,8 +37,9 @@
  * @package    PHPUnit
  * @subpackage Framework_Constraint
  * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @copyright  2002-2011 Sebastian Bergmann <sebastian@phpunit.de>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @author     Bernhard Schussek <bschussek@2bepublished.at>
+ * @copyright  2001-2012 Sebastian Bergmann <sebastian@phpunit.de>
+ * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.0.0
  */
@@ -52,77 +53,70 @@
  * @package    PHPUnit
  * @subpackage Framework_Constraint
  * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @copyright  2002-2011 Sebastian Bergmann <sebastian@phpunit.de>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.5.14
+ * @author     Bernhard Schussek <bschussek@2bepublished.at>
+ * @copyright  2001-2012 Sebastian Bergmann <sebastian@phpunit.de>
+ * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
+ * @version    Release: 3.7.0RC2
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.0.0
  */
 class PHPUnit_Framework_Constraint_IsInstanceOf extends PHPUnit_Framework_Constraint
 {
-	/**
-	 * @var string
-	 */
-	protected $className;
+    /**
+     * @var string
+     */
+    protected $className;
 
-	/**
-	 * @param string $className
-	 */
-	public function __construct($className)
-	{
-		$this->className = $className;
-	}
+    /**
+     * @param string $className
+     */
+    public function __construct($className)
+    {
+        $this->className = $className;
+    }
 
-	/**
-	 * Evaluates the constraint for parameter $other. Returns TRUE if the
-	 * constraint is met, FALSE otherwise.
-	 *
-	 * @param mixed $other Value or object to evaluate.
-	 * @return bool
-	 */
-	public function evaluate($other)
-	{
-		return ($other instanceof $this->className);
-	}
+    /**
+     * Evaluates the constraint for parameter $other. Returns TRUE if the
+     * constraint is met, FALSE otherwise.
+     *
+     * @param mixed $other Value or object to evaluate.
+     * @return bool
+     */
+    protected function matches($other)
+    {
+        return ($other instanceof $this->className);
+    }
 
-	/**
-	 * Creates the appropriate exception for the constraint which can be caught
-	 * by the unit test system. This can be called if a call to evaluate()
-	 * fails.
-	 *
-	 * @param   mixed   $other The value passed to evaluate() which failed the
-	 *                         constraint check.
-	 * @param   string  $description A string with extra description of what was
-	 *                               going on while the evaluation failed.
-	 * @param   boolean $not Flag to indicate negation.
-	 * @throws  PHPUnit_Framework_ExpectationFailedException
-	 */
-	public function fail($other, $description, $not = FALSE)
-	{
-		throw new PHPUnit_Framework_ExpectationFailedException(
-		  sprintf(
-			'%sFailed asserting that %s is %san instance of class "%s".',
+    /**
+     * Returns the description of the failure
+     *
+     * The beginning of failure messages is "Failed asserting that" in most
+     * cases. This method should return the second part of that sentence.
+     *
+     * @param  mixed $other Evaluated value or object.
+     * @return string
+     */
+    protected function failureDescription($other)
+    {
+        return sprintf(
+          '%s is an instance of class "%s"',
 
-			!empty($description) ? $description . "\n" : '',
-			PHPUnit_Util_Type::toString($other, TRUE),
-			$not ? 'not ' : '',
-			$this->className
-		  ),
-		  NULL
-		);
-	}
+          PHPUnit_Util_Type::shortenedExport($other),
+          $this->className
+        );
+    }
 
-	/**
-	 * Returns a string representation of the constraint.
-	 *
-	 * @return string
-	 */
-	public function toString()
-	{
-		return sprintf(
-		  'is instance of class "%s"',
+    /**
+     * Returns a string representation of the constraint.
+     *
+     * @return string
+     */
+    public function toString()
+    {
+        return sprintf(
+          'is instance of class "%s"',
 
-		  $this->className
-		);
-	}
+          $this->className
+        );
+    }
 }

@@ -2,7 +2,7 @@
 /**
  * PHPUnit
  *
- * Copyright (c) 2002-2011, Sebastian Bergmann <sebastian@phpunit.de>.
+ * Copyright (c) 2001-2012, Sebastian Bergmann <sebastian@phpunit.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,8 +37,8 @@
  * @package    PHPUnit
  * @subpackage Util
  * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @copyright  2002-2011 Sebastian Bergmann <sebastian@phpunit.de>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @copyright  2001-2012 Sebastian Bergmann <sebastian@phpunit.de>
+ * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.4.0
  */
@@ -49,306 +49,401 @@
  * @package    PHPUnit
  * @subpackage Util
  * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @copyright  2002-2011 Sebastian Bergmann <sebastian@phpunit.de>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.5.14
+ * @copyright  2001-2012 Sebastian Bergmann <sebastian@phpunit.de>
+ * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
+ * @version    Release: 3.7.0RC2
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.4.0
  */
 class PHPUnit_Util_GlobalState
 {
-	/**
-	 * @var array
-	 */
-	protected static $globals = array();
+    /**
+     * @var array
+     */
+    protected static $globals = array();
 
-	/**
-	 * @var array
-	 */
-	protected static $staticAttributes = array();
+    /**
+     * @var array
+     */
+    protected static $staticAttributes = array();
 
-	/**
-	 * @var array
-	 */
-	protected static $superGlobalArrays = array(
-	  '_ENV',
-	  '_POST',
-	  '_GET',
-	  '_COOKIE',
-	  '_SERVER',
-	  '_FILES',
-	  '_REQUEST'
-	);
+    /**
+     * @var array
+     */
+    protected static $superGlobalArrays = array(
+      '_ENV',
+      '_POST',
+      '_GET',
+      '_COOKIE',
+      '_SERVER',
+      '_FILES',
+      '_REQUEST'
+    );
 
-	/**
-	 * @var array
-	 */
-	protected static $superGlobalArraysLong = array(
-	  'HTTP_ENV_VARS',
-	  'HTTP_POST_VARS',
-	  'HTTP_GET_VARS',
-	  'HTTP_COOKIE_VARS',
-	  'HTTP_SERVER_VARS',
-	  'HTTP_POST_FILES'
-	);
+    /**
+     * @var array
+     */
+    protected static $superGlobalArraysLong = array(
+      'HTTP_ENV_VARS',
+      'HTTP_POST_VARS',
+      'HTTP_GET_VARS',
+      'HTTP_COOKIE_VARS',
+      'HTTP_SERVER_VARS',
+      'HTTP_POST_FILES'
+    );
 
-	public static function backupGlobals(array $blacklist)
-	{
-		self::$globals     = array();
-		$superGlobalArrays = self::getSuperGlobalArrays();
+    /**
+     * @var array
+     */
+    protected static $phpunitFiles;
 
-		foreach ($superGlobalArrays as $superGlobalArray) {
-			if (!in_array($superGlobalArray, $blacklist)) {
-				self::backupSuperGlobalArray($superGlobalArray);
-			}
-		}
+    public static function backupGlobals(array $blacklist)
+    {
+        self::$globals     = array();
+        $superGlobalArrays = self::getSuperGlobalArrays();
 
-		foreach (array_keys($GLOBALS) as $key) {
-			if ($key != 'GLOBALS' &&
-				!in_array($key, $superGlobalArrays) &&
-				!in_array($key, $blacklist)) {
-				self::$globals['GLOBALS'][$key] = serialize($GLOBALS[$key]);
-			}
-		}
-	}
+        foreach ($superGlobalArrays as $superGlobalArray) {
+            if (!in_array($superGlobalArray, $blacklist)) {
+                self::backupSuperGlobalArray($superGlobalArray);
+            }
+        }
 
-	public static function restoreGlobals(array $blacklist)
-	{
-		if (ini_get('register_long_arrays') == '1') {
-			$superGlobalArrays = array_merge(
-			  self::$superGlobalArrays, self::$superGlobalArraysLong
-			);
-		} else {
-			$superGlobalArrays = self::$superGlobalArrays;
-		}
+        foreach (array_keys($GLOBALS) as $key) {
+            if ($key != 'GLOBALS' &&
+                !in_array($key, $superGlobalArrays) &&
+                !in_array($key, $blacklist) &&
+                !$GLOBALS[$key] instanceof Closure) {
+                self::$globals['GLOBALS'][$key] = serialize($GLOBALS[$key]);
+            }
+        }
+    }
 
-		foreach ($superGlobalArrays as $superGlobalArray) {
-			if (!in_array($superGlobalArray, $blacklist)) {
-				self::restoreSuperGlobalArray($superGlobalArray);
-			}
-		}
+    public static function restoreGlobals(array $blacklist)
+    {
+        if (ini_get('register_long_arrays') == '1') {
+            $superGlobalArrays = array_merge(
+              self::$superGlobalArrays, self::$superGlobalArraysLong
+            );
+        } else {
+            $superGlobalArrays = self::$superGlobalArrays;
+        }
 
-		foreach (array_keys($GLOBALS) as $key) {
-			if ($key != 'GLOBALS' &&
-				!in_array($key, $superGlobalArrays) &&
-				!in_array($key, $blacklist)) {
-				if (isset(self::$globals['GLOBALS'][$key])) {
-					$GLOBALS[$key] = unserialize(
-					  self::$globals['GLOBALS'][$key]
-					);
-				} else {
-					unset($GLOBALS[$key]);
-				}
-			}
-		}
+        foreach ($superGlobalArrays as $superGlobalArray) {
+            if (!in_array($superGlobalArray, $blacklist)) {
+                self::restoreSuperGlobalArray($superGlobalArray);
+            }
+        }
 
-		self::$globals = array();
-	}
+        foreach (array_keys($GLOBALS) as $key) {
+            if ($key != 'GLOBALS' &&
+                !in_array($key, $superGlobalArrays) &&
+                !in_array($key, $blacklist)) {
+                if (isset(self::$globals['GLOBALS'][$key])) {
+                    $GLOBALS[$key] = unserialize(
+                      self::$globals['GLOBALS'][$key]
+                    );
+                } else {
+                    unset($GLOBALS[$key]);
+                }
+            }
+        }
 
-	protected static function backupSuperGlobalArray($superGlobalArray)
-	{
-		self::$globals[$superGlobalArray] = array();
+        self::$globals = array();
+    }
 
-		if (isset($GLOBALS[$superGlobalArray]) &&
-			is_array($GLOBALS[$superGlobalArray])) {
-			foreach ($GLOBALS[$superGlobalArray] as $key => $value) {
-				self::$globals[$superGlobalArray][$key] = serialize($value);
-			}
-		}
-	}
+    protected static function backupSuperGlobalArray($superGlobalArray)
+    {
+        self::$globals[$superGlobalArray] = array();
 
-	protected static function restoreSuperGlobalArray($superGlobalArray)
-	{
-		if (isset($GLOBALS[$superGlobalArray]) &&
-			is_array($GLOBALS[$superGlobalArray]) &&
-			isset(self::$globals[$superGlobalArray])) {
-			$keys = array_keys(
-			  array_merge(
-				$GLOBALS[$superGlobalArray], self::$globals[$superGlobalArray]
-			  )
-			);
+        if (isset($GLOBALS[$superGlobalArray]) &&
+            is_array($GLOBALS[$superGlobalArray])) {
+            foreach ($GLOBALS[$superGlobalArray] as $key => $value) {
+                self::$globals[$superGlobalArray][$key] = serialize($value);
+            }
+        }
+    }
 
-			foreach ($keys as $key) {
-				if (isset(self::$globals[$superGlobalArray][$key])) {
-					$GLOBALS[$superGlobalArray][$key] = unserialize(
-					  self::$globals[$superGlobalArray][$key]
-					);
-				} else {
-					unset($GLOBALS[$superGlobalArray][$key]);
-				}
-			}
-		}
+    protected static function restoreSuperGlobalArray($superGlobalArray)
+    {
+        if (isset($GLOBALS[$superGlobalArray]) &&
+            is_array($GLOBALS[$superGlobalArray]) &&
+            isset(self::$globals[$superGlobalArray])) {
+            $keys = array_keys(
+              array_merge(
+                $GLOBALS[$superGlobalArray], self::$globals[$superGlobalArray]
+              )
+            );
 
-		self::$globals[$superGlobalArray] = array();
-	}
+            foreach ($keys as $key) {
+                if (isset(self::$globals[$superGlobalArray][$key])) {
+                    $GLOBALS[$superGlobalArray][$key] = unserialize(
+                      self::$globals[$superGlobalArray][$key]
+                    );
+                } else {
+                    unset($GLOBALS[$superGlobalArray][$key]);
+                }
+            }
+        }
 
-	public static function getIncludedFilesAsString()
-	{
-		$blacklist = PHP_CodeCoverage::getInstance()->filter()->getBlacklist();
-		$blacklist = array_flip($blacklist['PHPUNIT']);
-		$files     = get_included_files();
-		$result    = '';
+        self::$globals[$superGlobalArray] = array();
+    }
 
-		for ($i = count($files) - 1; $i > 0; $i--) {
-			if (!isset($blacklist[$files[$i]]) && is_file($files[$i])) {
-				$result = 'require_once \'' . $files[$i] . "';\n" . $result;
-			}
-		}
+    public static function getIncludedFilesAsString()
+    {
+        $blacklist = self::phpunitFiles();
+        $files     = get_included_files();
+        $result    = '';
 
-		return $result;
-	}
+        for ($i = count($files) - 1; $i > 0; $i--) {
+            if (!isset($blacklist[$files[$i]]) && is_file($files[$i])) {
+                $result = 'require_once \'' . $files[$i] . "';\n" . $result;
+            }
+        }
 
-	public static function getConstantsAsString()
-	{
-		$constants = get_defined_constants(TRUE);
-		$result    = '';
+        return $result;
+    }
 
-		if (isset($constants['user'])) {
-			foreach ($constants['user'] as $name => $value) {
-				$result .= sprintf(
-				  'if (!defined(\'%s\')) define(\'%s\', %s);' . "\n",
-				  $name,
-				  $name,
-				  self::exportVariable($value)
-				);
-			}
-		}
+    public static function getConstantsAsString()
+    {
+        $constants = get_defined_constants(TRUE);
+        $result    = '';
 
-		return $result;
-	}
+        if (isset($constants['user'])) {
+            foreach ($constants['user'] as $name => $value) {
+                $result .= sprintf(
+                  'if (!defined(\'%s\')) define(\'%s\', %s);' . "\n",
+                  $name,
+                  $name,
+                  self::exportVariable($value)
+                );
+            }
+        }
 
-	public static function getGlobalsAsString()
-	{
-		$result            = '';
-		$superGlobalArrays = self::getSuperGlobalArrays();
+        return $result;
+    }
 
-		foreach ($superGlobalArrays as $superGlobalArray) {
-			if (isset($GLOBALS[$superGlobalArray]) &&
-				is_array($GLOBALS[$superGlobalArray])) {
-				foreach (array_keys($GLOBALS[$superGlobalArray]) as $key) {
-					$result .= sprintf(
-					  '$GLOBALS[\'%s\'][\'%s\'] = %s;' . "\n",
-					  $superGlobalArray,
-					  $key,
-					  self::exportVariable($GLOBALS[$superGlobalArray][$key])
-					);
-				}
-			}
-		}
+    public static function getGlobalsAsString()
+    {
+        $result            = '';
+        $superGlobalArrays = self::getSuperGlobalArrays();
 
-		$blacklist   = $superGlobalArrays;
-		$blacklist[] = 'GLOBALS';
-		$blacklist[] = '_PEAR_Config_instance';
+        foreach ($superGlobalArrays as $superGlobalArray) {
+            if (isset($GLOBALS[$superGlobalArray]) &&
+                is_array($GLOBALS[$superGlobalArray])) {
+                foreach (array_keys($GLOBALS[$superGlobalArray]) as $key) {
+                    if ($GLOBALS[$superGlobalArray][$key] instanceof Closure) {
+                        continue;
+                    }
 
-		foreach (array_keys($GLOBALS) as $key) {
-			if (!in_array($key, $blacklist)) {
-				$result .= sprintf(
-				  '$GLOBALS[\'%s\'] = %s;' . "\n",
-				  $key,
-				  self::exportVariable($GLOBALS[$key])
-				);
-			}
-		}
+                    $result .= sprintf(
+                      '$GLOBALS[\'%s\'][\'%s\'] = %s;' . "\n",
+                      $superGlobalArray,
+                      $key,
+                      self::exportVariable($GLOBALS[$superGlobalArray][$key])
+                    );
+                }
+            }
+        }
 
-		return $result;
-	}
+        $blacklist   = $superGlobalArrays;
+        $blacklist[] = 'GLOBALS';
+        $blacklist[] = '_PEAR_Config_instance';
 
-	protected static function getSuperGlobalArrays()
-	{
-		if (ini_get('register_long_arrays') == '1') {
-			return array_merge(
-			  self::$superGlobalArrays, self::$superGlobalArraysLong
-			);
-		} else {
-			return self::$superGlobalArrays;
-		}
-	}
+        foreach (array_keys($GLOBALS) as $key) {
+            if (!in_array($key, $blacklist) && !$GLOBALS[$key] instanceof Closure) {
+                $result .= sprintf(
+                  '$GLOBALS[\'%s\'] = %s;' . "\n",
+                  $key,
+                  self::exportVariable($GLOBALS[$key])
+                );
+            }
+        }
 
-	public static function backupStaticAttributes(array $blacklist)
-	{
-		self::$staticAttributes = array();
-		$declaredClasses        = get_declared_classes();
-		$declaredClassesNum     = count($declaredClasses);
+        return $result;
+    }
 
-		for ($i = $declaredClassesNum - 1; $i >= 0; $i--) {
-			if (strpos($declaredClasses[$i], 'PHPUnit') !== 0 &&
-				strpos($declaredClasses[$i], 'File_Iterator') !== 0 &&
-				strpos($declaredClasses[$i], 'PHP_CodeCoverage') !== 0 &&
-				strpos($declaredClasses[$i], 'PHP_Timer') !== 0 &&
-				strpos($declaredClasses[$i], 'PHP_TokenStream') !== 0 &&
-				strpos($declaredClasses[$i], 'sfYaml') !== 0 &&
-				strpos($declaredClasses[$i], 'Text_Template') !== 0 &&
-				!$declaredClasses[$i] instanceof PHPUnit_Framework_Test) {
-				$class = new ReflectionClass($declaredClasses[$i]);
+    protected static function getSuperGlobalArrays()
+    {
+        if (ini_get('register_long_arrays') == '1') {
+            return array_merge(
+              self::$superGlobalArrays, self::$superGlobalArraysLong
+            );
+        } else {
+            return self::$superGlobalArrays;
+        }
+    }
 
-				if (!$class->isUserDefined()) {
-					break;
-				}
+    public static function backupStaticAttributes(array $blacklist)
+    {
+        self::$staticAttributes = array();
+        $declaredClasses        = get_declared_classes();
+        $declaredClassesNum     = count($declaredClasses);
 
-				$backup = array();
+        for ($i = $declaredClassesNum - 1; $i >= 0; $i--) {
+            if (strpos($declaredClasses[$i], 'PHPUnit') !== 0 &&
+                strpos($declaredClasses[$i], 'File_Iterator') !== 0 &&
+                strpos($declaredClasses[$i], 'PHP_CodeCoverage') !== 0 &&
+                strpos($declaredClasses[$i], 'PHP_Invoker') !== 0 &&
+                strpos($declaredClasses[$i], 'PHP_Timer') !== 0 &&
+                strpos($declaredClasses[$i], 'PHP_TokenStream') !== 0 &&
+                strpos($declaredClasses[$i], 'Symfony') !== 0 &&
+                strpos($declaredClasses[$i], 'Text_Template') !== 0 &&
+                !$declaredClasses[$i] instanceof PHPUnit_Framework_Test) {
+                $class = new ReflectionClass($declaredClasses[$i]);
 
-				foreach ($class->getProperties() as $attribute) {
-					if ($attribute->isStatic()) {
-						$name = $attribute->getName();
+                if (!$class->isUserDefined()) {
+                    break;
+                }
 
-						if (!isset($blacklist[$declaredClasses[$i]]) ||
-						   !in_array($name, $blacklist[$declaredClasses[$i]])) {
-							$attribute->setAccessible(TRUE);
-							$backup[$name] = serialize($attribute->getValue());
-						}
-					}
-				}
+                $backup = array();
 
-				if (!empty($backup)) {
-					self::$staticAttributes[$declaredClasses[$i]] = $backup;
-				}
-			}
-		}
-	}
+                foreach ($class->getProperties() as $attribute) {
+                    if ($attribute->isStatic()) {
+                        $name = $attribute->getName();
 
-	public static function restoreStaticAttributes()
-	{
-		foreach (self::$staticAttributes as $className => $staticAttributes) {
-			foreach ($staticAttributes as $name => $value) {
-				$reflector = new ReflectionProperty($className, $name);
-				$reflector->setAccessible(TRUE);
-				$reflector->setValue(unserialize($value));
-			}
-		}
+                        if (!isset($blacklist[$declaredClasses[$i]]) ||
+                           !in_array($name, $blacklist[$declaredClasses[$i]])) {
+                            $attribute->setAccessible(TRUE);
+                            $value = $attribute->getValue();
 
-		self::$staticAttributes = array();
-	}
+                            if (!$value instanceof Closure) {
+                                $backup[$name] = serialize($value);
+                            }
+                        }
+                    }
+                }
 
-	protected static function exportVariable($variable)
-	{
-		if (is_scalar($variable) || is_null($variable) ||
-		   (is_array($variable) && self::arrayOnlyContainsScalars($variable))) {
-			return var_export($variable, TRUE);
-		}
+                if (!empty($backup)) {
+                    self::$staticAttributes[$declaredClasses[$i]] = $backup;
+                }
+            }
+        }
+    }
 
-		return 'unserialize(\'' .
-				str_replace("'", "\'", serialize($variable)) .
-				'\')';
-	}
+    public static function restoreStaticAttributes()
+    {
+        foreach (self::$staticAttributes as $className => $staticAttributes) {
+            foreach ($staticAttributes as $name => $value) {
+                $reflector = new ReflectionProperty($className, $name);
+                $reflector->setAccessible(TRUE);
+                $reflector->setValue(unserialize($value));
+            }
+        }
 
-	protected static function arrayOnlyContainsScalars(array $array)
-	{
-		$result = TRUE;
+        self::$staticAttributes = array();
+    }
 
-		foreach ($array as $element) {
-			if (is_array($element)) {
-				$result = self::arrayOnlyContainsScalars($element);
-			}
+    protected static function exportVariable($variable)
+    {
+        if (is_scalar($variable) || is_null($variable) ||
+           (is_array($variable) && self::arrayOnlyContainsScalars($variable))) {
+            return var_export($variable, TRUE);
+        }
 
-			else if (!is_scalar($element) && !is_null($element)) {
-				$result = FALSE;
-			}
+        return 'unserialize(\'' .
+                str_replace("'", "\'", serialize($variable)) .
+                '\')';
+    }
 
-			if ($result === FALSE) {
-				break;
-			}
-		}
+    protected static function arrayOnlyContainsScalars(array $array)
+    {
+        $result = TRUE;
 
-		return $result;
-	}
+        foreach ($array as $element) {
+            if (is_array($element)) {
+                $result = self::arrayOnlyContainsScalars($element);
+            }
+
+            else if (!is_scalar($element) && !is_null($element)) {
+                $result = FALSE;
+            }
+
+            if ($result === FALSE) {
+                break;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return array
+     * @since  Method available since Release 3.6.0
+     */
+    public static function phpunitFiles()
+    {
+        if (self::$phpunitFiles === NULL) {
+            self::$phpunitFiles = phpunit_autoload();
+
+            if (function_exists('phpunit_mockobject_autoload')) {
+                self::$phpunitFiles = array_merge(
+                  self::$phpunitFiles, phpunit_mockobject_autoload()
+                );
+            }
+
+            if (function_exists('file_iterator_autoload')) {
+                self::$phpunitFiles = array_merge(
+                  self::$phpunitFiles, file_iterator_autoload()
+                );
+            }
+
+            if (function_exists('php_codecoverage_autoload')) {
+                self::$phpunitFiles = array_merge(
+                  self::$phpunitFiles, php_codecoverage_autoload()
+                );
+            }
+
+            if (function_exists('php_timer_autoload')) {
+                self::$phpunitFiles = array_merge(
+                  self::$phpunitFiles, php_timer_autoload()
+                );
+            }
+
+            if (function_exists('php_tokenstream_autoload')) {
+                self::$phpunitFiles = array_merge(
+                  self::$phpunitFiles, php_tokenstream_autoload()
+                );
+            }
+
+            if (function_exists('text_template_autoload')) {
+                self::$phpunitFiles = array_merge(
+                  self::$phpunitFiles, text_template_autoload()
+                );
+            }
+
+            if (function_exists('phpunit_dbunit_autoload')) {
+                self::$phpunitFiles = array_merge(
+                  self::$phpunitFiles, phpunit_dbunit_autoload()
+                );
+            }
+
+            if (function_exists('phpunit_selenium_autoload')) {
+                self::$phpunitFiles = array_merge(
+                  self::$phpunitFiles, phpunit_selenium_autoload()
+                );
+            }
+
+            if (function_exists('phpunit_story_autoload')) {
+                self::$phpunitFiles = array_merge(
+                  self::$phpunitFiles, phpunit_story_autoload()
+                );
+            }
+
+            if (function_exists('php_invoker_autoload')) {
+                self::$phpunitFiles = array_merge(
+                  self::$phpunitFiles, php_invoker_autoload()
+                );
+            }
+
+            foreach (self::$phpunitFiles as $key => $value) {
+                self::$phpunitFiles[$key] = str_replace(
+                  '/', DIRECTORY_SEPARATOR, $value
+                );
+            }
+
+            self::$phpunitFiles = array_flip(self::$phpunitFiles);
+        }
+
+        return self::$phpunitFiles;
+    }
 }

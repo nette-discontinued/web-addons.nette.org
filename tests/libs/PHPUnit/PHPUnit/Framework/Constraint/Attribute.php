@@ -2,7 +2,7 @@
 /**
  * PHPUnit
  *
- * Copyright (c) 2002-2011, Sebastian Bergmann <sebastian@phpunit.de>.
+ * Copyright (c) 2001-2012, Sebastian Bergmann <sebastian@phpunit.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,8 +37,9 @@
  * @package    PHPUnit
  * @subpackage Framework_Constraint
  * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @copyright  2002-2011 Sebastian Bergmann <sebastian@phpunit.de>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @author     Bernhard Schussek <bschussek@2bepublished.at>
+ * @copyright  2001-2012 Sebastian Bergmann <sebastian@phpunit.de>
+ * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.1.0
  */
@@ -49,101 +50,81 @@
  * @package    PHPUnit
  * @subpackage Framework_Constraint
  * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @copyright  2002-2011 Sebastian Bergmann <sebastian@phpunit.de>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.5.14
+ * @author     Bernhard Schussek <bschussek@2bepublished.at>
+ * @copyright  2001-2012 Sebastian Bergmann <sebastian@phpunit.de>
+ * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
+ * @version    Release: 3.7.0RC2
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.1.0
  */
 
-class PHPUnit_Framework_Constraint_Attribute extends PHPUnit_Framework_Constraint
+class PHPUnit_Framework_Constraint_Attribute extends PHPUnit_Framework_Constraint_Composite
 {
-	/**
-	 * @var string
-	 */
-	protected $attributeName;
+    /**
+     * @var string
+     */
+    protected $attributeName;
 
-	/**
-	 * @var PHPUnit_Framework_Constraint
-	 */
-	protected $constraint;
+    /**
+     * @param PHPUnit_Framework_Constraint $constraint
+     * @param string                       $attributeName
+     */
+    public function __construct(PHPUnit_Framework_Constraint $constraint, $attributeName)
+    {
+        parent::__construct($constraint);
 
-	/**
-	 * @param PHPUnit_Framework_Constraint $constraint
-	 * @param string                       $attributeName
-	 */
-	public function __construct(PHPUnit_Framework_Constraint $constraint, $attributeName)
-	{
-		$this->attributeName = $attributeName;
-		$this->constraint    = $constraint;
-	}
+        $this->attributeName = $attributeName;
+    }
 
-	/**
-	 * Evaluates the constraint for parameter $other. Returns TRUE if the
-	 * constraint is met, FALSE otherwise.
-	 *
-	 * @param mixed $other Value or object to evaluate.
-	 * @return bool
-	 */
-	public function evaluate($other)
-	{
-		return $this->constraint->evaluate(
-		  PHPUnit_Framework_Assert::readAttribute(
-			$other, $this->attributeName
-		  )
-		);
-	}
+    /**
+     * Evaluates the constraint for parameter $other
+     *
+     * If $returnResult is set to FALSE (the default), an exception is thrown
+     * in case of a failure. NULL is returned otherwise.
+     *
+     * If $returnResult is TRUE, the result of the evaluation is returned as
+     * a boolean value instead: TRUE in case of success, FALSE in case of a
+     * failure.
+     *
+     * @param  mixed $other Value or object to evaluate.
+     * @param  string $description Additional information about the test
+     * @param  bool $returnResult Whether to return a result or throw an exception
+     * @return mixed
+     * @throws PHPUnit_Framework_ExpectationFailedException
+     */
+    public function evaluate($other, $description = '', $returnResult = FALSE)
+    {
+        return parent::evaluate(
+          PHPUnit_Framework_Assert::readAttribute(
+            $other, $this->attributeName
+          ),
+          $description,
+          $returnResult
+        );
+    }
 
-	/**
-	 * @param   mixed   $other The value passed to evaluate() which failed the
-	 *                         constraint check.
-	 * @param   string  $description A string with extra description of what was
-	 *                               going on while the evaluation failed.
-	 * @param   boolean $not Flag to indicate negation.
-	 * @throws  PHPUnit_Framework_ExpectationFailedException
-	 */
-	public function fail($other, $description, $not = FALSE)
-	{
-		parent::fail(
-		  PHPUnit_Framework_Assert::readAttribute(
-			$other, $this->attributeName
-		  ),
-		  $description,
-		  $not
-		);
-	}
+    /**
+     * Returns a string representation of the constraint.
+     *
+     * @return string
+     */
+    public function toString()
+    {
+        return 'attribute "' . $this->attributeName . '" ' .
+               $this->innerConstraint->toString();
+    }
 
-	/**
-	 * Returns a string representation of the constraint.
-	 *
-	 * @return string
-	 */
-	public function toString()
-	{
-		return 'attribute "' . $this->attributeName . '" ' .
-			   $this->constraint->toString();
-	}
-
-	/**
-	 * Counts the number of constraint elements.
-	 *
-	 * @return integer
-	 * @since  Method available since Release 3.4.0
-	 */
-	public function count()
-	{
-		return count($this->constraint);
-	}
-
-	/**
-	 * @since Method available since Release 3.4.0
-	 */
-	protected function customFailureDescription($other, $description, $not)
-	{
-		return sprintf(
-		  'Failed asserting that %s.',
-
-		   $this->toString()
-		);
-	}
+    /**
+     * Returns the description of the failure
+     *
+     * The beginning of failure messages is "Failed asserting that" in most
+     * cases. This method should return the second part of that sentence.
+     *
+     * @param  mixed $other Evaluated value or object.
+     * @return string
+     */
+    protected function failureDescription($other)
+    {
+        return $this->toString();
+    }
 }

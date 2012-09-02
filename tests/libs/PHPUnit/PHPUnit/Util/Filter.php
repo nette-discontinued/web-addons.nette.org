@@ -2,7 +2,7 @@
 /**
  * PHPUnit
  *
- * Copyright (c) 2002-2011, Sebastian Bergmann <sebastian@phpunit.de>.
+ * Copyright (c) 2001-2012, Sebastian Bergmann <sebastian@phpunit.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,13 +37,11 @@
  * @package    PHPUnit
  * @subpackage Util
  * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @copyright  2002-2011 Sebastian Bergmann <sebastian@phpunit.de>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @copyright  2001-2012 Sebastian Bergmann <sebastian@phpunit.de>
+ * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
  * @link       http://www.phpunit.de/
  * @since      File available since Release 2.0.0
  */
-
-require_once 'File/Iterator/Factory.php';
 
 /**
  * Utility class for code filtering.
@@ -51,88 +49,90 @@ require_once 'File/Iterator/Factory.php';
  * @package    PHPUnit
  * @subpackage Util
  * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @copyright  2002-2011 Sebastian Bergmann <sebastian@phpunit.de>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.5.14
+ * @copyright  2001-2012 Sebastian Bergmann <sebastian@phpunit.de>
+ * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
+ * @version    Release: 3.7.0RC2
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 2.0.0
  */
 class PHPUnit_Util_Filter
 {
-	/**
-	 * Filters stack frames from PHPUnit classes.
-	 *
-	 * @param  Exception $e
-	 * @param  boolean   $filterTests
-	 * @param  boolean   $asString
-	 * @return string
-	 */
-	public static function getFilteredStacktrace(Exception $e, $filterTests = TRUE, $asString = TRUE)
-	{
-		if ($asString === TRUE) {
-			$filteredStacktrace = '';
-		} else {
-			$filteredStacktrace = array();
-		}
+    /**
+     * Filters stack frames from PHPUnit classes.
+     *
+     * @param  Exception $e
+     * @param  boolean   $asString
+     * @return string
+     */
+    public static function getFilteredStacktrace(Exception $e, $asString = TRUE)
+    {
+        if (!defined('PHPUNIT_TESTSUITE')) {
+            $blacklist = PHPUnit_Util_GlobalState::phpunitFiles();
+        } else {
+            $blacklist = array();
+        }
 
-		$groups = array('DEFAULT');
+        if ($asString === TRUE) {
+            $filteredStacktrace = '';
+        } else {
+            $filteredStacktrace = array();
+        }
 
-		if (!defined('PHPUNIT_TESTSUITE')) {
-			$groups[] = 'PHPUNIT';
-		}
+        if ($e instanceof PHPUnit_Framework_SyntheticError) {
+            $eTrace = $e->getSyntheticTrace();
+            $eFile  = $e->getSyntheticFile();
+            $eLine  = $e->getSyntheticLine();
+        } else {
+            if ($e->getPrevious()) {
+                $eTrace = $e->getPrevious()->getTrace();
+            } else {
+                $eTrace = $e->getTrace();
+            }
+            $eFile  = $e->getFile();
+            $eLine  = $e->getLine();
+        }
 
-		if ($filterTests) {
-			$groups[] = 'TESTS';
-		}
+        if (!self::frameExists($eTrace, $eFile, $eLine)) {
+            array_unshift(
+              $eTrace, array('file' => $eFile, 'line' => $eLine)
+            );
+        }
 
-		if ($e instanceof PHPUnit_Framework_SyntheticError) {
-			$eTrace = $e->getSyntheticTrace();
-		} else {
-			$eTrace = $e->getTrace();
-		}
+        foreach ($eTrace as $frame) {
+            if (isset($frame['file']) && is_file($frame['file']) &&
+                !isset($blacklist[$frame['file']])) {
+                if ($asString === TRUE) {
+                    $filteredStacktrace .= sprintf(
+                      "%s:%s\n",
 
-		if (!self::frameExists($eTrace, $e->getFile(), $e->getLine())) {
-			array_unshift(
-			  $eTrace, array('file' => $e->getFile(), 'line' => $e->getLine())
-			);
-		}
+                      $frame['file'],
+                      isset($frame['line']) ? $frame['line'] : '?'
+                    );
+                } else {
+                    $filteredStacktrace[] = $frame;
+                }
+            }
+        }
 
-		foreach ($eTrace as $frame) {
-			if (isset($frame['file']) && is_file($frame['file']) &&
-				!PHP_CodeCoverage::getInstance()->filter()->isFiltered(
-				  $frame['file'], $groups, TRUE)) {
-				if ($asString === TRUE) {
-					$filteredStacktrace .= sprintf(
-					  "%s:%s\n",
+        return $filteredStacktrace;
+    }
 
-					  $frame['file'],
-					  isset($frame['line']) ? $frame['line'] : '?'
-					);
-				} else {
-					$filteredStacktrace[] = $frame;
-				}
-			}
-		}
+    /**
+     * @param  array  $trace
+     * @param  string $file
+     * @param  int    $line
+     * @return boolean
+     * @since  Method available since Release 3.3.2
+     */
+    public static function frameExists(array $trace, $file, $line)
+    {
+        foreach ($trace as $frame) {
+            if (isset($frame['file']) && $frame['file'] == $file &&
+                isset($frame['line']) && $frame['line'] == $line) {
+                return TRUE;
+            }
+        }
 
-		return $filteredStacktrace;
-	}
-
-	/**
-	 * @param  array  $trace
-	 * @param  string $file
-	 * @param  int    $line
-	 * @return boolean
-	 * @since  Method available since Release 3.3.2
-	 */
-	public static function frameExists(array $trace, $file, $line)
-	{
-		foreach ($trace as $frame) {
-			if (isset($frame['file']) && $frame['file'] == $file &&
-				isset($frame['line']) && $frame['line'] == $line) {
-				return TRUE;
-			}
-		}
-
-		return FALSE;
-	}
+        return FALSE;
+    }
 }

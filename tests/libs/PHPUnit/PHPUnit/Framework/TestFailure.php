@@ -2,7 +2,7 @@
 /**
  * PHPUnit
  *
- * Copyright (c) 2002-2011, Sebastian Bergmann <sebastian@phpunit.de>.
+ * Copyright (c) 2001-2012, Sebastian Bergmann <sebastian@phpunit.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,8 +37,8 @@
  * @package    PHPUnit
  * @subpackage Framework
  * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @copyright  2002-2011 Sebastian Bergmann <sebastian@phpunit.de>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @copyright  2001-2012 Sebastian Bergmann <sebastian@phpunit.de>
+ * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
  * @link       http://www.phpunit.de/
  * @since      File available since Release 2.0.0
  */
@@ -49,180 +49,132 @@
  * @package    PHPUnit
  * @subpackage Framework
  * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @copyright  2002-2011 Sebastian Bergmann <sebastian@phpunit.de>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.5.14
+ * @copyright  2001-2012 Sebastian Bergmann <sebastian@phpunit.de>
+ * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
+ * @version    Release: 3.7.0RC2
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 2.0.0
  */
 class PHPUnit_Framework_TestFailure
 {
-	/**
-	 * @var    PHPUnit_Framework_Test
-	 */
-	protected $failedTest;
+    /**
+     * @var    PHPUnit_Framework_Test
+     */
+    protected $failedTest;
 
-	/**
-	 * @var    Exception
-	 */
-	protected $thrownException;
+    /**
+     * @var    Exception
+     */
+    protected $thrownException;
 
-	/**
-	 * Constructs a TestFailure with the given test and exception.
-	 *
-	 * @param  PHPUnit_Framework_Test $failedTest
-	 * @param  Exception               $thrownException
-	 */
-	public function __construct(PHPUnit_Framework_Test $failedTest, Exception $thrownException)
-	{
-		$this->failedTest      = $failedTest;
-		$this->thrownException = $thrownException;
-	}
+    /**
+     * Constructs a TestFailure with the given test and exception.
+     *
+     * @param  PHPUnit_Framework_Test $failedTest
+     * @param  Exception               $thrownException
+     */
+    public function __construct(PHPUnit_Framework_Test $failedTest, Exception $thrownException)
+    {
+        $this->failedTest      = $failedTest;
+        $this->thrownException = $thrownException;
+    }
 
-	/**
-	 * Returns a short description of the failure.
-	 *
-	 * @return string
-	 */
-	public function toString()
-	{
-		return sprintf(
-		  '%s: %s',
+    /**
+     * Returns a short description of the failure.
+     *
+     * @return string
+     */
+    public function toString()
+    {
+        return sprintf(
+          '%s: %s',
 
-		  $this->failedTest,
-		  $this->thrownException->getMessage()
-		);
-	}
+          $this->failedTest,
+          $this->thrownException->getMessage()
+        );
+    }
 
-	/**
-	 * Returns a description for the thrown exception.
-	 *
-	 * @return string
-	 * @since  Method available since Release 3.4.0
-	 */
-	public function getExceptionAsString()
-	{
-		return self::exceptionToString($this->thrownException);
-	}
+    /**
+     * Returns a description for the thrown exception.
+     *
+     * @return string
+     * @since  Method available since Release 3.4.0
+     */
+    public function getExceptionAsString()
+    {
+        return self::exceptionToString($this->thrownException);
+    }
 
-	/**
-	 * Returns a description for an exception.
-	 *
-	 * @param  Exception $e
-	 * @return string
-	 * @since  Method available since Release 3.2.0
-	 */
-	public static function exceptionToString(Exception $e)
-	{
-		if ($e instanceof PHPUnit_Framework_SelfDescribing) {
-			if ($e instanceof PHPUnit_Framework_ExpectationFailedException) {
-				$comparisonFailure = $e->getComparisonFailure();
-				$description       = $e->getDescription();
-				$message           = $e->getCustomMessage();
+    /**
+     * Returns a description for an exception.
+     *
+     * @param  Exception $e
+     * @return string
+     * @since  Method available since Release 3.2.0
+     */
+    public static function exceptionToString(Exception $e)
+    {
+        if ($e instanceof PHPUnit_Framework_SelfDescribing) {
+            $buffer = $e->toString();
 
-				if ($message == '') {
-					$buffer = '';
-				} else {
-					$buffer = $message . "\n";
-				}
+            if ($e instanceof PHPUnit_Framework_ExpectationFailedException && $e->getComparisonFailure()) {
+                $buffer = $buffer . "\n" . $e->getComparisonFailure()->getDiff();
+            }
 
-				if ($comparisonFailure !== NULL) {
-					if ($comparisonFailure->identical()) {
-						if ($comparisonFailure instanceof PHPUnit_Framework_ComparisonFailure_Object) {
-							$buffer .= 'Failed asserting that two variables ' .
-									   "reference the same object.\n";
-						} else {
-							$buffer .= $comparisonFailure->toString() . "\n";
-						}
-					} else {
-						if ($comparisonFailure instanceof PHPUnit_Framework_ComparisonFailure_Scalar) {
-							$buffer .= $comparisonFailure->toString() . "\n";
-						}
+            if (!empty($buffer)) {
+                $buffer = trim($buffer) . "\n";
+            }
+        }
 
-						else if ($comparisonFailure instanceof PHPUnit_Framework_ComparisonFailure_Array ||
-								 $comparisonFailure instanceof PHPUnit_Framework_ComparisonFailure_Object ||
-								 $comparisonFailure instanceof PHPUnit_Framework_ComparisonFailure_String) {
-							$buffer .= sprintf(
-							  "Failed asserting that two %ss are equal.\n%s\n",
+        else if ($e instanceof PHPUnit_Framework_Error) {
+            $buffer = $e->getMessage() . "\n";
+        }
 
-							  strtolower(
-								substr(get_class($comparisonFailure), 36)
-							  ),
-							  $comparisonFailure->toString()
-							);
-						}
-					}
-				} else {
-					$buffer .= $e->toString();
+        else {
+            $buffer = get_class($e) . ': ' . $e->getMessage() . "\n";
+        }
 
-					if (!empty($buffer)) {
-						$buffer .= "\n";
-					}
+        return $buffer;
+    }
 
-					if (strpos($buffer, $description) === FALSE) {
-						$buffer .= $description . "\n";
-					}
-				}
-			}
+    /**
+     * Gets the failed test.
+     *
+     * @return Test
+     */
+    public function failedTest()
+    {
+        return $this->failedTest;
+    }
 
-			else {
-				$buffer = $e->toString();
+    /**
+     * Gets the thrown exception.
+     *
+     * @return Exception
+     */
+    public function thrownException()
+    {
+        return $this->thrownException;
+    }
 
-				if (!empty($buffer)) {
-					$buffer .= "\n";
-				}
-			}
-		}
+    /**
+     * Returns the exception's message.
+     *
+     * @return string
+     */
+    public function exceptionMessage()
+    {
+        return $this->thrownException()->getMessage();
+    }
 
-		else if ($e instanceof PHPUnit_Framework_Error) {
-			$buffer = $e->getMessage() . "\n";
-		}
-
-		else {
-			$buffer = get_class($e) . ': ' . $e->getMessage() . "\n";
-		}
-
-		return $buffer;
-	}
-
-	/**
-	 * Gets the failed test.
-	 *
-	 * @return Test
-	 */
-	public function failedTest()
-	{
-		return $this->failedTest;
-	}
-
-	/**
-	 * Gets the thrown exception.
-	 *
-	 * @return Exception
-	 */
-	public function thrownException()
-	{
-		return $this->thrownException;
-	}
-
-	/**
-	 * Returns the exception's message.
-	 *
-	 * @return string
-	 */
-	public function exceptionMessage()
-	{
-		return $this->thrownException()->getMessage();
-	}
-
-	/**
-	 * Returns TRUE if the thrown exception
-	 * is of type AssertionFailedError.
-	 *
-	 * @return boolean
-	 */
-	public function isFailure()
-	{
-		return ($this->thrownException() instanceof PHPUnit_Framework_AssertionFailedError);
-	}
+    /**
+     * Returns TRUE if the thrown exception
+     * is of type AssertionFailedError.
+     *
+     * @return boolean
+     */
+    public function isFailure()
+    {
+        return ($this->thrownException() instanceof PHPUnit_Framework_AssertionFailedError);
+    }
 }

@@ -2,7 +2,7 @@
 /**
  * PHPUnit
  *
- * Copyright (c) 2002-2011, Sebastian Bergmann <sebastian@phpunit.de>.
+ * Copyright (c) 2001-2012, Sebastian Bergmann <sebastian@phpunit.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,8 +37,8 @@
  * @package    PHPUnit
  * @subpackage Runner
  * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @copyright  2002-2011 Sebastian Bergmann <sebastian@phpunit.de>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @copyright  2001-2012 Sebastian Bergmann <sebastian@phpunit.de>
+ * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
  * @link       http://www.phpunit.de/
  * @since      File available since Release 2.0.0
  */
@@ -49,142 +49,142 @@
  * @package    PHPUnit
  * @subpackage Runner
  * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @copyright  2002-2011 Sebastian Bergmann <sebastian@phpunit.de>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.5.14
+ * @copyright  2001-2012 Sebastian Bergmann <sebastian@phpunit.de>
+ * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
+ * @version    Release: 3.7.0RC2
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 2.0.0
  */
 abstract class PHPUnit_Runner_BaseTestRunner
 {
-	const STATUS_PASSED     = 0;
-	const STATUS_SKIPPED    = 1;
-	const STATUS_INCOMPLETE = 2;
-	const STATUS_FAILURE    = 3;
-	const STATUS_ERROR      = 4;
-	const SUITE_METHODNAME  = 'suite';
+    const STATUS_PASSED     = 0;
+    const STATUS_SKIPPED    = 1;
+    const STATUS_INCOMPLETE = 2;
+    const STATUS_FAILURE    = 3;
+    const STATUS_ERROR      = 4;
+    const SUITE_METHODNAME  = 'suite';
 
-	/**
-	 * Returns the loader to be used.
-	 *
-	 * @return PHPUnit_Runner_TestSuiteLoader
-	 */
-	public function getLoader()
-	{
-		return new PHPUnit_Runner_StandardTestSuiteLoader;
-	}
+    /**
+     * Returns the loader to be used.
+     *
+     * @return PHPUnit_Runner_TestSuiteLoader
+     */
+    public function getLoader()
+    {
+        return new PHPUnit_Runner_StandardTestSuiteLoader;
+    }
 
-	/**
-	 * Returns the Test corresponding to the given suite.
-	 * This is a template method, subclasses override
-	 * the runFailed() and clearStatus() methods.
-	 *
-	 * @param  string  $suiteClassName
-	 * @param  string  $suiteClassFile
-	 * @param  boolean $syntaxCheck
-	 * @return PHPUnit_Framework_Test
-	 */
-	public function getTest($suiteClassName, $suiteClassFile = '', $syntaxCheck = FALSE)
-	{
-		if (is_dir($suiteClassName) &&
-			!is_file($suiteClassName . '.php') && empty($suiteClassFile)) {
-			$testCollector = new PHPUnit_Runner_IncludePathTestCollector(
-			  array($suiteClassName)
-			);
+    /**
+     * Returns the Test corresponding to the given suite.
+     * This is a template method, subclasses override
+     * the runFailed() and clearStatus() methods.
+     *
+     * @param  string  $suiteClassName
+     * @param  string  $suiteClassFile
+     * @param  mixed   $suffixes
+     * @return PHPUnit_Framework_Test
+     */
+    public function getTest($suiteClassName, $suiteClassFile = '', $suffixes = '')
+    {
+        if (is_dir($suiteClassName) &&
+            !is_file($suiteClassName . '.php') && empty($suiteClassFile)) {
+            $facade = new File_Iterator_Facade;
+            $files  = $facade->getFilesAsArray(
+              $suiteClassName, $suffixes
+            );
 
-			$suite = new PHPUnit_Framework_TestSuite($suiteClassName);
-			$suite->addTestFiles($testCollector->collectTests(), $syntaxCheck);
+            $suite = new PHPUnit_Framework_TestSuite($suiteClassName);
+            $suite->addTestFiles($files);
 
-			return $suite;
-		}
+            return $suite;
+        }
 
-		try {
-			$testClass = $this->loadSuiteClass(
-			  $suiteClassName, $suiteClassFile, $syntaxCheck
-			);
-		}
+        try {
+            $testClass = $this->loadSuiteClass(
+              $suiteClassName, $suiteClassFile
+            );
+        }
 
-		catch (Exception $e) {
-			$this->runFailed($e->getMessage());
-			return NULL;
-		}
+        catch (Exception $e) {
+            $this->runFailed($e->getMessage());
+            return NULL;
+        }
 
-		try {
-			$suiteMethod = $testClass->getMethod(self::SUITE_METHODNAME);
+        try {
+            $suiteMethod = $testClass->getMethod(self::SUITE_METHODNAME);
 
-			if (!$suiteMethod->isStatic()) {
-				$this->runFailed(
-				  'suite() method must be static.'
-				);
+            if (!$suiteMethod->isStatic()) {
+                $this->runFailed(
+                  'suite() method must be static.'
+                );
 
-				return NULL;
-			}
+                return NULL;
+            }
 
-			try {
-				$test = $suiteMethod->invoke(NULL, $testClass->getName());
-			}
+            try {
+                $test = $suiteMethod->invoke(NULL, $testClass->getName());
+            }
 
-			catch (ReflectionException $e) {
-				$this->runFailed(
-				  sprintf(
-					"Failed to invoke suite() method.\n%s",
+            catch (ReflectionException $e) {
+                $this->runFailed(
+                  sprintf(
+                    "Failed to invoke suite() method.\n%s",
 
-					$e->getMessage()
-				  )
-				);
+                    $e->getMessage()
+                  )
+                );
 
-				return NULL;
-			}
-		}
+                return NULL;
+            }
+        }
 
-		catch (ReflectionException $e) {
-			try {
-				$test = new PHPUnit_Framework_TestSuite($testClass);
-			}
+        catch (ReflectionException $e) {
+            try {
+                $test = new PHPUnit_Framework_TestSuite($testClass);
+            }
 
-			catch (InvalidArgumentException $e) {
-				$test = new PHPUnit_Framework_TestSuite;
-				$test->setName($suiteClassName);
-			}
-		}
+            catch (PHPUnit_Framework_Exception $e) {
+                $test = new PHPUnit_Framework_TestSuite;
+                $test->setName($suiteClassName);
+            }
+        }
 
-		$this->clearStatus();
+        $this->clearStatus();
 
-		return $test;
-	}
+        return $test;
+    }
 
-	/**
-	 * Returns the loaded ReflectionClass for a suite name.
-	 *
-	 * @param  string  $suiteClassName
-	 * @param  string  $suiteClassFile
-	 * @param  boolean $syntaxCheck
-	 * @return ReflectionClass
-	 */
-	protected function loadSuiteClass($suiteClassName, $suiteClassFile = '', $syntaxCheck = FALSE)
-	{
-		$loader = $this->getLoader();
+    /**
+     * Returns the loaded ReflectionClass for a suite name.
+     *
+     * @param  string  $suiteClassName
+     * @param  string  $suiteClassFile
+     * @return ReflectionClass
+     */
+    protected function loadSuiteClass($suiteClassName, $suiteClassFile = '')
+    {
+        $loader = $this->getLoader();
 
-		if ($loader instanceof PHPUnit_Runner_StandardTestSuiteLoader) {
-			return $loader->load($suiteClassName, $suiteClassFile, $syntaxCheck);
-		} else {
-			return $loader->load($suiteClassName, $suiteClassFile);
-		}
-	}
+        if ($loader instanceof PHPUnit_Runner_StandardTestSuiteLoader) {
+            return $loader->load($suiteClassName, $suiteClassFile);
+        } else {
+            return $loader->load($suiteClassName, $suiteClassFile);
+        }
+    }
 
-	/**
-	 * Clears the status message.
-	 *
-	 */
-	protected function clearStatus()
-	{
-	}
+    /**
+     * Clears the status message.
+     *
+     */
+    protected function clearStatus()
+    {
+    }
 
-	/**
-	 * Override to define how to handle a failed loading of
-	 * a test suite.
-	 *
-	 * @param  string  $message
-	 */
-	abstract protected function runFailed($message);
+    /**
+     * Override to define how to handle a failed loading of
+     * a test suite.
+     *
+     * @param  string  $message
+     */
+    abstract protected function runFailed($message);
 }

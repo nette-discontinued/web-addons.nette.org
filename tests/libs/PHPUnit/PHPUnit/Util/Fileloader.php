@@ -2,7 +2,7 @@
 /**
  * PHPUnit
  *
- * Copyright (c) 2002-2011, Sebastian Bergmann <sebastian@phpunit.de>.
+ * Copyright (c) 2001-2012, Sebastian Bergmann <sebastian@phpunit.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,8 +37,8 @@
  * @package    PHPUnit
  * @subpackage Util
  * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @copyright  2002-2011 Sebastian Bergmann <sebastian@phpunit.de>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @copyright  2001-2012 Sebastian Bergmann <sebastian@phpunit.de>
+ * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
  * @link       http://www.phpunit.de/
  * @since      File available since Release 2.3.0
  */
@@ -49,92 +49,60 @@
  * @package    PHPUnit
  * @subpackage Util
  * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @copyright  2002-2011 Sebastian Bergmann <sebastian@phpunit.de>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.5.14
+ * @copyright  2001-2012 Sebastian Bergmann <sebastian@phpunit.de>
+ * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
+ * @version    Release: @package_version@
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 2.3.0
  */
 class PHPUnit_Util_Fileloader
 {
-	/**
-	 * Checks if a PHP sourcefile is readable and is optionally checked for
-	 * syntax errors through the syntaxCheck() method. The sourcefile is
-	 * loaded through the load() method.
-	 *
-	 * @param  string  $filename
-	 * @param  boolean $syntaxCheck
-	 * @return string
-	 * @throws RuntimeException
-	 */
-	public static function checkAndLoad($filename, $syntaxCheck = FALSE)
-	{
-		$includePathFilename = PHPUnit_Util_Filesystem::fileExistsInIncludePath(
-		  $filename
-		);
+    /**
+     * Checks if a PHP sourcefile is readable.
+     * The sourcefile is loaded through the load() method.
+     *
+     * @param  string $filename
+     * @throws PHPUnit_Framework_Exception
+     */
+    public static function checkAndLoad($filename)
+    {
+        $includePathFilename = stream_resolve_include_path($filename);
 
-		if (!$includePathFilename || !is_readable($includePathFilename)) {
-			throw new RuntimeException(
-			  sprintf('Cannot open file "%s".' . "\n", $filename)
-			);
-		}
+        if (!$includePathFilename || !is_readable($includePathFilename)) {
+            throw new PHPUnit_Framework_Exception(
+              sprintf('Cannot open file "%s".' . "\n", $filename)
+            );
+        }
 
-		if ($syntaxCheck) {
-			self::syntaxCheck($includePathFilename);
-		}
+        self::load($includePathFilename);
 
-		self::load($includePathFilename);
+        return $includePathFilename;
+    }
 
-		return $includePathFilename;
-	}
+    /**
+     * Loads a PHP sourcefile.
+     *
+     * @param  string $filename
+     * @return mixed
+     * @since  Method available since Release 3.0.0
+     */
+    public static function load($filename)
+    {
+        $oldVariableNames = array_keys(get_defined_vars());
 
-	/**
-	 * Loads a PHP sourcefile.
-	 *
-	 * @param  string $filename
-	 * @return mixed
-	 * @since  Method available since Release 3.0.0
-	 */
-	public static function load($filename)
-	{
-		$oldVariableNames = array_keys(get_defined_vars());
+        include_once $filename;
 
-		include_once $filename;
+        $newVariables     = get_defined_vars();
+        $newVariableNames = array_diff(
+                              array_keys($newVariables), $oldVariableNames
+                            );
 
-		$newVariables     = get_defined_vars();
-		$newVariableNames = array_diff(
-							  array_keys($newVariables), $oldVariableNames
-							);
+        foreach ($newVariableNames as $variableName) {
+            if ($variableName != 'oldVariableNames') {
+                $GLOBALS[$variableName] = $newVariables[$variableName];
+            }
+        }
 
-		foreach ($newVariableNames as $variableName) {
-			if ($variableName != 'oldVariableNames') {
-				$GLOBALS[$variableName] = $newVariables[$variableName];
-			}
-		}
-
-		return $filename;
-	}
-
-	/**
-	 * Uses a separate process to perform a syntax check on a PHP sourcefile.
-	 *
-	 * @param  string $filename
-	 * @throws RuntimeException
-	 * @since  Method available since Release 3.0.0
-	 */
-	protected static function syntaxCheck($filename)
-	{
-		$command = PHPUnit_Util_PHP::getPhpBinary();
-
-		if (DIRECTORY_SEPARATOR == '\\') {
-			$command = escapeshellarg($command);
-		}
-
-		$command .= ' -l ' . escapeshellarg($filename);
-		$output   = shell_exec($command);
-
-		if (strpos($output, 'Errors parsing') !== FALSE) {
-			throw new RuntimeException($output);
-		}
-	}
+        return $filename;
+    }
 }

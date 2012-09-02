@@ -7,6 +7,8 @@ require_once LIBS_DIR . '/HttpPHPUnit/init.php';
 $http = new HttpPHPUnit\Main(LIBS_DIR . '/PHPUnit');
 
 $cvg = $http->coverage(__DIR__ . '/../app', __DIR__ . '/coverage');
-$cvg->setProcessUncoveredFilesFromWhitelist(FALSE);
+if ($cvg) {
+	$cvg->setProcessUncoveredFilesFromWhitelist(FALSE);
+}
 
 $http->run(__DIR__ . '/cases');

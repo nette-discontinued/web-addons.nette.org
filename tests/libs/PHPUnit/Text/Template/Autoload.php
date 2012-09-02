@@ -43,23 +43,33 @@
  * @since      File available since Release 1.1.0
  */
 
-function text_template_autoload($class) {
-	static $classes = NULL;
-	static $path = NULL;
+function text_template_autoload($class = NULL) {
+    static $classes = NULL;
+    static $path = NULL;
 
-	if ($classes === NULL) {
-		$classes = array(
-		  'text_template' => '/Template.php'
-		);
+    if ($classes === NULL) {
+        $classes = array(
+          'text_template' => '/Template.php'
+        );
 
-		$path = dirname(dirname(__FILE__));
-	}
+        $path = dirname(dirname(__FILE__));
+    }
 
-	$cn = strtolower($class);
+    if ($class === NULL) {
+        $result = array(__FILE__);
 
-	if (isset($classes[$cn])) {
-		require $path . $classes[$cn];
-	}
+        foreach ($classes as $file) {
+            $result[] = $path . $file;
+        }
+
+        return $result;
+    }
+
+    $cn = strtolower($class);
+
+    if (isset($classes[$cn])) {
+        require $path . $classes[$cn];
+    }
 }
 
 spl_autoload_register('text_template_autoload');

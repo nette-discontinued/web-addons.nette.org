@@ -2,7 +2,7 @@
 /**
  * PHPUnit
  *
- * Copyright (c) 2002-2011, Sebastian Bergmann <sebastian@phpunit.de>.
+ * Copyright (c) 2001-2012, Sebastian Bergmann <sebastian@phpunit.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,15 +37,11 @@
  * @package    PHPUnit
  * @subpackage Util
  * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @copyright  2002-2011 Sebastian Bergmann <sebastian@phpunit.de>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @copyright  2001-2012 Sebastian Bergmann <sebastian@phpunit.de>
+ * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.1.0
  */
-
-if (!defined('T_NAMESPACE')) {
-	define('T_NAMESPACE', 377);
-}
 
 /**
  * Class helpers.
@@ -53,349 +49,313 @@ if (!defined('T_NAMESPACE')) {
  * @package    PHPUnit
  * @subpackage Util
  * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @copyright  2002-2011 Sebastian Bergmann <sebastian@phpunit.de>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.5.14
+ * @copyright  2001-2012 Sebastian Bergmann <sebastian@phpunit.de>
+ * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
+ * @version    Release: 3.7.0RC2
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.1.0
  */
 class PHPUnit_Util_Class
 {
-	protected static $buffer = array();
+    protected static $buffer = array();
 
-	/**
-	 * Starts the collection of loaded classes.
-	 *
-	 */
-	public static function collectStart()
-	{
-		self::$buffer = get_declared_classes();
-	}
+    /**
+     * Starts the collection of loaded classes.
+     *
+     */
+    public static function collectStart()
+    {
+        self::$buffer = get_declared_classes();
+    }
 
-	/**
-	 * Stops the collection of loaded classes and
-	 * returns the names of the loaded classes.
-	 *
-	 * @return array
-	 */
-	public static function collectEnd()
-	{
-		return array_values(
-		  array_diff(get_declared_classes(), self::$buffer)
-		);
-	}
+    /**
+     * Stops the collection of loaded classes and
+     * returns the names of the loaded classes.
+     *
+     * @return array
+     */
+    public static function collectEnd()
+    {
+        return array_values(
+          array_diff(get_declared_classes(), self::$buffer)
+        );
+    }
 
-	/**
-	 * Returns the class hierarchy for a given class.
-	 *
-	 * @param  string  $className
-	 * @param  boolean $asReflectionObjects
-	 * @return array
-	 */
-	public static function getHierarchy($className, $asReflectionObjects = FALSE)
-	{
-		if ($asReflectionObjects) {
-			$classes = array(new ReflectionClass($className));
-		} else {
-			$classes = array($className);
-		}
+    /**
+     * Returns the class hierarchy for a given class.
+     *
+     * @param  string  $className
+     * @param  boolean $asReflectionObjects
+     * @return array
+     */
+    public static function getHierarchy($className, $asReflectionObjects = FALSE)
+    {
+        if ($asReflectionObjects) {
+            $classes = array(new ReflectionClass($className));
+        } else {
+            $classes = array($className);
+        }
 
-		$done = FALSE;
+        $done = FALSE;
 
-		while (!$done) {
-			if ($asReflectionObjects) {
-				$class = new ReflectionClass(
-				  $classes[count($classes)-1]->getName()
-				);
-			} else {
-				$class = new ReflectionClass($classes[count($classes)-1]);
-			}
+        while (!$done) {
+            if ($asReflectionObjects) {
+                $class = new ReflectionClass(
+                  $classes[count($classes)-1]->getName()
+                );
+            } else {
+                $class = new ReflectionClass($classes[count($classes)-1]);
+            }
 
-			$parent = $class->getParentClass();
+            $parent = $class->getParentClass();
 
-			if ($parent !== FALSE) {
-				if ($asReflectionObjects) {
-					$classes[] = $parent;
-				} else {
-					$classes[] = $parent->getName();
-				}
-			} else {
-				$done = TRUE;
-			}
-		}
+            if ($parent !== FALSE) {
+                if ($asReflectionObjects) {
+                    $classes[] = $parent;
+                } else {
+                    $classes[] = $parent->getName();
+                }
+            } else {
+                $done = TRUE;
+            }
+        }
 
-		return $classes;
-	}
+        return $classes;
+    }
 
-	/**
-	 * Returns the parameters of a function or method.
-	 *
-	 * @param  ReflectionFunction|ReflectionMethod $method
-	 * @param  boolean                             $forCall
-	 * @return string
-	 * @since  Method available since Release 3.2.0
-	 */
-	public static function getMethodParameters($method, $forCall = FALSE)
-	{
-		$parameters = array();
+    /**
+     * Returns the parameters of a function or method.
+     *
+     * @param  ReflectionFunction|ReflectionMethod $method
+     * @param  boolean                             $forCall
+     * @return string
+     * @since  Method available since Release 3.2.0
+     */
+    public static function getMethodParameters($method, $forCall = FALSE)
+    {
+        $parameters = array();
 
-		foreach ($method->getParameters() as $i => $parameter) {
-			$name = '$' . $parameter->getName();
+        foreach ($method->getParameters() as $i => $parameter) {
+            $name = '$' . $parameter->getName();
 
-			if ($name === '$') {
-				$name .= 'arg' . $i;
-			}
+            if ($name === '$') {
+                $name .= 'arg' . $i;
+            }
 
-			$default  = '';
-			$typeHint = '';
+            $default   = '';
+            $reference = '';
+            $typeHint  = '';
 
-			if (!$forCall) {
-				if ($parameter->isArray()) {
-					$typeHint = 'array ';
-				} else {
-					try {
-						$class = $parameter->getClass();
-					}
+            if (!$forCall) {
+                if ($parameter->isArray()) {
+                    $typeHint = 'array ';
+                }
 
-					catch (ReflectionException $e) {
-						$class = FALSE;
-					}
+                else if (version_compare(PHP_VERSION, '5.4', '>') &&
+                         $parameter->isCallable()) {
+                    $typeHint = 'callable ';
+                }
 
-					if ($class) {
-						$typeHint = $class->getName() . ' ';
-					}
-				}
+                else {
+                    try {
+                        $class = $parameter->getClass();
+                    }
 
-				if ($parameter->isDefaultValueAvailable()) {
-					$value   = $parameter->getDefaultValue();
-					$default = ' = ' . var_export($value, TRUE);
-				}
+                    catch (ReflectionException $e) {
+                        $class = FALSE;
+                    }
 
-				else if ($parameter->isOptional()) {
-					$default = ' = null';
-				}
-			}
+                    if ($class) {
+                        $typeHint = $class->getName() . ' ';
+                    }
+                }
 
-			$ref = '';
+                if ($parameter->isDefaultValueAvailable()) {
+                    $value   = $parameter->getDefaultValue();
+                    $default = ' = ' . var_export($value, TRUE);
+                }
 
-			if ($parameter->isPassedByReference()) {
-				$ref = '&';
-			}
+                else if ($parameter->isOptional()) {
+                    $default = ' = null';
+                }
 
-			$parameters[] = $typeHint . $ref . $name . $default;
-		}
+                if ($parameter->isPassedByReference()) {
+                    $reference = '&';
+                }
+            }
 
-		return join(', ', $parameters);
-	}
+            $parameters[] = $typeHint . $reference . $name . $default;
+        }
 
-	/**
-	 * Returns the package information of a user-defined class.
-	 *
-	 * @param  string $className
-	 * @param  string $docComment
-	 * @return array
-	 */
-	public static function getPackageInformation($className, $docComment)
-	{
-		$result = array(
-		  'namespace'   => '',
-		  'fullPackage' => '',
-		  'category'    => '',
-		  'package'     => '',
-		  'subpackage'  => ''
-		);
+        return join(', ', $parameters);
+    }
 
-		if (strpos($className, '\\') !== FALSE) {
-			$result['namespace'] = self::arrayToName(
-			  explode('\\', $className)
-			);
-		}
+    /**
+     * Returns the package information of a user-defined class.
+     *
+     * @param  string $className
+     * @param  string $docComment
+     * @return array
+     */
+    public static function getPackageInformation($className, $docComment)
+    {
+        $result = array(
+          'namespace'   => '',
+          'fullPackage' => '',
+          'category'    => '',
+          'package'     => '',
+          'subpackage'  => ''
+        );
 
-		if (preg_match('/@category[\s]+([\.\w]+)/', $docComment, $matches)) {
-			$result['category'] = $matches[1];
-		}
+        if (strpos($className, '\\') !== FALSE) {
+            $result['namespace'] = self::arrayToName(
+              explode('\\', $className)
+            );
+        }
 
-		if (preg_match('/@package[\s]+([\.\w]+)/', $docComment, $matches)) {
-			$result['package']     = $matches[1];
-			$result['fullPackage'] = $matches[1];
-		}
+        if (preg_match('/@category[\s]+([\.\w]+)/', $docComment, $matches)) {
+            $result['category'] = $matches[1];
+        }
 
-		if (preg_match('/@subpackage[\s]+([\.\w]+)/', $docComment, $matches)) {
-			$result['subpackage']   = $matches[1];
-			$result['fullPackage'] .= '.' . $matches[1];
-		}
+        if (preg_match('/@package[\s]+([\.\w]+)/', $docComment, $matches)) {
+            $result['package']     = $matches[1];
+            $result['fullPackage'] = $matches[1];
+        }
 
-		if (empty($result['fullPackage'])) {
-			$result['fullPackage'] = self::arrayToName(
-			  explode('_', str_replace('\\', '_', $className)), '.'
-			);
-		}
+        if (preg_match('/@subpackage[\s]+([\.\w]+)/', $docComment, $matches)) {
+            $result['subpackage']   = $matches[1];
+            $result['fullPackage'] .= '.' . $matches[1];
+        }
 
-		return $result;
-	}
+        if (empty($result['fullPackage'])) {
+            $result['fullPackage'] = self::arrayToName(
+              explode('_', str_replace('\\', '_', $className)), '.'
+            );
+        }
 
-	/**
-	 * Returns the value of a static attribute.
-	 * This also works for attributes that are declared protected or private.
-	 *
-	 * @param  string  $className
-	 * @param  string  $attributeName
-	 * @return mixed
-	 * @throws InvalidArgumentException
-	 * @since  Method available since Release 3.4.0
-	 */
-	public static function getStaticAttribute($className, $attributeName)
-	{
-		if (!is_string($className)) {
-			throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'string');
-		}
+        return $result;
+    }
 
-		if (!class_exists($className)) {
-			throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'class name');
-		}
+    /**
+     * Returns the value of a static attribute.
+     * This also works for attributes that are declared protected or private.
+     *
+     * @param  string  $className
+     * @param  string  $attributeName
+     * @return mixed
+     * @throws PHPUnit_Framework_Exception
+     * @since  Method available since Release 3.4.0
+     */
+    public static function getStaticAttribute($className, $attributeName)
+    {
+        if (!is_string($className)) {
+            throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'string');
+        }
 
-		if (!is_string($attributeName)) {
-			throw PHPUnit_Util_InvalidArgumentHelper::factory(2, 'string');
-		}
+        if (!class_exists($className)) {
+            throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'class name');
+        }
 
-		$class = new ReflectionClass($className);
+        if (!is_string($attributeName)) {
+            throw PHPUnit_Util_InvalidArgumentHelper::factory(2, 'string');
+        }
 
-		while ($class) {
-			$attributes = $class->getStaticProperties();
+        $class = new ReflectionClass($className);
 
-			if (array_key_exists($attributeName, $attributes)) {
-				return $attributes[$attributeName];
-			}
+        while ($class) {
+            $attributes = $class->getStaticProperties();
 
-			$class = $class->getParentClass();
-		}
+            if (array_key_exists($attributeName, $attributes)) {
+                return $attributes[$attributeName];
+            }
 
-		throw new PHPUnit_Framework_Exception(
-		  sprintf(
-			'Attribute "%s" not found in class.',
+            $class = $class->getParentClass();
+        }
 
-			$attributeName
-		  )
-		);
-	}
+        throw new PHPUnit_Framework_Exception(
+          sprintf(
+            'Attribute "%s" not found in class.',
 
-	/**
-	 * Returns the value of an object's attribute.
-	 * This also works for attributes that are declared protected or private.
-	 *
-	 * @param  object  $object
-	 * @param  string  $attributeName
-	 * @return mixed
-	 * @throws InvalidArgumentException
-	 * @since  Method available since Release 3.4.0
-	 */
-	public static function getObjectAttribute($object, $attributeName)
-	{
-		if (!is_object($object)) {
-			throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'object');
-		}
+            $attributeName
+          )
+        );
+    }
 
-		if (!is_string($attributeName)) {
-			throw PHPUnit_Util_InvalidArgumentHelper::factory(2, 'string');
-		}
+    /**
+     * Returns the value of an object's attribute.
+     * This also works for attributes that are declared protected or private.
+     *
+     * @param  object  $object
+     * @param  string  $attributeName
+     * @return mixed
+     * @throws PHPUnit_Framework_Exception
+     * @since  Method available since Release 3.4.0
+     */
+    public static function getObjectAttribute($object, $attributeName)
+    {
+        if (!is_object($object)) {
+            throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'object');
+        }
 
-		try {
-			$attribute = new ReflectionProperty($object, $attributeName);
-		}
+        if (!is_string($attributeName)) {
+            throw PHPUnit_Util_InvalidArgumentHelper::factory(2, 'string');
+        }
 
-		catch (ReflectionException $e) {
-			$reflector = new ReflectionObject($object);
+        try {
+            $attribute = new ReflectionProperty($object, $attributeName);
+        }
 
-			while ($reflector = $reflector->getParentClass()) {
-				try {
-					$attribute = $reflector->getProperty($attributeName);
-					break;
-				}
+        catch (ReflectionException $e) {
+            $reflector = new ReflectionObject($object);
 
-				catch(ReflectionException $e) {
-				}
-			}
-		}
+            while ($reflector = $reflector->getParentClass()) {
+                try {
+                    $attribute = $reflector->getProperty($attributeName);
+                    break;
+                }
 
-		if (isset($attribute)) {
-			if ($attribute == NULL || $attribute->isPublic()) {
-				return $object->$attributeName;
-			} else {
-				$array         = (array)$object;
-				$protectedName = "\0*\0" . $attributeName;
+                catch(ReflectionException $e) {
+                }
+            }
+        }
 
-				if (array_key_exists($protectedName, $array)) {
-					return $array[$protectedName];
-				} else {
-					$classes = self::getHierarchy(get_class($object));
+        if (isset($attribute)) {
+            if (!$attribute || $attribute->isPublic()) {
+                return $object->$attributeName;
+            }
+            $attribute->setAccessible(TRUE);
+            $value = $attribute->getValue($object);
+            $attribute->setAccessible(FALSE);
 
-					foreach ($classes as $class) {
-						$privateName = sprintf(
-						  "\0%s\0%s",
+            return $value;
+        }
 
-						  $class,
-						  $attributeName
-						);
+        throw new PHPUnit_Framework_Exception(
+          sprintf(
+            'Attribute "%s" not found in object.',
+            $attributeName
+          )
+        );
+    }
 
-						if (array_key_exists($privateName, $array)) {
-							return $array[$privateName];
-						}
-					}
-				}
-			}
-		}
+    /**
+     * Returns the package information of a user-defined class.
+     *
+     * @param  array  $parts
+     * @param  string $join
+     * @return string
+     * @since  Method available since Release 3.2.12
+     */
+    protected static function arrayToName(array $parts, $join = '\\')
+    {
+        $result = '';
 
-		throw new PHPUnit_Framework_Exception(
-		  sprintf(
-			'Attribute "%s" not found in object.',
+        if (count($parts) > 1) {
+            array_pop($parts);
 
-			$attributeName
-		  )
-		);
-	}
+            $result = join($join, $parts);
+        }
 
-	/**
-	 *
-	 *
-	 * @param  string $className
-	 * @return array
-	 * @since  Method available since Release 3.4.0
-	 */
-	public static function parseFullyQualifiedClassName($className)
-	{
-		$result = array(
-		  'namespace'               => '',
-		  'className'               => $className,
-		  'fullyQualifiedClassName' => $className
-		);
-
-		if (strpos($className, '\\') !== FALSE) {
-			$tmp                 = explode('\\', $className);
-			$result['className'] = $tmp[count($tmp)-1];
-			$result['namespace'] = self::arrayToName($tmp);
-		}
-
-		return $result;
-	}
-
-	/**
-	 * Returns the package information of a user-defined class.
-	 *
-	 * @param  array  $parts
-	 * @param  string $join
-	 * @return string
-	 * @since  Method available since Release 3.2.12
-	 */
-	protected static function arrayToName(array $parts, $join = '\\')
-	{
-		$result = '';
-
-		if (count($parts) > 1) {
-			array_pop($parts);
-
-			$result = join($join, $parts);
-		}
-
-		return $result;
-	}
+        return $result;
+    }
 }
