@@ -266,6 +266,11 @@ final class ManagePresenter extends BasePresenter
 	{
 		$form = new AddVersionForm();
 		$form->onSuccess[] = callback($this, 'addVersionFormSubmitted');
+
+		if ($this->addon) {
+			$form['license']->setDefaultValue($this->addon->defaultLicense);
+		}
+
 		return $form;
 	}
 
