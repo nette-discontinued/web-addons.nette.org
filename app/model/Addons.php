@@ -74,12 +74,13 @@ class Addons extends Table
 // === CRUD ====================================================================
 
 	/**
-	 * Saves addos to database.
+	 * Saves addon to database.
 	 *
 	 * @author Jan Tvrdík
 	 * @param  Addon
-	 * @return \Nette\Database\Table\ActiveRow created row
-	 * @throws \NetteAddons\DuplicateEntryException if addons with given composer name already exists
+	 * @return ActiveRow created row
+	 * @throws \NetteAddons\DuplicateEntryException
+	 * @throws \PDOException
 	 */
 	public function add(Addon $addon)
 	{
@@ -92,36 +93,30 @@ class Addons extends Table
 		}
 
 		$this->connection->beginTransaction();
-
 		try {
-			$addonRow = $this->createRow(array(
+			$row = $this->createRow(array(
 				'name'             => $addon->name,
 				'composerName'     => $addon->composerName,
-				'userId'           => $addon->userId, // author
+				'userId'           => $addon->userId,
+				'repository'       => $addon->repository,
 				'shortDescription' => $addon->shortDescription,
 				'description'      => $addon->description,
+				'demo'             => $addon->demo ?: NULL,
 				'defaultLicense'   => $addon->defaultLicense,
-				'repository'       => $addon->repository,
-				'demo'             => $addon->demo,
 				'updatedAt'        => new Datetime('now'),
 			));
 
+			$addon->id = $row->id;
 			foreach ($addon->versions as $version) {
-				try {
-					$versionRow = $this->versions->add($addon, $version);
-					// $this->dependencies->setVersionDependencies($versionRow, $version); // move to versions
-
-				} catch (\NetteAddons\InvalidArgumentException $e) {
-					throw new \NetteAddons\InvalidStateException("Cannot create version {$version->version}.", NULL, $e);
-				}
+				$this->versions->add($version);
 			}
 
 			foreach ($addon->tags as $tag) {
-				$this->tags->addAddonTag($addonRow, $tag);
+				$this->tags->addAddonTag($row, $tag);
 			}
 
 			$this->connection->commit();
-			return $addonRow;
+			return $row;
 
 		} catch (\Exception $e) {
 			$this->connection->rollBack();
