@@ -37,44 +37,27 @@ class AddonVersions extends Table
 	/**
 	 * Adds new version of given addon.
 	 *
-	 * @param  Addon
 	 * @param  AddonVersion
-	 * @return \Nette\Database\Table\ActiveRow created row
+	 * @return ActiveRow created row
+	 * @throws \NetteAddons\DuplicateEntryException
+	 * @throws \PDOException
 	 */
-	public function add(Addon $addon, AddonVersion $version)
+	public function add(AddonVersion $version)
 	{
-		/*if ($version->uplodedFile) {
-			if (!$version->uplodedFile->isOk()) {
-				throw new \NetteAddons\InvalidArgumentException('Uploaded file is not OK.');
-			}
+		$row = $this->createRow(array(
+			'addonId' => $version->addon->id,
+			'version' => $version->version,
+			'license' => $version->license,
+			'distType' => $version->distType,
+			'distUrl' => $version->distUrl,
+			'sourceType' => $version->sourceType,
+			'sourceUrl' => $version->sourceUrl,
+			'sourceReference' => $version->sourceReference,
+			'composerJson' => $version->composerJson,
+		));
 
-			$fileName = $version->getFilename($addon);
-			$version->uplodedFile->move($this->uploadDir . '/' . $fileName);
-			$version->link = $this->uploadBaseUrl . '/' . $fileName;
-
-		} elseif (empty($version->link)) {
-			throw new \NetteAddons\InvalidArgumentException('AddonVersion::$link is required.');
-		}*/
-
-		// $this->connection->query('SAVEPOINT addVersion');
-
-		try {
-			$row = $this->createRow(array(
-				'addonId'      => $addon->id,
-				'version'      => $version->version,
-				'license'      => $version->license /*?: $addon->defaultLicense*/,
-				'link'         => $version->link,
-				'composerJson' => $version->composerJson,
-			));
-
-			$this->dependencies->setVersionDependencies($addon, $version);
-			// $this->connection->query('');
-			return $row;
-
-		} catch (\Exception $e) {
-			// $this->connection->rollBack();
-			throw $e;
-		}
+		$this->dependencies->setVersionDependencies($version);
+		return $row;
 	}
 
 
