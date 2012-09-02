@@ -258,7 +258,7 @@ final class ManagePresenter extends BasePresenter
 	 */
 	protected function createComponentAddVersionForm()
 	{
-		$form = new AddVersionForm();
+		$form = new AddVersionForm($this->getContext()->formValidators); // TODO: replace context by DI
 		$form->onSuccess[] = callback($this, 'addVersionFormSubmitted');
 
 		if ($this->addon) {

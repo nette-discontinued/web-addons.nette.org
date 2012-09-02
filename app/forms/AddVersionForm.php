@@ -2,6 +2,8 @@
 
 namespace NetteAddons;
 
+use NetteAddons\Model\Utils\FormValidators;
+use Nette\Forms;
 use Nette\Utils\Strings;
 
 
@@ -11,48 +13,40 @@ use Nette\Utils\Strings;
  */
 class AddVersionForm extends BaseForm
 {
+	/** @var FormValidators */
+	private $validators;
+
+
+
+	public function __construct(FormValidators $validators)
+	{
+		$this->validators = $validators;
+		parent::__construct();
+	}
+
+
 
 	protected function buildForm()
 	{
 		$this->addText('version', 'Version', 10, 20)
 			->setRequired("%label is required")
-			->addRule(callback($this, 'validateVersion'), 'Invalid version.');
+			->addRule($this->validators->isVersionValid, 'Invalid version.');
 
 		$this->addUpload('archive', 'Archive')
-			->setRequired("%label is required");
+			->setRequired("%label is required")
+			->addRule($this->isArchiveValid, 'Only ZIP files are allowed.');
 
 		$this->addText('license', 'License', 20, 100)
-			->setRequired("%label is required");
+			->setRequired("%label is required")
+			->addRule($this->validators->isLicenseValid, 'Invalid version.');
 
 		$this->addSubmit('create', 'Create');
-		$this->onValidate[] = callback($this, 'validateArchive');
 	}
 
 
-	/**
-	 * @param \NetteAddons\AddVersionForm $form
-	 */
-	public function validateArchive(AddVersionForm $form)
+
+	public function isArchiveValid(Forms\Controls\UploadControl $control)
 	{
-		/** @var $file \Nette\Http\FileUpload */
-		$file = $form['archive']->getValue();
-		if (!Strings::endsWith($file->getName(), '.zip')) {
-			$form['archive']->addError('Only ZIP files are allowed.');
-			$form->valid = FALSE;
-		}
+		return Strings::endsWith($control->getValue()->getName(), '.zip');
 	}
-
-	/**
-	 * Checks whether version is in valid format.
-	 *
-	 * @author Jan Tvrdík
-	 * @param  \Nette\Forms\Controls\TextInput
-	 * @return bool
-	 */
-	public function validateVersion(\Nette\Forms\Controls\TextInput $control)
-	{
-		$version = new Model\Version($control->getValue());
-		return $version->isValid();
-	}
-
 }
