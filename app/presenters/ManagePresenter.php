@@ -283,7 +283,7 @@ final class ManagePresenter extends BasePresenter
 		$values = $form->getValues();
 
 		try {
-			$this->manager->addVersionFromValues($this->addon, $values);
+			$this->manager->addVersionFromValues($this->addon, $values, $this->getUser()->getIdentity());
 			$this->updater->update($this->addon);
 			$this->storeAddon();
 

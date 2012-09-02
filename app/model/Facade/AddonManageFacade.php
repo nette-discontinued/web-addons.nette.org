@@ -132,11 +132,12 @@ class AddonManageFacade extends Nette\Object
 	 *
 	 * @param  Model\Addon
 	 * @param  array
+	 * @param  Nette\Security\Identity
 	 * @return Model\AddonVersion
 	 * @throws \NetteAddons\InvalidArgumentException
 	 * @throws \NetteAddons\IOException
 	 */
-	public function addVersionFromValues(Model\Addon $addon, $values)
+	public function addVersionFromValues(Model\Addon $addon, $values, Nette\Security\Identity $owner)
 	{
 		if (!$values->license) {
 			throw new \NetteAddons\InvalidArgumentException("License is mandatory.");
@@ -164,6 +165,13 @@ class AddonManageFacade extends Nette\Object
 
 		$version->distType = 'zip';
 		$version->distUrl = $fileUrl;
+		$version->composerJson = Model\Utils\Composer::createComposerJson($version);
+		$version->composerJson->authors = array(
+			(object) array(
+				'name' => $owner->name,
+				'email' => $owner->email, // Note: Some users may not like disclosing their e-mail.
+			)
+		);
 
 		$addon->versions[] = $version;
 
