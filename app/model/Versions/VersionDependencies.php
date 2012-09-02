@@ -12,39 +12,34 @@ use Nette\Database\Table\ActiveRow;
  */
 class VersionDependencies extends Table
 {
-
 	/** @var string */
 	protected $tableName = 'addons_dependencies';
 
 
 
 	/**
-	 * @param Addon
-	 * @param AddonVersion
+	 * @param  AddonVersion
+	 * @return void
+	 * @throws \NetteAddons\DuplicateEntryException
+	 * @throws \PDOException
 	 */
-	public function setVersionDependencies(Addon $addon, AddonVersion $version)
+	public function setVersionDependencies(AddonVersion $version)
 	{
-		foreach (array('require', 'suggest', 'provide', 'replace', 'conflict', 'recommend') as $type) {
-			foreach ($version->$type as $packageName => $versionName) {
-				if (strpos($packageName, '/') !== FALSE){
-					if ($dep = $this->findAddon($packageName)) {
-						$insert = array(
-							'dependencyId' => $dep->getPrimary()
-						);
-					}
+		foreach (AddonVersion::getLinkTypes() as $type) {
+			foreach ($version->$type as $packageName => $versionNumber) {
+				if (strpos($packageName, '/') !== FALSE && ($dep = $this->findAddon($packageName))) {
+					$depId = $dep->getPrimary();
+				} else {
+					$depId = NULL;
 				}
 
-				if (!isset($insert)) {
-					$insert = array(
-						'packageName' => $packageName
-					);
-				}
-
-				$this->createOrUpdate(array(
-					'addonId' => $addon->id,
-					'version' => $versionName,
+				$this->createRow(array(
+					'addonId' => $version->addon->id,
+					'dependencyId' => $depId,
+					'packageName' => $packageName,
+					'version' => $versionNumber,
 					'type' => $type,
-				) + $insert);
+				));
 			}
 		}
 	}
@@ -52,9 +47,10 @@ class VersionDependencies extends Table
 
 
 	/**
-	 * @param string $vendorName
-	 * @param string $packageName
-	 * @return \Nette\Database\Table\ActiveRow
+	 * Finds addon by composer name.
+	 *
+	 * @param  string
+	 * @return ActiveRow|FALSE
 	 */
 	private function findAddon($composerName)
 	{
@@ -62,5 +58,4 @@ class VersionDependencies extends Table
 			->where('composerName = ?', $composerName)
 			->limit(1)->fetch();
 	}
-
 }
