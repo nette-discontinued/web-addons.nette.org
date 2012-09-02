@@ -16,9 +16,6 @@ use Nette\Http;
  */
 class Addons extends Table
 {
-	/** @var string Prefix where the uploaded files are stored. */
-	private $uploadUri;
-
 	/** @var string */
 	protected $tableName = 'addons';
 
@@ -131,28 +128,4 @@ class Addons extends Table
 			throw $e;
 		}
 	}
-
-
-
-	public function setUploadUri($uploadUri, Http\IRequest $request)
-	{
-		$this->uploadUri = rtrim($request->getUrl()->getBaseUrl(), '/') . $uploadUri;
-	}
-
-
-
-	/**
-	 * @param Addon|ActiveRow $addon
-	 * @param AddonVersion|ActiveRow $version
-	 * @return string
-	 */
-	public function getZipUrl($addon, $version)
-	{
-		if ($addon->repository) {
-			return $addon->repository . '/zipball/' . $version->version;
-		} else {
-			return $this->uploadUri . '/' . $version->filename;
-		}
-	}
-
 }
