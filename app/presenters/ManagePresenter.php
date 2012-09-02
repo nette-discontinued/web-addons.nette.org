@@ -136,7 +136,7 @@ final class ManagePresenter extends BasePresenter
 	 */
 	protected function createComponentAddAddonForm()
 	{
-		$form = new AddAddonForm();
+		$form = new AddAddonForm($this->getContext()->formValidators);
 		$form->onSuccess[] = callback($this, 'addAddonFormSubmitted');
 
 		if ($this->addon !== NULL) {

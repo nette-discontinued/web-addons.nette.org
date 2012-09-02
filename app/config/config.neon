@@ -58,6 +58,9 @@ services:
 			github: @ghImporterFactory
 		}]
 
+	licenseValidator: Composer\Util\SpdxLicenseIdentifier
+	formValidators: NetteAddons\Model\Utils\FormValidators
+
 factories:
 	ghRepository:
 		parameters: [vendor, name]

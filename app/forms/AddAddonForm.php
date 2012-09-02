@@ -3,6 +3,7 @@
 namespace NetteAddons;
 
 use NetteAddons\Model\Addon;
+use NetteAddons\Model\Utils\FormValidators;
 use Nette;
 use Nette\Utils\Html;
 
@@ -14,13 +15,27 @@ use Nette\Utils\Html;
  */
 class AddAddonForm extends BaseForm
 {
+	/** @var FormValidators */
+	private $validators;
+
+
+
+	public function __construct(FormValidators $validators)
+	{
+		$this->validators = $validators;
+		parent::__construct();
+	}
+
+
+
 	protected function buildForm()
 	{
 		$this->addText('name', 'Name', 40, 100)
 			->setRequired();
 		$this->addText('composerName', 'Composer name')
 			->setRequired()
-			->addRule(self::PATTERN, 'Invalid composer name', '^[a-z]+(-[a-z]+)*/[a-z]+(-[a-z]+)*$')
+			->addRule(self::PATTERN, 'Invalid composer name', FormValidators::COMPOSER_NAME_RE)
+			->addRule($this->validators->isComposerNameUnique, 'This composer name has been already taken.')
 			->setOption('description', '<vendor>/<project-name>, only lowercase letters and dash separation is allowed');
 		$this->addText('shortDescription', 'Short description', NULL, 250)
 			->setAttribute('class', 'span4')
@@ -30,7 +45,7 @@ class AddAddonForm extends BaseForm
 			->setRequired();
 		$this->addText('defaultLicense', 'License')
 			->setRequired()
-			->addRule($this->validateLicense, 'Invalid license identifier.')
+			->addRule($this->validators->isLicenseValid, 'Invalid license identifier.')
 			->setOption(
 				'description',
 				Html::el()->setHtml(
@@ -60,17 +75,5 @@ class AddAddonForm extends BaseForm
 			'description' => $addon->description,
 			'demo' => $addon->demo
 		));
-	}
-
-
-
-	/**
-	 * @param  Nette\Forms\IControl
-	 * @return bool
-	 */
-	public function validateLicense(Nette\Forms\IControl $control)
-	{
-		$validator = new \Composer\Util\SpdxLicenseIdentifier();
-		return $validator->validate($control->getValue());
 	}
 }
