@@ -5,7 +5,6 @@ namespace NetteAddons;
 use NetteAddons\Model\Addon,
 	NetteAddons\Model\Addons,
 	NetteAddons\Model\AddonVersion,
-	NetteAddons\Model\AddonUpdater,
 	NetteAddons\Model\IAddonImporter,
 	NetteAddons\Model\Facade\AddonManageFacade;
 use Nette\Http\Session,
@@ -20,9 +19,6 @@ final class ManagePresenter extends BasePresenter
 
 	/** @var AddonManageFacade */
 	private $manager;
-
-	/** @var AddonUpdater */
-	private $updater;
 
 	/** @var Addons */
 	private $addons;
@@ -42,13 +38,11 @@ final class ManagePresenter extends BasePresenter
 
 
 	/**
-	 * @param \NetteAddons\Model\AddonUpdater $updater
 	 * @param \NetteAddons\Model\Addons $addons
 	 * @param \Nette\Http\Session $session
 	 */
-	public function setContext(AddonUpdater $updater, Addons $addons, Session $session)
+	public function setContext(Addons $addons, Session $session)
 	{
-		$this->updater = $updater;
 		$this->addons = $addons;
 		$this->session = $session->getSection('NetteAddons.ManagePresenter');
 		$this->manager = $this->createAddonManageFacade($addons);
@@ -284,7 +278,6 @@ final class ManagePresenter extends BasePresenter
 
 		try {
 			$this->manager->addVersionFromValues($this->addon, $values, $this->getUser()->getIdentity());
-			$this->updater->update($this->addon);
 			$this->storeAddon();
 
 		} catch (\NetteAddons\IOException $e) {
@@ -358,16 +351,14 @@ final class ManagePresenter extends BasePresenter
 		}
 
 		try {
-			$this->addon->userId = $this->getUser()->getId();
 			$this->addons->add($this->addon);
-			//$row = $this->updater->update($this->addon);
+			$this->removeStoredAddon();
 			$this->flashMessage('Addon was successfully registered.');
 
-		} catch (\NetteAddons\InvalidStateException $e) {
-			$row = $this->addons->findBy(array('composerName' => $this->addon->composerName));
-			$this->flashMessage("Addon cannot be imported. " . $e->getMessage(), 'danger');
+		} catch (\NetteAddons\DuplicateEntryException $e) {
+			$this->flashMessage("Adding new addon failed.", 'danger');
 		}
-		$this->removeStoredAddon();
+
 
 		if (isset($row->id)) {
 			$this->redirect('Detail:', $row->id);

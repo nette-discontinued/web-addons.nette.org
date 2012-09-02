@@ -47,9 +47,6 @@ services:
 	addonVotes: NetteAddons\Model\AddonVotes
 	versionDependencies: NetteAddons\Model\VersionDependencies
 
-	# importing
-	addonUpdater: NetteAddons\Model\AddonUpdater
-
 	# github
 	curl: NetteAddons\Curl( 50000 )
 
