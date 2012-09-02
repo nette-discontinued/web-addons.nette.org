@@ -446,10 +446,11 @@ final class ManagePresenter extends BasePresenter
 
 	private function createAddonManageFacade($addons)
 	{
+		$currentUrl = $this->getHttpRequest()->getUrl();
 		return new AddonManageFacade(
 			$addons,
 			$this->context->parameters['uploadDir'],
-			$this->getHttpRequest()->getUrl()->getBasePath() . $this->context->parameters['uploadUri']
+			$currentUrl->getHostUrl() . rtrim($currentUrl->getBasePath(), '/') . $this->context->parameters['uploadUri']
 		);
 	}
 }
