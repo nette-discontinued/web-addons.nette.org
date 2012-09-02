@@ -47,15 +47,15 @@ class AddonVersions extends Table
 	public function add(AddonVersion $version)
 	{
 		$row = $this->createRow(array(
-			'addonId' => $version->addon->id,
-			'version' => $version->version,
-			'license' => $version->license,
-			'distType' => $version->distType,
-			'distUrl' => $version->distUrl,
-			'sourceType' => $version->sourceType,
-			'sourceUrl' => $version->sourceUrl,
+			'addonId'         => $version->addon->id,
+			'version'         => $version->version,
+			'license'         => $version->license,
+			'distType'        => $version->distType,
+			'distUrl'         => $version->distUrl,
+			'sourceType'      => $version->sourceType,
+			'sourceUrl'       => $version->sourceUrl,
 			'sourceReference' => $version->sourceReference,
-			'composerJson' => Json::encode($version->composerJson),
+			'composerJson'    => Json::encode($version->composerJson),
 		));
 
 		$this->dependencies->setVersionDependencies($version);

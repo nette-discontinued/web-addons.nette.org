@@ -80,6 +80,7 @@ class Addons extends Table
 	 * @param  Addon
 	 * @return ActiveRow created row
 	 * @throws \NetteAddons\DuplicateEntryException
+	 * @throws \NetteAddons\InvalidArgumentException
 	 * @throws \PDOException
 	 */
 	public function add(Addon $addon)

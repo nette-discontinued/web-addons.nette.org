@@ -130,14 +130,14 @@ final class ManagePresenter extends BasePresenter
 
 
 	/**
-	 * Creates a new form for basic addon info.
+	 * Creates a new form for addon information.
 	 *
 	 * @return AddAddonForm
 	 */
 	protected function createComponentAddAddonForm()
 	{
-		$form = new AddAddonForm($this->getContext()->formValidators);
-		$form->onSuccess[] = callback($this, 'addAddonFormSubmitted');
+		$form = new AddAddonForm($this->getContext()->formValidators); // TODO: replace context by DI
+		$form->onSuccess[] = $this->addAddonFormSubmitted;
 
 		if ($this->addon !== NULL) {
 			$form->setAddonDefaults($this->addon);
@@ -166,23 +166,10 @@ final class ManagePresenter extends BasePresenter
 			$this->addon = new Addon();
 		}
 
-		try {
-			// fill addon with values
-			$this->manager->fillAddonWithValues($this->addon, $form->getValues(TRUE), $this->user->identity);
-			$this->storeAddon();
+		$this->manager->fillAddonWithValues($this->addon, $form->getValues(TRUE), $this->getUser()->getIdentity());
+		$this->storeAddon();
 
-		} catch (\NetteAddons\DuplicateEntryException $e) {
-			if ($this->addon->repository) {
-				$this->flashMessage($e->getMessage());
-				$this->redirect('add');
-
-			} else {
-				$form->addError($e->getMessage());
-				return;
-			}
-		}
-
-		if ($this->addon->repository) {
+		if ($this->addon->repository) { // TODO: use more reliable method
 			$this->flashMessage('Addon created.');
 			$this->redirect('versionImport');
 
@@ -204,26 +191,27 @@ final class ManagePresenter extends BasePresenter
 	protected function createComponentImportAddonForm()
 	{
 		$form = new ImportAddonForm();
-		$form->onSuccess[] = callback($this, 'importAddonFormSubmitted');
+		$form->onSuccess[] = $this->importAddonFormSubmitted;
 		return $form;
 	}
 
 
 
 	/**
-	 * @param \NetteAddons\ImportAddonForm $form
+	 * @param ImportAddonForm
 	 */
 	public function importAddonFormSubmitted(ImportAddonForm $form)
 	{
+		$url = $form->getValues()->url;
 		try {
-			$importer = $this->createAddonImporter($form->values->url);
+			$importer = $this->createAddonImporter($url);
 		} catch (\NetteAddons\NotSupportedException $e) {
-			$form['url']->addError("'{$form->values->url}' is not valid GitHub URL.");
+			$form['url']->addError("'$url' is not valid GitHub URL.");
 			return;
 		}
 
 		try {
-			$this->addon = $this->manager->import($importer, $this->user->identity);
+			$this->addon = $this->manager->import($importer, $this->getUser()->getIdentity());
 			$this->storeAddon();
 			$this->flashMessage('Addon has been successfully imported.');
 			$this->redirect('create');
@@ -241,16 +229,19 @@ final class ManagePresenter extends BasePresenter
 	}
 
 
+
 	/*************** Create a new version ****************/
+
 
 
 	public function actionVersionCreate($id = NULL)
 	{
 		if ($id !== NULL) {
 			$this->addon = Addon::fromActiveRow($this->addons->findOneBy(array('id' => $id)));
-			$this->addon->userId = $this->getUser()->getId();
+			$this->addon->userId = $this->getUser()->getId(); // TODO: probably remove
 		}
 	}
+
 
 
 	/**
@@ -259,7 +250,7 @@ final class ManagePresenter extends BasePresenter
 	protected function createComponentAddVersionForm()
 	{
 		$form = new AddVersionForm($this->getContext()->formValidators); // TODO: replace context by DI
-		$form->onSuccess[] = callback($this, 'addVersionFormSubmitted');
+		$form->onSuccess[] = $this->addVersionFormSubmitted;
 
 		if ($this->addon) {
 			$form['license']->setDefaultValue($this->addon->defaultLicense);
@@ -269,24 +260,24 @@ final class ManagePresenter extends BasePresenter
 	}
 
 
+
 	/**
-	 * @param \NetteAddons\AddVersionForm $form
+	 * @param AddVersionForm
 	 */
 	public function addVersionFormSubmitted(AddVersionForm $form)
 	{
-		$values = $form->getValues();
-
 		try {
+			$values = $form->getValues();
 			$this->manager->addVersionFromValues($this->addon, $values, $this->getUser()->getIdentity());
 			$this->storeAddon();
+			$this->flashMessage('Version created.');
 
 		} catch (\NetteAddons\IOException $e) {
 			$form['archive']->addError('Uploading file failed.');
 			return;
 		}
 
-		$this->flashMessage('Version created.');
-		if (($id = $this->getParameter('id')) !== NULL) {
+		if (($id = $this->getParameter('id')) !== NULL) { // TODO: better
 			$this->redirect('Detail:', $id);
 
 		} else {
@@ -297,6 +288,7 @@ final class ManagePresenter extends BasePresenter
 
 
 	/*************** Import versions ****************/
+
 
 
 	/**
@@ -327,14 +319,15 @@ final class ManagePresenter extends BasePresenter
 	}
 
 
+
 	/**
 	 *
 	 */
 	public function handleImportVersions()
 	{
+		// TODO: $this->addon may be NULL
 		$importer = $this->createAddonImporter($this->addon->repository);
 		$this->manager->importVersions($this->addon, $importer, $this->getUser()->getIdentity());
-
 		$this->storeAddon();
 		$this->redirect('finish');
 	}
@@ -369,7 +362,9 @@ final class ManagePresenter extends BasePresenter
 	}
 
 
+
 	/*************** Addon editing ****************/
+
 
 
 	/**
@@ -383,6 +378,8 @@ final class ManagePresenter extends BasePresenter
 		}
 		$this->addon = Addon::fromActiveRow($this->addonRow);
 	}
+
+
 
 	public function renderEdit()
 	{
@@ -400,6 +397,7 @@ final class ManagePresenter extends BasePresenter
 		$form->onSuccess[] = callback($this, 'editAddonFormSubmitted');
 		return $form;
 	}
+
 
 
 	/**

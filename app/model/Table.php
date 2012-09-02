@@ -94,6 +94,7 @@ abstract class Table extends Nette\Object
 	 * @param  array row values
 	 * @return \Nette\Database\Table\ActiveRow created row
 	 * @throws \NetteAddons\DuplicateEntryException
+	 * @throws \PDOException in case of SQL / database error
 	 */
 	protected function createRow(array $values)
 	{
@@ -102,7 +103,7 @@ abstract class Table extends Nette\Object
 
 		} catch (\PDOException $e) {
 			if ($e->getCode() == 23000) {
-				throw new \NetteAddons\DuplicateEntryException();
+				throw new \NetteAddons\DuplicateEntryException(NULL, NULL, $e);
 			} else {
 				throw $e;
 			}
