@@ -31,6 +31,7 @@ $container = $configurator->createContainer();
 
 // Setup router
 $container->router[] = new Route('index.php', 'Homepage:default', Route::ONE_WAY);
+$container->router[] = new Route('packages.json', 'Packages:default');
 $container->router[] = new Route('<presenter>[/<action>][/<id>]', array(
 	'presenter' => 'Homepage',
 	'action' => 'default'
