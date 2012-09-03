@@ -2,23 +2,23 @@
 
 namespace NetteAddons;
 
+use NetteAddons\Model\Utils\Composer;
 use Nette\Application\Responses\JsonResponse;
 
 
 
 /**
  * @author Jan Marek
+ * @author Jan Tvrdík
  */
 class PackagesPresenter extends BasePresenter
 {
 	public function renderDefault()
 	{
-		$packages = $this->context->addons->findAll();
-		$packages = array_map('NetteAddons\Model\Addon::fromActiveRow', iterator_to_array($packages));
-		$data = $this->context->composer->createPackages($packages);
+		$addons = $this->context->addons->findAll();
+		$addons = array_map('NetteAddons\Model\Addon::fromActiveRow', iterator_to_array($addons));
 
-		$this->sendResponse(new JsonResponse(array(
-			'packages' => $data,
-		)));
+		$packagesJson = Composer::createPackagesJson($addons);
+		$this->sendResponse(new JsonResponse($packagesJson));
 	}
 }
