@@ -13,6 +13,9 @@ use Nette\Database\Table\ActiveRow;
  */
 class AddonVersion extends Nette\Object
 {
+	/** @var int */
+	public $id;
+
 	/** @var string */
 	public $version;
 
@@ -72,6 +75,7 @@ class AddonVersion extends Nette\Object
 	public static function fromActiveRow(ActiveRow $row)
 	{
 		$version = new static;
+		$version->id = $row->id;
 		$version->version = $row->version;
 		$version->license = $row->license;
 		$version->distType = $row->distType;

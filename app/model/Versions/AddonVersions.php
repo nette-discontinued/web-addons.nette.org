@@ -58,6 +58,7 @@ class AddonVersions extends Table
 			'composerJson'    => Json::encode($version->composerJson),
 		));
 
+		$version->id = $row->id;
 		$this->dependencies->setVersionDependencies($version);
 		return $row;
 	}
