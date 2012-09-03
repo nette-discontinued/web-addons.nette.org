@@ -2,18 +2,27 @@
 
 namespace NetteAddons;
 
-use NetteAddons\Model\Addon,
-	NetteAddons\Model\Addons,
-	NetteAddons\Model\AddonVersion,
-	NetteAddons\Model\IAddonImporter,
-	NetteAddons\Model\Facade\AddonManageFacade;
-use Nette\Http\Session,
-	Nette\Http\SessionSection;
+use NetteAddons\Model\Addon;
+use NetteAddons\Model\Addons;
+use NetteAddons\Model\AddonVersion;
+use NetteAddons\Model\IAddonImporter;
+use NetteAddons\Model\Authorizator;
+use NetteAddons\Model\Facade\AddonManageFacade;
+use NetteAddons\Model\Utils\FormValidators;
+use Nette\Http\Session;
+use Nette\Http\SessionSection;
+use Nette\Utils\Strings;
 
 
 
 final class ManagePresenter extends BasePresenter
 {
+	/**
+	 * @var string token used for storing addon in session
+	 * @persistent
+	 */
+	public $token;
+
 	/** @var SessionSection */
 	private $session;
 
@@ -23,28 +32,30 @@ final class ManagePresenter extends BasePresenter
 	/** @var Addons */
 	private $addons;
 
-	/**
-	 * @var string
-	 * @persistent
-	 */
-	public $token;
+	/** @var FormValidators */
+	private $formValidators;
 
-	/** @var Addon from the session. */
+	/** @var Authorizator */
+	private $authorizator;
+
+	/** @var Addon|NULL from the session. */
 	private $addon;
 
-	/** @var \Nette\Database\Table\ActiveRow low-level database row. */
-	private $addonRow;
-
 
 
 	/**
-	 * @param \NetteAddons\Model\Addons $addons
-	 * @param \Nette\Http\Session $session
+	 * @param  Addons
+	 * @param  Session
+	 * @param  FormValidators
+	 * @param  Authorizator
+	 * @return void
 	 */
-	public function setContext(Addons $addons, Session $session)
+	public function setContext(Addons $addons, Session $session, FormValidators $formValidators, Authorizator $authorizator)
 	{
 		$this->addons = $addons;
 		$this->session = $session->getSection('NetteAddons.ManagePresenter');
+		$this->formValidators = $formValidators;
+		$this->authorizator = $authorizator;
 		$this->manager = $this->createAddonManageFacade($addons);
 	}
 
@@ -60,73 +71,11 @@ final class ManagePresenter extends BasePresenter
 		}
 
 		$this->restoreAddon();
-	}
-
-
-
-	/*************** Session storage ****************/
-
-
-	/**
-	 * Generates a new token for the wizzard.
-	 */
-	private function generateToken()
-	{
-		$this->token = base_convert(md5(lcg_value()), 16, 36);
-	}
-
-
-	/**
-	 * Gets the session key for the addon stored under the current token.
-	 *
-	 * If there is no token, triggers generation of a new one.
-	 * @return string
-	 */
-	private function getSessionKey()
-	{
-		if ($this->token === NULL) {
-			$this->generateToken();
-		}
-		return "addon-$this->token";
-	}
-
-
-	/**
-	 * Stores the addon object into the session.
-	 */
-	protected function storeAddon()
-	{
-		$this->addon->userId = $this->getUser()->getId();
-		$this->session[$this->getSessionKey()] = $this->addon;
-	}
-
-
-	/**
-	 * Restores the addon object from session.
-	 */
-	protected function restoreAddon()
-	{
-		if ($this->token !== NULL) {
-			$key = $this->getSessionKey();
-			if (isset($this->session[$key])) {
-				$this->addon = $this->session[$key];
-				$this->addon->userId = $this->getUser()->getId();
-			}
+		if ($this->addon && !$this->authorizator->isAllowed($this->addon, 'manage')) {
+			$this->error('You are not allowed to manage this addon.', 403);
 		}
 	}
 
-
-	/**
-	 */
-	protected function removeStoredAddon()
-	{
-		$this->addon = NULL;
-		$key = $this->getSessionKey();
-		unset($this->session[$key]);
-	}
-
-
-	/*************** Addon creation ****************/
 
 
 	/**
@@ -136,7 +85,7 @@ final class ManagePresenter extends BasePresenter
 	 */
 	protected function createComponentAddAddonForm()
 	{
-		$form = new AddAddonForm($this->getContext()->formValidators); // TODO: replace context by DI
+		$form = new AddAddonForm($this->formValidators);
 		$form->onSuccess[] = $this->addAddonFormSubmitted;
 
 		if ($this->addon !== NULL) {
@@ -181,10 +130,6 @@ final class ManagePresenter extends BasePresenter
 
 
 
-	/*************** Addon import ****************/
-
-
-
 	/**
 	 * @return ImportAddonForm
 	 */
@@ -202,9 +147,10 @@ final class ManagePresenter extends BasePresenter
 	 */
 	public function importAddonFormSubmitted(ImportAddonForm $form)
 	{
-		$url = $form->getValues()->url;
 		try {
+			$url = $form->getValues()->url;
 			$importer = $this->createAddonImporter($url);
+
 		} catch (\NetteAddons\NotSupportedException $e) {
 			$form['url']->addError("'$url' is not valid GitHub URL.");
 			return;
@@ -230,15 +176,23 @@ final class ManagePresenter extends BasePresenter
 
 
 
-	/*************** Create a new version ****************/
-
-
-
+	/**
+	 * @param int|NULL addon id
+	 */
 	public function actionVersionCreate($id = NULL)
 	{
-		if ($id !== NULL) {
-			$this->addon = Addon::fromActiveRow($this->addons->findOneBy(array('id' => $id)));
-			$this->addon->userId = $this->getUser()->getId(); // TODO: probably remove
+		if ($id !== NULL) { // we're manually adding new version to an already existing addon
+			if ($this->addon !== NULL) {
+				$this->error("Invalid request. Parameters token and id must not be present at the same time.");
+			}
+			$row = $this->addons->find($id);
+			if (!$row) {
+				$this->error("Addon with ID #$id does not exist.");
+			}
+			$this->addon = Addon::fromActiveRow($row);
+			if (!$this->authorizator->isAllowed($this->addon, 'manage')) {
+				$this->error("You are not allowed to manage this addon.", 403);
+			}
 		}
 	}
 
@@ -249,11 +203,13 @@ final class ManagePresenter extends BasePresenter
 	 */
 	protected function createComponentAddVersionForm()
 	{
-		$form = new AddVersionForm($this->getContext()->formValidators); // TODO: replace context by DI
+		$form = new AddVersionForm($this->formValidators);
 		$form->onSuccess[] = $this->addVersionFormSubmitted;
 
 		if ($this->addon) {
-			$form['license']->setDefaultValue($this->addon->defaultLicense);
+			$form->setDefaultValues(array(
+				'license' => $this->addon->defaultLicense,
+			));
 		}
 
 		return $form;
@@ -287,17 +243,13 @@ final class ManagePresenter extends BasePresenter
 
 
 
-	/*************** Import versions ****************/
-
-
-
 	/**
 	 * @param int
-	 * @throws \Nette\Application\BadRequestException
 	 */
 	public function actionCheckVersions($id)
 	{
-		if (($this->addonRow = $this->addons->findOneBy(array('id' => $id))) === FALSE) {
+		throw new \NetteAddons\NotImplementedException();
+		/*if (($this->addonRow = $this->addons->find($id)) === FALSE) {
 			throw new \Nette\Application\BadRequestException('Invalid addon ID.');
 		}
 
@@ -315,21 +267,26 @@ final class ManagePresenter extends BasePresenter
 			$this->flashMessage($e->getMessage() . ' Maybe missing license?');
 		}
 
-		$this->redirect('Detail:default', $id);
+		$this->redirect('Detail:default', $id);*/
 	}
 
 
 
-	/**
-	 *
-	 */
 	public function handleImportVersions()
 	{
-		// TODO: $this->addon may be NULL
-		$importer = $this->createAddonImporter($this->addon->repository);
-		$this->manager->importVersions($this->addon, $importer, $this->getUser()->getIdentity());
-		$this->storeAddon();
-		$this->redirect('finish');
+		if (!$this->addon) {
+			$this->error();
+		}
+
+		try {
+			$importer = $this->createAddonImporter($this->addon->repository);
+			$this->manager->importVersions($this->addon, $importer, $this->getUser()->getIdentity());
+			$this->storeAddon();
+			$this->redirect('finish');
+
+		} catch (\NetteAddons\NotSupportedException $e) {
+			$this->error();
+		}
 	}
 
 
@@ -340,43 +297,33 @@ final class ManagePresenter extends BasePresenter
 	public function actionFinish()
 	{
 		if ($this->addon === NULL) {
-			$this->redirect('create');
+			$this->error();
 		}
 
 		try {
 			$this->addons->add($this->addon);
 			$this->removeStoredAddon();
 			$this->flashMessage('Addon was successfully registered.');
+			$this->redirect('Detail:', $this->addon->id);
 
 		} catch (\NetteAddons\DuplicateEntryException $e) {
 			$this->flashMessage("Adding new addon failed.", 'danger');
-		}
-
-
-		if (isset($row->id)) {
-			$this->redirect('Detail:', $row->id);
-
-		} else {
-			$this->redirect('Homepage:');
+			$this->redirect('create');
 		}
 	}
 
 
 
-	/*************** Addon editing ****************/
-
-
-
 	/**
-	 * @param $id
-	 * @throws \Nette\Application\BadRequestException
+	 * @param int addon id
 	 */
 	public function actionEdit($id)
 	{
-		if (($this->addonRow = $this->addons->findOneBy(array('id' => $id))) === FALSE) {
-			throw new \Nette\Application\BadRequestException('Invalid addon ID.');
+		$row = $this->addon->find($id);
+		if (!$row) {
+			$this->error();
 		}
-		$this->addon = Addon::fromActiveRow($this->addonRow);
+		$this->addon = Addon::fromActiveRow($row);
 	}
 
 
@@ -387,6 +334,7 @@ final class ManagePresenter extends BasePresenter
 	}
 
 
+
 	/**
 	 * @return EditAddonForm
 	 */
@@ -394,27 +342,30 @@ final class ManagePresenter extends BasePresenter
 	{
 		$form = new EditAddonForm();
 		$form->setAddonDefaults($this->addon);
-		$form->onSuccess[] = callback($this, 'editAddonFormSubmitted');
+		$form->onSuccess[] = $this->editAddonFormSubmitted;
+
 		return $form;
 	}
 
 
 
 	/**
-	 * @param \NetteAddons\EditAddonForm $form
+	 * @param EditAddonForm
 	 */
 	public function editAddonFormSubmitted(EditAddonForm $form)
 	{
 		$values = $form->getValues();
 
-		$this->addonRow->name = $values->name;
+		throw new \NetteAddons\NotImplementedException();
+
+		/*$this->addonRow->name = $values->name;
 		$this->addonRow->shortDescription = $values->shortDescription;
 		$this->addonRow->description = $values->description;
 		$this->addonRow->demo = $values->demo;
 		$this->addonRow->update();
 
 		$this->flashMessage('Addon saved.');
-		$this->redirect('Detail:', $this->addonRow->id);
+		$this->redirect('Detail:', $this->addonRow->id);*/
 	}
 
 
@@ -441,5 +392,68 @@ final class ManagePresenter extends BasePresenter
 			$this->context->parameters['uploadDir'],
 			$currentUrl->getHostUrl() . rtrim($currentUrl->getBasePath(), '/') . $this->context->parameters['uploadUri']
 		);
+	}
+
+
+
+// === Storing addon in session ================================================
+
+
+	/**
+	 * Gets the session key for the addon stored under the current token.
+	 * If there is no token, it generates a new one.
+	 *
+	 * @return string
+	 */
+	private function getSessionKey()
+	{
+		if ($this->token === NULL) {
+			$this->token = Strings::random();
+		}
+
+		return "addon-$this->token";
+	}
+
+
+
+	/**
+	 * Stores the addon object into the session.
+	 *
+	 * @return void
+	 */
+	private function storeAddon()
+	{
+		$key = $this->getSessionKey();
+		$this->session[$key] = $this->addon;
+	}
+
+
+
+	/**
+	 * Tries to restore the addon object from session.
+	 *
+	 * @return void
+	 */
+	private function restoreAddon()
+	{
+		if ($this->token !== NULL) {
+			$key = $this->getSessionKey();
+			if (isset($this->session[$key]) && $this->session[$key] instanceof Addon) {
+				$this->addon = $this->session[$key];
+			}
+		}
+	}
+
+
+
+	/**
+	 * Removes the addon from session.
+	 *
+	 * @return void
+	 */
+	private function removeStoredAddon()
+	{
+		$key = $this->getSessionKey();
+		unset($this->session[$key]);
 	}
 }
