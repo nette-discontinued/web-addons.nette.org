@@ -4,6 +4,7 @@ namespace NetteAddons;
 
 use NetteAddons\Model\Utils\FormValidators;
 use Nette\Forms;
+use Nette\Utils\Html;
 use Nette\Utils\Strings;
 
 
@@ -38,7 +39,13 @@ class AddVersionForm extends BaseForm
 
 		$this->addText('license', 'License', 20, 100)
 			->setRequired("%label is required")
-			->addRule($this->validators->isLicenseValid, 'Invalid version.');
+			->addRule($this->validators->isLicenseValid, 'Invalid license identifier.')
+			->setOption(
+				'description',
+				Html::el()->setHtml(
+					'See <a href="http://www.spdx.org/licenses/">SPDX Open Source License Registry</a> for list of possible identifiers.'
+				)
+			);
 
 		$this->addSubmit('create', 'Create');
 	}
