@@ -50,6 +50,11 @@ class FormValidators extends Nette\Object
 
 	public function isVersionValid(Forms\IControl $control)
 	{
+		$value = $control->getValue();
+		if (Strings::match($value, '#^dev-[a-z0-9._-]#i')) { // e.g. 'dev-master'
+			return TRUE;
+		}
+
 		$version = new Version($control->getValue());
 		return $version->isValid();
 	}
