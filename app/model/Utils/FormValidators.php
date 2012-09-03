@@ -14,7 +14,7 @@ use Composer\Util\SpdxLicenseIdentifier;
 class FormValidators extends Nette\Object
 {
 	/** composerName regular expression */
-	const COMPOSER_NAME_RE = '^[a-z]+(-[a-z]+)*/[a-z]+(-[a-z]+)*$';
+	const COMPOSER_NAME_RE = '^[a-z0-9]+(-[a-z0-9]+)*/[a-z0-9]+(-[a-z0-9]+)*$';
 
 	/** @var Addons */
 	private $addonsRepo;
