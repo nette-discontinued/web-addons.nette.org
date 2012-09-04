@@ -23,6 +23,12 @@ final class ManagePresenter extends BasePresenter
 	 */
 	public $token;
 
+	/**
+	 * @var int
+	 * @persistent
+	 */
+	public $addonId;
+
 	/** @var SessionSection */
 	private $session;
 
@@ -70,7 +76,18 @@ final class ManagePresenter extends BasePresenter
 			$this->redirect('Sign:in', $this->getApplication()->storeRequest());
 		}
 
-		$this->restoreAddon();
+		if ($this->token && $this->addonId) {
+			$this->error('Parameters token and addonId must not be present at the same time.');
+		}
+
+		if ($this->token) {
+			$this->restoreAddon();
+		} elseif ($this->addonId) {
+			$row = $this->addons->find($this->addonId);
+			if (!$row) $this->error();
+			$this->addon = Addon::fromActiveRow($row);
+		}
+
 		if ($this->addon && !$this->authorizator->isAllowed($this->addon, 'manage')) {
 			$this->error('You are not allowed to manage this addon.', 403);
 		}
@@ -320,21 +337,7 @@ final class ManagePresenter extends BasePresenter
 
 
 
-	/**
-	 * @param int addon id
-	 */
-	public function actionEditAddon($id)
-	{
-		$row = $this->addons->find($id);
-		if (!$row) {
-			$this->error();
-		}
-		$this->addon = Addon::fromActiveRow($row);
-	}
-
-
-
-	public function renderEditAddon()
+	public function renderEditAddon($addonId)
 	{
 		$this->template->addon = $this->addon;
 	}
