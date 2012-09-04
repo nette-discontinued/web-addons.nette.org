@@ -2,66 +2,51 @@
 
 namespace NetteAddons\Model\Utils;
 
-use NetteAddons\Model\Addons;
-use NetteAddons\Model\Version;
 use Nette;
 use Nette\Forms;
-use Nette\Utils\Strings;
-use Composer\Util\SpdxLicenseIdentifier;
 
 
 
 class FormValidators extends Nette\Object
 {
 	/** composerName regular expression */
-	const COMPOSER_NAME_RE = '^[a-z0-9]+(-[a-z0-9]+)*/[a-z0-9]+(-[a-z0-9]+)*$';
+	const COMPOSER_NAME_RE = Validators::COMPOSER_NAME_RE;
 
-	/** @var Addons */
-	private $addonsRepo;
-
-	/** @var SpdxLicenseIdentifier */
-	private $licenseValidator;
+	/** @var Validators */
+	private $validators;
 
 
 
-	public function __construct(Addons $addonsRepo, SpdxLicenseIdentifier $licenseValidator)
+	public function __construct(Validators $validators)
 	{
-		$this->addonsRepo = $addonsRepo;
-		$this->licenseValidator = $licenseValidator;
+		$this->validators = $validators;
 	}
 
 
 
 	public function isComposerNameValid(Forms\IControl $control)
 	{
-		return Strings::match($control->getValue(), self::COMPOSER_NAME_RE);
+		return $this->validators->isComposerNameValid($control->getValue());
 	}
 
 
 
 	public function isComposerNameUnique(Forms\IControl $control)
 	{
-		$addon = $this->addonsRepo->findOneBy(array(
-			'composerName' => $control->getValue(),
-		));
-		return ($addon === FALSE);
+		return $this->validators->isComposerNameUnique($control->getValue());
 	}
+
 
 
 	public function isVersionValid(Forms\IControl $control)
 	{
-		$value = $control->getValue();
-		if (Strings::match($value, '#^dev-[a-z0-9._-]#i')) { // e.g. 'dev-master'
-			return TRUE;
-		}
-
-		$version = new Version($control->getValue());
-		return $version->isValid();
+		return $this->validators->isVersionValid($control->getValue());
 	}
+
 
 
 	public function isLicenseValid(Forms\IControl $control)
 	{
-		return $this->licenseValidator->validate($control->getValue());
+		return $this->validators->isLicenseValid($control->getValue());
 	}
 }

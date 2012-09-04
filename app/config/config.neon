@@ -59,6 +59,7 @@ services:
 		}]
 
 	licenseValidator: Composer\Util\SpdxLicenseIdentifier
+	validators: NetteAddons\Model\Utils\Validators
 	formValidators: NetteAddons\Model\Utils\FormValidators
 
 factories:
