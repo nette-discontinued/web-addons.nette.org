@@ -325,7 +325,7 @@ final class ManagePresenter extends BasePresenter
 	 */
 	public function actionEdit($id)
 	{
-		$row = $this->addon->find($id);
+		$row = $this->addons->find($id);
 		if (!$row) {
 			$this->error();
 		}
@@ -346,7 +346,7 @@ final class ManagePresenter extends BasePresenter
 	 */
 	protected function createComponentEditAddonForm()
 	{
-		$form = new EditAddonForm();
+		$form = new EditAddonForm($this->formValidators);
 		$form->setAddonDefaults($this->addon);
 		$form->onSuccess[] = $this->editAddonFormSubmitted;
 
