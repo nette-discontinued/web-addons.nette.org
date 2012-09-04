@@ -203,21 +203,9 @@ final class ManagePresenter extends BasePresenter
 	/**
 	 * @param int|NULL addon id
 	 */
-	public function actionCreateVersion($id = NULL)
+	public function renderCreateVersion($addonId = NULL)
 	{
-		if ($id !== NULL) { // we're manually adding new version to an already existing addon
-			if ($this->addon !== NULL) {
-				$this->error("Invalid request. Parameters token and id must not be present at the same time.");
-			}
-			$row = $this->addons->find($id);
-			if (!$row) {
-				$this->error("Addon with ID #$id does not exist.");
-			}
-			$this->addon = Addon::fromActiveRow($row);
-			if (!$this->authorizator->isAllowed($this->addon, 'manage')) {
-				$this->error("You are not allowed to manage this addon.", 403);
-			}
-		}
+
 	}
 
 
