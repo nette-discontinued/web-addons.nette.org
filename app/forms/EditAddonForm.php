@@ -10,6 +10,7 @@ class EditAddonForm extends AddAddonForm
 	{
 		parent::buildForm();
 
+		$this->removeComponent($this['composerName']);
 		$this['create']->caption = 'Save';
 	}
 }
