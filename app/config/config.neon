@@ -7,13 +7,12 @@
 
 php:
 	date.timezone: Europe/Prague
-	# session.save_path: "%tempDir%/sessions"
-	# zlib.output_compression: yes
 
 
 parameters:
 	uploadUri: '/upload'
 	uploadDir: '%wwwDir%%uploadUri%'
+	curlTimeout: 5000 # v ms
 
 
 nette:
@@ -30,10 +29,10 @@ nette:
 			password: %database.password%
 
 
+
 services:
-	databaseConnection: @Nette\Database\Connection
 	nette.presenterFactory: NetteAddons\PresenterFactory(%appDir%, @container)
-	templateFactory: NetteAddons\TemplateFactory(@nette.templateCacheStorage, ...)
+	templateFactory: NetteAddons\TemplateFactory(@nette.templateCacheStorage)
 
     # security
 	authenticator: NetteAddons\Model\Authenticator
@@ -42,31 +41,33 @@ services:
     # tables
 	users: NetteAddons\Model\Users
 	addons: NetteAddons\Model\Addons
-	tags: NetteAddons\Model\Tags
 	addonVersions: NetteAddons\Model\AddonVersions
 	addonVotes: NetteAddons\Model\AddonVotes
 	versionDependencies: NetteAddons\Model\VersionDependencies
+	tags: NetteAddons\Model\Tags
 
-	# github
-	curl: NetteAddons\Curl( 50000 )
+	# validators
+	licenseValidator: Composer\Util\SpdxLicenseIdentifier
+	validators: NetteAddons\Model\Utils\Validators
+	formValidators: NetteAddons\Model\Utils\FormValidators
 
-	reinstall: NetteAddons\Model\Reinstall
-
+	# importing from GitHub
+	curl: NetteAddons\Curl(%curlTimeout%)
 	repositoryImporterFactory:
 		class: NetteAddons\Model\Importers\RepositoryImporterFactory
 		arguments: [{
 			github: @ghImporterFactory
 		}]
 
-	licenseValidator: Composer\Util\SpdxLicenseIdentifier
-	validators: NetteAddons\Model\Utils\Validators
-	formValidators: NetteAddons\Model\Utils\FormValidators
+	# misc
+	reinstall: NetteAddons\Model\Reinstall
+
 
 factories:
 	ghRepository:
 		parameters: [vendor, name]
-		class: NetteAddons\Model\Importers\GitHub\Repository( @curl, %vendor%, %name% )
+		class: NetteAddons\Model\Importers\GitHub\Repository(@curl, %vendor%, %name%)
 
 	ghImporter:
 		parameters: [vendor, name]
-		class: NetteAddons\Model\Importers\GitHubImporter( @ghRepository(%vendor%, %name%) )
+		class: NetteAddons\Model\Importers\GitHubImporter(@ghRepository(%vendor%, %name%))
