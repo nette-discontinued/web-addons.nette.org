@@ -120,11 +120,11 @@ final class ManagePresenter extends BasePresenter
 
 		if ($this->addon->repository) { // TODO: use more reliable method
 			$this->flashMessage('Addon created.');
-			$this->redirect('versionImport');
+			$this->redirect('importVersions');
 
 		} else {
 			$this->flashMessage('Addon created. Now it\'s time to add the first version.');
-			$this->redirect('versionCreate');
+			$this->redirect('createVersion');
 		}
 	}
 
@@ -166,7 +166,7 @@ final class ManagePresenter extends BasePresenter
 
 			$this->storeAddon();
 			$this->flashMessage('Addon has been successfully imported.');
-			$this->redirect('create');
+			$this->redirect('createAddon');
 
 		} catch (\NetteAddons\HttpException $e) {
 			if ($e->getCode() === 404) {
@@ -185,7 +185,7 @@ final class ManagePresenter extends BasePresenter
 	/**
 	 * @param int|NULL addon id
 	 */
-	public function actionVersionCreate($id = NULL)
+	public function actionCreateVersion($id = NULL)
 	{
 		if ($id !== NULL) { // we're manually adding new version to an already existing addon
 			if ($this->addon !== NULL) {
@@ -314,7 +314,7 @@ final class ManagePresenter extends BasePresenter
 
 		} catch (\NetteAddons\DuplicateEntryException $e) {
 			$this->flashMessage("Adding new addon failed.", 'danger');
-			$this->redirect('create');
+			$this->redirect('createAddon');
 		}
 	}
 
@@ -323,7 +323,7 @@ final class ManagePresenter extends BasePresenter
 	/**
 	 * @param int addon id
 	 */
-	public function actionEdit($id)
+	public function actionEditAddon($id)
 	{
 		$row = $this->addons->find($id);
 		if (!$row) {
@@ -334,7 +334,7 @@ final class ManagePresenter extends BasePresenter
 
 
 
-	public function renderEdit()
+	public function renderEditAddon()
 	{
 		$this->template->addon = $this->addon;
 	}
