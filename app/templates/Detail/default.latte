@@ -48,7 +48,7 @@
 			{if isset($addon->repository) && $addon->repository != NULL}
 			<a n:href=":Manage:checkVersions $addon->id" class="btn btn-info">Check updates</a>
 			{else}
-			<a n:href=":Manage:versionCreate $addon->id" class="btn btn-success">Add new version</a>
+			<a n:href=":Manage:createVersion $addon->id" class="btn btn-success">Add new version</a>
 			{/if}
 		</li>
 		<li><a n:href=":Manage:editAddon $addon->id" class="btn btn-info">Edit</a></li>
