@@ -49,7 +49,8 @@ class AddAddonForm extends BaseForm
 			->setOption(
 				'description',
 				Html::el()->setHtml(
-					'See <a href="http://www.spdx.org/licenses/">SPDX Open Source License Registry</a> for list of possible identifiers.'
+					'See <a href="http://www.spdx.org/licenses/">SPDX Open Source License Registry</a>' .
+					' for list of possible identifiers. Multiple licenses can be separated by comma.'
 				)
 			);
 		$this->addText('demo', 'Demo URL', 60, 500)
