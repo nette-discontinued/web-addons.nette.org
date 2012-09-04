@@ -155,19 +155,29 @@ class AddonManageFacade extends Nette\Object
 		$version->version = $values->version;
 		$version->license = $values->license;
 
-		$fileName = $this->getFileName($version);
-		$fileDest = $this->uploadDir . '/' . $fileName;
-		$fileUrl = $this->uploadUrl . '/' . $fileName;
+		if ($values->archiveLink) {
+			$version->distType = 'zip';
+			$version->distUrl = $values->archiveLink;
 
-		try {
-			$file = $values->archive;
-			$file->move($fileDest);
-		} catch (\Nette\InvalidStateException $e) {
-			throw new \NetteAddons\IOException($e->getMessage(), NULL, $e);
+		} elseif ($values->archive) {
+			$fileName = $this->getFileName($version);
+			$fileDest = $this->uploadDir . '/' . $fileName;
+			$fileUrl = $this->uploadUrl . '/' . $fileName;
+
+			try {
+				$file = $values->archive;
+				$file->move($fileDest);
+			} catch (\Nette\InvalidStateException $e) {
+				throw new \NetteAddons\IOException($e->getMessage(), NULL, $e);
+			}
+
+			$version->distType = 'zip';
+			$version->distUrl = $fileUrl;
+
+		} else {
+			throw new \NetteAddons\InvalidArgumentException();
 		}
 
-		$version->distType = 'zip';
-		$version->distUrl = $fileUrl;
 		$version->composerJson = Model\Utils\Composer::createComposerJson($version);
 		$version->composerJson->authors = array(
 			(object) array(

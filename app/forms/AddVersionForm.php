@@ -33,10 +33,6 @@ class AddVersionForm extends BaseForm
 			->setRequired("%label is required")
 			->addRule($this->validators->isVersionValid, 'Invalid version.');
 
-		$this->addUpload('archive', 'Archive')
-			->setRequired("%label is required")
-			->addRule($this->isArchiveValid, 'Only ZIP files are allowed.');
-
 		$this->addText('license', 'License', 20, 100)
 			->setRequired("%label is required")
 			->addRule($this->validators->isLicenseValid, 'Invalid license identifier.')
@@ -46,6 +42,25 @@ class AddVersionForm extends BaseForm
 					'See <a href="http://www.spdx.org/licenses/">SPDX Open Source License Registry</a> for list of possible identifiers.'
 				)
 			);
+
+		$this->addSelect('how', 'How would you like to provide source codes?', array(
+			'link' => 'Provide link to distribution archive.',
+			'upload' => 'Upload archive to this site.',
+		))->setRequired()
+			->addCondition(self::EQUAL, 'link')->toggle('xlink')
+			->addCondition(self::EQUAL, 'upload')->toggle('xupload');
+
+		$this->addText('archiveLink', 'Link to ZIP archive')
+			->setOption('id', 'xlink')
+			->addConditionOn($this['how'], self::EQUAL, 'link')
+				->addRule(self::FILLED, "%label is required")
+				->addRule(self::URL, 'Please provide valid URL.');
+
+		$this->addUpload('archive', 'Archive')
+			->setOption('id', 'xupload')
+			->addConditionOn($this['how'], self::EQUAL, 'upload')
+				->addRule(self::FILLED, "%label is required")
+				->addRule($this->isArchiveValid, 'Only ZIP files are allowed.');
 
 		$this->addSubmit('create', 'Create');
 	}
