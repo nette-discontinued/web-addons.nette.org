@@ -173,14 +173,25 @@ class GitHubImporter extends Nette\Object implements IAddonImporter
 	 */
 	private function getVersions()
 	{
-		$tags = $this->repository->getTags();
 		$versions = array();
+		$tags = $this->repository->getTags();
+		$branches = $this->repository->getBranches();
+
 		foreach ($tags as $tag => $hash) {
 			$version = Model\Version::create($tag);
 			if ($version && $version->isValid()) {
 				$versions[$version->getVersion()] = $tag;
 			}
 		}
+
+		foreach ($branches as $branch => $hash) {
+			// dummy solution to ignore version-like branches such as '2.1.x'
+			// based on assumption that they always contain some number
+			if (!Strings::match($branch, '#\d#')) {
+				$versions['dev-' . $branch] = $branch;
+			}
+		}
+
 		return $versions;
 	}
 
