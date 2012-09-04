@@ -73,6 +73,7 @@ class AddAddonForm extends BaseForm
 			'name' => $addon->name,
 			'shortDescription' => $addon->shortDescription,
 			'description' => $addon->description,
+			'defaultLicense' => $addon->defaultLicense,
 			'demo' => $addon->demo
 		));
 	}
