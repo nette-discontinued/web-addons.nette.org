@@ -2,8 +2,15 @@
 
 namespace NetteAddons;
 
+use NetteAddons\Model\Addons;
+use NetteAddons\Model\AddonVersions;
+use NetteAddons\Model\AddonVotes;
+
+
+
 /**
  * @author Jan Marek
+ * @author Jan Tvrdík
  */
 class DetailPresenter extends BasePresenter
 {
@@ -13,25 +20,55 @@ class DetailPresenter extends BasePresenter
 	 */
 	public $id;
 
+	/** @var Addons */
+	private $addons;
+
+	/** @var AddonVersions */
+	private $addonVersions;
+
+	/** @var AddonVotes */
+	private $addonVotes;
+
+
+
+	public function injectAddons(Addons $addons)
+	{
+		$this->addons = $addons;
+	}
+
+
+
+	public function injectAddonVersions(AddonVersions $addonVersions)
+	{
+		$this->addonVersions = $addonVersions;
+	}
+
+
+
+	public function injectAddonVotes(AddonVotes $addonVotes)
+	{
+		$this->addonVotes = $addonVotes;
+	}
+
+
 
 	/**
 	 * @param $id
 	 */
 	public function renderDefault($id)
 	{
-		$addons = $this->context->addons;
-		if (!$addon = $addons->find($id)) {
+		if (!$addon = $this->addons->find($id)) {
 			$this->error('Addon not found!');
 		}
 
-		$popularity = $this->context->addonVotes->calculatePopularity($addon->id);
+		$popularity = $this->addonVotes->calculatePopularity($addon->id);
 		$this->template->plus = $popularity->plus;
 		$this->template->minus = $popularity->minus;
 		$this->template->percents = $popularity->percent;
 
 		$this->template->addon = $addon;
 
-		$this->template->currentVersion = $this->context->addonVersions->findAddonCurrentVersion($addon);
+		$this->template->currentVersion = $this->addonVersions->findAddonCurrentVersion($addon);
 	}
 
 	/**
@@ -59,7 +96,7 @@ class DetailPresenter extends BasePresenter
 			$this->error('not logged in', 403); // TODO: better
 		}
 
-		$this->context->addonVotes->vote($this->id, $this->user->id, $vote);
+		$this->addonVotes->vote($this->id, $this->user->id, $vote);
 		$this->flashMessage('Voting was successfull!');
 		$this->redirect('this');
 	}
