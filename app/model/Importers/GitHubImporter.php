@@ -23,14 +23,19 @@ class GitHubImporter extends Nette\Object implements IAddonImporter
 	/** @var GitHub\Repository */
 	private $repository;
 
+	/** @var Utils\Validators */
+	private $validators;
+
 
 
 	/**
 	 * @param GitHub\Repository
+	 * @param Utils\Validators
 	 */
-	public function __construct(GitHub\Repository $repo)
+	public function __construct(GitHub\Repository $repo, Utils\Validators $validators)
 	{
 		$this->repository = $repo;
+		$this->validators = $validators;
 	}
 
 
@@ -68,7 +73,7 @@ class GitHubImporter extends Nette\Object implements IAddonImporter
 		$addon->name = $info->name;
 
 		// composerName
-		if ($composer) {
+		if ($composer && $this->validators->isComposerNameValid($composer->name)) {
 			$addon->composerName = $composer->name;
 		}
 
