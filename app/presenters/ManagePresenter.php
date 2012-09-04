@@ -5,6 +5,7 @@ namespace NetteAddons;
 use NetteAddons\Model\Addon;
 use NetteAddons\Model\Addons;
 use NetteAddons\Model\AddonVersion;
+use NetteAddons\Model\AddonVersions;
 use NetteAddons\Model\IAddonImporter;
 use NetteAddons\Model\Facade\AddonManageFacade;
 use NetteAddons\Model\Utils\FormValidators;
@@ -37,6 +38,9 @@ final class ManagePresenter extends BasePresenter
 	/** @var Addons */
 	private $addons;
 
+	/** @var AddonVersions */
+	private $versions;
+
 	/** @var FormValidators */
 	private $formValidators;
 
@@ -55,6 +59,13 @@ final class ManagePresenter extends BasePresenter
 	public function injectAddons(Addons $addons)
 	{
 		$this->addons = $addons;
+	}
+
+
+
+	public function injectVersions(AddonVersions $versions)
+	{
+		$this->versions = $versions;
 	}
 
 
@@ -236,19 +247,20 @@ final class ManagePresenter extends BasePresenter
 	{
 		try {
 			$values = $form->getValues();
-			$this->manager->addVersionFromValues($this->addon, $values, $this->getUser()->getIdentity());
-			$this->storeAddon();
-			$this->flashMessage('Version created.');
+			$version = $this->manager->addVersionFromValues($this->addon, $values, $this->getUser()->getIdentity());
 
 		} catch (\NetteAddons\IOException $e) {
 			$form['archive']->addError('Uploading file failed.');
 			return;
 		}
 
-		if (($id = $this->getParameter('id')) !== NULL) { // TODO: better
-			$this->redirect('Detail:', $id);
+		if ($this->addonId) { // TODO: better
+			$this->versions->add($version);
+			$this->flashMessage('Version created.');
+			$this->redirect('Detail:', $this->addonId);
 
 		} else {
+			$this->storeAddon();
 			$this->redirect('finish');
 		}
 	}
