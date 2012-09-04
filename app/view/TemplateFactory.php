@@ -1,4 +1,5 @@
 <?php
+
 namespace NetteAddons;
 
 use Nette;
@@ -13,12 +14,13 @@ use Nette;
  */
 class TemplateFactory extends Nette\Object
 {
-
 	/** @var Nette\Caching\IStorage */
 	private $cacheStorage;
 
 	/** @var Nette\Localization\ITranslator|NULL */
 	private $translator;
+
+
 
 	/**
 	 * @param Nette\Caching\IStorage cache storage for templates
@@ -29,6 +31,8 @@ class TemplateFactory extends Nette\Object
 		$this->cacheStorage = $cacheStorage;
 		$this->translator = $translator;
 	}
+
+
 
 	/**
 	 * Creates and configures template.
@@ -85,5 +89,4 @@ class TemplateFactory extends Nette\Object
 
 		return $template;
 	}
-
 }

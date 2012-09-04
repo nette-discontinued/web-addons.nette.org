@@ -2,13 +2,20 @@
 
 namespace NetteAddons;
 
+use Texy;
+use TexyConfigurator;
+
+
+
 /**
  * @author Jan Marek
  */
 class TexyHelper
 {
-
+	/** @var Texy */
 	private $texy = NULL;
+
+
 
 	public function __invoke($text)
 	{
@@ -19,11 +26,12 @@ class TexyHelper
 		return $this->texy->process($text);
 	}
 
+
+
 	private function createTexy()
 	{
-		$texy = new \Texy();
-		\TexyConfigurator::safeMode($texy);
+		$texy = new Texy();
+		TexyConfigurator::safeMode($texy);
 		return $texy;
 	}
-
 }
