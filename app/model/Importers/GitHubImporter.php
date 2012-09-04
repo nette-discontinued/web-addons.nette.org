@@ -178,7 +178,7 @@ class GitHubImporter extends Nette\Object implements IAddonImporter
 		foreach ($tags as $tag => $hash) {
 			$version = Model\Version::create($tag);
 			if ($version && $version->isValid()) {
-				$versions[$version->getVersion()] = $hash;
+				$versions[$version->getVersion()] = $tag;
 			}
 		}
 		return $versions;
