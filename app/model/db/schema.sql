@@ -191,3 +191,7 @@ CHANGE `addonId` `versionId` int(10) unsigned NOT NULL AFTER `id`,
 DROP INDEX `addonId_packageName_version`,
 ADD UNIQUE `versionId_type_packageName` (`versionId`, `type`, `packageName`),
 ADD FOREIGN KEY (`versionId`) REFERENCES `addons_versions` (`id`);
+
+-- increased addons_versions.version length from 20 to 100 chars, because of versions such as "dev-jm-nette-extension"
+ALTER TABLE `addons_versions`
+CHANGE `version` `version` varchar(100) COLLATE 'utf8_general_ci' NOT NULL AFTER `addonId`;
