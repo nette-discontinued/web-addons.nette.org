@@ -34,7 +34,7 @@ class Validators extends Nette\Object
 
 	public function isComposerNameValid($composerName)
 	{
-		return Strings::match($composerName, self::COMPOSER_NAME_RE);
+		return Strings::match($composerName, '#' . self::COMPOSER_NAME_RE . '#');
 	}
 
 
