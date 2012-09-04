@@ -199,3 +199,20 @@ CHANGE `version` `version` varchar(100) COLLATE 'utf8_general_ci' NOT NULL AFTER
 -- added users.role
 ALTER TABLE `users`
 ADD `role` enum('admin','moderator') COLLATE 'utf8_general_ci' NULL;
+
+-- foreign keys in addons_tags are now "cascade"
+ALTER TABLE `addons_tags`
+DROP FOREIGN KEY `addons_tags_ibfk_1`,
+DROP FOREIGN KEY `addons_tags_ibfk_2`,
+ADD FOREIGN KEY (`addonId`) REFERENCES `addons` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+ADD FOREIGN KEY (`tagId`) REFERENCES `tags` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- addons_dependencies.versionId key is now "cascade"
+ALTER TABLE `addons_dependencies`
+DROP FOREIGN KEY `addons_dependencies_ibfk_3`,
+ADD FOREIGN KEY (`versionId`) REFERENCES `addons_versions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- addons_votes.addonId key is now "cascade"
+ALTER TABLE `addons_votes`
+DROP FOREIGN KEY `addons_votes_ibfk_1`,
+ADD FOREIGN KEY (`addonId`) REFERENCES `addons` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
