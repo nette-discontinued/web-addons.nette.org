@@ -6,7 +6,10 @@
 		"php": ">=5.3.0",
 		"nette/nette": "2.0.*",
 		"dg/texy": "2.2.*",
-        "composer/composer": "dev-master"
+		"composer/composer": "dev-master"
 	},
-    "minimum-stability":"dev"
+	"minimum-stability":"dev",
+	"autoload": {
+		"files": ["app/misc/functions.php"]
+	}
 }

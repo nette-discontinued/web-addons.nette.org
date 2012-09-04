@@ -8,8 +8,6 @@ use Nette\Config\Configurator;
 
 // Load Nette Framework
 require LIBS_DIR . '/autoload.php';
-require APP_DIR . '/misc/functions.php';
-
 
 // Configure application
 $configurator = new Nette\Config\Configurator;
