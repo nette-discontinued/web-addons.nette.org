@@ -120,7 +120,7 @@ class GitHubImporter extends Nette\Object implements IAddonImporter
 
 			// version
 			if ($composer && isset($composer->version)) {
-				$version->version = $composer->version;
+				$version->version = $composer->version; // warning: multiple tags may have the same composer version
 			} else {
 				$version->version = $v;
 			}
@@ -153,10 +153,10 @@ class GitHubImporter extends Nette\Object implements IAddonImporter
 			// composer.json
 			$version->composerJson = Utils\Composer::createComposerJson($version, $composer);
 
-			$versions[] = $version;
+			$versions[$version->version] = $version; // ensures that versions are unique
 		}
 
-		return $versions;
+		return array_values($versions);
 	}
 
 
