@@ -98,16 +98,19 @@ class AddonManageFacade extends Nette\Object
 	 */
 	public function fillAddonWithValues(Model\Addon $addon, array $values, Nette\Security\Identity $owner)
 	{
-		$always = array('name', 'shortDescription', 'description', 'demo');
-		$ifEmpty = array('composerName' => TRUE, 'defaultLicense' => TRUE, 'repository' => FALSE);
+		$overwritable = array('name' => TRUE, 'shortDescription' => TRUE, 'description' => TRUE, 'demo' => TRUE, 'defaultLicense' => FALSE);
+		$ifEmpty = array('composerName' => TRUE, 'repository' => FALSE);
 
 		$addon->userId = $owner->getId(); // TODO: this is duplicite to self::import()
 
-		foreach ($always as $field) {
+		foreach ($overwritable as $field => $required) {
 			if (!array_key_exists($field, $values)) {
-				throw new \NetteAddons\InvalidArgumentException("Values does not contain field '$field'.");
+				if ($required) {
+					throw new \NetteAddons\InvalidArgumentException("Values does not contain field '$field'.");
+				}
+			} else {
+				$addon->$field = $values[$field];
 			}
-			$addon->$field = $values[$field];
 		}
 
 		foreach ($ifEmpty as $field => $required) {
