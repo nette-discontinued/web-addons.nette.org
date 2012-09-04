@@ -75,6 +75,7 @@ class Addon extends Nette\Object
 
 		foreach ($row->related('versions') as $versionRow) {
 			$version = AddonVersion::fromActiveRow($versionRow);
+			$version->addon = $addon;
 			$addon->versions[$version->version] = $version;
 		}
 
