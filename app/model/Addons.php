@@ -125,4 +125,20 @@ class Addons extends Table
 			throw $e;
 		}
 	}
+
+
+
+	public function update(Addon $addon)
+	{
+		// this may fail, becase find() may return FALSE
+		$this->find($addon->id)->update(array(
+			'name'             => $addon->name,
+			'repository'       => $addon->repository,
+			'shortDescription' => $addon->shortDescription,
+			'description'      => $addon->description,
+			'demo'             => $addon->demo ?: NULL,
+			'defaultLicense'   => $addon->defaultLicense,
+			'updatedAt'        => new Datetime('now'),
+		));
+	}
 }
