@@ -349,6 +349,8 @@ final class ManagePresenter extends BasePresenter
 	 */
 	protected function createComponentEditAddonForm()
 	{
+		if (!$this->addon) $this->error();
+
 		$form = new EditAddonForm($this->formValidators);
 		$form->setAddonDefaults($this->addon);
 		$form->onSuccess[] = $this->editAddonFormSubmitted;
@@ -363,18 +365,13 @@ final class ManagePresenter extends BasePresenter
 	 */
 	public function editAddonFormSubmitted(EditAddonForm $form)
 	{
-		$values = $form->getValues();
+		$values = $form->getValues(TRUE);
 
-		throw new \NetteAddons\NotImplementedException();
-
-		/*$this->addonRow->name = $values->name;
-		$this->addonRow->shortDescription = $values->shortDescription;
-		$this->addonRow->description = $values->description;
-		$this->addonRow->demo = $values->demo;
-		$this->addonRow->update();
+		$this->manager->fillAddonWithValues($this->addon, $values, $this->getUser()->getIdentity());
+		$this->addons->update($this->addon);
 
 		$this->flashMessage('Addon saved.');
-		$this->redirect('Detail:', $this->addonRow->id);*/
+		$this->redirect('Detail:', $this->addon->id);
 	}
 
 
