@@ -57,7 +57,7 @@ class Users extends Table
 		$data = $user->toArray();
 		unset($data['password']);
 
-		return new Identity($user->id, NULL, $data);
+		return new Identity($user->id, $user->role, $data);
 	}
 
 
