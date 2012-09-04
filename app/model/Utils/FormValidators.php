@@ -47,6 +47,12 @@ class FormValidators extends Nette\Object
 
 	public function isLicenseValid(Forms\IControl $control)
 	{
-		return $this->validators->isLicenseValid($control->getValue());
+		$licenses = array_map('trim', explode(',', $control->getValue()));
+		foreach ($licenses as $license) {
+			if (!$this->validators->isLicenseValid($license)) {
+				return FALSE;
+			}
+		}
+		return TRUE;
 	}
 }
