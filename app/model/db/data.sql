@@ -71,14 +71,15 @@ INSERT INTO `tags` (`id`, `name`, `slug`, `level`, `visible`) VALUES
 (16,	'forms',	'forms',	9,	1),
 (17,	'bootstrap',	'bootstrap',	9,	1);
 
-INSERT INTO `users` (`id`, `name`, `password`, `email`) VALUES
-(1,	'Merxes',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'me@gmail.com'),
-(2,	'HosipLan',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'hosiplan@gmail.com'),
-(3,	'Vrtak',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'vrtak@gmail.com'),
-(4,	'Honza Marek',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'mail@janmarek.net'),
-(5,	'Panda',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'panda@gmail.com'),
-(6,	'chemiX',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'iamchemix@gmail.com'),
-(7,	'dgx',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'dgx@gmail.com'),
-(8,	'demo',	'40bd001563085fc35165329ea1ff5c5ecbdbbeef',	'demo@gmail.com');
+
+INSERT INTO `users` (`id`, `name`, `password`, `email`, `role`) VALUES
+(1,	'Merxes',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'me@gmail.com',	'moderator'),
+(2,	'HosipLan',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'hosiplan@gmail.com',	NULL),
+(3,	'Vrtak',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'vrtak@gmail.com',	NULL),
+(4,	'Honza Marek',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'mail@janmarek.net',	NULL),
+(5,	'Panda',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'panda@gmail.com',	NULL),
+(6,	'chemiX',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'iamchemix@gmail.com',	NULL),
+(7,	'dgx',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'dgx@gmail.com',	NULL),
+(8,	'demo',	'40bd001563085fc35165329ea1ff5c5ecbdbbeef',	'demo@gmail.com',	NULL);
 
 -- 2012-09-04 14:53:00
