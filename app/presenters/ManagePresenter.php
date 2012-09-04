@@ -6,7 +6,6 @@ use NetteAddons\Model\Addon;
 use NetteAddons\Model\Addons;
 use NetteAddons\Model\AddonVersion;
 use NetteAddons\Model\IAddonImporter;
-use NetteAddons\Model\Authorizator;
 use NetteAddons\Model\Facade\AddonManageFacade;
 use NetteAddons\Model\Utils\FormValidators;
 use Nette\Http\Session;
@@ -41,28 +40,28 @@ final class ManagePresenter extends BasePresenter
 	/** @var FormValidators */
 	private $formValidators;
 
-	/** @var Authorizator */
-	private $authorizator;
-
 	/** @var Addon|NULL from the session. */
 	private $addon;
 
 
 
-	/**
-	 * @param  Addons
-	 * @param  Session
-	 * @param  FormValidators
-	 * @param  Authorizator
-	 * @return void
-	 */
-	public function setContext(Addons $addons, Session $session, FormValidators $formValidators, Authorizator $authorizator)
+	public function injectSession(Session $session)
+	{
+		$this->session = $session->getSection(__CLASS__);
+	}
+
+
+
+	public function injectAddons(Addons $addons)
 	{
 		$this->addons = $addons;
-		$this->session = $session->getSection('NetteAddons.ManagePresenter');
+	}
+
+
+
+	public function injectFormValidators(FormValidators $formValidators)
+	{
 		$this->formValidators = $formValidators;
-		$this->authorizator = $authorizator;
-		$this->manager = $this->createAddonManageFacade($addons);
 	}
 
 
@@ -88,9 +87,11 @@ final class ManagePresenter extends BasePresenter
 			$this->addon = Addon::fromActiveRow($row);
 		}
 
-		if ($this->addon && !$this->authorizator->isAllowed($this->addon, 'manage')) {
+		if ($this->addon && !$this->auth->isAllowed($this->addon, 'manage')) {
 			$this->error('You are not allowed to manage this addon.', 403);
 		}
+
+		$this->manager = $this->createAddonManageFacade($this->addons);
 	}
 
 
