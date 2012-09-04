@@ -34,7 +34,7 @@ class VersionDependencies extends Table
 				}
 
 				$this->createRow(array(
-					'addonId' => $version->id, // yes, there must be version ID, not addon ID
+					'versionId' => $version->id,
 					'dependencyId' => $depId,
 					'packageName' => $packageName,
 					'version' => $versionNumber,

@@ -182,3 +182,12 @@ ALTER TABLE `addons_versions`
 ADD `distType` enum('zip','tarball') COLLATE 'utf8_general_ci' NOT NULL COMMENT 'type of distribution archive' AFTER `license`,
 ADD `distUrl` varchar(500) COLLATE 'utf8_general_ci' NOT NULL COMMENT 'link to distribution archive' AFTER `distType`,
 DROP `link`;
+
+-- addons_dependencies.addonId renamed to versionId and changed the unique key
+ALTER TABLE `addons_dependencies`
+DROP FOREIGN KEY `addons_dependencies_ibfk_1`;
+ALTER TABLE `addons_dependencies`
+CHANGE `addonId` `versionId` int(10) unsigned NOT NULL AFTER `id`,
+DROP INDEX `addonId_packageName_version`,
+ADD UNIQUE `versionId_type_packageName` (`versionId`, `type`, `packageName`),
+ADD FOREIGN KEY (`versionId`) REFERENCES `addons_versions` (`id`);
