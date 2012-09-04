@@ -53,7 +53,7 @@ class DetailPresenter extends BasePresenter
 
 
 	/**
-	 * @param $id
+	 * @param int addon ID
 	 */
 	public function renderDefault($id)
 	{
@@ -70,6 +70,8 @@ class DetailPresenter extends BasePresenter
 
 		$this->template->currentVersion = $this->addonVersions->findAddonCurrentVersion($addon);
 	}
+
+
 
 	/**
 	 * Handle voting for current addon.
@@ -100,5 +102,4 @@ class DetailPresenter extends BasePresenter
 		$this->flashMessage('Voting was successfull!');
 		$this->redirect('this');
 	}
-
 }
