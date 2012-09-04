@@ -121,6 +121,7 @@ class Addons extends Table
 
 		} catch (\Exception $e) {
 			$this->connection->rollBack();
+			$addon->id = NULL;
 			throw $e;
 		}
 	}
