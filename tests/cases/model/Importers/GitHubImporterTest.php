@@ -26,7 +26,8 @@ class GitHubImporterTest extends TestCase
 		parent::setUp();
 
 		$this->repo = Mockery::mock('NetteAddons\Model\Importers\GitHub\Repository');;
-		$this->imp = new GitHubImporter($this->repo);
+		$this->validators = Mockery::mock('NetteAddons\Model\Utils\Validators');
+		$this->imp = new GitHubImporter($this->repo, $this->validators);
 	}
 
 
@@ -58,6 +59,10 @@ class GitHubImporterTest extends TestCase
 		$this->repo->shouldReceive('getReadme')
 			->with('work_br')->once()
 			->andReturn('readme');
+
+		$this->validators->shouldReceive('isComposerNameValid')
+			->with('c-name')->once()
+			->andReturn(TRUE);
 
 		$addon = $this->imp->import();
 
