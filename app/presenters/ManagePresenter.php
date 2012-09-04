@@ -158,6 +158,12 @@ final class ManagePresenter extends BasePresenter
 
 		try {
 			$this->addon = $this->manager->import($importer, $this->getUser()->getIdentity());
+
+			if ($this->addon->composerName && !$this->context->validators->isComposerNameUnique($this->addon->composerName)) {
+				$form->addError("Addon with composer name '{$this->addon->composerName}' already exist.");
+				return;
+			}
+
 			$this->storeAddon();
 			$this->flashMessage('Addon has been successfully imported.');
 			$this->redirect('create');
