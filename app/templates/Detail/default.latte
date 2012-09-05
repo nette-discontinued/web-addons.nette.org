@@ -1,6 +1,26 @@
 {var $title = $addon->name}
 {var $disableAdd = TRUE}
 {var $themeicon = 'box-full'}{* todo addon icon *}
+{block adminMenu}
+<div id="wikimenu" n:if="$auth->isAllowed($addon, 'manage')">
+	<ul>
+		<li>
+			<a href="#">Manage <span>&#x25bc;</span></a>
+
+			<ul>
+				<li>
+					{if isset($addon->repository) && $addon->repository != NULL}
+					<a rel="nofollow" n:href=":Manage:checkVersions $addon->id">Check updates</a>
+					{else}
+					<a rel="nofollow" n:href=":Manage:createVersion $addon->id">Add new version</a>
+					{/if}
+				</li>
+				<li><a rel="nofollow" n:href=":Manage:editAddon $addon->id">Edit</a></li>
+			</ul>
+		</li>
+	</ul>
+</div>
+{/block}
 {block content}
 <div id="breadcrumbs">
 	<a href="http://nette.org/en/">Nette Framework</a> »
@@ -39,21 +59,6 @@
 	<h3>Composer name</h3>
 
 	<p>{$addon->composerName}</p>
-
-	{if $auth->isAllowed($addon, 'manage')}
-	<h3>Manage</h3>
-
-	<ul class="nostyle">
-		<li>
-			{if isset($addon->repository) && $addon->repository != NULL}
-			<a n:href=":Manage:checkVersions $addon->id" class="btn btn-info">Check updates</a>
-			{else}
-			<a n:href=":Manage:createVersion $addon->id" class="btn btn-success">Add new version</a>
-			{/if}
-		</li>
-		<li><a n:href=":Manage:editAddon $addon->id" class="btn btn-info">Edit</a></li>
-	</ul>
-	{/if}
 
 	<h3>Info</h3>
 
