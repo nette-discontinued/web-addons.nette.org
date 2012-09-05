@@ -12,7 +12,7 @@ require_once LIBS_DIR . '/autoload.php';
 $configurator = new Configurator;
 
 // Enable Debugger
-//$configurator->setDebugMode(TRUE);
+$configurator->setDebugMode(TRUE);
 $configurator->enableDebugger(__DIR__ . '/../log');
 
 // Enable RobotLoader
@@ -23,9 +23,9 @@ $configurator->createRobotLoader()
 
 // Create Dependency Injection container
 $configurator->addConfig(__DIR__ . '/config/config.neon', Configurator::NONE);
-if (file_exist($config = __DIR__ . '/config/config.local.neon')) {
+if (file_exists($config = __DIR__ . '/config/config.local.neon')) {
 	$configurator->addConfig($config, Configurator::NONE);
-} elseif (file_exist($config = __DIR__ . '/config/config.local.php')) {
+} elseif (file_exists($config = __DIR__ . '/config/config.local.php')) {
 	$configurator->addConfig($config, Configurator::NONE);
 }
 $container = $configurator->createContainer();
