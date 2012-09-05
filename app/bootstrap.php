@@ -14,6 +14,8 @@ $configurator = new Configurator;
 // Enable Debugger
 if (getenv('DEBUG_MODE') == 'on') {
 	$configurator->setDebugMode(TRUE);
+} elseif (getenv('DEBUG_MODE') == 'off') {
+	$configurator->setDebugMode(FALSE);
 }
 $configurator->enableDebugger(__DIR__ . '/../log');
 
