@@ -35,3 +35,11 @@ form .form .required small {
 .sidebar .info ul.nostyle ul li {
 	margin: .2em 0 .2em 1.70em;
 }
+
+/* Neon */
+.neon-section, .neon-key {color: #448CCB;}
+.neon-sep {color: #000;}
+.neon-comment {color: #777;}
+.neon-value, .neon-quote {color: brown;}
+.neon-num {color: red;}
+.neon-var, .neon-ref {color: #003663; font-weight: bold;}
