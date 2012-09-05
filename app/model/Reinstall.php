@@ -33,7 +33,7 @@ class Reinstall extends \Nette\Object
 			$connection->exec("DROP TABLE `{$table['name']}`");
 		}
 
-		\Nette\Database\Helpers::loadFromFile($connection, __DIR__ . "/db/schema.sql");
+		\Nette\Database\Helpers::loadFromFile($connection, __DIR__ . "/db/current-schema.sql");
 		\Nette\Database\Helpers::loadFromFile($connection, __DIR__ . "/db/data.sql");
 	}
 
