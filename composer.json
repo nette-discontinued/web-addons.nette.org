@@ -2,11 +2,18 @@
 	"config": {
 		"vendor-dir": "libs"
 	},
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/kukulich/fshl"
+		}
+	],
 	"require": {
 		"php": ">=5.3.0",
 		"nette/nette": "2.0.*",
 		"dg/texy": "2.2.*",
-		"composer/composer": "dev-master"
+		"composer/composer": "dev-master",
+		"fshl/fshl": "dev-develop"
 	},
 	"minimum-stability":"dev",
 	"autoload": {
