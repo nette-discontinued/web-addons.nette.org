@@ -12,7 +12,7 @@ require_once LIBS_DIR . '/autoload.php';
 $configurator = new Configurator;
 
 // Enable Debugger
-$configurator->setDebugMode(TRUE);
+//$configurator->setDebugMode(TRUE);
 $configurator->enableDebugger(__DIR__ . '/../log');
 
 // Enable RobotLoader
