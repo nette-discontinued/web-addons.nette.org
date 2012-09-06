@@ -147,7 +147,7 @@ final class ManagePresenter extends BasePresenter
 		$this->manager->fillAddonWithValues($this->addon, $form->getValues(TRUE), $this->getUser()->getIdentity());
 		$this->storeAddon();
 
-		if ($this->addon->repository) { // TODO: use more reliable method
+		if ($this->addon->repositoryHosting) {
 			$this->flashMessage('Addon created.');
 			$this->redirect('importVersions');
 
