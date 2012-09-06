@@ -98,8 +98,17 @@ class AddonManageFacade extends Nette\Object
 	 */
 	public function fillAddonWithValues(Model\Addon $addon, array $values, Nette\Security\Identity $owner)
 	{
-		$overwritable = array('name' => TRUE, 'shortDescription' => TRUE, 'description' => TRUE, 'demo' => TRUE, 'defaultLicense' => FALSE);
-		$ifEmpty = array('composerName' => TRUE, 'repository' => FALSE);
+		$overwritable = array(
+				'name' => TRUE,
+				'shortDescription' => TRUE,
+				'description' => TRUE,
+				'demo' => TRUE,
+				'defaultLicense' => FALSE,
+		);
+		$ifEmpty = array(
+			'composerName' => TRUE,
+			'repository' => FALSE,
+		);
 
 		$addon->userId = $owner->getId(); // TODO: this is duplicite to self::import()
 

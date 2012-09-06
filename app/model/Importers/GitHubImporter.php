@@ -112,6 +112,7 @@ class GitHubImporter extends Nette\Object implements IAddonImporter
 	 *
 	 * @param  Addon
 	 * @return AddonVersion[]
+	 * @throws \NetteAddons\IOException
 	 */
 	public function importVersions(Addon $addon)
 	{

@@ -1,6 +1,6 @@
 -- Adminer 3.3.3 MySQL dump
 
-SET NAMES utf8;
+SET NAMES 'utf8';
 SET foreign_key_checks = 0;
 SET time_zone = 'SYSTEM';
 SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
@@ -88,21 +88,15 @@ CREATE TABLE `addons_votes` (
 
 -- added addon.shortDescription
 ALTER TABLE `addons`
-ADD `shortDescription` varchar(250) COLLATE 'utf8_general_ci' NOT NULL COMMENT 'short description' AFTER `repository`,
-COMMENT=''
-REMOVE PARTITIONING;
+ADD `shortDescription` varchar(250) COLLATE 'utf8_general_ci' NOT NULL COMMENT 'short description' AFTER `repository`;
 
 -- added composer.json to version
 ALTER TABLE `addons_versions`
-ADD `composerJson` text COLLATE 'utf8_general_ci' NULL AFTER `version`,
-COMMENT=''
-REMOVE PARTITIONING;
+ADD `composerJson` text COLLATE 'utf8_general_ci' NULL AFTER `version`;
 
 -- added vendor name to addon
 ALTER TABLE `addons`
-ADD `vendor_name` varchar(100) COLLATE 'utf8_general_ci' NOT NULL AFTER `name`,
-COMMENT=''
-REMOVE PARTITIONING;
+ADD `vendor_name` varchar(100) COLLATE 'utf8_general_ci' NOT NULL AFTER `name`;
 
 -- versions for addon must be unique
 ALTER TABLE `addons_versions`
