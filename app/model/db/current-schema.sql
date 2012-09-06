@@ -12,6 +12,7 @@ CREATE TABLE `addons` (
   `composerName` varchar(100) NOT NULL COMMENT 'vendor / package',
   `userId` int(10) unsigned NOT NULL,
   `repository` varchar(250) DEFAULT NULL COMMENT 'repository url (git or svn)',
+  `repositoryHosting` enum('github') DEFAULT NULL COMMENT 'repository hosting',
   `shortDescription` varchar(250) NOT NULL COMMENT 'short description',
   `description` text NOT NULL COMMENT 'in Texy! syntax',
   `demo` varchar(500) DEFAULT NULL COMMENT 'url to demo',
@@ -105,4 +106,4 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- 2012-09-06 10:04:37
+-- 2012-09-06 10:08:07

@@ -214,3 +214,7 @@ ADD FOREIGN KEY (`addonId`) REFERENCES `addons` (`id`) ON DELETE CASCADE ON UPDA
 -- removed useless index in addons.versions
 ALTER TABLE `addons_versions`
 DROP INDEX `addonId`;
+
+-- added column addons.repositoryHosting
+ALTER TABLE `addons`
+ADD `repositoryHosting` enum('github') COLLATE 'utf8_general_ci' NULL COMMENT 'repository hosting' AFTER `repository`;
