@@ -65,7 +65,6 @@ CREATE TABLE `addons_versions` (
   `composerJson` text NOT NULL COMMENT 'composer.json (with source & dist) cache',
   PRIMARY KEY (`id`),
   UNIQUE KEY `addonId_version` (`addonId`,`version`),
-  KEY `addonId` (`addonId`),
   CONSTRAINT `addons_versions_ibfk_1` FOREIGN KEY (`addonId`) REFERENCES `addons` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -106,4 +105,4 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- 2012-09-06 01:27:19
+-- 2012-09-06 10:04:37

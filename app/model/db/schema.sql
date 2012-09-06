@@ -210,3 +210,7 @@ ADD FOREIGN KEY (`versionId`) REFERENCES `addons_versions` (`id`) ON DELETE CASC
 ALTER TABLE `addons_votes`
 DROP FOREIGN KEY `addons_votes_ibfk_1`,
 ADD FOREIGN KEY (`addonId`) REFERENCES `addons` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- removed useless index in addons.versions
+ALTER TABLE `addons_versions`
+DROP INDEX `addonId`;
