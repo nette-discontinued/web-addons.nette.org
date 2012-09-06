@@ -96,6 +96,7 @@ class GitHubImporter extends Nette\Object implements IAddonImporter
 
 		// repository
 		$addon->repository = $this->repository->getUrl();
+		$addon->repositoryHosting = 'github';
 
 		// tags
 		if ($composer && isset($composer->keywords)) {

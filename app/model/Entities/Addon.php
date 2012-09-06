@@ -37,6 +37,9 @@ class Addon extends Nette\Object
 	/** @var string|NULL repository URL	 */
 	public $repository;
 
+	/** @var string|NULL */
+	public $repositoryHosting;
+
 	/** @var string|NULL URL to addon demo. */
 	public $demo;
 
@@ -70,6 +73,7 @@ class Addon extends Nette\Object
 		$addon->description = $row->description;
 		$addon->defaultLicense = $row->defaultLicense;
 		$addon->repository = $row->repository;
+		$addon->repositoryHosting = $row->repositoryHosting;
 		$addon->demo = $row->demo;
 		$addon->updatedAt = ($row->updatedAt ? DateTime::from($row->updatedAt) : NULL);
 

@@ -96,15 +96,16 @@ class Addons extends Table
 		$this->connection->beginTransaction();
 		try {
 			$row = $this->createRow(array(
-				'name'             => $addon->name,
-				'composerName'     => $addon->composerName,
-				'userId'           => $addon->userId,
-				'repository'       => $addon->repository,
-				'shortDescription' => $addon->shortDescription,
-				'description'      => $addon->description,
-				'demo'             => $addon->demo ?: NULL,
-				'defaultLicense'   => $addon->defaultLicense,
-				'updatedAt'        => new Datetime('now'),
+				'name'              => $addon->name,
+				'composerName'      => $addon->composerName,
+				'userId'            => $addon->userId,
+				'repository'        => $addon->repository,
+				'repositoryHosting' => $addon->repositoryHosting,
+				'shortDescription'  => $addon->shortDescription,
+				'description'       => $addon->description,
+				'demo'              => $addon->demo ?: NULL,
+				'defaultLicense'    => $addon->defaultLicense,
+				'updatedAt'         => new Datetime('now'),
 			));
 
 			$addon->id = $row->id;
