@@ -41,17 +41,6 @@ class GitHubImporter extends Nette\Object implements IAddonImporter
 
 
 	/**
-	 * @todo remove!
-	 * @return string
-	 */
-	public function getUrl()
-	{
-		return $this->url;
-	}
-
-
-
-	/**
 	 * Imports addon from GitHub repository.
 	 *
 	 * @return Addon
