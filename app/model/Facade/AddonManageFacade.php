@@ -104,10 +104,10 @@ class AddonManageFacade extends Nette\Object
 				'description' => TRUE,
 				'demo' => TRUE,
 				'defaultLicense' => FALSE,
+				'repository' => FALSE,
 		);
 		$ifEmpty = array(
 			'composerName' => TRUE,
-			'repository' => FALSE,
 		);
 
 		$addon->userId = $owner->getId(); // TODO: this is duplicite to self::import()

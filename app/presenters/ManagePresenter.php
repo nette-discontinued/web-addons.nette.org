@@ -119,6 +119,7 @@ final class ManagePresenter extends BasePresenter
 
 		if ($this->addon !== NULL) {
 			$form->setAddonDefaults($this->addon);
+			$form->removeComponent($form['repository']);
 			if ($this->addon->defaultLicense) {
 				$form->removeComponent($form['defaultLicense']);
 			}

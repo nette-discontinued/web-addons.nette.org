@@ -53,6 +53,10 @@ class AddAddonForm extends BaseForm
 					' for list of possible identifiers. Multiple licenses can be separated by comma.'
 				)
 			);
+		$this->addText('repository', 'Repository URL', 60, 500)
+			->setAttribute('class', 'span6')
+			->addCondition(self::FILLED)
+				->addRule(self::URL);
 		$this->addText('demo', 'Demo URL', 60, 500)
 			->setAttribute('class', 'span6')
 			->addCondition(self::FILLED)
@@ -75,6 +79,7 @@ class AddAddonForm extends BaseForm
 			'shortDescription' => $addon->shortDescription,
 			'description' => $addon->description,
 			'defaultLicense' => $addon->defaultLicense,
+			'repository' => $addon->repository,
 			'demo' => $addon->demo
 		));
 	}
