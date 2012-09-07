@@ -145,10 +145,17 @@ final class ManagePresenter extends BasePresenter
 			$this->addon = new Addon();
 		}
 
-		$this->manager->fillAddonWithValues($this->addon, $form->getValues(TRUE), $this->getUser()->getIdentity());
+		$imported = (bool) $this->addon->repositoryHosting; // TODO: remove
+
+		$values = $form->getValues(TRUE);
+		if (isset($values['repository'])) {
+			$values['repository'] = $this->manager->tryNormalizeRepoUrl($values['repository'], $values['repositoryHosting']);
+		}
+
+		$this->manager->fillAddonWithValues($this->addon, $values, $this->getUser()->getIdentity());
 		$this->storeAddon();
 
-		if ($this->addon->repositoryHosting) {
+		if ($imported) {
 			$this->flashMessage('Addon created.');
 			$this->redirect('importVersions');
 
@@ -179,6 +186,7 @@ final class ManagePresenter extends BasePresenter
 	{
 		try {
 			$url = $form->getValues()->url;
+			$url = $this->manager->tryNormalizeRepoUrl($url, $hosting);
 			$importer = $this->createAddonImporter($url);
 
 		} catch (\NetteAddons\NotSupportedException $e) {
@@ -387,6 +395,7 @@ final class ManagePresenter extends BasePresenter
 	 */
 	private function createAddonImporter($url)
 	{
+		$url = new \Nette\Http\Url($url);
 		return $this->getContext()->repositoryImporterFactory->createFromUrl($url);
 	}
 

@@ -35,13 +35,12 @@ class RepositoryImporterFactory extends Nette\Object
 	/**
 	 * Creates repository importer from url.
 	 *
-	 * @param  string
+	 * @param  Url
 	 * @return IAddonImporter
 	 * @throws \NetteAddons\NotSupportedException
 	 */
-	public function createFromUrl($url)
+	public function createFromUrl(Url $url)
 	{
-		$url = $this->normalizeUrl($url);
 		if ($url->getHost() === 'github.com') {
 			$path = substr($url->getPath(), 1); // removed leading slash
 			list($vendor, $name) = explode('/', $path);
@@ -50,43 +49,5 @@ class RepositoryImporterFactory extends Nette\Object
 		} else {
 			throw new \NetteAddons\NotSupportedException("Currently only GitHub is supported.");
 		}
-	}
-
-
-
-	/**
-	 * @author Patrik Votoček
-	 * @author Jan Tvrdík
-	 * @param  string
-	 * @return Url
-	 * @throws \NetteAddons\NotSupportedException
-	 */
-	private function normalizeUrl($url)
-	{
-		if (!Strings::match($url, '#^[a-z]+://#i')) {
-			$url = 'http://' . $url;
-		}
-
-		$url = new Url($url);
-		if ($url->getHost() === 'github.com') {
-			$path = substr($url->getPath(), 1); // without leading slash
-			if (strpos($path, '/') === FALSE) {
-				throw new \NetteAddons\NotSupportedException("Invalid GitHub URL.");
-			}
-
-			if (Strings::endsWith($path, '.git')) {
-				$path = Strings::substring($path, 0, -4);
-			}
-
-			list($vendor, $name) = explode('/', $path);
-
-			$normalized = new Url("https://github.com");
-			$normalized->setPath("/$vendor/$name");
-
-		} else {
-			throw new \NetteAddons\NotSupportedException("Currently only GitHub is supported.");
-		}
-
-		return $normalized;
 	}
 }
