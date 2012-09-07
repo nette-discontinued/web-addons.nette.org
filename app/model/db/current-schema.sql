@@ -11,7 +11,7 @@ CREATE TABLE `addons` (
   `name` varchar(100) NOT NULL COMMENT 'user friendly form',
   `composerName` varchar(100) NOT NULL COMMENT 'vendor / package',
   `userId` int(10) unsigned NOT NULL,
-  `repository` varchar(250) DEFAULT NULL COMMENT 'repository url (git or svn)',
+  `repository` varchar(500) DEFAULT NULL COMMENT 'repository url (git or svn)',
   `repositoryHosting` enum('github') DEFAULT NULL COMMENT 'repository hosting',
   `shortDescription` varchar(250) NOT NULL COMMENT 'short description',
   `description` text NOT NULL COMMENT 'in Texy! syntax',

@@ -218,3 +218,7 @@ DROP INDEX `addonId`;
 -- added column addons.repositoryHosting
 ALTER TABLE `addons`
 ADD `repositoryHosting` enum('github') COLLATE 'utf8_general_ci' NULL COMMENT 'repository hosting' AFTER `repository`;
+
+-- addons.repository length increased to 500
+ALTER TABLE `addons`
+CHANGE `repository` `repository` varchar(500) COLLATE 'utf8_general_ci' NULL COMMENT 'repository url (git or svn)' AFTER `userId`;
