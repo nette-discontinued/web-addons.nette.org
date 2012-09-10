@@ -132,7 +132,7 @@ class GitHubImporter extends Nette\Object implements IAddonImporter
 			if ($composer) {
 				foreach (AddonVersion::getLinkTypes() as $link) {
 					if (!empty($composer->$link)) {
-						$version->$link = $composer->$link;
+						$version->$link = get_object_vars($composer->$link);
 					}
 				}
 			}
