@@ -9,11 +9,10 @@
 
 			<ul>
 				<li>
-					{if isset($addon->repository) && $addon->repository != NULL}
+					{if isset($addon->repositoryHosting) && $addon->repositoryHosting != NULL}
 					<a rel="nofollow" n:href=":Manage:checkVersions $addon->id">Check updates</a>
-					{else}
-					<a rel="nofollow" n:href=":Manage:createVersion $addon->id">Add new version</a>
 					{/if}
+					<a rel="nofollow" n:href=":Manage:createVersion $addon->id">Add new version</a>
 				</li>
 				<li><a rel="nofollow" n:href=":Manage:editAddon $addon->id">Edit</a></li>
 			</ul>
@@ -103,3 +102,4 @@
 	</div>
 	{******************************************************** TODO *************************************************************}
 </div>
+{/block}
