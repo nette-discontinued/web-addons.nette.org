@@ -71,6 +71,21 @@ class AddonManageFacade extends Nette\Object
 
 
 	/**
+	 * @throws \NetteAddons\IOException
+	 */
+	public function updateVersions(Model\Addon $addon, Model\IAddonImporter $importer, Nette\Security\Identity $owner)
+	{
+		$current = $addon->versions;
+
+		$new = $this->getImportedVersions($addon, $importer, $owner);
+		$result = $this->mergeVersions($current, $new);
+		$addon->versions = $result['merged'];
+		return $result;
+	}
+
+
+
+	/**
 	 * Fills addon with values (usually from form). Those value must be already validated.
 	 *
 	 * @param  Model\Addon
@@ -268,5 +283,51 @@ class AddonManageFacade extends Nette\Object
 		      . '-' . $version->version . '.zip';
 
 		return $name;
+	}
+
+
+
+	/**
+	 * @param  Model\AddonVersion[]
+	 * @param  Model\AddonVersion[]
+	 * @return array
+	 */
+	private function mergeVersions($a, $b)
+	{
+		$merged = array();
+		$new = array();
+		$conflicted = array();
+
+		foreach ($a as $version) {
+			$merged[$version->version] = $version;
+		}
+
+		foreach ($b as $version) {
+			if (!isset($merged[$version->version])) {
+				$merged[$version->version] = $version;
+				$new[$version->version] = $version;
+
+			} else {
+				$diff = array_diff_assoc_recursive(
+					get_object_vars($version),
+					get_object_vars($merged[$version->version])
+				);
+				unset($diff['id']); // ignore ID diff
+				if ($diff) {
+					$conflicted[$version->version] = array(
+						'a' => $merged[$version->version],
+						'b' => $version,
+						'diff' => $diff,
+					);
+				}
+			}
+		}
+
+		return array(
+			'ok' => (count($conflicted) === 0),
+			'merged' => array_values($merged),
+			'new' => $new,
+			'conflicted' => $conflicted,
+		);
 	}
 }
