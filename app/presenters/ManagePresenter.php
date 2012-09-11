@@ -279,28 +279,43 @@ final class ManagePresenter extends BasePresenter
 	/**
 	 * @param int
 	 */
-	public function actionCheckVersions($id)
+	public function renderCheckVersions($addonId)
 	{
-		throw new \NetteAddons\NotImplementedException();
-		/*if (($this->addonRow = $this->addons->find($id)) === FALSE) {
-			throw new \Nette\Application\BadRequestException('Invalid addon ID.');
+		if (!$this->addon->repositoryHosting) {
+			$this->error();
 		}
-
-		$this->addon = Addon::fromActiveRow($this->addonRow);
-		$this->addon->userId = $this->getUser()->getId();
 
 		try {
 			$importer = $this->createAddonImporter($this->addon->repository);
-			$this->addon->versions = $importer->importVersions();
-			$this->updater->update($this->addon);
+			$result = $this->manager->updateVersions($this->addon, $importer, $this->getUser()->getIdentity());
 
-			$this->flashMessage('Addon version successfully updated.');
-
-		} catch (\NetteAddons\InvalidStateException $e) {
-			$this->flashMessage($e->getMessage() . ' Maybe missing license?');
+		} catch (\NetteAddons\IOException $e) {
+			$this->flashMessage('Version importing failed. Try again later.', 'error');
+			$this->redirect('Detail:', $this->addon->id);
 		}
 
-		$this->redirect('Detail:default', $id);*/
+		if (count($result['conflicted']) === 0) {
+			if (count($result['new']) === 0) {
+				$this->flashMessage('Nothing new…');
+			} else {
+				try {
+					foreach ($result['new'] as $version) {
+						$this->versions->add($version);
+					}
+					$this->flashMessage('New versions have been imported.');
+				} catch (\PDOException $e) {
+					$this->flashMessage('Version importing failed. Try again later.', 'error');
+				}
+			}
+
+			$this->redirect('Detail:', $this->addon->id);
+		} else {
+			$this->flashMessage('There is a conflict!');
+			$this->redirect('Detail:', $this->addon->id);
+
+
+		}
+
 	}
 
 
