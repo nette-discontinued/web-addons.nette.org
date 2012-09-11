@@ -102,7 +102,7 @@ final class ManagePresenter extends BasePresenter
 			$this->error('You are not allowed to manage this addon.', 403);
 		}
 
-		$this->manager = $this->createAddonManageFacade($this->addons);
+		$this->manager = $this->createAddonManageFacade();
 	}
 
 
@@ -401,11 +401,10 @@ final class ManagePresenter extends BasePresenter
 
 
 
-	private function createAddonManageFacade($addons)
+	private function createAddonManageFacade()
 	{
 		$currentUrl = $this->getHttpRequest()->getUrl();
 		return new AddonManageFacade(
-			$addons,
 			$this->context->parameters['uploadDir'],
 			$currentUrl->getHostUrl() . rtrim($currentUrl->getBasePath(), '/') . $this->context->parameters['uploadUri']
 		);

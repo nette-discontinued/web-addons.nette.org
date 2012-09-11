@@ -15,9 +15,6 @@ use Nette\Utils\Strings;
  */
 class AddonManageFacade extends Nette\Object
 {
-	/** @var Model\Addons */
-	private $addons;
-
 	/** @var string */
 	private $uploadDir;
 
@@ -27,13 +24,11 @@ class AddonManageFacade extends Nette\Object
 
 
 	/**
-	 * @param Model\Addons
 	 * @param string
 	 * @param string
 	 */
-	public function __construct(Model\Addons $addons, $uploadDir, $uploadUrl)
+	public function __construct($uploadDir, $uploadUrl)
 	{
-		$this->addons = $addons;
 		$this->uploadDir = $uploadDir;
 		$this->uploadUrl = $uploadUrl;
 	}
