@@ -61,24 +61,11 @@ class AddonManageFacade extends Nette\Object
 	 * @param  Model\IAddonImporter
 	 * @param  Nette\Security\Identity
 	 * @return Model\AddonVersion[]
+	 * @throws \NetteAddons\IOException
 	 */
 	public function importVersions(Model\Addon $addon, Model\IAddonImporter $importer, Nette\Security\Identity $owner)
 	{
-		$addon->versions = $importer->importVersions($addon);
-
-		// add information about author if missing
-		foreach ($addon->versions as $version) {
-			if (empty($version->composerJson->authors)) {
-				$version->composerJson->authors = array(
-					(object) array(
-						'name' => $owner->name,
-						'email' => $owner->email, // Note: Some users may not like disclosing their e-mail.
-					)
-				);
-			}
-		}
-
-		return $addon->versions;
+		return $addon->versions = $this->getImportedVersions($addon, $importer, $owner);
 	}
 
 
@@ -236,6 +223,40 @@ class AddonManageFacade extends Nette\Object
 
 		return $url;
 	}
+
+
+
+	/**
+	 * Returns versions imported from addon importer.
+	 *
+	 * @param  Model\Addon
+	 * @param  Model\IAddonImporter
+	 * @param  Nette\Security\Identity
+	 * @return Model\AddonVersion[]
+	 * @throws \NetteAddons\IOException
+	 */
+	private function getImportedVersions(Model\Addon $addon, Model\IAddonImporter $importer, Nette\Security\Identity $owner)
+	{
+		$versions = $importer->importVersions($addon);
+
+		// add information about author if missing
+		foreach ($versions as $version) {
+			if (empty($version->composerJson->authors)) {
+				$version->composerJson->authors = array(
+					(object) array(
+						'name' => $owner->name,
+						'email' => $owner->email, // Note: Some users may not like disclosing their e-mail.
+					)
+				);
+			}
+		}
+
+		return $versions;
+	}
+
+
+
+	/**
 	 * Returns filename for addon version.
 	 *
 	 * @param  Model\AddonVersion
