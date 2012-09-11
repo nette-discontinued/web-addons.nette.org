@@ -28,6 +28,40 @@ function c($instance)
 	return $instance;
 }
 
+
+
+/**
+ * Similar to array_diff_assoc, but works with multidimensional arrays and stdClass.
+ *
+ * @param  array
+ * @param  array
+ * @return array
+ */
+function array_diff_assoc_recursive(array $a, array $b)
+{
+	$diff = array();
+	foreach ($a as $key => $val) {
+		if (!array_key_exists($key, $b) || gettype($val) !== gettype($b[$key])) {
+			$diff[$key] = $val;
+		} elseif (is_array($val)) {
+			$diff2 = array_diff_assoc_recursive($val, $b[$key]);
+			if ($diff2) {
+				$diff[$key] = $diff2;
+			}
+		} elseif ($val instanceof stdClass && $b[$key] instanceof stdClass) {
+			$diff2 = array_diff_assoc_recursive(get_object_vars($val), get_object_vars($b[$key]));
+			if ($diff2) {
+				$diff[$key] = $diff2;
+			}
+		} elseif ($val !== $b[$key]) {
+			$diff[$key] = $val;
+		}
+	}
+	return $diff;
+}
+
+
+
 /**
  * PHP workaround for direct usage of cloned instances
  *
