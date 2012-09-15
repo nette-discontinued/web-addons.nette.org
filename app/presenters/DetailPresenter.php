@@ -5,6 +5,7 @@ namespace NetteAddons;
 use NetteAddons\Model\Addons;
 use NetteAddons\Model\AddonVersions;
 use NetteAddons\Model\AddonVotes;
+use Nette\Utils\Json;
 
 
 
@@ -62,13 +63,16 @@ class DetailPresenter extends BasePresenter
 		}
 
 		$popularity = $this->addonVotes->calculatePopularity($addon->id);
+		$currentVersion = $this->addonVersions->findAddonCurrentVersion($addon);
+		$versionRow = $addon->related('versions')->where('version', $currentVersion)->fetch();
+
 		$this->template->plus = $popularity->plus;
 		$this->template->minus = $popularity->minus;
 		$this->template->percents = $popularity->percent;
 
 		$this->template->addon = $addon;
-
-		$this->template->currentVersion = $this->addonVersions->findAddonCurrentVersion($addon);
+		$this->template->version = $versionRow;
+		$this->template->composer = $versionRow->composerJson ? Json::decode($versionRow->composerJson) : NULL;
 	}
 
 

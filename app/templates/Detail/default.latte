@@ -17,26 +17,59 @@
 	</ul>
 </div>
 {/block}
+
+
+
 {block content}
-<div id="breadcrumbs">
-	<a href="http://nette.org/en/">Nette Framework</a> »
-	<a n:href=":Homepage:">Addons, plugins and components</a> »
-	<span>{$addon->name}</span>
-</div>
+	<div id="breadcrumbs">
+		<a href="http://nette.org/en/">Nette Framework</a> »
+		<a n:href=":Homepage:">Addons, plugins and components</a> »
+		<span>{$addon->name}</span>
+	</div>
 
-<h1 id="toc-addons-plugins-and-components">{$addon->name}</h1>
+	<h1>{$addon->name}</h1>
+	<p class="perex">{$addon->shortDescription}</p>
 
-{******************************************************** TODO ************************************************************* }
-<p class="addon-download">
-	<a n:if="$addon->demo" class="btn btn-success btn-large" href="{$addon->demo}"><i class="icon-eye-open icon-white"></i> Demo</a>
-	<a class="btn btn-primary btn-large" href="javascript:;"><i class="icon-download icon-white"></i> Download</a>
-</p>
-{******************************************************** TODO *************************************************************}
+	<table>
+		<tr>
+			<th>Composer name</th>
+			<td>{$addon->composerName}</td>
+		</tr>
+		<tr>
+			<th>Download link</th>
+			<td><a href="{$version->distUrl}">{$version->distUrl}</a></td>
+		</tr>
+		<tr n:if="$addon->repository">
+			<th>Repository</th>
+			<td><a href="{$addon->repository}">{$addon->repository}</a></td>
+		</tr>
+		<tr n:if="$addon->demo">
+			<th>Demo</th>
+			<td><a href="{$addon->demo}">{$addon->demo}</a></td>
+		</tr>
+		<tr>
+			<th>Version</th>
+			<td>{$version->version}</td>
+		</tr>
+		<tr>
+			<th>License</th>
+			<td>{$version->license}</td>
+		</tr>
+		<tr n:ifset="$composer, $composer->require">
+			<th>Requirements</th>
+			<td>
+				{foreach $composer->require as $package => $v}
+					{$package} ({$v})
+					{sep}<br>{/sep}
+				{/foreach}
+			</td>
+		</tr>
+	</table>
 
-<p class="perex">{$addon->shortDescription}</p>
-
-{!$addon->description|texy}
+	{!$addon->description|texy}
 {/block}
+
+
 
 {block sidebar}
 <div class="info">
@@ -50,19 +83,6 @@
 		<h3><a n:href=":People:detail id => $addon->user->id" title="$addon->user->name">{$addon->user->name}</a></h3>
 		<img src="http://forum.nette.org/cs/img/avatars/2118.jpg" class="avatar" alt="Avatar">
 	</div>
-
-
-	<h3>Composer name</h3>
-
-	<p>{$addon->composerName}</p>
-
-	<h3>Info</h3>
-
-	<ul class="nostyle">
-		<li>Last update: {$addon->updatedAt|date:'%d.%m.%Y'}</li>
-		{*<li>License: {$addon->license|replace:',',', '}</li>*}
-		<li n:if="$addon->repository"><a href="{$addon->repository}">Repository</a></li>
-	</ul>
 
 	{******************************************************** TODO ************************************************************* }
 	<div class="box-vote">
