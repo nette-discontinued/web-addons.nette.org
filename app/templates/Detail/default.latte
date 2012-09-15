@@ -6,14 +6,11 @@
 	<ul>
 		<li>
 			<a href="#">Manage <span>&#x25bc;</span></a>
-
 			<ul>
-				<li>
-					{if isset($addon->repositoryHosting) && $addon->repositoryHosting != NULL}
+				<li n:if="isset($addon->repositoryHosting) && $addon->repositoryHosting != NULL">
 					<a rel="nofollow" n:href=":Manage:checkVersions $addon->id">Check updates</a>
-					{/if}
-					<a rel="nofollow" n:href=":Manage:createVersion $addon->id">Add new version</a>
 				</li>
+				<li><a rel="nofollow" n:href=":Manage:createVersion $addon->id">Add new version</a></li>
 				<li><a rel="nofollow" n:href=":Manage:editAddon $addon->id">Edit</a></li>
 			</ul>
 		</li>
