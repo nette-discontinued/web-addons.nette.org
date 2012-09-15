@@ -392,6 +392,10 @@ final class ManagePresenter extends BasePresenter
 	{
 		$values = $form->getValues(TRUE);
 
+		if ($values['repository']) {
+			$values['repository'] = $this->manager->tryNormalizeRepoUrl($values['repository'], $values['repositoryHosting']);
+		}
+
 		$this->manager->fillAddonWithValues($this->addon, $values, $this->getUser()->getIdentity());
 		$this->addons->update($this->addon);
 
