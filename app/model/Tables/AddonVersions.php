@@ -71,13 +71,13 @@ class AddonVersions extends Table
 	public function findAddonCurrentVersion(ActiveRow $addon)
 	{
 		$versions = $addon->related('addons_versions')->fetchPairs('id', 'version');
-		$hasMasterBranch = in_array('master', $versions);
+		$hasMasterBranch = in_array('dev-master', $versions);
 		$versions = array_filter($versions, function ($ver) {
 			return (bool)Version::create($ver);
 		});
 
 		if (!$versions && $hasMasterBranch) {
-			return "master";
+			return 'dev-master';
 		}
 
 		usort($versions, function ($me, $him) {
