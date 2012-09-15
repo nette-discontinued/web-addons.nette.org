@@ -74,6 +74,7 @@ class DetailPresenter extends BasePresenter
 
 		$texy = $this->texyFactory->create();
 		$this->template->content = $texy->process($addon->description);
+		$this->template->toc = $texy->headingModule->TOC;
 
 		$popularity = $this->addonVotes->calculatePopularity($addon->id);
 		$currentVersion = $this->addonVersions->findAddonCurrentVersion($addon);
