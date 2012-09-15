@@ -38,6 +38,9 @@ services:
 	authenticator: NetteAddons\Model\Authenticator
 	authorizator: NetteAddons\Model\Authorizator
 
+	# view
+	texyFactory: NetteAddons\TexyFactory
+
     # tables
 	users: NetteAddons\Model\Users
 	addons: NetteAddons\Model\Addons

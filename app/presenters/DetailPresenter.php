@@ -30,6 +30,9 @@ class DetailPresenter extends BasePresenter
 	/** @var AddonVotes */
 	private $addonVotes;
 
+	/** @var TexyFactory */
+	private $texyFactory;
+
 
 
 	public function injectAddons(Addons $addons)
@@ -53,6 +56,13 @@ class DetailPresenter extends BasePresenter
 
 
 
+	public function injectTexyFactory(TexyFactory $factory)
+	{
+		$this->texyFactory = $factory;
+	}
+
+
+
 	/**
 	 * @param int addon ID
 	 */
@@ -61,6 +71,9 @@ class DetailPresenter extends BasePresenter
 		if (!$addon = $this->addons->find($id)) {
 			$this->error('Addon not found!');
 		}
+
+		$texy = $this->texyFactory->create();
+		$this->template->content = $texy->process($addon->description);
 
 		$popularity = $this->addonVotes->calculatePopularity($addon->id);
 		$currentVersion = $this->addonVersions->findAddonCurrentVersion($addon);

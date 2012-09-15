@@ -2,6 +2,7 @@
 
 namespace NetteAddons;
 
+use Nette;
 use Texy;
 use TexyHtml;
 use FSHL\Highlighter;
@@ -11,30 +12,14 @@ use FSHL\Lexer;
 
 
 /**
+ * @author David Grudl
  * @author Jan Marek
+ * @author Patrik Votoček
+ * @author Jan Tvrdík
  */
-class TexyHelper
+class TexyFactory extends Nette\Object
 {
-	/** @var Texy */
-	private $texy = NULL;
-
-
-
-	public function __invoke($text)
-	{
-		if ($this->texy === NULL) {
-			$this->texy = $this->createTexy();
-		}
-
-		return $this->texy->process($text);
-	}
-
-
-
-	/**
-	 * @return \Texy
-	 */
-	public function createTexy()
+	public function create()
 	{
 		$texy = new Texy;
 		$texy->setOutputMode(Texy::HTML5);
