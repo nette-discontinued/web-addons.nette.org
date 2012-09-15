@@ -92,6 +92,21 @@ class DetailPresenter extends BasePresenter
 
 
 	/**
+	 * @param int addon ID
+	 */
+	public function renderArchive($id)
+	{
+		if (!$addon = $this->addons->find($id)) {
+			$this->error('Addon not found!');
+		}
+
+		$this->template->addon = $addon;
+		$this->template->versions = $addon->related('versions');
+	}
+
+
+
+	/**
 	 * Handle voting for current addon.
 	 *
 	 * @author Jan Tvrdík

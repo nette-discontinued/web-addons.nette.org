@@ -1,0 +1,68 @@
+{block content}
+
+	<style>
+		table th {
+			vertical-align: top;
+		}
+	</style>
+
+	<h1><a n:href="default">{$addon->name}</a> archive</h1>
+
+	{foreach $versions as $version}
+		{var $composer = json_decode($version->composerJson)}
+		<table>
+			<h2>{$version->version}</h2>
+			<tr>
+				<th>License</th>
+				<td>{$version->license}</td>
+			</tr>
+			<tr>
+				<th>Download link</th>
+				<td><a href="{$version->distUrl}">{$version->distUrl}</a></td>
+			</tr>
+
+			<tr n:ifset="$composer->source">
+				<th>{$composer->source->type|firstUpper} reference</th>
+				<td>
+					<a n:tag-if="$addon->repositoryHosting == github" href="{$addon->repository}/tree/{$composer->source->reference}">
+						{$composer->source->reference}
+					</a>
+				</td>
+			</tr>
+			<tr n:ifset="$composer->time">
+				<th>Release date</th>
+				<td>{$composer->time}</td> {* Format: YYYY-MM-DD or YYYY-MM-DD HH:MM:SS *}
+			</tr>
+			<tr>
+				<th>Authors</th>
+				<td>
+					{foreach $composer->authors as $author}
+						<a n:tag-ifset="$author->homepage" href="{$author->homepage}" rel="nofollow">{$author->name}</a>
+						{ifset $author->role}({$author->role}){/ifset}
+						{sep}<br>{/sep}
+					{/foreach}
+				</td>
+			</tr>
+			<tr n:if="!empty($composer->support)">
+				<th>Support channels</th>
+				<td>
+					{var $labels = array(
+						issues => "Issue Tracker",
+						forum => "Forum",
+						wiki => "Wiki",
+						irc => "IRC",
+						source => "Source code",
+					)}
+
+					{*ifset $composer->support->email}E-mail: {$composer->support->email|replace:'@':' (at) '}<br>{/ifset*}
+					{foreach $labels as $key => $label}
+						{continueIf !isset($composer->support->$key)}
+						<a href="{$composer->support->$key}" rel="nofollow">{$label}</a>
+						{sep}<br>{/sep}
+					{/foreach}
+				</td>
+			</tr>
+		</table>
+	{/foreach}
+
+{/block}
