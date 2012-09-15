@@ -42,7 +42,7 @@ class TexyHelper
 		$texy->alignClasses['left'] = 'left';
 		$texy->alignClasses['right'] = 'right';
 		$texy->emoticonModule->class = 'smiley';
-		$texy->headingModule->top = 1;
+		$texy->headingModule->top = 2;
 		$texy->headingModule->generateID = TRUE;
 		$texy->tabWidth = 4;
 		$texy->tableModule->evenClass = 'alt';
