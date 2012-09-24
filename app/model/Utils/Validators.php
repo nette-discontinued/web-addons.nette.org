@@ -3,7 +3,6 @@
 namespace NetteAddons\Model\Utils;
 
 use NetteAddons\Model\Addons;
-use NetteAddons\Model\Version;
 use Nette;
 use Nette\Forms;
 use Nette\Utils\Strings;
