@@ -86,20 +86,19 @@ class DetailPresenter extends BasePresenter
 	public function renderDefault($id)
 	{
 		$currentVersion = $this->addonVersions->getCurrent($this->addon->versions);
-
-		$texy = $this->texyFactory->create();
-		$this->template->content = $texy->process($this->addon->description);
-		$this->template->toc = $texy->headingModule->TOC;
-
 		$popularity = $this->addonVotes->calculatePopularity($this->addon->id);
-
-		$this->template->plus = $popularity->plus;
-		$this->template->minus = $popularity->minus;
-		$this->template->percents = $popularity->percent;
+		$texy = $this->texyFactory->create();
 
 		$this->template->addon = $addon;
 		$this->template->version = $currentVersion;
 		$this->template->composer = $currentVersion->composerJson;
+
+		$this->template->content = $texy->process($this->addon->description);
+		$this->template->toc = $texy->headingModule->TOC;
+
+		$this->template->plus = $popularity->plus;
+		$this->template->minus = $popularity->minus;
+		$this->template->percents = $popularity->percent;
 	}
 
 

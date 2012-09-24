@@ -312,10 +312,7 @@ final class ManagePresenter extends BasePresenter
 		} else {
 			$this->flashMessage('There is a conflict!');
 			$this->redirect('Detail:', $this->addon->id);
-
-
 		}
-
 	}
 
 
