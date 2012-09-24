@@ -20,17 +20,22 @@ class AddonVersions extends Table
 	/** @var VersionDependencies version dependencies repository */
 	private $dependencies;
 
+	/** @var Utils\VersionParser */
+	private $parser;
+
 
 
 	/**
 	 * Class constructor.
 	 *
 	 * @param  Nette\Database\Connection
+	 * @param  Utils\VersionParser
 	 */
-	public function __construct(Nette\Database\Connection $dbConn, VersionDependencies $dependencies)
+	public function __construct(Nette\Database\Connection $dbConn, VersionDependencies $dependencies, Utils\VersionParser $parser)
 	{
 		parent::__construct($dbConn);
 		$this->dependencies = $dependencies;
+		$this->parser = $parser;
 	}
 
 
@@ -88,4 +93,16 @@ class AddonVersions extends Table
 		return end($versions);
 	}
 
+
+
+	/**
+	 * Sorts list of versions.
+	 *
+	 * @param  AddonVersion[]
+	 * @return void
+	 */
+	public function rsort(&$versions)
+	{
+		$this->parser->sort($versions, TRUE);
+	}
 }
