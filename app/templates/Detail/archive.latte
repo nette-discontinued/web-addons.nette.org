@@ -8,8 +8,8 @@
 
 	<h1><a n:href="default">{$addon->name}</a> archive</h1>
 
-	{foreach $versions as $version}
-		{var $composer = json_decode($version->composerJson)}
+	{foreach $addon->versions as $version}
+		{var $composer = $version->composerJson}
 		<table>
 			<h2>{$version->version}</h2>
 			<tr>
@@ -20,7 +20,6 @@
 				<th>Download link</th>
 				<td><a href="{$version->distUrl}">{$version->distUrl}</a></td>
 			</tr>
-
 			<tr n:ifset="$composer->source">
 				<th>{$composer->source->type|firstUpper} reference</th>
 				<td>

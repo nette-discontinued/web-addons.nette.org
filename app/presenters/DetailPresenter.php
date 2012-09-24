@@ -2,6 +2,7 @@
 
 namespace NetteAddons;
 
+use NetteAddons\Model\Addon;
 use NetteAddons\Model\Addons;
 use NetteAddons\Model\AddonVersions;
 use NetteAddons\Model\AddonVotes;
@@ -20,6 +21,9 @@ class DetailPresenter extends BasePresenter
 	 * @persistent
 	 */
 	public $id;
+
+	/** @var Addon */
+	private $addon;
 
 	/** @var Addons */
 	private $addons;
@@ -63,30 +67,39 @@ class DetailPresenter extends BasePresenter
 
 
 
+	protected function startup()
+	{
+		parent::startup();
+
+		if (!$row = $this->addons->find($this->id)) {
+			$this->error('Addon not found!');
+		}
+		$this->addon = Addon::fromActiveRow($row);
+		$this->addonVersions->rsort($this->addon->versions);
+	}
+
+
+
 	/**
 	 * @param int addon ID
 	 */
 	public function renderDefault($id)
 	{
-		if (!$addon = $this->addons->find($id)) {
-			$this->error('Addon not found!');
-		}
+		$currentVersion = $this->addonVersions->getCurrent($this->addon->versions);
 
 		$texy = $this->texyFactory->create();
-		$this->template->content = $texy->process($addon->description);
+		$this->template->content = $texy->process($this->addon->description);
 		$this->template->toc = $texy->headingModule->TOC;
 
-		$popularity = $this->addonVotes->calculatePopularity($addon->id);
-		$currentVersion = $this->addonVersions->findAddonCurrentVersion($addon);
-		$versionRow = $addon->related('versions')->where('version', $currentVersion)->fetch();
+		$popularity = $this->addonVotes->calculatePopularity($this->addon->id);
 
 		$this->template->plus = $popularity->plus;
 		$this->template->minus = $popularity->minus;
 		$this->template->percents = $popularity->percent;
 
 		$this->template->addon = $addon;
-		$this->template->version = $versionRow;
-		$this->template->composer = $versionRow->composerJson ? Json::decode($versionRow->composerJson) : NULL;
+		$this->template->version = $currentVersion;
+		$this->template->composer = $currentVersion->composerJson;
 	}
 
 
@@ -96,12 +109,7 @@ class DetailPresenter extends BasePresenter
 	 */
 	public function renderArchive($id)
 	{
-		if (!$addon = $this->addons->find($id)) {
-			$this->error('Addon not found!');
-		}
-
-		$this->template->addon = $addon;
-		$this->template->versions = $addon->related('versions');
+		$this->template->addon = $this->addon;
 	}
 
 
