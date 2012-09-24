@@ -131,7 +131,7 @@ class Addons extends Table
 
 	public function update(Addon $addon)
 	{
-		// this may fail, becase find() may return FALSE
+		// TODO: this may fail, becase find() may return FALSE
 		$this->find($addon->id)->update(array(
 			'name'             => $addon->name,
 			'repository'       => $addon->repository,
