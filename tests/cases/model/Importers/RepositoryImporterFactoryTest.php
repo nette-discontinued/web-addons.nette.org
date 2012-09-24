@@ -4,6 +4,7 @@ namespace NetteAddons\Test;
 
 use NetteAddons;
 use NetteAddons\Model\Importers\RepositoryImporterFactory;
+use Nette\Http\Url;
 use Mockery;
 
 
@@ -13,10 +14,7 @@ use Mockery;
  */
 class RepositoryImporterFactoryTest extends TestCase
 {
-	/**
-	 * @dataProvider dataNormalizeGitHubUrl
-	 */
-	public function testCreateFromUrl($input, $expected)
+	public function testCreateFromUrl()
 	{
 		$test = $this;
 		$importer = Mockery::mock('NetteAddons\Model\Importers\GitHubImporter');
@@ -29,7 +27,8 @@ class RepositoryImporterFactoryTest extends TestCase
 			},
 		));
 
-		$this->assertSame($importer, $factory->createFromUrl($input));
+		$url = new Url('https://github.com/smith/browser');
+		$this->assertSame($importer, $factory->createFromUrl($url));
 	}
 
 
@@ -37,24 +36,11 @@ class RepositoryImporterFactoryTest extends TestCase
 	/**
 	 * @dataProvider dataUnsupportedUrls
 	 */
-	public function testCreateFromInvalidUrl($url)
+	public function testCreateFromUnsupportedUrl($url)
 	{
 		$this->setExpectedException('NetteAddons\NotSupportedException');
 		$factory = new RepositoryImporterFactory(array());
-		$factory->createFromUrl($url);
-	}
-
-
-
-	/**
-	 * @dataProvider dataNormalizeGitHubUrl
-	 */
-	public function testNormalizeUrl($input, $expected)
-	{
-		$factory = new RepositoryImporterFactory(array());
-		$method = Access($factory, 'normalizeUrl');
-
-		$this->assertSame($expected, (string) $method->call($input));
+		$factory->createFromUrl(new Url($url));
 	}
 
 
@@ -63,24 +49,6 @@ class RepositoryImporterFactoryTest extends TestCase
 	{
 		return array(
 			array('https://bitbucket.org/jiriknesl/mockista'),
-			array('invalid'),
-		);
-	}
-
-
-
-	/**
-	 * @author Patrik Votoček
-	 */
-	public static function dataNormalizeGitHubUrl()
-	{
-		return array(
-			array('https://github.com/smith/browser', 'https://github.com/smith/browser'),
-			array('http://github.com/smith/browser', 'https://github.com/smith/browser'),
-			array('github.com/smith/browser', 'https://github.com/smith/browser'),
-			array('https://github.com/smith/browser/commits/master', 'https://github.com/smith/browser'),
-			array('https://github.com/smith/browser.git', 'https://github.com/smith/browser'),
-			array('git://github.com/smith/browser.git', 'https://github.com/smith/browser'),
 		);
 	}
 }
