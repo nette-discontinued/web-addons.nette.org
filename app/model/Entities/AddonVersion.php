@@ -26,7 +26,7 @@ class AddonVersion extends Nette\Object
 	public $require = array();
 
 	/** @var string[] */
-	public $suggest = array();
+	//public $suggest = array();
 
 	/** @var string[] */
 	public $provide = array();
@@ -103,6 +103,6 @@ class AddonVersion extends Nette\Object
 	 */
 	public static function getLinkTypes()
 	{
-		return array('require', 'replace', 'conflict', 'provide', /*'require-dev', */'suggest');
+		return array('require', 'replace', 'conflict', 'provide', /*'require-dev', 'suggest'*/);
 	}
 }
