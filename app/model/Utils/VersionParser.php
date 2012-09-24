@@ -2,6 +2,7 @@
 
 namespace NetteAddons\Model\Utils;
 
+use NetteAddons\Model\AddonVersion;
 use Nette;
 use Composer\Package\Version\VersionParser as ComposerVersionParser;
 
@@ -70,6 +71,16 @@ class VersionParser extends Nette\Object
 
 
 	/**
+	 * @param  AddonVersion[]
+	 * @return AddonVersion[]
+	 */
+	public function filterStable($versions)
+	{
+		$that = $this;
+		return array_filter($versions, function (AddonVersion $version) use ($that) {
+			return $that->parseStability($version->version) === 'stable';
+		});
+	}
 	 * @return ComposerVersionParser
 	 */
 	private function getParser()
