@@ -10,7 +10,8 @@
 
 <p class="warning">
 	<b>This is DEVELOPMENT version new Nette Framework Addons Portal</b><br>
-	Please login as demo user. Username: <i>demo</i> Password: <i>123</i> | <a n:href="reinstall!">Reinstall</a>
+	Please login as demo user. Username: <i>demo</i> Password: <i>123</i>
+	{if !$presenter->context->parameters['productionMode']}| <a n:href="reinstall!">Reinstall</a>{/if}
 </p>
 
 <p class="perex">All extensions for Nette Framework in one place. Addons for latest version of Nette are highlighted.</p>
