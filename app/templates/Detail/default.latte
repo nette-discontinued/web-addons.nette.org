@@ -43,6 +43,14 @@
 			<th>Repository</th>
 			<td><a href="{$addon->repository}">{$addon->repository}</a></td>
 		</tr>
+		<tr n:ifset="$composer->source">
+			<th>{$composer->source->type|firstUpper} reference</th>
+			<td>
+				<a n:tag-if="$addon->repositoryHosting == github" href="{$addon->repository}/tree/{$composer->source->reference}">
+					{$composer->source->reference}
+				</a>
+			</td>
+		</tr>
 		<tr n:if="$addon->demo">
 			<th>Demo</th>
 			<td><a href="{$addon->demo}">{$addon->demo}</a></td>
