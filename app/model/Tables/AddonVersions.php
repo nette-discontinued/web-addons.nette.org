@@ -105,4 +105,27 @@ class AddonVersions extends Table
 	{
 		$this->parser->sort($versions, TRUE);
 	}
+
+
+
+	/**
+	 * Returns the latest version.
+	 *
+	 * @param  AddonVersion[] reverse sorted versions
+	 * @param  bool
+	 * @return AddonVersion|FALSE
+	 */
+	public function getCurrent($versions, $preferStable = TRUE)
+	{
+		if (count($versions) === 0) {
+			return FALSE;
+		}
+
+		if ($preferStable) {
+			$stable = $this->parser->filterStable($versions);
+			if ($stable) $versions = $stable;
+		}
+
+		return reset($versions);
+	}
 }
