@@ -89,7 +89,7 @@ class DetailPresenter extends BasePresenter
 		$popularity = $this->addonVotes->calculatePopularity($this->addon->id);
 		$texy = $this->texyFactory->create();
 
-		$this->template->addon = $addon;
+		$this->template->addon = $this->addon;
 		$this->template->version = $currentVersion;
 		$this->template->composer = $currentVersion->composerJson;
 
