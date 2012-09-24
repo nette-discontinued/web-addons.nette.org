@@ -41,6 +41,10 @@ class HomepagePresenter extends BasePresenter
 
 	public function handleReinstall()
 	{
+		if ($this->context->parameters['productionMode']) {
+			$this->error();
+		}
+
 		$this->reinstaller->recreateDatabase();
 
 		$this->flashMessage('Fuk yea!');
