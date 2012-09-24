@@ -5,6 +5,7 @@ namespace NetteAddons\Model\Utils;
 use NetteAddons\Model\AddonVersion;
 use Nette;
 use Composer\Package\Version\VersionParser as ComposerVersionParser;
+use Composer\Package\LinkConstraint\VersionConstraint;
 
 
 
@@ -81,6 +82,51 @@ class VersionParser extends Nette\Object
 			return $that->parseStability($version->version) === 'stable';
 		});
 	}
+
+
+
+	/**
+	 * Compares two versions and returns 0 if $a == $b, -1 if $a < $b and +1 if $b > $a.
+	 *
+	 * @param  AddonVersion
+	 * @param  AddonVersion
+	 * @return int
+	 */
+	public function compare(AddonVersion $a, AddonVersion $b)
+	{
+		$parser = $this->getParser();
+		$a = $parser->normalize($a->version);
+		$b = $parser->normalize($b->version);
+
+		$constraint = new VersionConstraint(NULL, NULL);
+		if ($constraint->versionCompare($a, $b, '==')) {
+			return 0;
+		} elseif ($constraint->versionCompare($a, $b, '<')) {
+			return -1;
+		} else {
+			return 1;
+		}
+	}
+
+
+
+	/**
+	 * @param  AddonVersion[]
+	 * @param  bool
+	 * @return void
+	 */
+	public function sort(&$versions, $reverse)
+	{
+		$reverse = ($reverse ? -1 : 1);
+		$that = $this;
+		uksort($versions, function ($a, $b) use ($that, $versions, $reverse) {
+			return $that->compare($versions[$a], $versions[$b]) * $reverse;
+		});
+	}
+
+
+
+	/**
 	 * @return ComposerVersionParser
 	 */
 	private function getParser()
