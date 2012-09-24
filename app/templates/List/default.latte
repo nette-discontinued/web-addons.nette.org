@@ -14,18 +14,21 @@
 
 <h2>List addons</h2>
 
-<table>
-	<tbody>
-		{foreach $addons as $addon}
-		<tr n:class="$iterator->odd ? alt">
-			<td><a title="{$addon->name}" n:href=":Detail: id => $addon->id">{$addon->name}</a></td>
-			<td>{$addon->shortDescription}</td>
-		</tr>
-		{/foreach}
-	</tbody>
-</table>
+{if count($addons)}
+	<table>
+		<tbody>
+			{foreach $addons as $addon}
+			<tr n:class="$iterator->odd ? alt">
+				<td><a title="{$addon->name}" n:href=":Detail: id => $addon->id">{$addon->name}</a></td>
+				<td>{$addon->shortDescription}</td>
+			</tr>
+			{/foreach}
+		</tbody>
+	</table>
+{else}
+	<p>No addons found.</p>
+{/if}
 
-<p n:if="!count($addons)">XNo addons found.</p>
 {/block}
 
 {block sidebar}
