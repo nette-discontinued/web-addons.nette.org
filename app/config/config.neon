@@ -64,6 +64,7 @@ services:
 
 	# misc
 	reinstall: NetteAddons\Model\Reinstall
+	versionParser: NetteAddons\Model\Utils\VersionParser
 
 
 factories:
