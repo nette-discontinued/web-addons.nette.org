@@ -148,7 +148,7 @@ final class ManagePresenter extends BasePresenter
 		$imported = (bool) $this->addon->repositoryHosting; // TODO: remove
 
 		$values = $form->getValues(TRUE);
-		if (isset($values['repository'])) {
+		if (!empty($values['repository'])) {
 			$values['repository'] = $this->manager->tryNormalizeRepoUrl($values['repository'], $values['repositoryHosting']);
 		}
 
@@ -392,7 +392,7 @@ final class ManagePresenter extends BasePresenter
 	{
 		$values = $form->getValues(TRUE);
 
-		if ($values['repository']) {
+		if (!empty($values['repository'])) {
 			$values['repository'] = $this->manager->tryNormalizeRepoUrl($values['repository'], $values['repositoryHosting']);
 		}
 
