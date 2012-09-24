@@ -6,7 +6,6 @@ use NetteAddons\Model\Addon;
 use NetteAddons\Model\Addons;
 use NetteAddons\Model\AddonVersions;
 use NetteAddons\Model\AddonVotes;
-use Nette\Utils\Json;
 
 
 
