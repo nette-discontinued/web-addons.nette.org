@@ -3,6 +3,7 @@
 namespace NetteAddons\Model\Facade;
 
 use NetteAddons\Model;
+use NetteAddons\Model\Utils\VersionParser;
 use Nette;
 use Nette\Http\Url;
 use Nette\Utils\Strings;
@@ -144,11 +145,12 @@ class AddonManageFacade extends Nette\Object
 	 * @param  Model\Addon
 	 * @param  array
 	 * @param  Nette\Security\Identity
+	 * @param  VersionParser
 	 * @return Model\AddonVersion
 	 * @throws \NetteAddons\InvalidArgumentException
 	 * @throws \NetteAddons\IOException
 	 */
-	public function addVersionFromValues(Model\Addon $addon, $values, Nette\Security\Identity $owner)
+	public function addVersionFromValues(Model\Addon $addon, $values, Nette\Security\Identity $owner, VersionParser $versionParser)
 	{
 		if (!$values->license) {
 			throw new \NetteAddons\InvalidArgumentException("License is mandatory.");
@@ -160,7 +162,7 @@ class AddonManageFacade extends Nette\Object
 
 		$version = new Model\AddonVersion();
 		$version->addon = $addon;
-		$version->version = $values->version;
+		$version->version = $versionParser->parseTag($version->version);
 		$version->license = $values->license;
 
 		if ($values->archiveLink) {

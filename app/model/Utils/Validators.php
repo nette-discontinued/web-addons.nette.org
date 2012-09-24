@@ -22,12 +22,16 @@ class Validators extends Nette\Object
 	/** @var SpdxLicenseIdentifier */
 	private $licenseValidator;
 
+	/** @var VersionParser */
+	private $versionParser;
 
 
-	public function __construct(Addons $addonsRepo, SpdxLicenseIdentifier $licenseValidator)
+
+	public function __construct(Addons $addonsRepo, SpdxLicenseIdentifier $licenseValidator, VersionParser $versionParser)
 	{
 		$this->addonsRepo = $addonsRepo;
 		$this->licenseValidator = $licenseValidator;
+		$this->versionParser = $versionParser;
 	}
 
 
@@ -51,12 +55,7 @@ class Validators extends Nette\Object
 
 	public function isVersionValid($versionString)
 	{
-		if (Strings::match($versionString, '#^dev-[a-z0-9._-]#i')) { // e.g. 'dev-master'
-			return TRUE;
-		}
-
-		$version = new Version($versionString);
-		return $version->isValid();
+		return (bool) $this->versionParser->parseTag($versionString);
 	}
 
 

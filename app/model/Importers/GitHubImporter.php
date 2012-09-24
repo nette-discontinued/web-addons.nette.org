@@ -167,20 +167,17 @@ class GitHubImporter extends Nette\Object implements IAddonImporter
 		$versions = array();
 		$tags = $this->repository->getTags();
 		$branches = $this->repository->getBranches();
+		$util = new Utils\VersionParser; // TODO: use dependency injection
 
 		foreach ($tags as $tag => $hash) {
-			$version = Model\Version::create($tag);
-			if ($version && $version->isValid()) {
-				$versions[$version->getVersion()] = $tag;
-			}
+			$version = $util->parseTag($tag);
+			if (!$version) continue;
+			$versions[$version] = $tag;
 		}
 
 		foreach ($branches as $branch => $hash) {
-			// dummy solution to ignore version-like branches such as '2.1.x'
-			// based on assumption that they always contain some number
-			if (!Strings::match($branch, '#\d#')) {
-				$versions['dev-' . $branch] = $branch;
-			}
+			$version = $util->parseBranch($branch);
+			$versions[$version] = $branch;
 		}
 
 		return $versions;
