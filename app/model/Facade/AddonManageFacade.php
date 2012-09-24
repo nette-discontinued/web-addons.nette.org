@@ -162,7 +162,7 @@ class AddonManageFacade extends Nette\Object
 
 		$version = new Model\AddonVersion();
 		$version->addon = $addon;
-		$version->version = $versionParser->parseTag($version->version);
+		$version->version = $versionParser->parseTag($values->version);
 		$version->license = $values->license;
 
 		if ($values->archiveLink) {
