@@ -77,7 +77,9 @@
 		{ifset $composer, $composer->authors}
 			<h3>Authors</h3>
 			<ul>
-				<li n:foreach="$composer->authors as $author">{$author->name}</li>
+				<li n:foreach="$composer->authors as $author">
+					<a n:tag-ifset="$author->homepage" href="{$author->homepage}" rel="nofollow">{$author->name}</a>
+				</li>
 			</ul>
 		{else}
 			Author
