@@ -256,7 +256,7 @@ final class ManagePresenter extends BasePresenter
 	{
 		try {
 			$values = $form->getValues();
-			$version = $this->manager->addVersionFromValues($this->addon, $values, $this->getUser()->getIdentity());
+			$version = $this->manager->addVersionFromValues($this->addon, $values, $this->getUser()->getIdentity(), $this->context->versionParser);
 
 		} catch (\NetteAddons\IOException $e) {
 			$form['archive']->addError('Uploading file failed.');
