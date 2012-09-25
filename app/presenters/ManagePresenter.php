@@ -294,25 +294,24 @@ final class ManagePresenter extends BasePresenter
 			$this->redirect('Detail:', $this->addon->id);
 		}
 
-		if (count($result['conflicted']) === 0) {
-			if (count($result['new']) === 0) {
-				$this->flashMessage('Nothing new…');
-			} else {
-				try {
-					foreach ($result['new'] as $version) {
-						$this->versions->add($version);
-					}
-					$this->flashMessage('New versions have been imported.');
-				} catch (\PDOException $e) {
-					$this->flashMessage('Version importing failed. Try again later.', 'error');
-				}
-			}
-
-			$this->redirect('Detail:', $this->addon->id);
+		if (count($result['conflicted']) === 0 && count($result['new']) === 0) {
+			$this->flashMessage('Nothing new…');
 		} else {
-			$this->flashMessage('There is a conflict!');
-			$this->redirect('Detail:', $this->addon->id);
+			try {
+				foreach ($result['new'] as $version) {
+					$this->versions->add($version);
+				}
+				foreach ($result['conflicted'] as $conflict) {
+					$conflict['b']->id = $conflict['a']->id;
+					$this->versions->update($conflict['b']);
+				}
+				$this->flashMessage('Versions has been updated.');
+			} catch (\PDOException $e) {
+				$this->flashMessage('Version importing failed. Try again later.', 'error');
+			}
 		}
+
+		$this->redirect('Detail:', $this->addon->id);
 	}
 
 
