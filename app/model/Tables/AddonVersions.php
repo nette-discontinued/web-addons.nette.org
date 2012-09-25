@@ -51,18 +51,7 @@ class AddonVersions extends Table
 	 */
 	public function add(AddonVersion $version)
 	{
-		$row = $this->createRow(array(
-			'addonId'         => $version->addon->id,
-			'version'         => $version->version,
-			'license'         => $version->license,
-			'distType'        => $version->distType,
-			'distUrl'         => $version->distUrl,
-			'sourceType'      => $version->sourceType,
-			'sourceUrl'       => $version->sourceUrl,
-			'sourceReference' => $version->sourceReference,
-			'composerJson'    => Json::encode($version->composerJson),
-		));
-
+		$row = $this->createRow($this->toArray($version));
 		$version->id = $row->id;
 		$this->dependencies->setVersionDependencies($version);
 		return $row;
@@ -102,5 +91,26 @@ class AddonVersions extends Table
 		}
 
 		return reset($versions);
+	}
+
+
+
+	/**
+	 * @param  AddonVersion
+	 * @return array
+	 */
+	private function toArray(AddonVersion $version)
+	{
+		return array(
+			'addonId'         => $version->addon->id,
+			'version'         => $version->version,
+			'license'         => $version->license,
+			'distType'        => $version->distType,
+			'distUrl'         => $version->distUrl,
+			'sourceType'      => $version->sourceType,
+			'sourceUrl'       => $version->sourceUrl,
+			'sourceReference' => $version->sourceReference,
+			'composerJson'    => Json::encode($version->composerJson),
+		);
 	}
 }
