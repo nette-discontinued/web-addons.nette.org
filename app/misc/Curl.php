@@ -69,12 +69,14 @@ class Curl extends \Nette\Object
 
 		$data = curl_exec($ch);
 		if (($err = curl_errno($ch)) !== CURLE_OK || $data === FALSE) {
-			throw new \NetteAddons\CurlException(curl_error($ch), $err);
+			if ($err !== CURLE_HTTP_NOT_FOUND) {// correct name is CURLE_HTTP_RETURNED_ERROR
+				throw new \NetteAddons\CurlException(curl_error($ch), $err);
+			}
 		}
 
 		$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-		if ($httpCode !== 200) {
-			throw new \NetteAddons\HttpException("Server returned HTTP code other than 200 OK.", $httpCode);
+		if ($httpCode !== 200 || $err === CURLE_HTTP_NOT_FOUND) {
+			throw new \NetteAddons\HttpException("Server returned HTTP code other than 200 OK.", (int) $httpCode);
 		}
 
 		curl_close($ch);
