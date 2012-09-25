@@ -43,6 +43,7 @@ class Curl extends \Nette\Object
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 		curl_setopt($ch, CURLOPT_TIMEOUT_MS, $this->timeout);
+		curl_setopt($ch, CURLOPT_FAILONERROR, FALSE);
 
 		if (PHP_OS === 'WINNT') {
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
