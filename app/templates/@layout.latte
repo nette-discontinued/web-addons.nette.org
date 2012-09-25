@@ -12,6 +12,7 @@
 	<title>{block #title}{ifset $title}{$title} | {/ifset}Nette Framework - Addons, plugins and components{/block}</title>
 
 	<link rel="stylesheet" href="{$basePath}/css/addons.css" />
+	<link rel="stylesheet" href="{$basePath}/assets/plugins/chosen/chosen.css">
 	<link rel="shortcut icon" href="/favicon.ico" />
 
 	{*<script src="http://files.nette.org/js/analytics.js"></script><script>
@@ -75,6 +76,7 @@
 			| <a href="http://nette.org/cs/pravni-dolozka">Terms of use</a> | If not stated otherwise, the contents are licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cz/">Creative Commons CC-BY-SA</a>.</p>
 		</div>
 	</div> <!-- /page -->
+	<script src="{$basePath}/assets/plugins/chosen/chosen.jquery.js"></script>
 	<script src="{$basePath}/js/addons.js"></script>
 </body>
 </html>
