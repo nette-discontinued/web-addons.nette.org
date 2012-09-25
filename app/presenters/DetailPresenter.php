@@ -86,6 +86,12 @@ class DetailPresenter extends BasePresenter
 	{
 		$currentVersion = $this->addonVersions->getCurrent($this->addon->versions);
 		$popularity = $this->addonVotes->calculatePopularity($this->addon->id);
+		if ($this->getUser()->isLoggedIn()) {
+			$row = $this->addonVotes->findOneBy(array('userId' => $this->getUser()->getId()));
+			$myVote = $row->vote;
+		} else {
+			$myVote = NULL;
+		}
 		$texy = $this->texyFactory->create();
 
 		$this->template->addon = $this->addon;
@@ -98,6 +104,7 @@ class DetailPresenter extends BasePresenter
 		$this->template->plus = $popularity->plus;
 		$this->template->minus = $popularity->minus;
 		$this->template->percents = $popularity->percent;
+		$this->template->myVote = $myVote;
 	}
 
 

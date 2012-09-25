@@ -96,6 +96,25 @@
 		{/ifset}
 	</div>
 
+	<h3>Rating: {$percents}&nbsp;%</h3>
+	<table class="table-vote">
+		<tr>
+			<td class="thumb">
+				<span class="num">{$plus}×</span>
+				<a n:tag-if="$auth->isAllowed($addon, 'vote')" n:class="btn, btn-success, btn-mini, ($myVote > 0) ? disabled" n:href="vote! ($myVote > 0) ? cancel : up"><i class="icon-thumb_up">up</i></a>
+			</td>
+			{*<td class="wrap-progress">
+				<div class="progress progress-yesno progress-success {if $plus == 0 && $minus == 0}progress-disabled{/if}">
+					<div class="bar" title="{$percents} %" style="width: {$percents}%;"></div>
+				</div>
+			</td>*}
+			<td class="thumb">
+				<span class="num">{$minus}×</span>
+				<a n:tag-if="$auth->isAllowed($addon, 'vote')" n:class="btn, btn-danger, btn-mini, ($myVote < 0) ? disabled" n:href="vote! ($myVote < 0) ? cancel : down"><i class="icon-thumb_down">down</i></a>
+			</td>
+		</tr>
+	</table>
+
 	{if $toc}
 		<h3>Contents</h3>
 		{var $level = 2}
@@ -112,40 +131,5 @@
 		{/foreach}
 		{while $level-- > 1}</ul>{/while}
 	{/if}
-
-	{******************************************************** TODO ************************************************************* }
-	<div class="box-vote">
-		{if $user->loggedIn}
-			{var $vote = $addon->related('votes')->where('userId = ?', $user->id)->fetch()}
-			{var $my = $vote ? $vote->vote : 0}
-		{/if}
-
-
-		{* sum plusu a minusu
-			<span class="votes">{$addon->related('votes')->aggregation('SUM(vote)') ?: 0}</span>
-		* }
-
-		<table class="table-vote">
-			<tr>
-				<td class="thumb">
-					<span class="num">{$plus}×</span>
-					<a n:tag-if="$auth->isAllowed($addon, 'vote')" n:class="btn, btn-success, btn-mini, ($my > 0) ? disabled" n:href="vote! ($my > 0) ? cancel : up"><i class="icon-thumb_up"></i></a>
-				</td>
-				<td class="wrap-progress">
-
-						<div class="progress progress-yesno progress-success {if $plus == 0 && $minus == 0}progress-disabled{/if}">
-							<div class="bar" title="{$percents} %" style="width: {$percents}%;"></div>
-						</div>
-				</td>
-				<td class="thumb">
-					<span class="num">{$minus}×</span>
-					<a n:tag-if="$auth->isAllowed($addon, 'vote')" n:class="btn, btn-danger, btn-mini, ($my < 0) ? disabled" n:href="vote! ($my < 0) ? cancel : down"><i class="icon-thumb_down"></i></a>
-				</td>
-			</tr>
-		</table>
-
-
-	</div>
-	{******************************************************** TODO *************************************************************}
 </div>
 {/block}
