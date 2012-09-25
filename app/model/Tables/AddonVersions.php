@@ -60,6 +60,26 @@ class AddonVersions extends Table
 
 
 	/**
+	 * Updates addon version.
+	 *
+	 * @param  AddonVersion
+	 * @return bool
+	 * @throws \NetteAddons\InvalidArgumentException
+	 */
+	public function update(AddonVersion $version)
+	{
+		if (!$version->id) {
+			throw new \NetteAddons\InvalidArgumentException();
+		}
+
+		$row = $this->find($version->id);
+		if (!$row) return FALSE;
+		return (bool) $row->update($this->toArray($version));
+	}
+
+
+
+	/**
 	 * Sorts list of versions.
 	 *
 	 * @param  AddonVersion[]
