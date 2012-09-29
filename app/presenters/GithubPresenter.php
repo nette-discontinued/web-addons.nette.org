@@ -2,9 +2,12 @@
 
 namespace NetteAddons;
 
-use NetteAddons\Model\Users;
 use NetteAddons\Model\Addon;
 use NetteAddons\Model\Addons;
+use NetteAddons\Model\Users;
+use Nette\Utils\Json;
+
+
 
 /**
  * GitHub API
@@ -18,6 +21,7 @@ class GithubPresenter extends BasePresenter
 
 	/** @var Addons */
 	private $addons;
+
 
 
 	public function injectServices(Users $users, Addons $addons)
@@ -34,13 +38,21 @@ class GithubPresenter extends BasePresenter
 	public function actionPostReceive()
 	{
 		$post = $this->getRequest()->getPost();
-		$payload = json_decode($post['payload'], true);
-		if (!$payload || !isset($payload['repository']['url'])) {
-			$this->getHttpResponse()->setCode(400); // Bad Request
-			$this->sendJson(array(
-				'status' => 'error',
-				'message' => 'Missing or invalid payload'
-			));
+		if (!isset($post['payload'], $post['username']), $post['apiToken']) {
+			$this->error('Invalid request.');
+		}
+
+		try {
+			$payload = Json::decode($post['payload']);
+			if (!isset($payload->repository->url)) {
+				$this->getHttpResponse()->setCode(400); // Bad Request
+				$this->sendJson(array(
+					'status' => 'error',
+					'message' => 'Missing or invalid payload',
+				));
+			}
+		} catch (\Nette\Utils\JsonException $e) {
+			$this->error('Invalid request.');
 		}
 
 		$username = $post['username'];
@@ -55,7 +67,7 @@ class GithubPresenter extends BasePresenter
 			));
 		}
 
-		if (!preg_match('~(github.com/[\w.-]+/[\w.-]+?)(\.git)?$~', $payload['repository']['url'], $match)) {
+		if (!preg_match('~(github.com/[\w.-]+/[\w.-]+?)(\.git)?$~', $payload->repository->url, $match)) {
 			$this->getHttpResponse()->setCode(400); // Bad Request
 			$this->sendJson(array(
 				'status' => 'error',
@@ -65,6 +77,7 @@ class GithubPresenter extends BasePresenter
 
 		$repositoryUrl = "https://$match[1]";
 		$row = $this->addons->findOneBy(array('repository' => $repositoryUrl));
+		if (!$row) $this->error();
 		$addon = Addon::fromActiveRow($row);
 
 		$importer = $this->context->repositoryImporterFactory->createFromUrl(new \Nette\Http\Url($addon->repository));
@@ -73,5 +86,4 @@ class GithubPresenter extends BasePresenter
 
 		$this->sendJson(array('status' => "success"));
 	}
-
 }

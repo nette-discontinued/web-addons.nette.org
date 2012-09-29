@@ -6,6 +6,7 @@ use NetteAddons\Model\Addons;
 use NetteAddons\Model\AddonVersions;
 
 
+
 /**
  * Misc API calls
  *
@@ -30,22 +31,29 @@ class ApiPresenter extends BasePresenter
 
 
 	/**
-	 * Called when composer installs a package to increase counters
-	 * @param string $package
+	 * Called when composer installs a package to increase counters.
+	 *
+	 * @link http://getcomposer.org/doc/05-repositories.md#notify
+	 * @param string
 	 */
 	public function actionDownloadNotify($package)
 	{
+		$post = $this->getRequest()->getPost();
+		if (!isset($post['version'])) {
+			$this->error('Invalid request');
+		}
+		$version = (string) $post['version'];
+
 		if (!$row = $this->addons->findOneBy(array('composerName' => $package))) {
-			throw new \Nette\Application\BadRequestException("Package not found", 404);
+			$this->error('Package not found.');
 		}
 
-		$version = $this->request->post['version'];
 		$rowVersion = $this->addonVersions->findOneBy(array(
 			'addonId' => $row->id,
 			'version' => $version,
 		));
-		if (!$row) {
-			throw new \Nette\Application\BadRequestException("Version of package not found", 404);
+		if (!$rowVersion) {
+			$this->error("Version of package not found.");
 		}
 
 		$row->update(array(
@@ -58,5 +66,4 @@ class ApiPresenter extends BasePresenter
 
 		$this->sendJson(array('status' => "success"));
 	}
-
 }
