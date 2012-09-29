@@ -13,6 +13,7 @@ parameters:
 	uploadUri: '/upload'
 	uploadDir: '%wwwDir%%uploadUri%'
 	curlTimeout: 5000 # v ms
+	ghApiVersion: beta
 
 
 nette:
@@ -58,7 +59,7 @@ services:
 	formValidators: NetteAddons\Model\Utils\FormValidators
 
 	# importing from GitHub
-	curl: NetteAddons\Curl(%curlTimeout%)
+	curlFactory: NetteAddons\CurlRequestFactory(%curlTimeout%)
 	repositoryImporterFactory:
 		class: NetteAddons\Model\Importers\RepositoryImporterFactory
 		arguments: [{
@@ -73,7 +74,7 @@ services:
 factories:
 	ghRepository:
 		parameters: [vendor, name]
-		class: NetteAddons\Model\Importers\GitHub\Repository(@curl, %vendor%, %name%)
+		class: NetteAddons\Model\Importers\GitHub\Repository(%ghApiVersion%, @curlFactory, %vendor%, %name%)
 
 	ghImporter:
 		parameters: [vendor, name]

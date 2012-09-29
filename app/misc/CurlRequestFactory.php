@@ -6,7 +6,7 @@ namespace NetteAddons;
  * @author Patrik Votoček
  * @author Michael Moravec
  */
-class Curl extends \Nette\Object
+class CurlRequestFactory extends \Nette\Object
 {
 	const UA = 'Nette Addons';
 

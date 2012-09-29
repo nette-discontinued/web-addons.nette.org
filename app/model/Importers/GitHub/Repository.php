@@ -17,7 +17,7 @@ use Nette\Utils\Strings;
  */
 class Repository extends \Nette\Object
 {
-	/** @var \NetteAddons\Curl */
+	/** @var \NetteAddons\CurlRequestFactory */
 	private $curl;
 
 	/** @var string */
@@ -29,6 +29,9 @@ class Repository extends \Nette\Object
 	/** @var string */
 	public $baseUrl = 'https://api.github.com';
 
+	/** @var string */
+	private $apiVersion;
+
 
 
 	/**
@@ -36,8 +39,9 @@ class Repository extends \Nette\Object
 	 * @param string
 	 * @param string
 	 */
-	public function __construct(\NetteAddons\Curl $curl, $vendor, $name)
+	public function __construct($apiVersion, \NetteAddons\CurlRequestFactory $curl, $vendor, $name)
 	{
+		$this->apiVersion;
 		$this->curl = $curl;
 		$this->vendor = $vendor;
 		$this->name = $name;
@@ -57,8 +61,13 @@ class Repository extends \Nette\Object
 		try {
 			$url = new \Nette\Http\Url($this->baseUrl);
 			$url->setPath($path);
-			$json = $this->curl->get((string) $url);
-			return \Nette\Utils\Json::decode($json);
+
+			$request = $this->curl->create($url);
+			$request->setOption(CURLOPT_HTTPHEADER, array(
+				"Accept: application/vnd.github.{$this->apiVersion}+json",
+			));
+
+			return \Nette\Utils\Json::decode($request->execute());
 
 		} catch (\NetteAddons\CurlException $e) {
 			throw new \NetteAddons\IOException('cURL execution failed.', NULL, $e);

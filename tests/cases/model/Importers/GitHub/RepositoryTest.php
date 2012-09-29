@@ -24,8 +24,8 @@ class RepositoryTest extends TestCase
 	protected function setUp()
 	{
 		parent::setUp();
-		$this->curl = Mockery::mock('NetteAddons\Curl');
-		$this->repo = new Repository($this->curl, 'smith', 'browser');
+		$this->curl = Mockery::mock('NetteAddons\CurlRequestFactory');
+		$this->repo = new Repository('beta', $this->curl, 'smith', 'browser');
 	}
 
 

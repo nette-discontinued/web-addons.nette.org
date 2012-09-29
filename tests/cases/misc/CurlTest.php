@@ -2,7 +2,7 @@
 
 namespace NetteAddons\Test;
 
-use NetteAddons\Curl;
+use NetteAddons\CurlRequestFactory;
 
 
 
@@ -12,7 +12,7 @@ use NetteAddons\Curl;
  */
 class CurlTest extends TestCase
 {
-	/** @var Curl */
+	/** @var CurlRequestFactory */
 	private $curl;
 
 
@@ -20,14 +20,14 @@ class CurlTest extends TestCase
 	protected function setUp()
 	{
 		parent::setUp();
-		$this->curl = new Curl(10000);
+		$this->curl = new CurlRequestFactory(10000);
 	}
 
 
 
 	public function testOK()
 	{
-		$s = $this->curl->get('http://httpstat.us/200');
+		$s = $this->curl->create('http://httpstat.us/200')->execute();
 		$this->assertInternalType('string', $s);
 	}
 
@@ -36,7 +36,7 @@ class CurlTest extends TestCase
 	public function testCurlError()
 	{
 		$this->setExpectedException('NetteAddons\CurlException', NULL, CURLE_UNSUPPORTED_PROTOCOL);
-		$s = $this->curl->get('foobar://example.com');
+		$s = $this->curl->create('foobar://example.com')->execute();
 	}
 
 
@@ -47,7 +47,7 @@ class CurlTest extends TestCase
 	public function testHttpError($code)
 	{
 		$this->setExpectedException('NetteAddons\HttpException', NULL, $code);
-		$this->curl->get('http://httpstat.us/' . $code);
+		$this->curl->create('http://httpstat.us/' . $code)->execute();
 	}
 
 
