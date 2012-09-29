@@ -43,3 +43,22 @@ form .form .required small {
 .neon-value, .neon-quote {color: brown;}
 .neon-num {color: red;}
 .neon-var, .neon-ref {color: #003663; font-weight: bold;}
+
+.addon-download {
+	background: url('../images/download-button.gif') repeat-x left;
+	border-radius: 8px;
+	color: black;
+	display: block;
+	font-family: Georgia,"New York CE",utopia,serif;
+	font-size: 191%;
+	height: 45px;
+	line-height: 45px;
+	margin: 20px 0;
+	padding: 0;
+	text-align: center;
+}
+.addon-download:hover, .addon-download:focus {
+	background: url('../images/download-button-active.gif') repeat-x left;
+	border-radius: 8px;
+	color: black;
+}
