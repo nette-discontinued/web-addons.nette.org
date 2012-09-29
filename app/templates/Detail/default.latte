@@ -12,8 +12,11 @@
 		<span>{$addon->name}</span>
 	</div>
 
-	<h1>{$addon->name}</h1>
-	<p class="perex">{$addon->shortDescription}</p>
+	<div class="addon-heading">
+		<h1>{$addon->name} <span class="addon-version">{$version->version}</span></h1>
+		<p class="perex">{$addon->shortDescription}</p>
+		<a class="addon-archive-link" n:href="archive">older versions</a>
+	</div>
 
 	<table>
 		<tr>
@@ -39,10 +42,6 @@
 		<tr n:if="$addon->demo">
 			<th>Demo</th>
 			<td><a href="{$addon->demo}">{$addon->demo}</a></td>
-		</tr>
-		<tr>
-			<th>Version</th>
-			<td>{$version->version} (older versions are available in <a n:href="archive">archive</a>)</td>
 		</tr>
 		<tr>
 			<th>License</th>

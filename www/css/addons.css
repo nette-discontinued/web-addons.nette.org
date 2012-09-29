@@ -64,3 +64,20 @@ form .form .required small {
 	border-radius: 8px;
 	color: black;
 }
+
+.addon-heading {
+	position: relative;
+}
+.addon-heading h1 {
+	padding-right: 100px;
+}
+.addon-version {
+	color: #999;
+	font-size: 65%;
+	margin-left: 15px;
+}
+.addon-archive-link {
+	position: absolute;
+	right: 0;
+	top: 23px;
+}
