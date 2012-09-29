@@ -42,7 +42,7 @@ services:
 	authorizator: NetteAddons\Model\Authorizator
 
 	# view
-	texyFactory: NetteAddons\TexyFactory
+	textPreprocessor: NetteAddons\TextPreprocessor
 
     # tables
 	users: NetteAddons\Model\Users

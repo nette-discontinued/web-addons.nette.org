@@ -15,9 +15,6 @@
                     "url":"git://github.com/michelf/php-markdown.git",
                     "type":"git",
                     "reference":"x1.2.5"
-                },
-                "autoload":{
-                    "classes":["markdown.php"]
                 }
             }
         }
@@ -32,6 +29,7 @@
 	},
 	"minimum-stability":"dev",
 	"autoload": {
-		"files": ["app/misc/functions.php"]
+		"files": ["app/misc/functions.php"],
+		"classmap": ["libs/michelf/php-markdown/markdown.php"]
 	}
 }

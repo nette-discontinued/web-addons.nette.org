@@ -33,8 +33,8 @@ class DetailPresenter extends BasePresenter
 	/** @var AddonVotes */
 	private $addonVotes;
 
-	/** @var TexyFactory */
-	private $texyFactory;
+	/** @var TextPreprocessor */
+	private $textPreprocessor;
 
 
 
@@ -47,9 +47,9 @@ class DetailPresenter extends BasePresenter
 
 
 
-	public function injectTexyFactory(TexyFactory $factory)
+	public function injectTextPreprocessor(TextPreprocessor $factory)
 	{
-		$this->texyFactory = $factory;
+		$this->textPreprocessor = $factory;
 	}
 
 
@@ -80,14 +80,14 @@ class DetailPresenter extends BasePresenter
 		} else {
 			$myVote = NULL;
 		}
-		$texy = $this->texyFactory->create();
+		$description = $this->textPreprocessor->processDescription($this->addon);
 
 		$this->template->addon = $this->addon;
 		$this->template->version = $currentVersion;
 		$this->template->composer = $currentVersion->composerJson;
 
-		$this->template->content = $texy->process($this->addon->description);
-		$this->template->toc = $texy->headingModule->TOC;
+		$this->template->content = $description['content'];
+		$this->template->toc = $description['toc'];
 
 		$this->template->plus = $popularity->plus;
 		$this->template->minus = $popularity->minus;

@@ -3,6 +3,7 @@
 namespace NetteAddons;
 
 use Nette;
+use NetteAddons\Model\Addon;
 use Texy;
 use TexyHtml;
 use FSHL\Highlighter;
@@ -17,9 +18,41 @@ use FSHL\Lexer;
  * @author Patrik Votoček
  * @author Jan Tvrdík
  */
-class TexyFactory extends Nette\Object
+class TextPreprocessor extends Nette\Object
 {
-	public function create()
+	const FORMAT_MARKDOWN = 'markdown';
+
+
+
+	/**
+	 * @param Model\Addon
+	 * @return array
+	 * @throws NotImplementedException
+	 */
+	public function processDescription(Addon $addon)
+	{
+		if ($addon->descriptionFormat === self::FORMAT_MARKDOWN) {
+			$markdown = new \MarkdownExtra_Parser();
+			return array(
+				'content' => $markdown->transform($addon->description),
+				'toc' => array()
+			);
+
+		} else {
+			$texy = $this->createTexy();
+			return array(
+				'content' => $texy->process($addon->description),
+				'toc' => $texy->headingModule->TOC
+			);
+		}
+	}
+
+
+
+	/**
+	 * @return \Texy
+	 */
+	public function createTexy()
 	{
 		$texy = new Texy;
 		$texy->setOutputMode(Texy::HTML5);
@@ -55,13 +88,13 @@ class TexyFactory extends Nette\Object
 	 * @param  TexyModifier modifier
 	 * @return TexyHtml
 	 */
-	public function blockHandler($invocation, $blocktype, $content, $lang, $modifier)
+	public function blockHandler($invocation, $blockType, $content, $lang, $modifier)
 	{
-		if ($blocktype === 'block/php' || $blocktype === 'block/neon' || $blocktype === 'block/javascript' || $blocktype === 'block/js' || $blocktype === 'block/css' || $blocktype === 'block/html' || $blocktype === 'block/htmlcb' || $blocktype === 'block/latte') {
-			list(, $lang) = explode('/', $blocktype);
+		if ($blockType === 'block/php' || $blockType === 'block/neon' || $blockType === 'block/javascript' || $blockType === 'block/js' || $blockType === 'block/css' || $blockType === 'block/html' || $blockType === 'block/htmlcb' || $blockType === 'block/latte') {
+			list(, $lang) = explode('/', $blockType);
 
-		} elseif ($blocktype !== 'block/code') {
-			return $invocation->proceed($blocktype, $content, $lang, $modifier);
+		} elseif ($blockType !== 'block/code') {
+			return $invocation->proceed($blockType, $content, $lang, $modifier);
 		}
 
 		$fshl = new Highlighter(new Html, Highlighter::OPTION_TAB_INDENT);
@@ -106,4 +139,5 @@ class TexyFactory extends Nette\Object
 
 		return $elPre;
 	}
+
 }
