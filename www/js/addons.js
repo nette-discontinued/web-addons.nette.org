@@ -6,7 +6,7 @@ $(document).ready(function() {
 			$this = $(this);
 			$($this.attr('rel')).slideToggle('default', function () {
 				$(this).find('.chzn-select').chosen();
-				$('#content').appendTo($('#main')); // hack
+				// $('#content').appendTo($('#main')); // hack
 			});
 
 			hRel = $this.attr('data-addons-toggle');
