@@ -72,6 +72,7 @@ class DetailPresenter extends BasePresenter
 		if (!$row = $this->addons->find($this->id)) {
 			$this->error('Addon not found!');
 		}
+
 		$this->addon = Addon::fromActiveRow($row);
 		$this->addonVersions->rsort($this->addon->versions);
 	}
@@ -83,33 +84,6 @@ class DetailPresenter extends BasePresenter
 	 */
 	public function renderDefault($id)
 	{
-		$currentVersion = $this->addonVersions->getCurrent($this->addon->versions);
-		$popularity = $this->addonVotes->calculatePopularity($this->addon->id);
-		if ($this->getUser()->isLoggedIn()) {
-			$row = $this->addonVotes->findOneBy(array('userId' => $this->getUser()->getId()));
-			$myVote = $row ? $row->vote : NULL;
-		} else {
-			$myVote = NULL;
-		}
-		$description = $this->textPreprocessor->processDescription($this->addon);
-
-		$gravatar = new \emberlabs\GravatarLib\Gravatar();
-		$gravatar->setAvatarSize(50);
-		$gravatar->setMaxRating('pg');
-		$this->template->gravatar = $gravatar;
-
-		$this->template->addon = $this->addon;
-		$this->template->version = $currentVersion;
-		$this->template->composer = $currentVersion->composerJson;
-
-		$this->template->content = $description['content'];
-		$this->template->toc = $description['toc'];
-
-		$this->template->plus = $popularity->plus;
-		$this->template->minus = $popularity->minus;
-		$this->template->percents = $popularity->percent;
-		$this->template->myVote = $myVote;
-
 		$this->template->netteRepositoryUrl = 'http://' . $this->url->host . '/';
 	}
 
@@ -120,7 +94,6 @@ class DetailPresenter extends BasePresenter
 	 */
 	public function renderArchive($id)
 	{
-		$this->template->addon = $this->addon;
 	}
 
 	/**
@@ -177,6 +150,42 @@ class DetailPresenter extends BasePresenter
 			$this->flashMessage('Voting was successfull!');
 			$this->redirect('this');
 		}
+	}
+
+
+
+	protected function beforeRender()
+	{
+		parent::beforeRender();
+
+		$currentVersion = $this->addonVersions->getCurrent($this->addon->versions);
+		$popularity = $this->addonVotes->calculatePopularity($this->addon->id);
+
+		if ($this->getUser()->isLoggedIn()) {
+			$row = $this->addonVotes->findOneBy(array('userId' => $this->getUser()->getId()));
+			$myVote = $row ? $row->vote : NULL;
+		} else {
+			$myVote = NULL;
+		}
+
+		$description = $this->textPreprocessor->processDescription($this->addon);
+
+		$gravatar = new \emberlabs\GravatarLib\Gravatar();
+		$gravatar->setAvatarSize(50);
+		$gravatar->setMaxRating('pg');
+		$this->template->gravatar = $gravatar;
+
+		$this->template->addon = $this->addon;
+		$this->template->version = $currentVersion;
+		$this->template->composer = $currentVersion->composerJson;
+
+		$this->template->content = $description['content'];
+		$this->template->toc = $description['toc'];
+
+		$this->template->plus = $popularity->plus;
+		$this->template->minus = $popularity->minus;
+		$this->template->percents = $popularity->percent;
+		$this->template->myVote = $myVote;
 	}
 
 

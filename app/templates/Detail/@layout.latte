@@ -1,0 +1,80 @@
+{extends '../@layout.latte'}
+
+
+{block sidebar}
+<div class="info">
+	<div class="addon-composer-use">Use <a href="http://doc.nette.org/composer">Composer</a> or</div>
+	<a class="bigbutton" n:href="download!" title="{$addon->totalDownloadsCount}× total downloads, {$version->downloadsCount}× this version"><i class="icon-download"></i>Download</a>
+	<div style="margin-bottom:2em">
+		{ifset $composer, $composer->authors}
+			<h3>Authors</h3>
+			<ul>
+				<li class="gravatars" n:foreach="$composer->authors as $author">
+					{ifset $author->email}
+						<img src="{= $gravatar->buildGravatarURL($author->email)}" alt="{$author->name}" class="gravatar" />
+						{else}
+						<img src="{$basePath}/images/default-gravatar.jpg" alt="{$author->name}" class="gravatar" />
+					{/ifset}
+					<a n:tag-ifset="$author->homepage" href="{$author->homepage}" rel="nofollow">{$author->name}</a>
+				</li>
+			</ul>
+			{else}
+			Author
+			<h3><a n:href=":People:detail id => $addon->user->id" title="$addon->user->name">{$addon->user->name}</a></h3>
+			<img src="http://forum.nette.org/cs/img/avatars/2118.jpg" class="avatar" alt="Avatar">
+		{/ifset}
+	</div>
+	<div style="margin-bottom:2em">
+		<h3>License</h3>
+		<p>{$version->license}</p>
+	</div>
+
+	{snippet rating}
+		<h3>Rating</h3>
+		<table class="table-vote">
+			<tr>
+				<td class="thumb">
+					<span class="num">{$plus}×</span>
+					{if $auth->isAllowed($addon, 'vote')}
+						<a n:href="vote! vote => ($myVote > 0) ? cancel : up" class="ajax"><i class="icon-thumb_up" title="{if $myVote > 0}remove my vote{else}vote up{/if}"></i></a>
+						{else}
+						<i class="icon-thumb_up"></i>
+					{/if}
+				</td>
+				<td class="wrap-progress">
+					<div class="progress progress-yesno progress-success {if $plus == 0 && $minus == 0}progress-disabled{/if}">
+						<div class="bar" title="{$percents|number:2 } %" style="width: {!$percents}%;"></div>
+					</div>
+				</td>
+				<td class="thumb">
+					<span class="num">{$minus}×</span>
+					{if $auth->isAllowed($addon, 'vote')}
+						<a n:href="vote! vote => ($myVote < 0) ? cancel : down" class="ajax"><i class="icon-thumb_down" title="{if $myVote < 0}remove my vote{else}vote down{/if}"></i></a>
+						{else}
+						<i class="icon-thumb_down"></i>
+					{/if}
+				</td>
+			</tr>
+		</table>
+	{/snippet}
+
+	{if $toc}
+		<div id="toc">
+			<h2>Contents</h2>
+			{var $level = 2}
+		<ul>
+			{foreach $toc as $heading}
+				{if $heading['level'] === $level + 1}
+					{var $level = $level + 1}
+					<ul>
+						{elseif $heading['level'] === $level - 1}
+					{var $level = $level - 1}
+					</ul>
+				{/if}
+			<li><a href="#{$heading['el']->id}">{$heading['title']}</a>
+			{/foreach}
+			{while $level-- > 1}</ul>{/while}
+		</div>
+	{/if}
+</div>
+{/block}
