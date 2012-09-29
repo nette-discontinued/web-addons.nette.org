@@ -70,7 +70,8 @@ class AddAddonForm extends BaseForm
 			->setAttribute('class', 'span6')
 			->addCondition(self::FILLED)
 				->addRule(self::URL);
-		$this->addMultiSelect('tags', 'Categories', $this->getCategories());
+		$this->addMultiSelect('tags', 'Categories', $this->getCategories())
+			->setAttribute('class', 'chzn-select');
 		$this->addSubmit('create', 'Next');
 	}
 

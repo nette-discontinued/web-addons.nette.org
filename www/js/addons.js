@@ -4,7 +4,11 @@ $(document).ready(function() {
 			e.preventDefault();
 
 			$this = $(this);
-			$($this.attr('rel')).slideToggle();
+			$($this.attr('rel')).slideToggle('default', function () {
+				$(this).find('.chzn-select').chosen();
+				$('#content').appendTo($('#main')); // hack
+			});
+
 			hRel = $this.attr('data-addons-toggle');
 			if (hRel) {
 				$(hRel).slideToggle();
@@ -12,5 +16,5 @@ $(document).ready(function() {
 		});
 	});
 
-	$(".chzn-select").chosen();
+	//$(".chzn-select").chosen();
 });
