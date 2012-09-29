@@ -108,7 +108,7 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 
 		parent::signalReceived($signal);
 
-		if (isset($this->params[Presenter::CSRF_TOKEN_KEY])) {
+		if (isset($this->params[self::CSRF_TOKEN_KEY])) {
 			throw new \RuntimeException("Secured signal '$signal' did not redirect. Possible csrf-token reveal by http referer header.");
 		}
 	}
