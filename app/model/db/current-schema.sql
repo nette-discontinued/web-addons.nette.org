@@ -92,6 +92,7 @@ CREATE TABLE `tags` (
   `name` varchar(50) NOT NULL COMMENT 'user friendly form',
   `slug` varchar(50) NOT NULL,
   `level` smallint(5) unsigned NOT NULL COMMENT '1 = category, 2 = subcategory, 9 = others',
+  `parent_id` int(10) unsigned NOT NULL DEFAULT '0',
   `visible` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT 'visible on homepage',
   PRIMARY KEY (`id`),
   UNIQUE KEY `slug` (`slug`)

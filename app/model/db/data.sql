@@ -70,16 +70,16 @@ INSERT INTO `addons_versions` (`id`, `addonId`, `version`, `license`, `distType`
 (27,	8,	'dev-master',	'New BSD',	'zip',	'https://github.com/vojtech-dobes/nette-forms-gpspicker/zipball/master',	0,	'git',	'https://github.com/vojtech-dobes/nette-forms-gpspicker',	'master',	'{\"name\":\"vojtech-dobes\\/nette-forms-gpspicker\",\"description\":\"Google Maps based picker of coordinates for Nette Framework.\",\"keywords\":[\"nette\",\"forms\",\"maps\",\"gps\"],\"homepage\":\"http:\\/\\/github.com\\/vojtech-dobes\\/nette-forms-gpspicker\",\"license\":[\"New BSD\"],\"authors\":[{\"name\":\"Vojt\\u011bch Dobe\\u0161\",\"email\":\"me@vojtechdobes.com\"}],\"require\":{\"php\":\">=5.3.2\",\"nette\\/nette\":\"2.0.*\"},\"autoload\":{\"classmap\":[\"src\\/\"]},\"version\":\"dev-master\",\"dist\":{\"type\":\"zip\",\"url\":\"https:\\/\\/github.com\\/vojtech-dobes\\/nette-forms-gpspicker\\/zipball\\/master\",\"reference\":null,\"shasum\":null},\"source\":{\"type\":\"git\",\"url\":\"https:\\/\\/github.com\\/vojtech-dobes\\/nette-forms-gpspicker\",\"reference\":\"master\"}}');
 
 
-INSERT INTO `tags` (`id`, `name`, `slug`, `level`, `visible`) VALUES
-(1,	'Visual components',	'visual-components',	1,	1),
-(2,	'Nonvisual components',	'nonvisual-components',	1,	1),
-(3,	'Form extensions',	'form-extensions',	1,	1),
-(4,	'Localization',	'localization',	1,	1),
-(5,	'AJAX',	'ajax',	1,	1),
-(6,	'Helpers and template utilities',	'helpers-and-template-utilities',	1,	1),
-(7,	'Extensions and tools',	'extensions-and-tools',	1,	1),
-(8,	'DebugBar panels',	'debug-bar-panels',	1,	1),
-(9,	'Datagrids',	'datagrids',	2,	1);
+INSERT INTO `tags` (`id`, `name`, `slug`, `level`, `parent_id`, `visible`) VALUES
+(1,	'Visual components',	'visual-components',	1,	0,	1),
+(2,	'Nonvisual components',	'nonvisual-components',	1,	0,	1),
+(3,	'Form extensions',	'form-extensions',	1,	0,	1),
+(4,	'Localization',	'localization',	1,	0,	1),
+(5,	'AJAX',	'ajax',	1,	0,	1),
+(6,	'Helpers and template utilities',	'helpers-and-template-utilities',	1,	0,	1),
+(7,	'Extensions and tools',	'extensions-and-tools',	1,	0,	1),
+(8,	'DebugBar panels',	'debug-bar-panels',	1,	0,	1),
+(9,	'Datagrids',	'datagrids',	2,	1,	1);
 
 
 

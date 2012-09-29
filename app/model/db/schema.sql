@@ -240,3 +240,8 @@ COMMENT='';
 -- api token not only for github
 ALTER TABLE `users`
 ADD `apiToken` varchar(100) COLLATE 'utf8_general_ci' NULL;
+
+-- subcategories
+ALTER TABLE `tags`
+ADD `parent_id` int(10) unsigned NOT NULL DEFAULT '0' AFTER `level`,
+COMMENT='';
