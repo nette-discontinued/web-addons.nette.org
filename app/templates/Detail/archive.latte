@@ -24,7 +24,7 @@
 			</tr>
 			<tr>
 				<th>Download link</th>
-				<td><a href="{$version->distUrl}">{$version->distUrl}</a></td>
+				<td><a n:href="download! version => $version->version">{$version->distUrl}</a></td>
 			</tr>
 			<tr n:ifset="$composer->source">
 				<th>{$composer->source->type|firstUpper} reference</th>

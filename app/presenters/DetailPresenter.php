@@ -113,17 +113,23 @@ class DetailPresenter extends BasePresenter
 	/**
 	 * @param int $id addon ID
 	 */
-	public function handleDownload()
+	public function handleDownload($version = '')
 	{
-		$currentVersion = $this->addonVersions->getCurrent($this->addon->versions);
+		if ($version === '') { // current
+			$version = $this->addonVersions->getCurrent($this->addon->versions);
+		} elseif (isset($this->addon->versions[$version])) { // archive
+			$version = $this->addon->versions[$version];
+		} else {
+			$this->error('Unknown addon version.');
+		}
 
-		$currentVersion->downloadsCount += 1;
+		$version->downloadsCount += 1;
 		$this->addon->totalDownloadsCount += 1;
 
-		$this->addonVersions->update($currentVersion);
+		$this->addonVersions->update($version);
 		$this->addons->update($this->addon);
 
-		$this->redirectUrl($currentVersion->distUrl);
+		$this->redirectUrl($version->distUrl);
 	}
 
 
