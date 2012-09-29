@@ -144,7 +144,7 @@ class Repository extends \Nette\Object
 	public function getFileContent($hash, $path)
 	{
 		$data = $this->exec("/repos/{$this->vendor}/{$this->name}/contents/$path?ref=$hash");
-		return $this->processContentResponse($data);
+		return $this->processContentResponse($data)->content;
 	}
 
 
@@ -174,6 +174,11 @@ class Repository extends \Nette\Object
 
 
 
+	/**
+	 * @param string
+	 * @return \stdClass
+	 * @throws \NetteAddons\IOException
+	 */
 	protected function processContentResponse($data)
 	{
 		if (!$data instanceof \stdClass || !isset($data->encoding, $data->content)) {
@@ -181,14 +186,13 @@ class Repository extends \Nette\Object
 		}
 
 		if ($data->encoding === 'base64') {
-			return base64_decode($data->content);
+			$data->content = base64_decode($data->content);
 
-		} elseif ($data->encoding === 'utf-8') {
-			return $data->content;
-
-		} else {
+		} elseif ($data->encoding !== 'utf-8') {
 			throw new \NetteAddons\IOException('GitHub API returned file content in unknown encoding.');
 		}
+
+		return $data;
 	}
 
 

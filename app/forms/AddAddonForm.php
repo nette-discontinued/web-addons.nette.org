@@ -43,6 +43,10 @@ class AddAddonForm extends BaseForm
 		$this->addTextArea('description', 'Description', 80, 20)
 			->setAttribute('class', 'span6')
 			->setRequired();
+		$this->addSelect('descriptionFormat', 'Description format', array('texy' => 'Texy!', 'markdown' => 'Markdown'))
+			->setAttribute('class', 'span6')
+			->setDefaultValue('texy')
+			->setRequired();
 		$this->addText('defaultLicense', 'Default license')
 			->setRequired()
 			->addRule($this->validators->isLicenseValid, 'Invalid license identifier.')
@@ -78,6 +82,7 @@ class AddAddonForm extends BaseForm
 			'name' => $addon->name,
 			'shortDescription' => $addon->shortDescription,
 			'description' => $addon->description,
+			'descriptionFormat' => $addon->descriptionFormat,
 			'defaultLicense' => $addon->defaultLicense,
 			'repository' => $addon->repository,
 			'demo' => $addon->demo

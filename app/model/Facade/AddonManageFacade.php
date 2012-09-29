@@ -97,10 +97,11 @@ class AddonManageFacade extends Nette\Object
 	 */
 	public function fillAddonWithValues(Model\Addon $addon, array $values, Nette\Security\Identity $owner)
 	{
-		$overwritable = array(
+		$overWritable = array(
 				'name' => TRUE,
 				'shortDescription' => TRUE,
 				'description' => TRUE,
+				'descriptionFormat' => TRUE,
 				'demo' => TRUE,
 				'defaultLicense' => FALSE,
 				'repository' => FALSE,

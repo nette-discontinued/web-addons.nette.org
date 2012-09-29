@@ -222,3 +222,9 @@ ADD `repositoryHosting` enum('github') COLLATE 'utf8_general_ci' NULL COMMENT 'r
 -- addons.repository length increased to 500
 ALTER TABLE `addons`
 CHANGE `repository` `repository` varchar(500) COLLATE 'utf8_general_ci' NULL COMMENT 'repository url (git or svn)' AFTER `userId`;
+
+-- addon support for markdown
+ALTER TABLE `addons`
+ADD `descriptionFormat` enum('texy','markdown') COLLATE 'utf8_general_ci' NOT NULL COMMENT 'texy' AFTER `description`,
+COMMENT=''
+REMOVE PARTITIONING;

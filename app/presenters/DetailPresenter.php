@@ -38,22 +38,10 @@ class DetailPresenter extends BasePresenter
 
 
 
-	public function injectAddons(Addons $addons)
+	public function injectAddons(Addons $addons, AddonVersions $addonVersions, AddonVotes $addonVotes)
 	{
 		$this->addons = $addons;
-	}
-
-
-
-	public function injectAddonVersions(AddonVersions $addonVersions)
-	{
 		$this->addonVersions = $addonVersions;
-	}
-
-
-
-	public function injectAddonVotes(AddonVotes $addonVotes)
-	{
 		$this->addonVotes = $addonVotes;
 	}
 

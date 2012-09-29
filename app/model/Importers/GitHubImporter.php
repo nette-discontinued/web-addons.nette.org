@@ -75,7 +75,8 @@ class GitHubImporter extends Nette\Object implements IAddonImporter
 
 		// description
 		if ($readme) {
-			$addon->description = $readme;
+			$addon->description = $readme->content;
+			$addon->descriptionFormat = strtolower(pathinfo($readme->path, PATHINFO_EXTENSION)) === 'md' ? 'markdown' : 'texy';
 		}
 
 		// default license

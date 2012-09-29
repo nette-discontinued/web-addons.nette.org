@@ -175,7 +175,7 @@ class RepositoryTest extends TestCase
 				'content' => base64_encode('foobar'),
 			)));
 
-		$s = $this->repo->getReadme('cb3a02f');
+		$s = $this->repo->getReadme('cb3a02f')->content;
 		$this->assertSame('foobar', $s);
 	}
 
@@ -187,7 +187,7 @@ class RepositoryTest extends TestCase
 			->with('https://api.github.com/repos/smith/browser/readme?ref=cb3a02f')
 			->andThrow('NetteAddons\HttpException', NULL, 404);
 
-		$s = $this->repo->getReadme('cb3a02f');
+		$s = $this->repo->getReadme('cb3a02f')->content;
 		$this->assertNull($s);
 	}
 

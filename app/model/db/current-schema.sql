@@ -15,6 +15,7 @@ CREATE TABLE `addons` (
   `repositoryHosting` enum('github') DEFAULT NULL COMMENT 'repository hosting',
   `shortDescription` varchar(250) NOT NULL COMMENT 'short description',
   `description` text NOT NULL COMMENT 'in Texy! syntax',
+  `descriptionFormat` enum('texy','markdown') NOT NULL COMMENT 'texy',
   `demo` varchar(500) DEFAULT NULL COMMENT 'url to demo',
   `updatedAt` datetime NOT NULL COMMENT 'time of last update (of anything)',
   `defaultLicense` varchar(100) NOT NULL COMMENT 'used as default for new versions',
@@ -106,4 +107,4 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- 2012-09-06 10:08:07
+-- 2012-09-29 12:37:09

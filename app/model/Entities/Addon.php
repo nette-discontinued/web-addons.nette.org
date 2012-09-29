@@ -31,6 +31,9 @@ class Addon extends Nette\Object
 	/** @var string */
 	public $description;
 
+	/** @var string */
+	public $descriptionFormat = 'texy';
+
 	/** @var string default license for new versions */
 	public $defaultLicense;
 
@@ -71,6 +74,7 @@ class Addon extends Nette\Object
 		$addon->userId = (int) $row->user->id;
 		$addon->shortDescription = $row->shortDescription;
 		$addon->description = $row->description;
+		$addon->descriptionFormat = $row->descriptionFormat;
 		$addon->defaultLicense = $row->defaultLicense;
 		$addon->repository = $row->repository;
 		$addon->repositoryHosting = $row->repositoryHosting;
