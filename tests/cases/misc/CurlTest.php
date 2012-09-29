@@ -20,7 +20,7 @@ class CurlTest extends TestCase
 	protected function setUp()
 	{
 		parent::setUp();
-		$this->curl = new Curl(1000);
+		$this->curl = new Curl(10000);
 	}
 
 

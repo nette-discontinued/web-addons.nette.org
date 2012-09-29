@@ -1,22 +1,7 @@
 {var $title = $addon->name}
 {var $disableAdd = TRUE}
 {var $themeicon = 'box-full'}{* todo addon icon *}
-{block adminMenu}
-<div id="wikimenu" n:if="$auth->isAllowed($addon, 'manage')">
-	<ul>
-		<li>
-			<a href="#">Manage <span>&#x25bc;</span></a>
-			<ul>
-				<li n:if="isset($addon->repositoryHosting) && $addon->repositoryHosting != NULL">
-					<a rel="nofollow" n:href=":Manage:checkVersions $addon->id">Check updates</a>
-				</li>
-				<li><a rel="nofollow" n:href=":Manage:createVersion $addon->id">Add new version</a></li>
-				<li><a rel="nofollow" n:href=":Manage:editAddon $addon->id">Edit</a></li>
-			</ul>
-		</li>
-	</ul>
-</div>
-{/block}
+{block adminMenu}{control wikimenu}{/block}
 
 
 
@@ -81,6 +66,7 @@
 
 {block sidebar}
 <div class="info">
+	<a class="addon-download" n:href="download!">Download</a>
 	<div style="margin-bottom:2em">
 		{ifset $composer, $composer->authors}
 			<h3>Authors</h3>

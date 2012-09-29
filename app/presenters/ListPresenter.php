@@ -1,12 +1,25 @@
 <?php
 
 namespace NetteAddons;
+use NetteAddons\Model\AddonVotes;
 
 /**
  * @author Jan Marek
  */
 class ListPresenter extends BasePresenter
 {
+
+	/** @var AddonVotes */
+	private $addonVotes;
+
+
+
+	public function injectAddons(AddonVotes $addonVotes)
+	{
+		$this->addonVotes = $addonVotes;
+	}
+
+
 
 	public function renderDefault($tag = NULL, $author = NULL, $search = NULL)
 	{
@@ -25,6 +38,7 @@ class ListPresenter extends BasePresenter
 			$addonRepository->filterByString($addons, $search);
 		}
 
+		$this->template->addonVotes = callback($this->addonVotes, 'calculatePopularity');
 		$this->template->addons = $addons;
 	}
 

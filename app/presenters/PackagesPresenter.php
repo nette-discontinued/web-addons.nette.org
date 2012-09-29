@@ -32,6 +32,8 @@ class PackagesPresenter extends BasePresenter
 		$addons = array_map('NetteAddons\Model\Addon::fromActiveRow', iterator_to_array($addons));
 
 		$packagesJson = Composer::createPackagesJson($addons);
+		$packagesJson->notify = "/api/download-notify?package=%package%";
 		$this->sendResponse(new JsonResponse($packagesJson));
 	}
+
 }

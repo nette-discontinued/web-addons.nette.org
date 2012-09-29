@@ -153,4 +153,22 @@ class DetailPresenter extends BasePresenter
 		$this->flashMessage('Voting was successfull!');
 		$this->redirect('this');
 	}
+
+
+
+	/**
+	 * @throws \Nette\Application\BadRequestException
+	 * @return WikimenuControl
+	 */
+	protected function createComponentWikimenu()
+	{
+		if (!$this->addon) {
+			throw new \Nette\Application\BadRequestException;
+		}
+
+		$wiki = new WikimenuControl($this->auth);
+		$wiki->setAddon($this->addon);
+		return $wiki;
+	}
+
 }

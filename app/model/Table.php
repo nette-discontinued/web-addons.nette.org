@@ -102,8 +102,8 @@ abstract class Table extends Nette\Object
 			return $this->getTable()->insert($values);
 
 		} catch (\PDOException $e) {
-			if ($e->getCode() == 23000) {
-				throw new \NetteAddons\DuplicateEntryException(NULL, NULL, $e);
+			if (is_array($e->errorInfo) && $e->errorInfo[1] == 1062) {
+				throw new \NetteAddons\DuplicateEntryException($e->getMessage(), $e->errorInfo[1], $e);
 			} else {
 				throw $e;
 			}

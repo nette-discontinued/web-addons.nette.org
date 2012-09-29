@@ -71,15 +71,17 @@ INSERT INTO `addons_versions` (`id`, `addonId`, `version`, `license`, `distType`
 
 
 INSERT INTO `tags` (`id`, `name`, `slug`, `level`, `visible`) VALUES
-(1,	'Vizuální komponenty',	'vizualni-komponenty',	1,	1),
-(2,	'Nevizuální komponenty',	'nevizualni-komponenty',	1,	1),
-(3,	'Rozšíření formulářů',	'rozsireni-fomrularu',	1,	1),
-(4,	'Jazykové mutace',	'jazykove-mutace',	1,	1),
+(1,	'Visual components',	'visual-components',	1,	1),
+(2,	'Nonvisual components',	'nonvisual-components',	1,	1),
+(3,	'Form extensions',	'form-extensions',	1,	1),
+(4,	'Localization',	'localization',	1,	1),
 (5,	'AJAX',	'ajax',	1,	1),
-(6,	'Helpery a pomůcky pro šablony',	'helpery-a-pomucky-pro-sablony',	1,	1),
-(7,	'Rozšíření a nástroje',	'rozsireni-a-nastroje',	1,	1),
-(8,	'Panely pro DebugBar',	'panely-pro-debugbar',	1,	1),
-(9,	'Datagridy',	'datagridy',	2,	1);
+(6,	'Helpers and template utilities',	'helpers-and-template-utilities',	1,	1),
+(7,	'Extensions and tools',	'extensions-and-tools',	1,	1),
+(8,	'DebugBar panels',	'debug-bar-panels',	1,	1),
+(9,	'Datagrids',	'datagrids',	2,	1);
+
+
 
 INSERT INTO `users` (`id`, `name`, `password`, `email`, `role`) VALUES
 (1,	'Merxes',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'me@example.com',	'moderator'),
@@ -89,6 +91,8 @@ INSERT INTO `users` (`id`, `name`, `password`, `email`, `role`) VALUES
 (5,	'Panda',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'panda@example.com',	'moderator'),
 (6,	'chemiX',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'iamchemix@example.com',	'moderator'),
 (7,	'dgx',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'dgx@example.com',	'moderator'),
-(8,	'demo',	'40bd001563085fc35165329ea1ff5c5ecbdbbeef',	'demo@example.com',	NULL);
+(8,	'demo',	'40bd001563085fc35165329ea1ff5c5ecbdbbeef',	'demo@example.com',	NULL),
+(9,	'Schmutzka',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'schmutzka@example.com',	'moderator');
+
 
 -- 2012-09-29 12:58:44

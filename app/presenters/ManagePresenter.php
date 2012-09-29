@@ -102,7 +102,7 @@ final class ManagePresenter extends BasePresenter
 	 */
 	protected function createComponentAddAddonForm()
 	{
-		$form = new AddAddonForm($this->formValidators);
+		$form = new AddAddonForm($this->formValidators, $this->context->tags);
 		$form->onSuccess[] = $this->addAddonFormSubmitted;
 
 		if ($this->addon !== NULL) {
@@ -385,6 +385,23 @@ final class ManagePresenter extends BasePresenter
 
 		$this->flashMessage('Addon saved.');
 		$this->redirect('Detail:', $this->addon->id);
+	}
+
+
+
+	/**
+	 * @throws \Nette\Application\BadRequestException
+	 * @return WikimenuControl
+	 */
+	protected function createComponentWikimenu()
+	{
+		if (!$this->addon) {
+			throw new \Nette\Application\BadRequestException;
+		}
+
+		$wiki = new WikimenuControl($this->auth);
+		$wiki->setAddon($this->addon);
+		return $wiki;
 	}
 
 
