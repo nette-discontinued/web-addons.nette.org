@@ -105,6 +105,13 @@ form .form .required small {
 	font-size: 150%;
 	text-align: center;
 }
+.addon-composer p {
+	color: #999;
+	font-size: 90%;
+	font-style: italic;
+	margin: 0;
+	text-indent: 0;
+}
 
 li.gravatars {
 	list-style-type: none;

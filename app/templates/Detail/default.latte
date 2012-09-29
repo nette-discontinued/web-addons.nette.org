@@ -21,6 +21,13 @@
 	<div class="addon-composer">
 		<span class="addon-composer-label">Composer:</span>
 		<span class="addon-composer-name">{$addon->composerName}</span>
+		<p>Please add Nette Addons repository to your <code>composer.json</code> <a href="#" data-addons-toggle rel="#addon-composer-help">►</a></p>
+		<pre id="addon-composer-help" style="display:none">"repositories": [
+	{
+		"type": "composer",
+		"url": "{$netteRepositoryUrl}"
+	}
+]</pre>
 	</div>
 
 	<table>

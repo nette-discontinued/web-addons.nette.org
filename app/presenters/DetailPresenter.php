@@ -2,6 +2,7 @@
 
 namespace NetteAddons;
 
+use Nette\Http;
 use NetteAddons\Model\Addon;
 use NetteAddons\Model\Addons;
 use NetteAddons\Model\AddonVersions;
@@ -36,6 +37,9 @@ class DetailPresenter extends BasePresenter
 	/** @var TextPreprocessor */
 	private $textPreprocessor;
 
+	/** @var Url */
+	private $url;
+
 
 
 	public function injectAddons(Addons $addons, AddonVersions $addonVersions, AddonVotes $addonVotes)
@@ -50,6 +54,13 @@ class DetailPresenter extends BasePresenter
 	public function injectTextPreprocessor(TextPreprocessor $factory)
 	{
 		$this->textPreprocessor = $factory;
+	}
+
+
+
+	public function injectUrl(Http\IRequest $httpRequest)
+	{
+		$this->url = $httpRequest->url;
 	}
 
 
@@ -98,6 +109,8 @@ class DetailPresenter extends BasePresenter
 		$this->template->minus = $popularity->minus;
 		$this->template->percents = $popularity->percent;
 		$this->template->myVote = $myVote;
+
+		$this->template->netteRepositoryUrl = 'http://' . $this->url->host . '/';
 	}
 
 
