@@ -3,6 +3,7 @@
 namespace NetteAddons\Model;
 
 use Nette;
+use Nette\Database\SqlLiteral;
 use Nette\Database\Table\ActiveRow;
 use Nette\Utils\Json;
 
@@ -124,7 +125,22 @@ class AddonVersions extends Table
 		}
 
 		$row->update(array(
-			'downloadsCount' => new \Nette\Database\SqlLiteral('downloadsCount + 1')
+			'downloadsCount' => new SqlLiteral('downloadsCount + 1')
+		));
+	}
+
+
+
+	public function incrementInstallsCount(AddonVersion $version)
+	{
+		$row = $this->find($version->id);
+
+		if (!$row) {
+			return;
+		}
+
+		$row->update(array(
+			'installsCount' => new SqlLiteral('installsCount + 1')
 		));
 	}
 

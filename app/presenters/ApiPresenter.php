@@ -2,7 +2,9 @@
 
 namespace NetteAddons;
 
+use NetteAddons\Model\Addon;
 use NetteAddons\Model\Addons;
+use NetteAddons\Model\AddonVersion;
 use NetteAddons\Model\AddonVersions;
 
 
@@ -44,25 +46,25 @@ class ApiPresenter extends BasePresenter
 		}
 		$version = (string) $post['version'];
 
-		if (!$row = $this->addons->findOneBy(array('composerName' => $package))) {
+		if (!$addonRow = $this->addons->findOneBy(array('composerName' => $package))) {
 			$this->error('Package not found.');
 		}
 
-		$rowVersion = $this->addonVersions->findOneBy(array(
-			'addonId' => $row->id,
+		$addon = Addon::fromActiveRow($addonRow);
+
+		$versionRow = $this->addonVersions->findOneBy(array(
+			'addonId' => $addon->id,
 			'version' => $version,
 		));
-		if (!$rowVersion) {
+
+		if (!$versionRow) {
 			$this->error("Version of package not found.");
 		}
 
-		$row->update(array(
-			'totalInstallsCount' => $row->totalInstallsCount + 1,
-		));
+		$version = AddonVersion::fromActiveRow($versionRow);
 
-		$rowVersion->update(array(
-			'installsCount' => $rowVersion->installsCount + 1,
-		));
+		$this->addons->incrementInstallsCount($addon);
+		$this->addonVersions->incrementInstallsCount($version);
 
 		$this->sendJson(array('status' => "success"));
 	}

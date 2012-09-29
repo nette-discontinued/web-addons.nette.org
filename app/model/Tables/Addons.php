@@ -4,6 +4,7 @@ namespace NetteAddons\Model;
 
 use NetteAddons;
 use Nette;
+use Nette\Database\SqlLiteral;
 use Nette\Database\Table\ActiveRow;
 use Nette\Database\Table\Selection;
 use Nette\DateTime;
@@ -80,8 +81,23 @@ class Addons extends Table
 		}
 
 		$row->update(array(
-				'totalDownloadsCount' => new \Nette\Database\SqlLiteral('totalDownloadsCount + 1')
-			));
+			'totalDownloadsCount' => new SqlLiteral('totalDownloadsCount + 1')
+		));
+	}
+
+
+
+	public function incrementInstallsCount(Addon $addon)
+	{
+		$row = $this->find($addon->id);
+
+		if (!$row) {
+			return;
+		}
+
+		$row->update(array(
+			'totalInstallsCount' => new SqlLiteral('totalInstallsCount + 1')
+		));
 	}
 
 
