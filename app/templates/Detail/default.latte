@@ -40,10 +40,6 @@
 			<th>Demo</th>
 			<td><a href="{$addon->demo}">{$addon->demo}</a></td>
 		</tr>
-		<tr>
-			<th>License</th>
-			<td>{$version->license}</td>
-		</tr>
 		<tr n:ifset="$composer, $composer->require">
 			<th>Requirements</th>
 			<td>
@@ -78,6 +74,10 @@
 			<h3><a n:href=":People:detail id => $addon->user->id" title="$addon->user->name">{$addon->user->name}</a></h3>
 			<img src="http://forum.nette.org/cs/img/avatars/2118.jpg" class="avatar" alt="Avatar">
 		{/ifset}
+	</div>
+	<div style="margin-bottom:2em">
+		<h3>License</h3>
+		<p>{$version->license}</p>
 	</div>
 
 	<h3>Rating: {$percents}&nbsp;%</h3>
