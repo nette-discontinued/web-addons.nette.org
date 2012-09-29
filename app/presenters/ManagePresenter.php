@@ -3,6 +3,7 @@
 namespace NetteAddons;
 
 use NetteAddons\Model\Addon;
+use NetteAddons\Model\Users;
 use NetteAddons\Model\Addons;
 use NetteAddons\Model\AddonVersion;
 use NetteAddons\Model\AddonVersions;
@@ -41,6 +42,9 @@ final class ManagePresenter extends BasePresenter
 	/** @var AddonVersions */
 	private $versions;
 
+	/** @var Users */
+	private $users;
+
 	/** @var FormValidators */
 	private $formValidators;
 
@@ -56,11 +60,12 @@ final class ManagePresenter extends BasePresenter
 
 
 
-	public function injectAddons(Addons $addons, AddonVersions $versions, FormValidators $formValidators)
+	public function injectAddons(Addons $addons, AddonVersions $versions, FormValidators $formValidators, Users $users)
 	{
 		$this->addons = $addons;
 		$this->versions = $versions;
 		$this->formValidators = $formValidators;
+		$this->users = $users;
 	}
 
 
@@ -273,9 +278,11 @@ final class ManagePresenter extends BasePresenter
 			$this->error();
 		}
 
+		$owner = $this->users->createIdentity($this->users->find($this->addon->userId));
+
 		try {
 			$importer = $this->createAddonImporter($this->addon->repository);
-			$result = $this->manager->updateVersions($this->addon, $importer, $this->getUser()->getIdentity());
+			$result = $this->manager->updateVersions($this->addon, $importer, $owner);
 
 		} catch (\NetteAddons\IOException $e) {
 			$this->flashMessage('Version importing failed. Try again later.', 'error');
