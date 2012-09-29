@@ -26,7 +26,7 @@ class AddonVersion extends Nette\Object
 	public $require = array();
 
 	/** @var string[] */
-	//public $suggest = array();
+	public $requireDev = array();
 
 	/** @var string[] */
 	public $provide = array();
@@ -89,8 +89,12 @@ class AddonVersion extends Nette\Object
 		$version->sourceReference = $row->sourceReference;
 		$version->composerJson = Json::decode($row->composerJson); // this may fail
 
+		$linkTypes = self::getLinkTypes();
+		$linkTypes = array_flip($linkTypes);
+
 		foreach ($row->related('dependencies') as $dependencyRow) {
 			$type = $dependencyRow->type;
+			$type = $linkTypes[$type];
 			$version->{$type}[$dependencyRow->packageName] = $dependencyRow->version;
 		}
 
@@ -107,6 +111,12 @@ class AddonVersion extends Nette\Object
 	 */
 	public static function getLinkTypes()
 	{
-		return array('require', 'replace', 'conflict', 'provide', /*'require-dev', 'suggest'*/);
+		return array(
+			'require' => 'require', 
+			'replace' => 'replace', 
+			'conflict' => 'conflict', 
+			'provide' => 'provide', 
+			'requireDev' => 'require-dev',
+		);
 	}
 }

@@ -34,7 +34,7 @@ CREATE TABLE `addons_dependencies` (
   `dependencyId` int(10) unsigned DEFAULT NULL,
   `packageName` varchar(100) NOT NULL,
   `version` varchar(20) NOT NULL,
-  `type` enum('require','suggest','provide','replace','conflict','recommend') NOT NULL DEFAULT 'require',
+  `type` enum('require','require-dev','suggest','provide','replace','conflict','recommend') NOT NULL DEFAULT 'require',
   PRIMARY KEY (`id`),
   UNIQUE KEY `versionId_type_packageName` (`versionId`,`type`,`packageName`),
   KEY `dependencyId` (`dependencyId`),

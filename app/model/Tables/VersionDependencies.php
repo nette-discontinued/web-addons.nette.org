@@ -25,8 +25,8 @@ class VersionDependencies extends Table
 	 */
 	public function setVersionDependencies(AddonVersion $version)
 	{
-		foreach (AddonVersion::getLinkTypes() as $type) {
-			foreach ($version->$type as $packageName => $versionNumber) {
+		foreach (AddonVersion::getLinkTypes() as $key => $type) {
+			foreach ($version->$key as $packageName => $versionNumber) {
 				if (strpos($packageName, '/') !== FALSE && ($dep = $this->findAddon($packageName))) {
 					$depId = $dep->getPrimary();
 				} else {
