@@ -58,7 +58,7 @@ class GitHubImporterTest extends TestCase
 
 		$this->repo->shouldReceive('getReadme')
 			->with('work_br')->once()
-			->andReturn('readme');
+			->andReturn((object)array('content' => 'readme', 'path' => 'readme.md'));
 
 		$this->validators->shouldReceive('isComposerNameValid')
 			->with('c-name')->once()

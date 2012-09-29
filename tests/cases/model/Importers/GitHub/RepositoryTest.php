@@ -187,7 +187,7 @@ class RepositoryTest extends TestCase
 			->with('https://api.github.com/repos/smith/browser/readme?ref=cb3a02f')
 			->andThrow('NetteAddons\HttpException', NULL, 404);
 
-		$s = $this->repo->getReadme('cb3a02f')->content;
+		$s = $this->repo->getReadme('cb3a02f');
 		$this->assertNull($s);
 	}
 
