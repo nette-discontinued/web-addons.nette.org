@@ -104,4 +104,11 @@ form .form .required small {
 	font-family: Consolas;
 	font-size: 150%;
 	text-align: center;
+
+li.gravatars {
+	list-style-type: none;
+}
+
+img.gravatar {
+	margin-right: 8px;
 }

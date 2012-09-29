@@ -25,7 +25,8 @@
 		"dg/texy": "2.2.*",
 		"composer/composer": "dev-master",
 		"kukulich/fshl": "dev-develop",
-        "michelf/php-markdown": "1.2.5"
+        "michelf/php-markdown": "1.2.5",
+		"emberlabs/gravatarlib": "@dev"
 	},
 	"minimum-stability":"dev",
 	"autoload": {
