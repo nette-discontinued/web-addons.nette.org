@@ -25,11 +25,13 @@
 		"dg/texy": "2.2.*",
 		"composer/composer": "dev-master",
 		"kukulich/fshl": "dev-develop",
-        "michelf/php-markdown": "1.2.5"
+        "michelf/php-markdown": "1.2.5",
+        "emberlabs/gravatarlib": "dev-master"
 	},
 	"minimum-stability":"dev",
 	"autoload": {
 		"files": ["app/misc/functions.php"],
-		"classmap": ["libs/michelf/php-markdown/markdown.php"]
+		"classmap": ["libs/michelf/php-markdown/markdown.php"],
+        "classmap": ["libs/emberlabs/gravatarlib/emberlabs/gravatarlib/Gravatar.php"]
 	}
 }

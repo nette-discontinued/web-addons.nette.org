@@ -42,6 +42,7 @@ services:
 	authorizator: NetteAddons\Model\Authorizator
 
 	# view
+	gravatarPathBuilder: emberlabs\GravatarLib\Gravatar
 	textPreprocessor: NetteAddons\TextPreprocessor
 
     # tables
