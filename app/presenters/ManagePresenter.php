@@ -390,6 +390,23 @@ final class ManagePresenter extends BasePresenter
 
 
 	/**
+	 * @throws \Nette\Application\BadRequestException
+	 * @return WikimenuControl
+	 */
+	protected function createComponentWikimenu()
+	{
+		if (!$this->addon) {
+			throw new \Nette\Application\BadRequestException;
+		}
+
+		$wiki = new WikimenuControl($this->auth);
+		$wiki->setAddon($this->addon);
+		return $wiki;
+	}
+
+
+
+	/**
 	 * Addon importer factory
 	 *
 	 * @param  string
