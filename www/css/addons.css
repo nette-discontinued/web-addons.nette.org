@@ -114,3 +114,30 @@ li.gravatars {
 img.gravatar {
 	margin-right: 8px;
 }
+/** icons */
+[class^="icon-"],
+[class*=" icon-"] {
+	display: inline-block;
+	width: 14px;
+	height: 14px;
+	line-height: 14px;
+	vertical-align: text-top;
+	background-position: 14px 14px;
+	background-repeat: no-repeat;
+	*margin-right: .3em;
+	*margin-right: .3em;
+}
+[class^="icon-"]:last-child,
+[class*=" icon-"]:last-child {
+	*margin-left: 0;
+}
+[class^="icon-"]:last-child,
+[class*=" icon-"]:last-child {
+	*margin-left: 0;
+}
+.icon-thumb_down {
+	background: url(../images/thumb_down.png) no-repeat;
+}
+.icon-thumb_up {
+	background: url(../images/thumb_up.png) no-repeat;
+}
