@@ -108,6 +108,7 @@ form .form .required small {
 
 li.gravatars {
 	list-style-type: none;
+	margin: 0 0 5px;
 }
 
 img.gravatar {
