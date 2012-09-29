@@ -19,7 +19,7 @@
 	</div>
 
 	<div class="emphasis addon-composer">
-		<h2><span>Composer:</span>{$addon->composerName}</h2>
+		<h2><span><a href="http://doc.nette.org/composer">Composer</a>:</span>{$addon->composerName}</h2>
 		<p>Please add Nette Addons repository to your <code>composer.json</code> <a href="#" data-addons-toggle rel="#addon-composer-help" title="Give me code">►</a></p>
 		<pre id="addon-composer-help" style="display:none">"repositories": [
 	{
@@ -68,7 +68,7 @@
 
 {block sidebar}
 <div class="info">
-	<div class="addon-composer-use">Use Composer or</div>
+	<div class="addon-composer-use">Use <a href="http://doc.nette.org/composer">Composer</a> or</div>
 	<a class="bigbutton" n:href="download!" title="{$addon->totalDownloadsCount}× total downloads, {$version->downloadsCount}× this version"><i class="icon-download"></i>Download</a>
 	<div style="margin-bottom:2em">
 		{ifset $composer, $composer->authors}
