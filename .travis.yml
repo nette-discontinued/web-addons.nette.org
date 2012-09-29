@@ -9,3 +9,6 @@ before_script:
   - "sh -c 'php composer.phar install --quiet'"
 
 script: phpunit --configuration tests/phpunit.xml
+
+notifications:
+  email: false
