@@ -38,14 +38,14 @@ nette:
 services:
 	templateFactory: NetteAddons\TemplateFactory(@nette.templateCacheStorage)
 
-    # security
+	# security
 	authenticator: NetteAddons\Model\Authenticator
 	authorizator: NetteAddons\Model\Authorizator
 
 	# view
 	textPreprocessor: NetteAddons\TextPreprocessor
 
-    # tables
+	# tables
 	users: NetteAddons\Model\Users
 	addons: NetteAddons\Model\Addons
 	addonVersions: NetteAddons\Model\AddonVersions
