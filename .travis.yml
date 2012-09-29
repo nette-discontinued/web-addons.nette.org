@@ -6,6 +6,6 @@ php:
 
 before_script:
   - "sh -c 'curl -s http://getcomposer.org/installer | php'"
-  - "sh -c 'php composer.phar install'"
+  - "sh -c 'php composer.phar install --quiet'"
 
 script: phpunit --configuration tests/phpunit.xml
