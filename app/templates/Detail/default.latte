@@ -18,11 +18,12 @@
 		<a class="addon-archive-link" n:href="archive">older versions</a>
 	</div>
 
+	<div class="addon-composer">
+		<span class="addon-composer-label">Composer:</span>
+		<span class="addon-composer-name">{$addon->composerName}</span>
+	</div>
+
 	<table>
-		<tr>
-			<th>Composer name</th>
-			<td>{$addon->composerName}</td>
-		</tr>
 		<tr n:if="$addon->repository">
 			<th>Repository</th>
 			<td><a href="{$addon->repository}">{$addon->repository}</a></td>
@@ -61,6 +62,7 @@
 
 {block sidebar}
 <div class="info">
+	<div class="addon-composer-use">Use Composer or</div>
 	<a class="addon-download" n:href="download!" title="{$addon->totalDownloadsCount}× total downloads, {$version->downloadsCount}× this version">Download</a>
 	<div style="margin-bottom:2em">
 		{ifset $composer, $composer->authors}
