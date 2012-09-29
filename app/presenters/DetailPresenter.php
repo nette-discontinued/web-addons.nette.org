@@ -136,11 +136,8 @@ class DetailPresenter extends BasePresenter
 			$this->error('Unknown addon version.');
 		}
 
-		$version->downloadsCount += 1;
-		$this->addon->totalDownloadsCount += 1;
-
-		$this->addonVersions->update($version);
-		$this->addons->update($this->addon);
+		$this->addonVersions->incrementDownloadsCount($version);
+		$this->addons->incrementDownloadsCount($this->addon);
 
 		$this->redirectUrl($version->distUrl);
 	}

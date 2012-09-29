@@ -71,6 +71,21 @@ class Addons extends Table
 
 
 
+	public function incrementDownloadsCount(Addon $addon)
+	{
+		$row = $this->find($addon->id);
+
+		if (!$row) {
+			return;
+		}
+
+		$row->update(array(
+				'totalDownloadsCount' => new \Nette\Database\SqlLiteral('totalDownloadsCount + 1')
+			));
+	}
+
+
+
 // === CRUD ====================================================================
 
 	/**
