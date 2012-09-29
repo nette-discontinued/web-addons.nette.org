@@ -129,6 +129,7 @@ class DetailPresenter extends BasePresenter
 	 * @author Jan Tvrdík
 	 * @param  string 'up' or 'down'
 	 * @return void
+	 * @secured
 	 */
 	public function handleVote($vote)
 	{
