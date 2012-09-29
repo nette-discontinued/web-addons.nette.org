@@ -106,6 +106,7 @@ class AddonManageFacade extends Nette\Object
 				'defaultLicense' => FALSE,
 				'repository' => FALSE,
 				'repositoryHosting' => FALSE,
+				'tags' => FALSE,
 		);
 		$ifEmpty = array(
 			'composerName' => TRUE,

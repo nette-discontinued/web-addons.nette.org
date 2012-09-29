@@ -3,6 +3,7 @@
 namespace NetteAddons;
 
 use NetteAddons\Model\Addon;
+use NetteAddons\Model\Tags;
 use NetteAddons\Model\Utils\FormValidators;
 use Nette;
 use Nette\Utils\Html;
@@ -18,11 +19,15 @@ class AddAddonForm extends BaseForm
 	/** @var FormValidators */
 	private $validators;
 
+	/** @var Tags */
+	private $tags;
 
 
-	public function __construct(FormValidators $validators)
+
+	public function __construct(FormValidators $validators, Tags $tags)
 	{
 		$this->validators = $validators;
+		$this->tags = $tags;
 		parent::__construct();
 	}
 
@@ -65,7 +70,7 @@ class AddAddonForm extends BaseForm
 			->setAttribute('class', 'span6')
 			->addCondition(self::FILLED)
 				->addRule(self::URL);
-		// $this->addText('tags');
+		$this->addMultiSelect('tags', 'Categories', $this->getCategories());
 		$this->addSubmit('create', 'Next');
 	}
 
@@ -87,5 +92,16 @@ class AddAddonForm extends BaseForm
 			'repository' => $addon->repository,
 			'demo' => $addon->demo
 		));
+	}
+
+
+
+	private function getCategories()
+	{
+		$categories = array();
+		foreach ($this->tags->findMainTags() as $tag) {
+			$categories[$tag->id] = $tag->name;
+		}
+		return $categories;
 	}
 }
