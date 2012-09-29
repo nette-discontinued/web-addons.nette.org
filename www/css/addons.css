@@ -14,6 +14,10 @@ form .form .required small {
 	display: none;
 }
 
+.table-full {
+	width: 100%;
+}
+
 .sidebar .info {
 	clear: both;
 	color: #666;

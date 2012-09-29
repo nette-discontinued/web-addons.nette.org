@@ -20,44 +20,45 @@
 
 	<div class="emphasis addon-composer">
 		<h2><span>Composer:</span>{$addon->composerName}</h2>
-		<p>Please add Nette Addons repository to your <code>composer.json</code> <a href="#" data-addons-toggle rel="#addon-composer-help">►</a></p>
+		<p>Please add Nette Addons repository to your <code>composer.json</code> <a href="#" data-addons-toggle rel="#addon-composer-help" title="Give me code">►</a></p>
 		<pre id="addon-composer-help" style="display:none">"repositories": [
 	{
 		"type": "composer",
 		"url": "{$netteRepositoryUrl}"
 	}
 ]</pre>
-		<a id="addon-cvs-details-link" n:class="$addon->repositoryHosting == 'github' ? addon-github" href="#" data-addons-toggle rel="#addon-cvs-details">&nbsp;</a>
-	</div>
 
-	<div id="addon-cvs-details" style="display:none">
-	<table>
-		<tr n:if="$addon->repository">
-			<th>Repository</th>
-			<td><a href="{$addon->repository}">{$addon->repository}</a></td>
-		</tr>
-		<tr n:ifset="$composer->source">
-			<th>{$composer->source->type|firstUpper} reference</th>
-			<td>
-				<a n:tag-if="$addon->repositoryHosting == github" href="{$addon->repository}/tree/{$composer->source->reference}">
-					{$composer->source->reference}
-				</a>
-			</td>
-		</tr>
-		<tr n:if="$addon->demo">
-			<th>Demo</th>
-			<td><a href="{$addon->demo}">{$addon->demo}</a></td>
-		</tr>
-		<tr n:ifset="$composer, $composer->require">
-			<th>Requirements</th>
-			<td>
-				{foreach $composer->require as $package => $v}
-					{$package} ({$v})
-					{sep}<br>{/sep}
-				{/foreach}
-			</td>
-		</tr>
-	</table>
+		<div id="addon-cvs-details" class="hide">
+			<table class="table-full">
+				<tr n:if="$addon->repository">
+					<th>Repository</th>
+					<td><a href="{$addon->repository}">{$addon->repository}</a></td>
+				</tr>
+				<tr n:ifset="$composer->source">
+					<th>{$composer->source->type|firstUpper} reference</th>
+					<td>
+						<a n:tag-if="$addon->repositoryHosting == github" href="{$addon->repository}/tree/{$composer->source->reference}">
+							{$composer->source->reference}
+						</a>
+					</td>
+				</tr>
+				<tr n:if="$addon->demo">
+					<th>Demo</th>
+					<td><a href="{$addon->demo}">{$addon->demo}</a></td>
+				</tr>
+				<tr n:ifset="$composer, $composer->require">
+					<th>Requirements</th>
+					<td>
+						{foreach $composer->require as $package => $v}
+							{$package} ({$v})
+								{sep}<br>{/sep}
+						{/foreach}
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<a id="addon-cvs-details-link" n:class="$addon->repositoryHosting == 'github' ? addon-github" href="#" data-addons-toggle rel="#addon-cvs-details" title="Show more info">&nbsp;</a>
 	</div>
 
 	{!$content}
