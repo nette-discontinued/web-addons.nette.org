@@ -84,7 +84,7 @@
 		<p>{$version->license}</p>
 	</div>
 
-	<h3>Rating: {$percents}&nbsp;%</h3>
+	<h3>Rating</h3>
 	<table class="table-vote">
 		<tr>
 			<td class="thumb">
@@ -95,11 +95,11 @@
 					<i class="icon-thumb_up"></i>
 				{/if}
 			</td>
-			{*<td class="wrap-progress">
+			<td class="wrap-progress">
 				<div class="progress progress-yesno progress-success {if $plus == 0 && $minus == 0}progress-disabled{/if}">
-					<div class="bar" title="{$percents} %" style="width: {$percents}%;"></div>
+					<div class="bar" title="{$percents|number:2} %" style="width: {!$percents}%;"></div>
 				</div>
-			</td>*}
+			</td>
 			<td class="thumb">
 				<span class="num">{$minus}×</span>
 				{if $auth->isAllowed($addon, 'vote')}
