@@ -3,6 +3,7 @@
 namespace NetteAddons\Model\Importers\GitHub;
 
 use Nette\Utils\Strings;
+use Nette\Http\Url;
 
 
 
@@ -59,10 +60,7 @@ class Repository extends \Nette\Object
 	protected function exec($path)
 	{
 		try {
-			$url = new \Nette\Http\Url($this->baseUrl);
-			$url->setPath($path);
-
-			$request = $this->curl->create($url);
+			$request = $this->curl->create(new Url($this->baseUrl . '/' . ltrim($path, '/')));
 			$request->setOption(CURLOPT_HTTPHEADER, array(
 				"Accept: application/vnd.github.{$this->apiVersion}+json",
 			));

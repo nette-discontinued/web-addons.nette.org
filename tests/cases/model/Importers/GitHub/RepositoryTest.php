@@ -2,6 +2,7 @@
 
 namespace NetteAddons\Test;
 
+use Nette;
 use NetteAddons;
 use NetteAddons\Model\Importers\GitHub\Repository;
 use Mockery;
@@ -16,7 +17,7 @@ class RepositoryTest extends TestCase
 	/** @var Repository */
 	private $repo;
 
-	/** @var Mockery\MockInterface */
+	/** @var \PHPUnit_Framework_MockObject_MockObject */
 	private $curl;
 
 
@@ -24,7 +25,7 @@ class RepositoryTest extends TestCase
 	protected function setUp()
 	{
 		parent::setUp();
-		$this->curl = Mockery::mock('NetteAddons\CurlRequestFactory');
+		$this->curl = $this->getMockBuilder('NetteAddons\CurlRequestFactory')->disableOriginalConstructor()->getMock();
 		$this->repo = new Repository('beta', $this->curl, 'smith', 'browser');
 	}
 
@@ -48,13 +49,36 @@ class RepositoryTest extends TestCase
 
 
 
+	/**
+	 * @param string $url
+	 * @return \PHPUnit_Framework_MockObject_MockObject|\NetteAddons\CurlRequest
+	 */
+	private function mockRequest($url = NULL)
+	{
+		$request = $this->getMockBuilder('NetteAddons\CurlRequest')
+			->disableOriginalConstructor()->getMock();
+		$request->expects($this->any())->method('setOption');
+
+		$urlConstraint = $url !== NULL
+			? $this->equalTo(new Nette\Http\Url($url))
+			: $this->isInstanceOf('Nette\Http\Url'); // https://api.github.com/repos/smith/browser
+
+		$this->curl->expects($this->once())->method('create')
+			->with($urlConstraint)
+			->will($this->returnValue($request));
+
+		return $request;
+	}
+
+
+
 	public function testGetMetadata()
 	{
-		$this->curl->shouldReceive('get')->once()
-			->with('https://api.github.com/repos/smith/browser')
-			->andReturn(json_encode(array(
+		$request = $this->mockRequest();
+		$request->expects($this->once())->method('execute')
+			->will($this->returnValue(json_encode(array(
 				'name' => 'Smith\'s Browser',
-			)));
+			))));
 
 		$metadata = $this->repo->getMetadata();
 		$this->assertInstanceOf('stdClass', $metadata);
@@ -66,9 +90,10 @@ class RepositoryTest extends TestCase
 	public function testCurlError()
 	{
 		$ex = new NetteAddons\CurlException(NULL, CURLE_COULDNT_RESOLVE_HOST);
-		$this->curl->shouldReceive('get')->once()
-			->with('https://api.github.com/repos/smith/browser')
-			->andThrow($ex);
+		$this->mockRequest()
+			->expects($this->once())
+			->method('execute')
+			->will($this->throwException($ex));
 
 		try {
 			$this->repo->getMetadata();
@@ -84,9 +109,10 @@ class RepositoryTest extends TestCase
 	public function testHttpError()
 	{
 		$ex = new NetteAddons\HttpException(NULL, 404);
-		$this->curl->shouldReceive('get')->once()
-			->with('https://api.github.com/repos/smith/browser')
-			->andThrow($ex);
+		$this->mockRequest()
+			->expects($this->once())
+			->method('execute')
+			->will($this->throwException($ex));
 
 		try {
 			$this->repo->getMetadata();
@@ -101,9 +127,10 @@ class RepositoryTest extends TestCase
 
 	public function testInvalidJson()
 	{
-		$this->curl->shouldReceive('get')->once()
-			->with('https://api.github.com/repos/smith/browser')
-			->andReturn('{]'); // invalid JSON
+		$this->mockRequest()
+			->expects($this->once())
+			->method('execute')
+			->will($this->returnValue('{]'));
 
 		try {
 			$this->repo->getMetadata();
@@ -128,39 +155,51 @@ class RepositoryTest extends TestCase
 
 
 
-	public function testGetFileContent()
+	/**
+	 * @return array
+	 */
+	public function dataGetFileContent()
 	{
-		// base64
-		$this->curl->shouldReceive('get')->once()
-			->with('https://api.github.com/repos/smith/browser/contents/file.txt?ref=cb3a02f')
-			->andReturn(json_encode(array(
-				'encoding' => 'base64',
-				'content' => base64_encode('foobar'),
-			)));
+		return array(
+			array('base64', base64_encode('foobar'), 'foobar'),
+			array('utf-8', 'barfoo', 'barfoo'),
+		);
+	}
+
+
+
+	/**
+	 * @dataProvider dataGetFileContent
+	 */
+	public function testGetFileContent($encoding, $content, $expectedValue)
+	{
+		$request = $this->mockRequest('https://api.github.com/repos/smith/browser/contents/file.txt?ref=cb3a02f');
+		$request->expects($this->once())
+			->method('execute')
+			->will($this->returnValue(json_encode(array(
+				'encoding' => $encoding,
+				'content' => $content,
+			))));
 
 		$s = $this->repo->getFileContent('cb3a02f', 'file.txt');
-		$this->assertSame('foobar', $s);
+		$this->assertSame($expectedValue, $s);
+	}
 
-		// UTF-8
-		$this->curl->shouldReceive('get')->once()
-			->with('https://api.github.com/repos/smith/browser/contents/file.txt?ref=cb3a02f')
-			->andReturn(json_encode(array(
-				'encoding' => 'utf-8',
-				'content' => 'foobar',
-			)));
 
-		$s = $this->repo->getFileContent('cb3a02f', 'file.txt');
-		$this->assertSame('foobar', $s);
 
-		// unknown
-		$this->curl->shouldReceive('get')->once()
-			->with('https://api.github.com/repos/smith/browser/contents/file.txt?ref=cb3a02f')
-			->andReturn(json_encode(array(
+	/**
+	 * @expectedException NetteAddons\IOException
+	 */
+	public function testGetFileContent_UnknownEncodingException()
+	{
+		$request = $this->mockRequest('https://api.github.com/repos/smith/browser/contents/file.txt?ref=cb3a02f');
+		$request->expects($this->once())
+			->method('execute')
+			->will($this->returnValue(json_encode(array(
 				'encoding' => 'unknown',
 				'content' => 'foobar',
-			)));
+			))));
 
-		$this->setExpectedException('NetteAddons\IOException');
 		$this->repo->getFileContent('cb3a02f', 'file.txt');
 	}
 
@@ -168,12 +207,13 @@ class RepositoryTest extends TestCase
 
 	public function testGetReadme()
 	{
-		$this->curl->shouldReceive('get')->once()
-			->with('https://api.github.com/repos/smith/browser/readme?ref=cb3a02f')
-			->andReturn(json_encode(array(
+		$request = $this->mockRequest('https://api.github.com/repos/smith/browser/readme?ref=cb3a02f');
+		$request->expects($this->once())
+			->method('execute')
+			->will($this->returnValue(json_encode(array(
 				'encoding' => 'base64',
 				'content' => base64_encode('foobar'),
-			)));
+			))));
 
 		$s = $this->repo->getReadme('cb3a02f')->content;
 		$this->assertSame('foobar', $s);
@@ -183,9 +223,10 @@ class RepositoryTest extends TestCase
 
 	public function testGetReadmeNotExist()
 	{
-		$this->curl->shouldReceive('get')->once()
-			->with('https://api.github.com/repos/smith/browser/readme?ref=cb3a02f')
-			->andThrow('NetteAddons\HttpException', NULL, 404);
+		$request = $this->mockRequest('https://api.github.com/repos/smith/browser/readme?ref=cb3a02f');
+		$request->expects($this->once())
+			->method('execute')
+			->will($this->throwException(new NetteAddons\HttpException(NULL, 404)));
 
 		$s = $this->repo->getReadme('cb3a02f');
 		$this->assertNull($s);
@@ -195,18 +236,13 @@ class RepositoryTest extends TestCase
 
 	public function testGetTags()
 	{
-		$this->curl->shouldReceive('get')->once()
-			->with('https://api.github.com/repos/smith/browser/tags')
-			->andReturn(json_encode(array(
-				array(
-					'name' => 'tagA',
-					'commit' => array('sha' => 'cb3a02f'),
-				),
-				array(
-					'name' => 'tagB',
-					'commit' => array('sha' => 'a630f70'),
-				),
-			)));
+		$request = $this->mockRequest('https://api.github.com/repos/smith/browser/tags');
+		$request->expects($this->once())
+			->method('execute')
+			->will($this->returnValue(json_encode(array(
+				array('name' => 'tagA', 'commit' => array('sha' => 'cb3a02f')),
+				array('name' => 'tagB', 'commit' => array('sha' => 'a630f70')),
+			))));
 
 		$this->assertSame(array(
 			'tagA' => 'cb3a02f',
@@ -218,18 +254,13 @@ class RepositoryTest extends TestCase
 
 	public function testGetBranches()
 	{
-		$this->curl->shouldReceive('get')->once()
-			->with('https://api.github.com/repos/smith/browser/branches')
-			->andReturn(json_encode(array(
-				array(
-					'name' => 'branchA',
-					'commit' => array('sha' => 'cb3a02f'),
-				),
-				array(
-					'name' => 'branchB',
-					'commit' => array('sha' => 'a630f70'),
-				),
-			)));
+		$request = $this->mockRequest('https://api.github.com/repos/smith/browser/branches');
+		$request->expects($this->once())
+			->method('execute')
+			->will($this->returnValue(json_encode(array(
+				array('name' => 'branchA', 'commit' => array('sha' => 'cb3a02f')),
+				array('name' => 'branchB', 'commit' => array('sha' => 'a630f70')),
+			))));
 
 		$this->assertSame(array(
 			'branchA' => 'cb3a02f',
@@ -249,4 +280,5 @@ class RepositoryTest extends TestCase
 		$this->setExpectedException('NetteAddons\NotSupportedException');
 		$this->repo->getArchiveLink('rar', 'cb3a02f');
 	}
+
 }

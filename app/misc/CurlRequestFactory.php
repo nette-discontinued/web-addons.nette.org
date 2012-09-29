@@ -56,18 +56,4 @@ class CurlRequestFactory extends \Nette\Object
 		return $request;
 	}
 
-
-
-	/**
-	 * @param  string|\Nette\Http\Url
-	 * @return string
-	 * @throws CurlException if cURL execution fails, see http://curl.haxx.se/libcurl/c/libcurl-errors.html
-	 * @throws HttpException if server returns HTTP code other than 200 OK
-	 *
-	 * @deprecated
-	 */
-	public function get($url)
-	{
-		return $this->create($url)->execute();
-	}
 }

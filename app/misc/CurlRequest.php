@@ -64,11 +64,8 @@ class CurlRequest extends \Nette\FreezableObject
 		$this->freeze();
 
 		$ch = curl_init();
-
 		curl_setopt_array($ch, $this->options);
-
 		$data = curl_exec($ch);
-
 
 		if (($err = curl_errno($ch)) !== CURLE_OK || $data === FALSE) {
 			if ($err !== CURLE_HTTP_NOT_FOUND) {// correct name is CURLE_HTTP_RETURNED_ERROR
