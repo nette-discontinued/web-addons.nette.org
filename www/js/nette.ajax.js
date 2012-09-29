@@ -368,7 +368,7 @@ $.nette.ext('redirect', {
 });
 
 // change URL (requires HTML5)
-if (!!(window.history && history.pushState)) { // check borrowed from Modernizr
+/*if (!!(window.history && history.pushState)) { // check borrowed from Modernizr
 	$.nette.ext('history', {
 		start: function (xhr, settings) {
 			if (!settings.nette) return;
@@ -386,7 +386,7 @@ if (!!(window.history && history.pushState)) { // check borrowed from Modernizr
 			}
 		}
 	}, {href: null});
-}
+}*/
 
 // current page state
 $.nette.ext('state', {
