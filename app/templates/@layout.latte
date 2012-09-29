@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta http-equiv="Content-Language" content="en" />
-	<meta http-equiv="imagetoolbar" content="no" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta http-equiv="Content-Language" content="en">
+	<meta http-equiv="imagetoolbar" content="no">
 
 	<meta name="robots" content="{$robots}" n:ifset="$robots">
 
-	<meta name="copyright" content="c 2008, 2012 Nette Foundation" />
+	<meta name="copyright" content="c 2008, 2012 Nette Foundation">
 
 	<title>{block #title}{ifset $title}{$title} | {/ifset}Nette Framework - Addons, plugins and components{/block}</title>
 
-	<link rel="stylesheet" href="{$basePath}/css/addons.css" />
+	<link rel="stylesheet" href="{$basePath}/css/addons.css">
 	<link rel="stylesheet" href="{$basePath}/assets/plugins/chosen/chosen.css">
-	<link rel="shortcut icon" href="/favicon.ico" />
+	<link rel="shortcut icon" href="{$basePath}/favicon.ico">
 
 	{*<script src="http://files.nette.org/js/analytics.js"></script><script>
 	_ga.create('UA-95238-14', '.nette.org');
@@ -62,7 +62,10 @@
 			<div n:ifset="$themeicon"><img src="{$basePath}/images/{$themeicon}.png" id="themeicon" alt="" /></div>
 
 			<div id="content">
-				{foreach $flashes as $flash}<div class="flash {$flash->type}">{$flash->message}</div>{/foreach}
+				{foreach $flashes as $flash}
+					<div class="flash {$flash->type}">{$flash->message}</div>
+				{/foreach}
+
 				{include #content}
 			</div>
 

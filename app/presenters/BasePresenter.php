@@ -51,6 +51,7 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 	}
 
 
+
 	public function link($destination, $args = array())
 	{
 		if (!is_array($args)) {

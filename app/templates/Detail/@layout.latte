@@ -16,13 +16,13 @@
 				<li class="gravatars" n:foreach="$composer->authors as $author">
 					{ifset $author->email}
 						<img src="{= $gravatar->buildGravatarURL($author->email)}" alt="{$author->name}" class="gravatar" />
-						{else}
+					{else}
 						<img src="{$basePath}/images/default-gravatar.jpg" alt="{$author->name}" class="gravatar" />
 					{/ifset}
 					<a n:tag-ifset="$author->homepage" href="{$author->homepage}" rel="nofollow">{$author->name}</a>
 				</li>
 			</ul>
-			{else}
+		{else}
 			Author
 			<h3><a n:href=":People:detail id => $addon->user->id" title="$addon->user->name">{$addon->user->name}</a></h3>
 			<img src="http://forum.nette.org/cs/img/avatars/2118.jpg" class="avatar" alt="Avatar">
@@ -41,7 +41,7 @@
 					<span class="num">{$plus}×</span>
 					{if $auth->isAllowed($addon, 'vote')}
 						<a n:href="vote! vote => ($myVote > 0) ? cancel : up" class="ajax"><i class="icon-thumb_up" title="{if $myVote > 0}remove my vote{else}vote up{/if}"></i></a>
-						{else}
+					{else}
 						<i class="icon-thumb_up"></i>
 					{/if}
 				</td>
@@ -54,7 +54,7 @@
 					<span class="num">{$minus}×</span>
 					{if $auth->isAllowed($addon, 'vote')}
 						<a n:href="vote! vote => ($myVote < 0) ? cancel : down" class="ajax"><i class="icon-thumb_down" title="{if $myVote < 0}remove my vote{else}vote down{/if}"></i></a>
-						{else}
+					{else}
 						<i class="icon-thumb_down"></i>
 					{/if}
 				</td>
@@ -71,7 +71,7 @@
 				{if $heading['level'] === $level + 1}
 					{var $level = $level + 1}
 					<ul>
-						{elseif $heading['level'] === $level - 1}
+				{elseif $heading['level'] === $level - 1}
 					{var $level = $level - 1}
 					</ul>
 				{/if}

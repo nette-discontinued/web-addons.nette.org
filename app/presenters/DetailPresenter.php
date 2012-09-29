@@ -96,6 +96,8 @@ class DetailPresenter extends BasePresenter
 	{
 	}
 
+
+
 	/**
 	 * @param int $id addon ID
 	 */
@@ -204,5 +206,4 @@ class DetailPresenter extends BasePresenter
 		$wiki->setAddon($this->addon);
 		return $wiki;
 	}
-
 }
