@@ -1,5 +1,9 @@
 {extends '../@layout.latte'}
 
+{var $title = $addon->name}
+{var $disableAdd = TRUE}
+{var $themeicon = 'box-full'}{* todo addon icon *}
+{block adminMenu}{control wikimenu}{/block}
 
 {block sidebar}
 <div class="info">
