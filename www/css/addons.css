@@ -62,3 +62,11 @@ form .form .required small {
 	border-radius: 8px;
 	color: black;
 }
+
+li.gravatars {
+	list-style-type: none;
+}
+
+img.gravatar {
+	margin-right: 8px;
+}

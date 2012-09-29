@@ -82,6 +82,11 @@ class DetailPresenter extends BasePresenter
 		}
 		$description = $this->textPreprocessor->processDescription($this->addon);
 
+		$gravatar = new \emberlabs\GravatarLib\Gravatar();
+		$gravatar->setAvatarSize(50);
+		$gravatar->setMaxRating('pg');
+		$this->template->gravatar = $gravatar;
+
 		$this->template->addon = $this->addon;
 		$this->template->version = $currentVersion;
 		$this->template->composer = $currentVersion->composerJson;
