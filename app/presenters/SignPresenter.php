@@ -39,7 +39,7 @@ class SignPresenter extends BasePresenter
 			}
 
 		} catch (NS\AuthenticationException $e) {
-			$form->addError($e->getMessage());
+			$this->flashMessage($e->getMessage(), 'error');
 		}
 	}
 
