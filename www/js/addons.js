@@ -16,5 +16,7 @@ $(document).ready(function() {
 		});
 	});
 
+	$.nette.init();
+
 	//$(".chzn-select").chosen();
 });

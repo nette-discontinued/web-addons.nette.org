@@ -113,31 +113,50 @@
 		<p>{$version->license}</p>
 	</div>
 
+	{snippet rating}
 	<h3>Rating</h3>
 	<table class="table-vote">
 		<tr>
 			<td class="thumb">
 				<span class="num">{$plus}×</span>
 				{if $auth->isAllowed($addon, 'vote')}
-					<a n:href="vote! vote => ($myVote > 0) ? cancel : up"><i class="icon-thumb_up" title="{if $myVote > 0}remove my vote{else}vote up{/if}"></i></a>
+					<a n:href="vote! vote => ($myVote > 0) ? cancel : up" class="ajax"><i class="icon-thumb_up" title="{if $myVote > 0}remove my vote{else}vote up{/if}"></i></a>
 				{else}
 					<i class="icon-thumb_up"></i>
 				{/if}
 			</td>
 			<td class="wrap-progress">
 				<div class="progress progress-yesno progress-success {if $plus == 0 && $minus == 0}progress-disabled{/if}">
-					<div class="bar" title="{$percents|number:2} %" style="width: {!$percents}%;"></div>
+					<div class="bar" title="{$percents|number:2 } %" style="width: {!$percents}%;"></div>
 				</div>
 			</td>
 			<td class="thumb">
 				<span class="num">{$minus}×</span>
 				{if $auth->isAllowed($addon, 'vote')}
-					<a n:href="vote! vote => ($myVote < 0) ? cancel : down"><i class="icon-thumb_down" title="{if $myVote < 0}remove my vote{else}vote down{/if}"></i></a>
+					<a n:href="vote! vote => ($myVote < 0) ? cancel : down" class="ajax"><i class="icon-thumb_down" title="{if $myVote < 0}remove my vote{else}vote down{/if}"></i></a>
 				{else}
 					<i class="icon-thumb_down"></i>
 				{/if}
 			</td>
 		</tr>
 	</table>
+	{/snippet}
+
+	{if $toc}
+		<h3>Contents</h3>
+		{var $level = 2}
+		<ul>
+		{foreach $toc as $heading}
+			{if $heading['level'] === $level + 1}
+				{var $level = $level + 1}
+				<ul>
+			{elseif $heading['level'] === $level - 1}
+				{var $level = $level - 1}
+				</ul>
+			{/if}
+			<li><a href="#{$heading['el']->id}">{$heading['title']}</a>
+		{/foreach}
+		{while $level-- > 1}</ul>{/while}
+	{/if}
 </div>
 {/block}

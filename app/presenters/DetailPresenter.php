@@ -174,8 +174,12 @@ class DetailPresenter extends BasePresenter
 		}
 
 		$this->addonVotes->vote($this->id, $this->user->id, $vote);
-		$this->flashMessage('Voting was successfull!');
-		$this->redirect('this');
+		if ($this->isAjax()) {
+			$this->invalidateControl('rating');
+		} else {
+			$this->flashMessage('Voting was successfull!');
+			$this->redirect('this');
+		}
 	}
 
 
