@@ -56,22 +56,10 @@ final class ManagePresenter extends BasePresenter
 
 
 
-	public function injectAddons(Addons $addons)
+	public function injectAddons(Addons $addons, AddonVersions $versions, FormValidators $formValidators)
 	{
 		$this->addons = $addons;
-	}
-
-
-
-	public function injectVersions(AddonVersions $versions)
-	{
 		$this->versions = $versions;
-	}
-
-
-
-	public function injectFormValidators(FormValidators $formValidators)
-	{
 		$this->formValidators = $formValidators;
 	}
 
