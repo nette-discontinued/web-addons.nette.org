@@ -29,9 +29,9 @@ form .form .required small {
 	border-radius: 8px;
 	color: black;
 	display: block;
-	font-size: 181%;
-	height: 45px;
-	line-height: 45px;
+	font-size: 140%;
+	height: 35px;
+	line-height: 35px;
 	margin: 0 0 20px;
 	padding: 0;
 	text-align: center;
@@ -44,8 +44,8 @@ form .form .required small {
 }
 
 .sidebar .bigbutton .icon-download {
-	margin-top: 8px;
-	margin-right: 8px;
+	margin-top: 5px;
+	margin-right: 5px;
 }
 
 .sidebar .info h3 {
