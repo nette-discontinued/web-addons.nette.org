@@ -89,22 +89,22 @@ form .form .required small {
 }
 
 .addon-composer {
-	background-color: #F1F7FF;
-	border: 1px solid #D8DCE1;
-	border-radius: 8px;
 	margin-bottom: 25px;
 	overflow: visible;
 	padding: 15px;
 	position: relative;
 }
-.addon-composer-label {
+.addon-composer h2 {
+	margin-top: 0;
+	padding: 0 10px;
+	background-color: #F5EABC;
+	border-radius: 3px;
+	box-shadow: inset 1px 1px 10px #F4E4B3;
+	font-family: Consolas;
+}
+.addon-composer h2 span {
 	color: #999;
 	padding-right: 15px;
-}
-.addon-composer-name {
-	font-family: Consolas;
-	font-size: 150%;
-	text-align: center;
 }
 .addon-composer p {
 	color: #999;
