@@ -64,3 +64,21 @@ form .form .required small {
 	border-radius: 8px;
 	color: black;
 }
+
+.addon-authors li {
+	list-style-type: none;
+	margin: 0;
+	overflow: hidden;
+	padding: 0 0 5px 0;
+}
+.addon-authors img {
+	float: left;
+	margin-right: 15px;
+}
+.addon-authors span {
+	float: left;
+	line-height: 60px;
+}
+.addon-authors span.gravatar {
+	line-height: 40px;
+}
