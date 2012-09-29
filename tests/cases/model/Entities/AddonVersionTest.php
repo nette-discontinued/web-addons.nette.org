@@ -22,6 +22,7 @@ class AddonVersionTest extends TestCase
 			'license' => 'BSD-3',
 			'distType' => 'zip',
 			'distUrl' => 'http://smith.name/browser.zip',
+			'downloadsCount' => 0,
 			'sourceType' => NULL,
 			'sourceUrl' => NULL,
 			'sourceReference' => NULL,
