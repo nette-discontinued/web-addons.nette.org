@@ -1,4 +1,4 @@
-require(['jquery'], ['netteForms'], function($) {
+require(['jquery'], ['libs/netteForms'], ['libs/nette.ajax'], function($) {
 	$(document).ready(function() {
 		$('[data-addons-toggle]').each(function(i, el) {
 			$(el).click(function(e) {
