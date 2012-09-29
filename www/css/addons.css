@@ -1,3 +1,5 @@
+@import 'combined.css';
+
 form .form label {
 	display: block;
 }
