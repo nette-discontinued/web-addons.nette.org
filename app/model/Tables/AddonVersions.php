@@ -143,6 +143,7 @@ class AddonVersions extends Table
 			'distType'        => $version->distType,
 			'distUrl'         => $version->distUrl,
 			'downloadsCount'  => $version->downloadsCount ?: 0,
+			'installsCount'  => $version->installsCount ?: 0,
 			'sourceType'      => $version->sourceType,
 			'sourceUrl'       => $version->sourceUrl,
 			'sourceReference' => $version->sourceReference,

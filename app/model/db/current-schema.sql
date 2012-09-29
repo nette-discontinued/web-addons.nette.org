@@ -20,6 +20,7 @@ CREATE TABLE `addons` (
   `updatedAt` datetime NOT NULL COMMENT 'time of last update (of anything)',
   `defaultLicense` varchar(100) NOT NULL COMMENT 'used as default for new versions',
   `totalDownloadsCount` int(11) NOT NULL DEFAULT '0' COMMENT 'total times this addon was downloaded',
+  `totalInstallsCount` int(11) NOT NULL DEFAULT '0' COMMENT 'total times this addon was installed using composer',
   PRIMARY KEY (`id`),
   UNIQUE KEY `composerName` (`composerName`),
   KEY `userId` (`userId`),
@@ -63,6 +64,7 @@ CREATE TABLE `addons_versions` (
   `distType` enum('zip','tarball') NOT NULL COMMENT 'type of distribution archive',
   `distUrl` varchar(500) NOT NULL COMMENT 'link to distribution archive',
   `downloadsCount` int(11) NOT NULL DEFAULT '0' COMMENT 'number of downloads',
+  `installsCount` int(11) NOT NULL DEFAULT '0' COMMENT 'number of installs using composer',
   `sourceType` enum('git','hg','svn') DEFAULT NULL COMMENT 'VCS type',
   `sourceUrl` varchar(500) DEFAULT NULL COMMENT 'repository URL, usually the same as addon.repository',
   `sourceReference` varchar(100) DEFAULT NULL COMMENT 'Git, Mercurial or SVN reference (usually branch or tag name)',
@@ -106,9 +108,9 @@ CREATE TABLE `users` (
   `password` char(40) NOT NULL,
   `email` varchar(100) NOT NULL,
   `role` enum('admin','moderator') DEFAULT NULL,
-  `apiToken` varchar(100) COLLATE 'utf8_general_ci' NULL,
+  `apiToken` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- 2012-09-29 12:58:14
+-- 2012-09-29 23:02:14

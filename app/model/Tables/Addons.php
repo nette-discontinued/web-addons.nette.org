@@ -123,6 +123,7 @@ class Addons extends Table
 				'defaultLicense'      => $addon->defaultLicense,
 				'updatedAt'           => new Datetime('now'),
 				'totalDownloadsCount' => $addon->totalDownloadsCount ?: 0,
+				'totalInstallsCount' => $addon->totalInstallsCount ?: 0,
 			));
 
 			$addon->id = $row->id;
@@ -159,6 +160,7 @@ class Addons extends Table
 			'defaultLicense'      => $addon->defaultLicense,
 			'updatedAt'           => new Datetime('now'),
 			'totalDownloadsCount' => $addon->totalDownloadsCount ?: 0,
+			'totalInstallsCount' => $addon->totalInstallsCount ?: 0,
 		));
 	}
 }

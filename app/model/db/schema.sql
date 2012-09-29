@@ -245,3 +245,11 @@ ADD `apiToken` varchar(100) COLLATE 'utf8_general_ci' NULL;
 ALTER TABLE `tags`
 ADD `parent_id` int(10) unsigned NOT NULL DEFAULT '0' AFTER `level`,
 COMMENT='';
+
+-- different column for installations count
+ALTER TABLE `addons`
+ADD `totalInstallsCount` int(11) NOT NULL DEFAULT '0' COMMENT 'total times this addon was installed using composer',
+COMMENT='';
+ALTER TABLE `addons_versions`
+ADD `installsCount` int(11) NOT NULL DEFAULT '0' COMMENT 'number of installs using composer' AFTER `downloadsCount`,
+COMMENT='';

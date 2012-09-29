@@ -57,11 +57,11 @@ class ApiPresenter extends BasePresenter
 		}
 
 		$row->update(array(
-			'totalDownloadsCount' => $row->totalDownloadsCount + 1,
+			'totalInstallsCount' => $row->totalInstallsCount + 1,
 		));
 
 		$rowVersion->update(array(
-			'downloadsCount' => $rowVersion->downloadsCount + 1,
+			'installsCount' => $rowVersion->installsCount + 1,
 		));
 
 		$this->sendJson(array('status' => "success"));

@@ -23,6 +23,7 @@ class AddonVersionTest extends TestCase
 			'distType' => 'zip',
 			'distUrl' => 'http://smith.name/browser.zip',
 			'downloadsCount' => 0,
+			'installsCount' => 0,
 			'sourceType' => NULL,
 			'sourceUrl' => NULL,
 			'sourceReference' => NULL,
@@ -60,6 +61,7 @@ class AddonVersionTest extends TestCase
 		$this->assertEquals((object) array('a' => 'b'), $version->composerJson);
 		$this->assertSame(NULL, $version->addon);
 		$this->assertSame(0, $version->downloadsCount);
+		$this->assertSame(0, $version->installsCount);
 	}
 
 
