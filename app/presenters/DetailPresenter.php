@@ -2,6 +2,7 @@
 
 namespace NetteAddons;
 
+use emberlabs\GravatarLib\Gravatar;
 use NetteAddons\Model\Addon;
 use NetteAddons\Model\Addons;
 use NetteAddons\Model\AddonVersions;
@@ -33,6 +34,9 @@ class DetailPresenter extends BasePresenter
 	/** @var AddonVotes */
 	private $addonVotes;
 
+	/** @var Gravatar */
+	private $gravatar;
+
 	/** @var TextPreprocessor */
 	private $textPreprocessor;
 
@@ -43,6 +47,13 @@ class DetailPresenter extends BasePresenter
 		$this->addons = $addons;
 		$this->addonVersions = $addonVersions;
 		$this->addonVotes = $addonVotes;
+	}
+
+
+
+	public function injectGravatar(Gravatar $gravatar)
+	{
+		$this->gravatar = $gravatar;
 	}
 
 
@@ -63,6 +74,20 @@ class DetailPresenter extends BasePresenter
 		}
 		$this->addon = Addon::fromActiveRow($row);
 		$this->addonVersions->rsort($this->addon->versions);
+	}
+
+
+
+	protected function beforeRender()
+	{
+		parent::beforeRender();
+		$gravatar = $this->gravatar;
+		$this->template->registerHelper('gravatar', function ($email, $size = NULL) use ($gravatar) {
+			if (isset($size)) {
+				$gravatar->setAvatarSize($size);
+			}
+			return $gravatar->buildGravatarURL($email);
+		});
 	}
 
 
