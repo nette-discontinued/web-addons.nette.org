@@ -23,10 +23,6 @@
 			<th>Composer name</th>
 			<td>{$addon->composerName}</td>
 		</tr>
-		<tr>
-			<th>Download link</th>
-			<td><a n:href="download!">{$version->distUrl}</a> ({$addon->totalDownloadsCount}× total downloads, {$version->downloadsCount}× this version)</td>
-		</tr>
 		<tr n:if="$addon->repository">
 			<th>Repository</th>
 			<td><a href="{$addon->repository}">{$addon->repository}</a></td>
@@ -65,7 +61,7 @@
 
 {block sidebar}
 <div class="info">
-	<a class="addon-download" n:href="download!">Download</a>
+	<a class="addon-download" n:href="download!" title="{$addon->totalDownloadsCount}× total downloads, {$version->downloadsCount}× this version">Download</a>
 	<div style="margin-bottom:2em">
 		{ifset $composer, $composer->authors}
 			<h3>Authors</h3>
