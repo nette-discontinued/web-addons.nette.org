@@ -236,3 +236,7 @@ COMMENT='';
 ALTER TABLE `addons_versions`
 ADD `downloadsCount` int NOT NULL DEFAULT '0' COMMENT 'number of downloads' AFTER `distUrl`,
 COMMENT='';
+
+-- api token not only for github
+ALTER TABLE `users`
+ADD `apiToken` varchar(100) COLLATE 'utf8_general_ci' NULL;

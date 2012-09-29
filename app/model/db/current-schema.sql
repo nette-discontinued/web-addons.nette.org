@@ -105,6 +105,7 @@ CREATE TABLE `users` (
   `password` char(40) NOT NULL,
   `email` varchar(100) NOT NULL,
   `role` enum('admin','moderator') DEFAULT NULL,
+  `apiToken` varchar(100) COLLATE 'utf8_general_ci' NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
