@@ -111,9 +111,9 @@ class AddonManageFacade extends Nette\Object
 			'composerName' => TRUE,
 		);
 
-		$addon->userId = $owner->getId(); // TODO: this is duplicite to self::import()
+		$addon->userId = $owner->getId(); // TODO: this is duplicity to self::import()
 
-		foreach ($overwritable as $field => $required) {
+		foreach ($overWritable as $field => $required) {
 			if (!array_key_exists($field, $values)) {
 				if ($required) {
 					throw new \NetteAddons\InvalidArgumentException("Values does not contain field '$field'.");
