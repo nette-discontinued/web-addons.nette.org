@@ -31,6 +31,6 @@
 	"minimum-stability":"dev",
 	"autoload": {
 		"files": ["app/misc/functions.php"],
-		"classmap": ["libs/michelf/php-markdown/markdown.php"]
+		"classmap": ["libs/michelf/php-markdown/markdown.php", "libs/emberlabs/gravatarlib/emberlabs/gravatarlib/Gravatar.php"]
 	}
 }
