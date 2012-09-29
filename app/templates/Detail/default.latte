@@ -37,7 +37,7 @@
 		</tr>
 		<tr>
 			<th>Download link</th>
-			<td><a href="{$version->distUrl}">{$version->distUrl}</a></td>
+			<td><a n:href="download!">{$version->distUrl}</a> ({$addon->totalDownloadsCount}× total downloads, {$version->downloadsCount}× this version)</td>
 		</tr>
 		<tr n:if="$addon->repository">
 			<th>Repository</th>

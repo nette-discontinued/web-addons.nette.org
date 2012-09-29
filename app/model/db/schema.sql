@@ -228,3 +228,11 @@ ALTER TABLE `addons`
 ADD `descriptionFormat` enum('texy','markdown') COLLATE 'utf8_general_ci' NOT NULL COMMENT 'texy' AFTER `description`,
 COMMENT=''
 REMOVE PARTITIONING;
+
+-- added downloads count
+ALTER TABLE `addons`
+ADD `totalDownloadsCount` int NOT NULL DEFAULT '0' COMMENT 'total times this addon was downloaded',
+COMMENT='';
+ALTER TABLE `addons_versions`
+ADD `downloadsCount` int NOT NULL DEFAULT '0' COMMENT 'number of downloads' AFTER `distUrl`,
+COMMENT='';

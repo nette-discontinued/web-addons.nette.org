@@ -46,6 +46,9 @@ class AddonVersion extends Nette\Object
 	/** @var string URL of distribution archive */
 	public $distUrl;
 
+	/** @var int number of downloads */
+	public $downloadsCount;
+
 	/** @var string|NULL VCS type ('git', 'hg' or 'svn') */
 	public $sourceType;
 
@@ -80,6 +83,7 @@ class AddonVersion extends Nette\Object
 		$version->license = $row->license;
 		$version->distType = $row->distType;
 		$version->distUrl = $row->distUrl;
+		$version->downloadsCount = $row->downloadsCount;
 		$version->sourceType = $row->sourceType;
 		$version->sourceUrl = $row->sourceUrl;
 		$version->sourceReference = $row->sourceReference;

@@ -105,6 +105,22 @@ class DetailPresenter extends BasePresenter
 		$this->template->addon = $this->addon;
 	}
 
+	/**
+	 * @param int $id addon ID
+	 */
+	public function handleDownload()
+	{
+		$currentVersion = $this->addonVersions->getCurrent($this->addon->versions);
+
+		$currentVersion->downloadsCount += 1;
+		$this->addon->totalDownloadsCount += 1;
+
+		$this->addonVersions->update($currentVersion);
+		$this->addons->update($this->addon);
+
+		$this->redirectUrl($currentVersion->distUrl);
+	}
+
 
 
 	/**

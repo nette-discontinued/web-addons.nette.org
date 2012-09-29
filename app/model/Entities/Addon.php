@@ -55,6 +55,8 @@ class Addon extends Nette\Object
 	/** @var string[] */
 	public $tags = array();
 
+	/** @var int total times this addon was downloaded */
+	public $totalDownloadsCount;
 
 
 	/**
@@ -80,6 +82,7 @@ class Addon extends Nette\Object
 		$addon->repositoryHosting = $row->repositoryHosting;
 		$addon->demo = $row->demo;
 		$addon->updatedAt = ($row->updatedAt ? DateTime::from($row->updatedAt) : NULL);
+		$addon->totalDownloadsCount = $row->totalDownloadsCount;
 
 		foreach ($row->related('versions') as $versionRow) {
 			$version = AddonVersion::fromActiveRow($versionRow);

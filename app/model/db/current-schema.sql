@@ -1,4 +1,4 @@
--- Adminer 3.5.1 MySQL dump
+-- Adminer 3.6.1 MySQL dump
 
 SET NAMES utf8;
 SET foreign_key_checks = 0;
@@ -19,6 +19,7 @@ CREATE TABLE `addons` (
   `demo` varchar(500) DEFAULT NULL COMMENT 'url to demo',
   `updatedAt` datetime NOT NULL COMMENT 'time of last update (of anything)',
   `defaultLicense` varchar(100) NOT NULL COMMENT 'used as default for new versions',
+  `totalDownloadsCount` int(11) NOT NULL DEFAULT '0' COMMENT 'total times this addon was downloaded',
   PRIMARY KEY (`id`),
   UNIQUE KEY `composerName` (`composerName`),
   KEY `userId` (`userId`),
@@ -61,6 +62,7 @@ CREATE TABLE `addons_versions` (
   `license` varchar(100) NOT NULL COMMENT 'separed by comma',
   `distType` enum('zip','tarball') NOT NULL COMMENT 'type of distribution archive',
   `distUrl` varchar(500) NOT NULL COMMENT 'link to distribution archive',
+  `downloadsCount` int(11) NOT NULL DEFAULT '0' COMMENT 'number of downloads',
   `sourceType` enum('git','hg','svn') DEFAULT NULL COMMENT 'VCS type',
   `sourceUrl` varchar(500) DEFAULT NULL COMMENT 'repository URL, usually the same as addon.repository',
   `sourceReference` varchar(100) DEFAULT NULL COMMENT 'Git, Mercurial or SVN reference (usually branch or tag name)',
@@ -107,4 +109,4 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- 2012-09-29 12:37:09
+-- 2012-09-29 12:58:14

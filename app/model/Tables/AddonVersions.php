@@ -127,6 +127,7 @@ class AddonVersions extends Table
 			'license'         => $version->license,
 			'distType'        => $version->distType,
 			'distUrl'         => $version->distUrl,
+			'downloadsCount'  => $version->downloadsCount,
 			'sourceType'      => $version->sourceType,
 			'sourceUrl'       => $version->sourceUrl,
 			'sourceReference' => $version->sourceReference,
