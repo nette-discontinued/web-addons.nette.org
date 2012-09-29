@@ -28,8 +28,10 @@
 		"url": "{$netteRepositoryUrl}"
 	}
 ]</pre>
+		<a id="addon-cvs-details-link" n:class="$addon->repositoryHosting == 'github' ? addon-github" href="#" data-addons-toggle rel="#addon-cvs-details">&nbsp;</a>
 	</div>
 
+	<div id="addon-cvs-details" style="display:none">
 	<table>
 		<tr n:if="$addon->repository">
 			<th>Repository</th>
@@ -57,6 +59,7 @@
 			</td>
 		</tr>
 	</table>
+	</div>
 
 	{if $toc}
 		<div id="toc">

@@ -93,8 +93,9 @@ form .form .required small {
 	border: 1px solid #D8DCE1;
 	border-radius: 8px;
 	margin-bottom: 25px;
-	overflow: hidden;
+	overflow: visible;
 	padding: 15px;
+	position: relative;
 }
 .addon-composer-label {
 	color: #999;
@@ -111,6 +112,24 @@ form .form .required small {
 	font-style: italic;
 	margin: 0;
 	text-indent: 0;
+}
+#addon-cvs-details-link {
+	background-image: url('../images/git.png') !important;
+	background-position: top left;
+	background-repeat: no-repeat;
+	display: block;
+	height: 45px;
+	position: absolute;
+	bottom: -25px;
+	right: -20px;
+	text-decoration: none !important;
+	width: 45px;
+}
+#addon-cvs-details-link:hover {
+	background-color: transparent;
+}
+#addon-cvs-details-link.addon-github {
+	background-image: url('../images/github.png') !important;
 }
 
 li.gravatars {
