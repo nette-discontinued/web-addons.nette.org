@@ -51,6 +51,25 @@
 		</tr>
 	</table>
 
+	{if $toc}
+		<div id="toc">
+			<h2>Contents</h2>
+			{var $level = 2}
+			<ul>
+			{foreach $toc as $heading}
+				{if $heading['level'] === $level + 1}
+					{var $level = $level + 1}
+					<ul>
+				{elseif $heading['level'] === $level - 1}
+					{var $level = $level - 1}
+					</ul>
+				{/if}
+				<li><a href="#{$heading['el']->id}">{$heading['title']}</a>
+			{/foreach}
+			{while $level-- > 1}</ul>{/while}
+		</div>
+	{/if}
+
 	{!$content}
 {/block}
 
@@ -110,22 +129,5 @@
 			</td>
 		</tr>
 	</table>
-
-	{if $toc}
-		<h3>Contents</h3>
-		{var $level = 2}
-		<ul>
-		{foreach $toc as $heading}
-			{if $heading['level'] === $level + 1}
-				{var $level = $level + 1}
-				<ul>
-			{elseif $heading['level'] === $level - 1}
-				{var $level = $level - 1}
-				</ul>
-			{/if}
-			<li><a href="#{$heading['el']->id}">{$heading['title']}</a>
-		{/foreach}
-		{while $level-- > 1}</ul>{/while}
-	{/if}
 </div>
 {/block}
