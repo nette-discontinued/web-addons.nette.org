@@ -69,7 +69,7 @@
 {block sidebar}
 <div class="info">
 	<div class="addon-composer-use">Use Composer or</div>
-	<a class="addon-download" n:href="download!" title="{$addon->totalDownloadsCount}× total downloads, {$version->downloadsCount}× this version">Download</a>
+	<a class="bigbutton" n:href="download!" title="{$addon->totalDownloadsCount}× total downloads, {$version->downloadsCount}× this version"><i class="icon-download"></i>Download</a>
 	<div style="margin-bottom:2em">
 		{ifset $composer, $composer->authors}
 			<h3>Authors</h3>

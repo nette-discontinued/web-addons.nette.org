@@ -22,6 +22,32 @@ form .form .required small {
 	clear: both;
 	color: #666;
 }
+
+.sidebar .bigbutton {
+	background: #F5EABC;
+
+	border-radius: 8px;
+	color: black;
+	display: block;
+	font-size: 181%;
+	height: 45px;
+	line-height: 45px;
+	margin: 0 0 20px;
+	padding: 0;
+	text-align: center;
+}
+
+.sidebar .bigbutton:hover, .sidebar .bigbutton:focus {
+	background: url('../images/download-button.gif') repeat-x left;
+	border-radius: 8px;
+	color: black;
+}
+
+.sidebar .bigbutton .icon-download {
+	margin-top: 8px;
+	margin-right: 8px;
+}
+
 .sidebar .info h3 {
 	color: #26374e;
 	margin: 0 0 .2em;
@@ -54,26 +80,6 @@ form .form .required small {
 	font-size: 135%;
 	margin: 10px 0 5px;
 	text-align: center;
-}
-.addon-download {
-	/*background: url('../images/download-button.gif') repeat-x left;*/
-	background: #F5EABC url('../images/li-download.gif') 10px center no-repeat;
-
-	border-radius: 8px;
-	color: black;
-	display: block;
-	font-size: 181%;
-	height: 45px;
-	line-height: 45px;
-	margin: 0 0 20px;
-	padding: 0;
-	text-align: center;
-}
-.addon-download:hover, .addon-download:focus {
-	/*background: url('../images/download-button-active.gif') repeat-x left;*/
-	background: url('../images/download-button.gif') repeat-x left;
-	border-radius: 8px;
-	color: black;
 }
 
 .addon-heading {
@@ -182,6 +188,11 @@ img.gravatar {
 }
 .icon-thumb_up {
 	background: url(../images/thumb_up.png) no-repeat;
+}
+.icon-download {
+	background: url(../images/li-download.gif) no-repeat;
+	width: 15px;
+	height: 16px;
 }
 
 .progress {
