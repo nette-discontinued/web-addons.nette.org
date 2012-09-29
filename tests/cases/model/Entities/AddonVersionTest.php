@@ -27,6 +27,7 @@ class AddonVersionTest extends TestCase
 			'sourceUrl' => NULL,
 			'sourceReference' => NULL,
 			'composerJson' => '{"a": "b"}',
+			'downloadsCount' => NULL,
 		));
 
 		$row->shouldReceive('related')
@@ -59,6 +60,7 @@ class AddonVersionTest extends TestCase
 		$this->assertSame(NULL, $version->sourceReference);
 		$this->assertEquals((object) array('a' => 'b'), $version->composerJson);
 		$this->assertSame(NULL, $version->addon);
+		$this->assertSame(NULL, $version->downloadsCount);
 	}
 
 
