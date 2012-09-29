@@ -69,7 +69,7 @@ class Curl extends \Nette\Object
 
 		$data = curl_exec($ch);
 		if (($err = curl_errno($ch)) !== CURLE_OK || $data === FALSE) {
-			if ($err !== CURLE_HTTP_NOT_FOUND) {// correct name is CURLE_HTTP_RETURNED_ERROR
+			if ($err !== CURLE_HTTP_NOT_FOUND) { // correct name is CURLE_HTTP_RETURNED_ERROR
 				throw new \NetteAddons\CurlException(curl_error($ch), $err);
 			}
 		}

@@ -34,7 +34,7 @@ class VersionParser extends Nette\Object
 		} catch (\UnexpectedValueException $e) {
 			return FALSE;
 		}
-		$parsedTag = preg_replace('#\.0(\-[a-z0-9]+)?$#i', '$1', $parsedTag);
+		$parsedTag = preg_replace('#\\.0(\\-[a-z0-9]+)?$#i', '$1', $parsedTag);
 		return $parsedTag;
 	}
 
