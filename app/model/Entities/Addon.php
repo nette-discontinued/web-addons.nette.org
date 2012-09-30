@@ -100,37 +100,4 @@ class Addon extends Nette\Object
 
 		return $addon;
 	}
-
-
-
-	/**
-	 * Sets the composer name.
-	 * It is built from the current package name and specified username.
-	 *
-	 * Requires owner in form of Identity or ActiveRow that has name.
-	 *
-	 * @param \Nette\Security\Identity|\Nette\Database\Table\ActiveRow $owner
-	 * @throws \Nette\InvalidArgumentException
-	 * @return void
-	 */
-	public function updateComposerName($owner)
-	{
-		if (!isset($owner->realname)) {
-			throw new Nette\InvalidArgumentException("Owner has no name!");
-		}
-
-		$this->composerName = $this->sanitizeName($owner->realname) . '/' . $this->sanitizeName($this->name);
-	}
-
-
-
-	/**
-	 * @param $string
-	 * @return mixed
-	 */
-	private function sanitizeName($string)
-	{
-		$name = Strings::toAscii($string);
-		return preg_replace('#[^A-Za-z0-9]#i', '', $name);
-	}
 }
