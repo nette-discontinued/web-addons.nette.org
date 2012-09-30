@@ -37,9 +37,6 @@ class DetailPresenter extends BasePresenter
 	/** @var TextPreprocessor */
 	private $textPreprocessor;
 
-	/** @var Url */
-	private $url;
-
 
 
 	public function injectAddons(Addons $addons, AddonVersions $addonVersions, AddonVotes $addonVotes)
@@ -54,13 +51,6 @@ class DetailPresenter extends BasePresenter
 	public function injectTextPreprocessor(TextPreprocessor $factory)
 	{
 		$this->textPreprocessor = $factory;
-	}
-
-
-
-	public function injectUrl(Http\IRequest $httpRequest)
-	{
-		$this->url = $httpRequest->url;
 	}
 
 
@@ -84,7 +74,7 @@ class DetailPresenter extends BasePresenter
 	 */
 	public function renderDefault($id)
 	{
-		$this->template->netteRepositoryUrl = 'http://' . $this->url->host . '/';
+		$this->template->netteRepositoryUrl = $this->getHttpRequest()->getUrl()->getBaseUrl();
 	}
 
 
