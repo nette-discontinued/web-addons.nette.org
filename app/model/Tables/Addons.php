@@ -176,5 +176,7 @@ class Addons extends Table
 			'totalDownloadsCount' => $addon->totalDownloadsCount ?: 0,
 			'totalInstallsCount' => $addon->totalInstallsCount ?: 0,
 		));
+
+		$this->tags->saveAddonTags($addon);
 	}
 }
