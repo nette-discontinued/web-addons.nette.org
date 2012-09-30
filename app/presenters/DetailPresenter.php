@@ -83,6 +83,7 @@ class DetailPresenter extends BasePresenter
 
 
 	/**
+	 * @secured
 	 * @param string version identifier
 	 */
 	public function handleDownload($version = NULL)

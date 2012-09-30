@@ -8,7 +8,7 @@
 {block sidebar}
 <div class="info">
 	<div class="addon-composer-use">Use <a href="http://doc.nette.org/composer">Composer</a> or</div>
-	<a class="bigbutton" n:href="download!" title="{$addon->totalDownloadsCount}× total downloads, {$version->downloadsCount}× this version"><i class="icon-download"></i>Download</a>
+	<a class="bigbutton" n:href="download!, version => $version->version" title="{$addon->totalDownloadsCount}× total downloads, {$version->downloadsCount}× this version"><i class="icon-download"></i>Download</a>
 	<div style="margin-bottom:2em">
 		<h3>Authors</h3>
 		<ul>
