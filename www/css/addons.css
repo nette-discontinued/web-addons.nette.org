@@ -120,6 +120,10 @@ form .form .required small {
 .addon-composer h2 span {
 	color: #999;
 	padding-right: 15px;
+	font-size: 70%;
+}
+.addon-composer h2 span a {
+	text-decoration: none !important;
 }
 .addon-composer p {
 	color: #999;
