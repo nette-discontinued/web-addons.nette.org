@@ -34,13 +34,14 @@ class AddonVotes extends Table
 			throw new \NetteAddons\InvalidArgumentException('Vote can be only +1, -1 or 0.');
 		}
 
+		$now = new \DateTime('now');
 		$this->connection->query('
 			INSERT INTO ' . $this->tableName . '
-			(`addonId`, `userId`, `vote`, `comment`)
-			VALUES (?, ?, ?, ?)
-			ON DUPLICATE KEY UPDATE `vote` = ?',
-			$addonId, $userId, $vote, $comment,
-			$vote
+			(`addonId`, `userId`, `vote`, `comment`, `datetime`)
+			VALUES (?, ?, ?, ?, ?)
+			ON DUPLICATE KEY UPDATE `vote` = ?, `datetime` = ?' ,
+			$addonId, $userId, $vote, $comment, $now,
+			$vote, $now
 		);
 	}
 

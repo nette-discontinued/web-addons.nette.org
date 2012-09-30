@@ -253,3 +253,7 @@ COMMENT='';
 ALTER TABLE `addons_versions`
 ADD `installsCount` int(11) NOT NULL DEFAULT '0' COMMENT 'number of installs using composer' AFTER `downloadsCount`,
 COMMENT='';
+
+-- added addons_votes.datetime
+ALTER TABLE `addons_votes`
+ADD `datetime` datetime NOT NULL;

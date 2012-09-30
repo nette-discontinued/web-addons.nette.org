@@ -81,6 +81,7 @@ CREATE TABLE `addons_votes` (
   `userId` int(10) unsigned NOT NULL,
   `vote` tinyint(4) NOT NULL COMMENT '+1 / -1',
   `comment` varchar(1000) DEFAULT NULL,
+  `datetime` datetime NOT NULL,
   PRIMARY KEY (`addonId`,`userId`),
   KEY `userId` (`userId`),
   CONSTRAINT `addons_votes_ibfk_3` FOREIGN KEY (`addonId`) REFERENCES `addons` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
