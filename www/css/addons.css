@@ -198,8 +198,14 @@ img.gravatar {
 .icon-thumb_up {
 	background: url(../images/thumb_up.png) no-repeat;
 }
+.icon-thumb_down.off {
+	background: url(../images/thumb_down_grey.png) no-repeat;
+}
+.icon-thumb_up.off {
+	background: url(../images/thumb_up_grey.png) no-repeat;
+}
 .icon-download {
-	background: url(../images/li-download.gif) no-repeat;
+background: url(../images/li-download.gif) no-repeat;
 	width: 15px;
 	height: 16px;
 }

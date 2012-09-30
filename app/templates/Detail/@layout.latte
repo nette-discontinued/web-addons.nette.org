@@ -42,7 +42,7 @@
 					{if $auth->isAllowed($addon, 'vote')}
 						<a n:href="vote! vote => ($myVote < 0) ? cancel : down" class="ajax"><i class="icon-thumb_down" title="{if $myVote < 0}remove my vote{else}vote down{/if}"></i></a>
 					{else}
-						<i class="icon-thumb_down"></i>
+						<i class="icon-thumb_down off"></i>
 					{/if}
 				</td>
 				<td class="wrap-progress">
@@ -55,7 +55,7 @@
 					{if $auth->isAllowed($addon, 'vote')}
 						<a n:href="vote! vote => ($myVote > 0) ? cancel : up" class="ajax"><i class="icon-thumb_up" title="{if $myVote > 0}remove my vote{else}vote up{/if}"></i></a>
 					{else}
-						<i class="icon-thumb_up"></i>
+						<i class="icon-thumb_up off"></i>
 					{/if}
 				</td>
 			</tr>
