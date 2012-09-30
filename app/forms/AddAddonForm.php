@@ -35,21 +35,22 @@ class AddAddonForm extends BaseForm
 
 	protected function buildForm()
 	{
-		$this->addText('name', 'Name', 40, 100)
+		$this->addText('name', 'Name', 100)
+			->setAttribute('class', 'large-input')
+			->addRule(self::MAX_LENGTH, NULL, 100)
 			->setRequired();
-		$this->addText('composerName', 'Composer name')
+		$this->addText('composerName', 'Composer name', 100)
 			->setRequired()
+			->addRule(self::MAX_LENGTH, NULL, 100)
 			->addRule(self::PATTERN, 'Invalid composer name', FormValidators::COMPOSER_NAME_RE)
 			->addRule($this->validators->isComposerNameUnique, 'This composer name has been already taken.')
 			->setOption('description', '<vendor>/<project-name>, only lowercase letters and dash separation is allowed');
-		$this->addText('shortDescription', 'Short description', NULL, 250)
-			->setAttribute('class', 'span4')
+		$this->addTextArea('shortDescription', 'Short description', 80, 2)
+			->addRule(self::MAX_LENGTH, NULL, 250)
 			->setRequired();
 		$this->addTextArea('description', 'Description', 80, 20)
-			->setAttribute('class', 'span6')
 			->setRequired();
 		$this->addSelect('descriptionFormat', 'Description format', array('texy' => 'Texy!', 'markdown' => 'Markdown'))
-			->setAttribute('class', 'span6')
 			->setDefaultValue('texy')
 			->setRequired();
 		$this->addText('defaultLicense', 'Default license')
@@ -63,16 +64,14 @@ class AddAddonForm extends BaseForm
 				)
 			);
 		$this->addText('repository', 'Repository URL', 60, 500)
-			->setAttribute('class', 'span6')
 			->addCondition(self::FILLED)
 				->addRule(self::URL);
 		$this->addText('demo', 'Demo URL', 60, 500)
-			->setAttribute('class', 'span6')
 			->addCondition(self::FILLED)
 				->addRule(self::URL);
 		$this->addMultiSelect('tags', 'Categories', $this->getCategories())
 			->setAttribute('class', 'chzn-select')
-			->setAttribute('style', 'width: 493px;');
+			->setAttribute('style', 'width: 500px;');
 		$this->addSubmit('create', 'Next');
 	}
 
