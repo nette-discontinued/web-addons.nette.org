@@ -54,7 +54,7 @@ services:
 	tags: NetteAddons\Model\Tags
 
 	# validators
-	licenseValidator: Composer\Util\SpdxLicenseIdentifier
+	licenses: NetteAddons\Model\Utils\Licenses
 	validators: NetteAddons\Model\Utils\Validators
 	formValidators: NetteAddons\Model\Utils\FormValidators
 

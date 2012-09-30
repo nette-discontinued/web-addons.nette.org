@@ -18,7 +18,7 @@ class Validators extends Nette\Object
 	/** @var Addons */
 	private $addonsRepo;
 
-	/** @var SpdxLicenseIdentifier */
+	/** @var Licenses */
 	private $licenseValidator;
 
 	/** @var VersionParser */
@@ -26,7 +26,7 @@ class Validators extends Nette\Object
 
 
 
-	public function __construct(Addons $addonsRepo, SpdxLicenseIdentifier $licenseValidator, VersionParser $versionParser)
+	public function __construct(Addons $addonsRepo, Licenses $licenseValidator, VersionParser $versionParser)
 	{
 		$this->addonsRepo = $addonsRepo;
 		$this->licenseValidator = $licenseValidator;
