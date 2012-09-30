@@ -73,10 +73,14 @@ class TextPreprocessor extends Nette\Object
 		}
 		$s = "";
 		foreach ($licenses as $license) {
-			$el = \Nette\Utils\Html::el('a');
-			$el->href = $this->licenses->getUrl($license);
-			$el->title = $license;
-			$el->add($this->licenses->getLicense($license));
+			$el = $license;
+			if ($this->licenses->validate($license)) {
+				$el = \Nette\Utils\Html::el('a');
+				$el->href = $this->licenses->getUrl($license);
+				$el->title = $license;
+				$el->add($this->licenses->getLicense($license));
+			}
+
 			if (Strings::length($s) >= 1) {
 				$s .= ', ' . $el;
 			} else {
