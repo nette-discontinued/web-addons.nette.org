@@ -4,10 +4,7 @@ $(document).ready(function() {
 			e.preventDefault();
 
 			$this = $(this);
-			$($this.attr('rel')).slideToggle('default', function () {
-				$(this).find('.chzn-select').chosen();
-				// $('#content').appendTo($('#main')); // hack
-			});
+			$($this.attr('rel')).slideToggle('default');
 
 			hRel = $this.attr('data-addons-toggle');
 			if (hRel) {
@@ -18,5 +15,5 @@ $(document).ready(function() {
 
 	$.nette.init();
 
-	//$(".chzn-select").chosen();
+	$(".chzn-select").chosen();
 });
