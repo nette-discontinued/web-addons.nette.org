@@ -2,6 +2,8 @@
 
 namespace NetteAddons;
 
+
+
 /**
  * @author Michael Moravec
  */
@@ -26,8 +28,8 @@ class CurlRequest extends \Nette\FreezableObject
 
 
 	/**
-	 * @param int $name
-	 * @param mixed $value
+	 * @param  int
+	 * @param  mixed
 	 * @return CurlRequest
 	 */
 	public function setOption($name, $value)
@@ -41,7 +43,7 @@ class CurlRequest extends \Nette\FreezableObject
 
 
 	/**
-	 * @param int $name
+	 * @param  int
 	 * @return CurlRequest
 	 */
 	public function removeOption($name)
@@ -68,7 +70,7 @@ class CurlRequest extends \Nette\FreezableObject
 		$data = curl_exec($ch);
 
 		if (($err = curl_errno($ch)) !== CURLE_OK || $data === FALSE) {
-			if ($err !== CURLE_HTTP_NOT_FOUND) {// correct name is CURLE_HTTP_RETURNED_ERROR
+			if ($err !== CURLE_HTTP_NOT_FOUND) { // correct name is CURLE_HTTP_RETURNED_ERROR
 				$e = new \NetteAddons\CurlException(curl_error($ch), $err);
 				curl_close($ch);
 				throw $e;

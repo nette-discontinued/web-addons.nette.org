@@ -13,14 +13,13 @@ use Nette\Database\Table\Selection;
  */
 abstract class Table extends Nette\Object
 {
-
-	/** @var \Nette\Database\Connection */
+	/** @var Nette\Database\Connection */
 	protected $connection;
 
 
 
 	/**
-	 * @param \Nette\Database\Connection $db
+	 * @param  Nette\Database\Connection
 	 * @throws \NetteAddons\InvalidStateException
 	 */
 	public function __construct(Nette\Database\Connection $db)
@@ -56,7 +55,7 @@ abstract class Table extends Nette\Object
 
 
 	/**
-	 * @param array $by
+	 * @param  array
 	 * @return \Nette\Database\Table\Selection
 	 */
 	public function findBy(array $by)
@@ -67,7 +66,7 @@ abstract class Table extends Nette\Object
 
 
 	/**
-	 * @param array $by
+	 * @param  array
 	 * @return \Nette\Database\Table\ActiveRow|FALSE
 	 */
 	public function findOneBy(array $by)
@@ -78,12 +77,12 @@ abstract class Table extends Nette\Object
 
 
 	/**
-	 * @param int $id
+	 * @param  int
 	 * @return \Nette\Database\Table\ActiveRow|FALSE
 	 */
 	public function find($id)
 	{
-		return $this->findOneBy(array('id' => $id));
+		return $this->getTable()->find($id)->fetch();
 	}
 
 
@@ -135,5 +134,4 @@ abstract class Table extends Nette\Object
 
 		return $this->findOneBy(func_get_arg(0));
 	}
-
 }

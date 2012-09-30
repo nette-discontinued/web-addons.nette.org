@@ -119,11 +119,7 @@ class AddonVersions extends Table
 	public function incrementDownloadsCount(AddonVersion $version)
 	{
 		$row = $this->find($version->id);
-
-		if (!$row) {
-			return;
-		}
-
+		if (!$row) return;
 		$row->update(array(
 			'downloadsCount' => new SqlLiteral('downloadsCount + 1')
 		));

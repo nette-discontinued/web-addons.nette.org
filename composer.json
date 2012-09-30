@@ -1,31 +1,31 @@
 {
-    "name":"nette/addons-portal",
-    "description":"Nette addons portal",
-    "license":["GPL-2.0", "GPL-3.0"],
+	"name":"nette/addons-portal",
+	"description":"Nette addons portal",
+	"license":["GPL-2.0", "GPL-3.0"],
 	"config": {
 		"vendor-dir": "libs"
 	},
 	"repositories": {
-        "michelf/php-markdown":{
-            "type":"package",
-            "package":{
-                "name":"michelf/php-markdown",
-                "version":"1.2.5",
-                "source":{
-                    "url":"git://github.com/michelf/php-markdown.git",
-                    "type":"git",
-                    "reference":"x1.2.5"
-                }
-            }
-        }
-    },
+		"michelf/php-markdown":{
+			"type":"package",
+			"package":{
+				"name":"michelf/php-markdown",
+				"version":"1.2.5",
+				"source":{
+					"url":"git://github.com/michelf/php-markdown.git",
+					"type":"git",
+					"reference":"x1.2.5"
+				}
+			}
+		}
+	},
 	"require": {
 		"php": ">=5.3.0",
 		"nette/nette": "dev-master",
 		"dg/texy": "2.2.*",
 		"composer/composer": "dev-master",
 		"kukulich/fshl": "dev-develop",
-        "michelf/php-markdown": "1.2.5",
+		"michelf/php-markdown": "1.2.5",
 		"emberlabs/gravatarlib": "@dev"
 	},
 	"minimum-stability":"dev",

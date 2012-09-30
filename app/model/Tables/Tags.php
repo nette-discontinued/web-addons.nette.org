@@ -47,7 +47,7 @@ class Tags extends Table
 				->where('name = ? OR slug = ? OR id = ?', $tag, $tag, $tag) // JT: I don't like this.
 				->limit(1)->fetch();
 
-			if (!$tag) { 
+			if (!$tag) {
 				$tag = $this->createOrUpdate(array(
 					'name' => func_get_arg(1),
 					'slug' => Strings::webalize(func_get_arg(1)),
@@ -109,15 +109,15 @@ class Tags extends Table
 
 
 	/**
-	 * Returns parent category for given category
+	 * Returns parent category for given category.
 	 *
-	 * @param \Nette\Database\Table\ActiveRow $tag
-	 * @return \Nette\Database\Table\ActiveRow
+	 * @param  ActiveRow
+	 * @return ActiveRow|NULL
 	 */
 	public function getParentCategory(ActiveRow $tag)
 	{
 		if (!$this->isSubCategory($tag)) {
-			return null;
+			return NULL;
 		}
 
 		return $this->getTable()
@@ -133,12 +133,12 @@ class Tags extends Table
 	 * @param \Nette\Database\Table\ActiveRow $tag
 	 * @return \Nette\Database\Table\ActiveRow
 	 */
-	public function getSubCategories(ActiveRow $tag) 
+	public function getSubCategories(ActiveRow $tag)
 	{
 		if (!$this->isCategory($tag)) {
 			return null;
 		}
-		
+
 		return $this->getTable()
 			->where('parent_id', $tag->id);
 	}

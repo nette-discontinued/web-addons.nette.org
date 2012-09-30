@@ -99,11 +99,11 @@ class DetailPresenter extends BasePresenter
 
 
 	/**
-	 * @param int $id addon ID
+	 * @param string version identifier
 	 */
-	public function handleDownload($version = '')
+	public function handleDownload($version = NULL)
 	{
-		if ($version === '') { // current
+		if ($version === NULL) { // current
 			$version = $this->addonVersions->getCurrent($this->addon->versions);
 		} elseif (isset($this->addon->versions[$version])) { // archive
 			$version = $this->addon->versions[$version];

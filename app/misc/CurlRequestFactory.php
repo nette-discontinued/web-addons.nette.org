@@ -2,6 +2,8 @@
 
 namespace NetteAddons;
 
+
+
 /**
  * @author Patrik Votoček
  * @author Michael Moravec
@@ -55,5 +57,4 @@ class CurlRequestFactory extends \Nette\Object
 
 		return $request;
 	}
-
 }
