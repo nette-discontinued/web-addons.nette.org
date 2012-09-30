@@ -25,7 +25,7 @@ class AddonTest extends \PHPUnit_Framework_TestCase
 	{
 		$this->object->name = 'Muj Plugínek';
 		$author = (object) array(
-			'name' => 'Honzík Marků',
+			'realname' => 'Honzík Marků',
 		);
 		$expected = 'HonzikMarku/MujPluginek';
 		$this->object->updateComposerName($author);
