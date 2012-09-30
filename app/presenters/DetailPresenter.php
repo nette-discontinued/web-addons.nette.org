@@ -74,6 +74,10 @@ class DetailPresenter extends BasePresenter
 	 */
 	public function renderDefault($id)
 	{
+		$description = $this->textPreprocessor->processDescription($this->addon);
+
+		$this->template->content = $description['content'];
+		$this->template->toc = $description['toc'];
 		$this->template->netteRepositoryUrl = $this->getHttpRequest()->getUrl()->getBaseUrl();
 	}
 
@@ -160,8 +164,6 @@ class DetailPresenter extends BasePresenter
 			$myVote = NULL;
 		}
 
-		$description = $this->textPreprocessor->processDescription($this->addon);
-
 		$gravatar = new \emberlabs\GravatarLib\Gravatar();
 		$gravatar->setAvatarSize(50);
 		$gravatar->setMaxRating('pg');
@@ -170,9 +172,6 @@ class DetailPresenter extends BasePresenter
 		$this->template->addon = $this->addon;
 		$this->template->version = $currentVersion;
 		$this->template->composer = $currentVersion->composerJson;
-
-		$this->template->content = $description['content'];
-		$this->template->toc = $description['toc'];
 
 		$this->template->plus = $popularity->plus;
 		$this->template->minus = $popularity->minus;
