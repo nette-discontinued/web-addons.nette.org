@@ -63,9 +63,11 @@ class AddAddonForm extends BaseForm
 			->setRequired()
 			->addRule($this->validators->isLicenseValid, 'Invalid license identifier.');
 		$this->addText('repository', 'Repository URL', 60, 500)
+			->setType('url')
 			->addCondition(self::FILLED)
 				->addRule(self::URL);
 		$this->addText('demo', 'Demo URL', 60, 500)
+			->setType('url')
 			->addCondition(self::FILLED)
 				->addRule(self::URL);
 		$this->addMultiSelect('tags', 'Categories', $this->getCategories())
