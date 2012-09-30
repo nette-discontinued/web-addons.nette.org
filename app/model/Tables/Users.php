@@ -91,6 +91,7 @@ class Users extends Table
 		return $this->connection->table('users')->insert(array(
 			'id' => $id,
 			'username' => $username,
+			'realname' => $username,
 			'password' => sha1($password),
 			'group_id' => 4,
 		));
