@@ -125,7 +125,7 @@ class GitHubImporter extends Nette\Object implements IAddonImporter
 
 			// license
 			if ($composer && isset($composer->license)) {
-				$version->license = implode(',', (array) $composer->license);
+				$version->license = implode(', ', (array) $composer->license);
 			} else {
 				$version->license = $addon->defaultLicense;
 			}
