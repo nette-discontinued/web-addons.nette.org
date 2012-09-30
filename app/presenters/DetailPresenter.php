@@ -34,9 +34,6 @@ class DetailPresenter extends BasePresenter
 	/** @var AddonVotes */
 	private $addonVotes;
 
-	/** @var TextPreprocessor */
-	private $textPreprocessor;
-
 
 
 	public function injectAddons(Addons $addons, AddonVersions $addonVersions, AddonVotes $addonVotes)
@@ -44,13 +41,6 @@ class DetailPresenter extends BasePresenter
 		$this->addons = $addons;
 		$this->addonVersions = $addonVersions;
 		$this->addonVotes = $addonVotes;
-	}
-
-
-
-	public function injectTextPreprocessor(TextPreprocessor $factory)
-	{
-		$this->textPreprocessor = $factory;
 	}
 
 

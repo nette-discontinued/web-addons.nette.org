@@ -25,6 +25,9 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 	/** @var Model\Utils\Licenses */
 	protected $licenses;
 
+	/** @var TextPreprocessor */
+	protected $textPreprocessor;
+
 
 
 	public function injectAuthorizator(Authorizator $auth)
@@ -51,6 +54,13 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 	public function injectLicenses(Model\Utils\Licenses $licenses)
 	{
 		$this->licenses = $licenses;
+	}
+
+
+
+	public function injectTextPreprocessor(TextPreprocessor $factory)
+	{
+		$this->textPreprocessor = $factory;
 	}
 
 
