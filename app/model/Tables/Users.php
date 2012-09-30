@@ -9,21 +9,12 @@ use Nette\Security\Identity;
 
 
 /**
-  -- view sql
-  create view users_view as
-  select users.*, users_details.created, users_details.apiToken, groups.g_title as role
-  from users
-  join users_details on users.id = users_details.id
-  join groups on groups.g_id = users.group_id
-*/
-
-/**
  * Users repository
  */
 class Users extends Table
 {
 	/** @var string */
-	protected $tableName = 'users_view';
+	protected $tableName = 'users';
 
 
 
@@ -65,7 +56,13 @@ class Users extends Table
 		$data = $user->toArray();
 		unset($data['password']);
 
-		return new Identity($user->id, $user->role, $data);
+		$role = strtolower($user->ref('groups', 'group_id')->g_title);
+
+		if ($details = $user->ref('users_details', 'id')) {
+			$data += $details->toArray();
+		}
+
+		return new Identity($user->id, $role, $data);
 	}
 
 
