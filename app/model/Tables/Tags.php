@@ -35,43 +35,6 @@ class Tags extends Table
 
 
 
-	/**
-	 * @param  ActiveRow
-	 * @param  string|ActiveRow
-	 * @return bool
-	 */
-	public function addAddonTag(ActiveRow $addon, $tag)
-	{
-		if (!$tag instanceof ActiveRow) {
-			$tag = $this->getTable()
-				->where('name = ? OR slug = ? OR id = ?', $tag, $tag, $tag) // JT: I don't like this.
-				->limit(1)->fetch();
-
-			if (!$tag) {
-				$tag = $this->createOrUpdate(array(
-					'name' => func_get_arg(1),
-					'slug' => Strings::webalize(func_get_arg(1)),
-					'level' => self::LEVEL_ORDINARY_TAG,
-					'visible' => TRUE,
-				));
-			}
-		}
-
-		try {
-			$this->getAddonTags()->insert(array(
-				'addonId' => $addon->id,
-				'tagId' => $tag->id
-			));
-		} catch (\PDOException $e) {
-			// duplicate entry is not an error in this case
-			// TODO: Rethrow the exception if inserting fails for different reason.
-		}
-
-		return TRUE;
-	}
-
-
-
 	public function saveAddonTags(Addon $addon)
 	{
 		if (count($addon->tags) === 0) return;
