@@ -72,6 +72,65 @@ class Tags extends Table
 
 
 
+	public function saveAddonTags(Addon $addon)
+	{
+		if (count($addon->tags) === 0) return;
+		$tags = array();
+		foreach ($addon->tags as $tag) {
+			if ($tag instanceof Tag) {
+				$tags[] = $tag->id;
+			} elseif (is_string($tag) && !ctype_digit($tag)) {
+				$tags[] = $this->ensureExistence($tag);
+			} elseif (is_int($tag) || ctype_digit($tag)) {
+				$tags[] = (int) $tag;
+			}
+		}
+
+		$current = array_keys($this->getAddonTags()->where('addonId', $addon->id)->fetchPairs('tagId'));
+		$tags2Remove = array_values(array_diff($current, $tags));
+		$newTags = array_diff($tags, $current);
+
+		$this->getAddonTags()->where(array(
+			'addonId' => $addon->id,
+			'tagId' => $tags2Remove,
+		))->delete();
+
+		foreach ($newTags as $tagId) {
+			$this->getAddonTags()->insert(array(
+				'addonId' => $addon->id,
+				'tagId' => $tagId,
+			));
+		}
+	}
+
+
+
+	/**
+	 * @param  string tag name
+	 * @return int tag id
+	 */
+	public function ensureExistence($tagName)
+	{
+		try {
+			$slug = Strings::webalize($tagName);
+			$row = $this->createRow(array(
+				'name' => $tagName,
+				'slug' => $slug,
+				'level' => self::LEVEL_ORDINARY_TAG,
+				'visible' => TRUE,
+			));
+
+		} catch (\NetteAddon\DuplicateEntryException $e) {
+			$row = $this->findOneBy(array(
+				'slug' => $slug,
+			));
+		}
+
+		return (int) $row->id;
+	}
+
+
+
 	/**
 	 * @return TableSelection
 	 */
@@ -128,17 +187,13 @@ class Tags extends Table
 
 
 	/**
-	 * Returns subcategories of given category
+	 * Returns subcategories of given category.
 	 *
-	 * @param \Nette\Database\Table\ActiveRow $tag
-	 * @return \Nette\Database\Table\ActiveRow
+	 * @param  ActiveRow
+	 * @return TableSelection
 	 */
 	public function getSubCategories(ActiveRow $tag)
 	{
-		if (!$this->isCategory($tag)) {
-			return null;
-		}
-
 		return $this->getTable()
 			->where('parent_id', $tag->id);
 	}
