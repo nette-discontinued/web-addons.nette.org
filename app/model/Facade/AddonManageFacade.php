@@ -7,6 +7,7 @@ use NetteAddons\Model\Utils\VersionParser;
 use Nette;
 use Nette\Http\Url;
 use Nette\Utils\Strings;
+use stdClass;
 
 
 
@@ -267,14 +268,14 @@ class AddonManageFacade extends Nette\Object
 		$versions = $importer->importVersions($addon);
 
 		// add information about author if missing
+		$author = new stdClass();
+		$author->name = $owner->realname;
+		if (!empty($owner->email)) $author->email = $owner->email;
+		if (!empty($owner->url)) $author->homepage = $owner->url;
+
 		foreach ($versions as $version) {
 			if (empty($version->composerJson->authors)) {
-				$version->composerJson->authors = array(
-					(object) array(
-						'name' => $owner->realname,
-						'email' => $owner->email, // Note: Some users may not like disclosing their e-mail.
-					)
-				);
+				$version->composerJson->authors = array($author);
 			}
 		}
 
