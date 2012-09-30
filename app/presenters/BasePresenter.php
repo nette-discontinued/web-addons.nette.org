@@ -22,6 +22,9 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 	/** @var Model\Tags */
 	protected $tags;
 
+	/** @var Model\Utils\Licenses */
+	protected $licenses;
+
 
 
 	public function injectAuthorizator(Authorizator $auth)
@@ -41,6 +44,13 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 	public function injectTags(Model\Tags $tags)
 	{
 		$this->tags = $tags;
+	}
+
+
+
+	public function injectLicenses(Model\Utils\Licenses $licenses)
+	{
+		$this->licenses = $licenses;
 	}
 
 
