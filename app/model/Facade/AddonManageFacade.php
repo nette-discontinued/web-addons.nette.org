@@ -116,6 +116,10 @@ class AddonManageFacade extends Nette\Object
 			$values['defaultLicense'] = implode(', ', $values['defaultLicense']);
 		}
 
+		if (isset($values['tags']) && is_array($values['tags'])) {
+			$values['tags'] = array_map('intval', $values['tags']);
+		}
+
 		$addon->userId = $owner->getId(); // TODO: this is duplicity to self::import()
 
 		foreach ($overWritable as $field => $required) {
