@@ -147,9 +147,7 @@ class Addons extends Table
 				$this->versions->add($version);
 			}
 
-			foreach ($addon->tags as $tag) {
-				$this->tags->addAddonTag($row, $tag);
-			}
+			$this->tags->saveAddonTags($addon);
 
 			$this->connection->commit();
 			return $row;
