@@ -19,6 +19,9 @@ use Nette,
  */
 class Addons extends Table
 {
+	/** @var array */
+	public $onAddonChange = array();
+
 	/** @var string */
 	protected $tableName = 'addons';
 
@@ -274,6 +277,8 @@ class Addons extends Table
 			'totalDownloadsCount' => $addon->totalDownloadsCount ?: 0,
 			'totalInstallsCount' => $addon->totalInstallsCount ?: 0,
 		));
+
+		$this->onAddonChange($addon);
 
 		$this->tags->saveAddonTags($addon);
 	}

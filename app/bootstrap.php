@@ -33,21 +33,14 @@ $container->router[] = new Route('index.php', 'Homepage:default', Route::ONE_WAY
 $container->router[] = new Route('packages.json', 'Api:Composer:packages'); // same as Packagist's route
 $container->router[] = new Route('downloads/<package>', 'Api:Composer:downloadNotify'); // same as Packagist's route
 $container->router[] = new Route('api/github', 'Api:Github:postReceive'); // same as Packagist's route
+$composerPackageRouteHelper = $container->packageRouterHelper;
 $container->router[] = new Route('<id>[/<action>]', array(
 	'presenter' => 'Detail',
 	'action' => 'default',
 	'id' => array(
 		Route::PATTERN => '[^/]+/[^/]+',
-		Route::FILTER_IN => function ($composerFullName) use ($container) {
-			$row = $container->addons->findOneByComposerFullName($composerFullName);
-			if (!$row) return NULL;
-			return $row->id;
-		},
-		Route::FILTER_OUT => function ($id) use ($container) {
-			$row = $container->addons->find($id);
-			if (!$row) return NULL;
-			return $row->composerVendor . '/' . $row->composerName;
-		},
+		Route::FILTER_IN => $composerPackageRouteHelper->filterIn,
+		Route::FILTER_OUT => $composerPackageRouteHelper->filterOut,
 	)
 ));
 $container->router[] = new Route('<vendor>', array(
