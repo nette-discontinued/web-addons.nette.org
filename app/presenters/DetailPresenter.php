@@ -165,7 +165,7 @@ class DetailPresenter extends BasePresenter
 		}
 
 		$gravatar = new \emberlabs\GravatarLib\Gravatar();
-		$gravatar->setAvatarSize(50);
+		$gravatar->setAvatarSize(40);
 		$gravatar->setMaxRating('pg');
 		$this->template->gravatar = $gravatar;
 
