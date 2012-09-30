@@ -107,7 +107,7 @@ CREATE TABLE `groups` (
   `g_post_flood` smallint(6) NOT NULL DEFAULT '30',
   `g_search_flood` smallint(6) NOT NULL DEFAULT '30',
   PRIMARY KEY (`g_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
 DROP TABLE IF EXISTS `tags`;
@@ -165,7 +165,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   KEY `users_registered_idx` (`registered`),
   KEY `users_username_idx` (`username`(8))
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
 DROP TABLE IF EXISTS `users_details`;
