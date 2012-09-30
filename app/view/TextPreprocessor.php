@@ -6,6 +6,7 @@ use Nette;
 use NetteAddons\Model\Addon;
 use Texy;
 use TexyHtml;
+use Nette\Utils\Strings;
 use FSHL\Highlighter;
 use FSHL\Output\Html;
 use FSHL\Lexer;
@@ -21,6 +22,18 @@ use FSHL\Lexer;
 class TextPreprocessor extends Nette\Object
 {
 	const FORMAT_MARKDOWN = 'markdown';
+
+	/** @var Model\Utils\Licenses */
+	private $licenses;
+
+
+	/**
+	 * @param Model\Utils\Licenses
+	 */
+	public function __construct(Model\Utils\Licenses $licenses)
+	{
+		$this->licenses = $licenses;
+	}
 
 
 
@@ -45,6 +58,32 @@ class TextPreprocessor extends Nette\Object
 				'toc' => $texy->headingModule->TOC
 			);
 		}
+	}
+
+
+
+	/**
+	 * @param string|array
+	 * @return string
+	 */
+	public function processLicenses($licenses)
+	{
+		if (is_string($licenses)) {
+			$licenses = array_map('trim', explode(',', $licenses));
+		}
+		$s = "";
+		foreach ($licenses as $license) {
+			$el = \Nette\Utils\Html::el('a');
+			$el->href = $this->licenses->getUrl($license);
+			$el->title = $license;
+			$el->add($this->licenses->getLicense($license));
+			if (Strings::length($s) >= 1) {
+				$s .= ', ' . $el;
+			} else {
+				$s = (string) $el;
+			}
+		}
+		return $s;
 	}
 
 
