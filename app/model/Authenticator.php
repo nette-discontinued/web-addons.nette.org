@@ -88,11 +88,17 @@ class Authenticator extends Object implements NS\IAuthenticator
 	 */
 	private function onFirstLogin(ActiveRow $user)
 	{
-		$user->getTable()->getConnection()->table('users_details')->insert(array(
-			'id' => $user->id,
+		$data = array(
 			'created' => new SqlLiteral('NOW()'),
 			'apiToken' => Strings::random(),
-		));
+		);
+		$table = $user->getTable()->getConnection()->table('users_details');
+		if ($detail = $table->find($user->id)) {
+			$detail->update($data);
+		} else {
+			$data['id'] = $user->id;
+			$table->insert($data);
+		}
 	}
 
 
