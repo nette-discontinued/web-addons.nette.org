@@ -96,7 +96,8 @@ class AddAddonForm extends BaseForm
 			'descriptionFormat' => $addon->descriptionFormat,
 			'defaultLicense' => $license,
 			'repository' => $addon->repository,
-			'demo' => $addon->demo
+			'demo' => $addon->demo,
+			'tags' => $addon->getTagsIds(),
 		));
 	}
 
