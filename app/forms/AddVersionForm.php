@@ -17,11 +17,15 @@ class AddVersionForm extends BaseForm
 	/** @var FormValidators */
 	private $validators;
 
+	/** @var Model\Utils\Licenses */
+	private $licenses;
 
 
-	public function __construct(FormValidators $validators)
+
+	public function __construct(FormValidators $validators, Model\Utils\Licenses $licenses)
 	{
 		$this->validators = $validators;
+		$this->licenses = $licenses;
 		parent::__construct();
 	}
 
@@ -29,19 +33,15 @@ class AddVersionForm extends BaseForm
 
 	protected function buildForm()
 	{
-		$this->addText('version', 'Version', 10, 20)
+		$this->addText('version', 'Version', 20)
 			->setRequired("%label is required")
 			->addRule($this->validators->isVersionValid, 'Invalid version.');
 
-		$this->addText('license', 'License', 20, 100)
-			->setRequired("%label is required")
-			->addRule($this->validators->isLicenseValid, 'Invalid license identifier.')
-			->setOption(
-				'description',
-				Html::el()->setHtml(
-					'See <a href="http://www.spdx.org/licenses/">SPDX Open Source License Registry</a> for list of possible identifiers.'
-				)
-			);
+		$this->addMultiSelect('license', 'License', $this->licenses->getLicenses())
+			->setAttribute('class', 'chzn-select')
+			->setAttribute('style', 'width: 500px;')
+			->setRequired()
+			->addRule($this->validators->isLicenseValid, 'Invalid license identifier.');
 
 		$this->addSelect('how', 'How would you like to provide source codes?', array(
 			'link' => 'Provide link to distribution archive.',

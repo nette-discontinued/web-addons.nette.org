@@ -112,6 +112,10 @@ class AddonManageFacade extends Nette\Object
 			'composerName' => TRUE,
 		);
 
+		if (isset($values['defaultLicense']) && is_array($values['defaultLicense'])) {
+			$values['defaultLicense'] = implode(', ', $values['defaultLicense']);
+		}
+
 		$addon->userId = $owner->getId(); // TODO: this is duplicity to self::import()
 
 		foreach ($overWritable as $field => $required) {
@@ -165,7 +169,7 @@ class AddonManageFacade extends Nette\Object
 		$version = new Model\AddonVersion();
 		$version->addon = $addon;
 		$version->version = $versionParser->parseTag($values->version);
-		$version->license = $values->license;
+		$version->license = is_array($values->license) ? implode(', ', $values->license) : $values->license;
 
 		if ($values->archiveLink) {
 			$version->distType = 'zip';

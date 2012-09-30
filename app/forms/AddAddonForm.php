@@ -22,12 +22,16 @@ class AddAddonForm extends BaseForm
 	/** @var Tags */
 	private $tags;
 
+	/** @var Model\Utils\Licenses */
+	private $licenses;
 
 
-	public function __construct(FormValidators $validators, Tags $tags)
+
+	public function __construct(FormValidators $validators, Tags $tags, Model\Utils\Licenses $licenses)
 	{
 		$this->validators = $validators;
 		$this->tags = $tags;
+		$this->licenses = $licenses;
 		parent::__construct();
 	}
 
@@ -53,16 +57,11 @@ class AddAddonForm extends BaseForm
 		$this->addSelect('descriptionFormat', 'Description format', array('texy' => 'Texy!', 'markdown' => 'Markdown'))
 			->setDefaultValue('texy')
 			->setRequired();
-		$this->addText('defaultLicense', 'Default license')
+		$this->addMultiSelect('defaultLicense', 'Default license', $this->licenses->getLicenses())
+			->setAttribute('class', 'chzn-select')
+			->setAttribute('style', 'width: 500px;')
 			->setRequired()
-			->addRule($this->validators->isLicenseValid, 'Invalid license identifier.')
-			->setOption(
-				'description',
-				Html::el()->setHtml(
-					'See <a href="http://www.spdx.org/licenses/">SPDX Open Source License Registry</a>' .
-					' for list of possible identifiers. Multiple licenses can be separated by comma.'
-				)
-			);
+			->addRule($this->validators->isLicenseValid, 'Invalid license identifier.');
 		$this->addText('repository', 'Repository URL', 60, 500)
 			->addCondition(self::FILLED)
 				->addRule(self::URL);
@@ -84,12 +83,16 @@ class AddAddonForm extends BaseForm
 	 */
 	public function setAddonDefaults(Addon $addon)
 	{
+		$license = $addon->defaultLicense;
+		if (is_string($license)) {
+			$license = array_map('trim', explode(',', $license));
+		}
 		$this->setDefaults(array(
 			'name' => $addon->name,
 			'shortDescription' => $addon->shortDescription,
 			'description' => $addon->description,
 			'descriptionFormat' => $addon->descriptionFormat,
-			'defaultLicense' => $addon->defaultLicense,
+			'defaultLicense' => $license,
 			'repository' => $addon->repository,
 			'demo' => $addon->demo
 		));

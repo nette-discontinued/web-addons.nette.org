@@ -107,7 +107,7 @@ final class ManagePresenter extends BasePresenter
 	 */
 	protected function createComponentAddAddonForm()
 	{
-		$form = new AddAddonForm($this->formValidators, $this->context->tags);
+		$form = new AddAddonForm($this->formValidators, $this->context->tags, $this->licenses);
 		$form->onSuccess[] = $this->addAddonFormSubmitted;
 
 		if ($this->addon !== NULL) {
@@ -228,12 +228,16 @@ final class ManagePresenter extends BasePresenter
 	 */
 	protected function createComponentAddVersionForm()
 	{
-		$form = new AddVersionForm($this->formValidators);
+		$form = new AddVersionForm($this->formValidators, $this->licenses);
 		$form->onSuccess[] = $this->addVersionFormSubmitted;
 
 		if ($this->addon) {
+			$license = $this->addon->defaultLicense;
+			if (is_string($license)) {
+				$license = array_map('trim', explode(',', $license));
+			}
 			$form->setDefaults(array(
-				'license' => $this->addon->defaultLicense,
+				'license' => $license,
 			));
 		}
 
