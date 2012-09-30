@@ -30,7 +30,8 @@ class Reinstall extends \Nette\Object
 		$tables = $connection->getSupplementalDriver()->getTables();
 		foreach ($tables as $table) {
 			$connection->exec('SET foreign_key_checks = 0');
-			$connection->exec("DROP TABLE `{$table['name']}`");
+			$sql = /*$table['view'] HACK: Nette bug #792 */ $table['name'] === 'users_view' ? "DROP VIEW `{$table['name']}`" : "DROP TABLE `{$table['name']}`";
+			$connection->exec($sql);
 		}
 
 		\Nette\Database\Helpers::loadFromFile($connection, __DIR__ . "/db/current-schema.sql");

@@ -8,6 +8,14 @@ use Nette\Database\Table\Selection as TableSelection;
 use Nette\Security\Identity;
 
 
+/**
+  -- view sql
+  create view users_view as
+  select users.*, users_details.created, users_details.apiToken, groups.g_title as role
+  from users
+  join users_details on users.id = users_details.id
+  join groups on groups.g_id = users.group_id
+*/
 
 /**
  * Users repository
@@ -15,7 +23,7 @@ use Nette\Security\Identity;
 class Users extends Table
 {
 	/** @var string */
-	protected $tableName = 'users';
+	protected $tableName = 'users_view';
 
 
 
@@ -28,7 +36,7 @@ class Users extends Table
 	public function findOneByName($name)
 	{
 		return $this->getTable()
-			->where('name = ? OR email = ?', $name, $name)
+			->where('username = ? OR email = ?', $name, $name)
 			->fetch();
 	}
 

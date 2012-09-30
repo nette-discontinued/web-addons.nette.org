@@ -69,6 +69,11 @@ INSERT INTO `addons_versions` (`id`, `addonId`, `version`, `license`, `distType`
 (26,	8,	'1.0.0',	'New BSD',	'zip',	'https://github.com/vojtech-dobes/nette-forms-gpspicker/zipball/v1.0.0',	0,	0,	'git',	'https://github.com/vojtech-dobes/nette-forms-gpspicker',	'v1.0.0',	'{\"name\":\"vojtech-dobes\\/nette-forms-gpspicker\",\"description\":\"Google Maps based picker of coordinates for Nette Framework.\",\"keywords\":[\"nette\",\"forms\",\"maps\",\"gps\"],\"homepage\":\"http:\\/\\/github.com\\/vojtech-dobes\\/nette-forms-gpspicker\",\"license\":[\"New BSD\"],\"authors\":[{\"name\":\"Vojt\\u011bch Dobe\\u0161\",\"email\":\"me@vojtechdobes.com\"}],\"require\":{\"php\":\">=5.3.2\",\"nette\\/nette\":\"2.0.*\"},\"autoload\":{\"files\":[\"src\\/loader.php\"]},\"version\":\"1.0.0\",\"dist\":{\"type\":\"zip\",\"url\":\"https:\\/\\/github.com\\/vojtech-dobes\\/nette-forms-gpspicker\\/zipball\\/v1.0.0\",\"reference\":null,\"shasum\":null},\"source\":{\"type\":\"git\",\"url\":\"https:\\/\\/github.com\\/vojtech-dobes\\/nette-forms-gpspicker\",\"reference\":\"v1.0.0\"}}'),
 (27,	8,	'dev-master',	'New BSD',	'zip',	'https://github.com/vojtech-dobes/nette-forms-gpspicker/zipball/master',	0,	0,	'git',	'https://github.com/vojtech-dobes/nette-forms-gpspicker',	'master',	'{\"name\":\"vojtech-dobes\\/nette-forms-gpspicker\",\"description\":\"Google Maps based picker of coordinates for Nette Framework.\",\"keywords\":[\"nette\",\"forms\",\"maps\",\"gps\"],\"homepage\":\"http:\\/\\/github.com\\/vojtech-dobes\\/nette-forms-gpspicker\",\"license\":[\"New BSD\"],\"authors\":[{\"name\":\"Vojt\\u011bch Dobe\\u0161\",\"email\":\"me@vojtechdobes.com\"}],\"require\":{\"php\":\">=5.3.2\",\"nette\\/nette\":\"2.0.*\"},\"autoload\":{\"classmap\":[\"src\\/\"]},\"version\":\"dev-master\",\"dist\":{\"type\":\"zip\",\"url\":\"https:\\/\\/github.com\\/vojtech-dobes\\/nette-forms-gpspicker\\/zipball\\/master\",\"reference\":null,\"shasum\":null},\"source\":{\"type\":\"git\",\"url\":\"https:\\/\\/github.com\\/vojtech-dobes\\/nette-forms-gpspicker\",\"reference\":\"master\"}}');
 
+INSERT INTO `groups` (`g_id`, `g_title`, `g_user_title`, `g_read_board`, `g_post_replies`, `g_post_topics`, `g_post_polls`, `g_edit_posts`, `g_delete_posts`, `g_delete_topics`, `g_set_title`, `g_search`, `g_search_users`, `g_edit_subjects_interval`, `g_post_flood`, `g_search_flood`) VALUES
+(1,	'Administrators',	'Administrator',	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	0,	0,	0),
+(2,	'Moderators',	'Moderator',	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	0,	0,	0),
+(3,	'Guest',	NULL,	1,	0,	0,	0,	0,	0,	0,	0,	1,	1,	0,	0,	0),
+(4,	'Members',	NULL,	1,	1,	1,	1,	1,	1,	1,	0,	1,	1,	300,	60,	30);
 
 INSERT INTO `tags` (`id`, `name`, `slug`, `level`, `parent_id`, `visible`) VALUES
 (1,	'Visual components',	'visual-components',	1,	0,	1),
@@ -81,15 +86,28 @@ INSERT INTO `tags` (`id`, `name`, `slug`, `level`, `parent_id`, `visible`) VALUE
 (8,	'DebugBar panels',	'debug-bar-panels',	1,	0,	1),
 (9,	'Datagrids',	'datagrids',	2,	1,	1);
 
-INSERT INTO `users` (`id`, `name`, `password`, `email`, `role`, `apiToken`) VALUES
-(1,	'Merxes',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'me@example.com',	'moderator',	NULL),
-(2,	'HosipLan',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'hosiplan@example.com',	'moderator',	NULL),
-(3,	'Vrtak-CZ',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'vrtak@example.com',	'moderator',	NULL),
-(4,	'Honza Marek',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'mail@example.net',	'moderator',	NULL),
-(5,	'Panda',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'panda@example.com',	'moderator',	NULL),
-(6,	'chemiX',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'iamchemix@example.com',	'moderator',	NULL),
-(7,	'dgx',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'dgx@example.com',	'moderator',	NULL),
-(8,	'demo',	'40bd001563085fc35165329ea1ff5c5ecbdbbeef',	'demo@example.com',	NULL,	NULL),
-(9,	'Schmutzka',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'schmutzka@example.com',	'moderator',	NULL);
+INSERT INTO `users` (`id`, `group_id`, `username`, `password`, `email`, `title`, `realname`, `url`, `jabber`, `icq`, `msn`, `aim`, `yahoo`, `location`, `use_avatar`, `signature`, `disp_topics`, `disp_posts`, `email_setting`, `save_pass`, `notify_with_post`, `show_smilies`, `show_img`, `show_img_sig`, `show_avatars`, `show_sig`, `timezone`, `language`, `style`, `num_posts`, `last_post`, `registered`, `registration_ip`, `last_visit`, `admin_note`, `activate_string`, `activate_key`) VALUES
+(1,	1,	'Merxes',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'me@example.com',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	0,	NULL,	NULL,	NULL,	1,	1,	0,	1,	1,	1,	1,	1,	0,	'English',	'Oxygen',	0,	NULL,	0,	'0.0.0.0',	0,	NULL,	NULL,	NULL),
+(2,	1,	'HosipLan',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'hosiplan@example.com',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	0,	NULL,	NULL,	NULL,	1,	1,	0,	1,	1,	1,	1,	1,	0,	'English',	'Oxygen',	0,	NULL,	0,	'0.0.0.0',	0,	NULL,	NULL,	NULL),
+(3,	1,	'Vrtak-CZ',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'vrtak@example.com',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	0,	NULL,	NULL,	NULL,	1,	1,	0,	1,	1,	1,	1,	1,	0,	'English',	'Oxygen',	0,	NULL,	0,	'0.0.0.0',	0,	NULL,	NULL,	NULL),
+(4,	1,	'Honza Marek',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'mail@example.net',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	0,	NULL,	NULL,	NULL,	1,	1,	0,	1,	1,	1,	1,	1,	0,	'English',	'Oxygen',	0,	NULL,	0,	'0.0.0.0',	0,	NULL,	NULL,	NULL),
+(5,	1,	'Panda',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'panda@example.com',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	0,	NULL,	NULL,	NULL,	1,	1,	0,	1,	1,	1,	1,	1,	0,	'English',	'Oxygen',	0,	NULL,	0,	'0.0.0.0',	0,	NULL,	NULL,	NULL),
+(6,	1,	'chemiX',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'iamchemix@example.com',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	0,	NULL,	NULL,	NULL,	1,	1,	0,	1,	1,	1,	1,	1,	0,	'English',	'Oxygen',	0,	NULL,	0,	'0.0.0.0',	0,	NULL,	NULL,	NULL),
+(7,	1,	'dgx',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'dgx@example.com',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	0,	NULL,	NULL,	NULL,	1,	1,	0,	1,	1,	1,	1,	1,	0,	'English',	'Oxygen',	0,	NULL,	0,	'0.0.0.0',	0,	NULL,	NULL,	NULL),
+(8,	1,	'demo',	'40bd001563085fc35165329ea1ff5c5ecbdbbeef',	'demo@example.com',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	0,	NULL,	NULL,	NULL,	1,	1,	0,	1,	1,	1,	1,	1,	0,	'English',	'Oxygen',	0,	NULL,	0,	'0.0.0.0',	0,	NULL,	NULL,	NULL),
+(9,	1,	'Schmutzka',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'schmutzka@example.com',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	0,	NULL,	NULL,	NULL,	1,	1,	0,	1,	1,	1,	1,	1,	0,	'English',	'Oxygen',	0,	NULL,	0,	'0.0.0.0',	0,	NULL,	NULL,	NULL),
+(10,	1,	'juzna',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'juzna.cz@gmail.com',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	0,	NULL,	NULL,	NULL,	1,	1,	0,	1,	1,	1,	1,	1,	0,	'English',	'Oxygen',	1,	1348963054,	1348963054,	'127.0.0.1',	1348963054,	NULL,	NULL,	NULL);
 
--- 2012-09-29 23:02:25
+INSERT INTO `users_details` (`id`, `created`, `apiToken`) VALUES
+(1,	'0000-00-00 00:00:00',	NULL),
+(2,	'0000-00-00 00:00:00',	NULL),
+(3,	'0000-00-00 00:00:00',	NULL),
+(4,	'0000-00-00 00:00:00',	NULL),
+(5,	'0000-00-00 00:00:00',	NULL),
+(6,	'0000-00-00 00:00:00',	NULL),
+(7,	'0000-00-00 00:00:00',	NULL),
+(8,	'0000-00-00 00:00:00',	NULL),
+(9,	'0000-00-00 00:00:00',	NULL),
+(10,	'0000-00-00 00:00:00',	NULL);
+
+-- 2012-09-29 12:58:44
