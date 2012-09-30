@@ -43,6 +43,9 @@ class HomepagePresenter extends BasePresenter
 
 
 
+	/**
+	 * @secured
+	 */
 	public function handleReinstall()
 	{
 		if ($this->context->parameters['productionMode']) {
