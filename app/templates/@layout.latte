@@ -45,13 +45,13 @@
 
 		<div id="tools">
 			{if $user->isLoggedIn()}
-				Logged in as <a n:href=":People:detail $user->identity->id">{$user->identity->username}</a> / <a n:href=":Sign:out">Log out</a>
+				Logged in as <a n:href=":People:detail $user->identity->id">{$user->identity->username}</a> / <a n:href=":Sign:out">Sign out</a>
 			{else}
-				<a n:href=":Sign:in">Login</a> | <a href="http://forum.nette.org/en/register.php">Register</a>
+				<a n:href=":Sign:in">Sign In</a> | <a href="http://forum.nette.org/en/register.php">Register</a>
 			{/if}
 
 			{*<form action="http://www.google.com/cse" id="search" onsubmit="if(this.q.value.indexOf('more:')==-1)this.q.value+=' more:full_nette.org'">
-				<input type="hidden" name="cx" value="011549293477758430224:vxofa9ufnhc" /><input type="hidden" name="ie" value="UTF-8" /><input type="text" name="q" class="text" size="30" /><input type="image" src="http://files.nette.org/images/search.png" alt="Search" />
+				<input type="hidden" name="cx" value="011549293477758430224:vxofa9ufnhc"><input type="hidden" name="ie" value="UTF-8"><input type="text" name="q" class="text" size="30"><input type="image" src="http://files.nette.org/images/search.png" alt="Search">
 			</form>*}
 		</div>
 
@@ -59,7 +59,7 @@
 
 		{block main}
 		<div id="main" class="sidebar">
-			<div n:ifset="$themeicon"><img src="{$basePath}/images/{$themeicon}.png" id="themeicon" alt="" /></div>
+			<div n:ifset="$themeicon"><img src="{$basePath}/images/{$themeicon}.png" id="themeicon" alt=""></div>
 
 			<div id="content">
 				{foreach $flashes as $flash}

@@ -62,6 +62,9 @@ class AddAddonForm extends BaseForm
 			->setAttribute('style', 'width: 500px;')
 			->setRequired()
 			->addRule($this->validators->isLicenseValid, 'Invalid license identifier.');
+		$this->addMultiSelect('tags', 'Categories', $this->getCategories())
+				->setAttribute('class', 'chzn-select')
+				->setAttribute('style', 'width: 500px;');
 		$this->addText('repository', 'Repository URL', 60, 500)
 			->setType('url')
 			->addCondition(self::FILLED)
@@ -70,9 +73,6 @@ class AddAddonForm extends BaseForm
 			->setType('url')
 			->addCondition(self::FILLED)
 				->addRule(self::URL);
-		$this->addMultiSelect('tags', 'Categories', $this->getCategories())
-			->setAttribute('class', 'chzn-select')
-			->setAttribute('style', 'width: 500px;');
 		$this->addSubmit('create', 'Next');
 	}
 

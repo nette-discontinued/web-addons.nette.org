@@ -71,7 +71,7 @@ class TextPreprocessor extends Nette\Object
 		if (is_string($licenses)) {
 			$licenses = array_map('trim', explode(',', $licenses));
 		}
-		$s = "";
+
 		foreach ($licenses as $license) {
 			$el = $license;
 			if ($this->licenses->validate($license)) {
@@ -81,10 +81,10 @@ class TextPreprocessor extends Nette\Object
 				$el->add($this->licenses->getLicense($license));
 			}
 
-			if (Strings::length($s) >= 1) {
-				$s .= ', ' . $el;
-			} else {
+			if (empty($s)) {
 				$s = (string) $el;
+			} else {
+				$s .= ', ' . $el;
 			}
 		}
 		return $s;

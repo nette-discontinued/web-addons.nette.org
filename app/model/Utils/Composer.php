@@ -69,7 +69,6 @@ class Composer
 	/**
 	 * Generates composer.json data
 	 *
-	 * @todo   Implement setting authors.
 	 * @param  AddonVersion
 	 * @param  stdClass|NULL original composer.json
 	 * @return stdClass

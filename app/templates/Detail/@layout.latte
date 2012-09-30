@@ -15,9 +15,9 @@
 			<ul>
 				<li class="gravatars" n:foreach="$composer->authors as $author">
 					{ifset $author->email}
-						<img src="{= $gravatar->buildGravatarURL($author->email)}" alt="{$author->name}" class="gravatar" />
+						<img src="{=$gravatar->buildGravatarURL($author->email)}" alt="{$author->name}" class="gravatar">
 					{else}
-						<img src="{$basePath}/images/default-gravatar.jpg" alt="{$author->name}" class="gravatar" />
+						<img src="{$basePath}/images/default-gravatar.jpg" alt="{$author->name}" class="gravatar">
 					{/ifset}
 					<a n:tag-ifset="$author->homepage" href="{$author->homepage}" rel="nofollow">{$author->name}</a>
 				</li>
