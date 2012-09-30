@@ -87,14 +87,12 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 
 			if ($signalReflection->hasAnnotation('secured')) {
 				$signalParams = array();
-				if ($args) {
-					foreach ($signalReflection->getParameters() as $param) {
-						if (isset($args[$param->name])) {
-							$signalParams[$param->name] = $args[$param->name];
-						}
+				foreach ($signalReflection->getParameters() as $param) {
+					if (isset($args[$param->name])) {
+						$signalParams[$param->name] = $args[$param->name];
 					}
-					$args[self::CSRF_TOKEN_KEY] = $this->getCsrfToken($method, $signalParams);
 				}
+				$args[self::CSRF_TOKEN_KEY] = $this->getCsrfToken($method, $signalParams);
 			}
 		}
 
