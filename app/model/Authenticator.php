@@ -127,7 +127,7 @@ class Authenticator extends Object implements NS\IAuthenticator
 		$id = $match[1];
 
 		$this->users->createUser($id, $username, $password);
-		return $this->users->find($id);
+		return $this->users->findOneBy(array('id' => $id)); // hack - cannot use find(), because it's view so it doesn't have primary key
 	}
 
 }
