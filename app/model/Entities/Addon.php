@@ -49,10 +49,10 @@ class Addon extends Nette\Object
 	/** @var DateTime */
 	public $updatedAt;
 
-	/** @var AddonVersion[] */
+	/** @var AddonVersion[] (versionNumber => AddonVersion) */
 	public $versions = array();
 
-	/** @var string[] */
+	/** @var Tag[]|string[]|int[] (tagId => Tag (from db) or # => tagName (new user-created tags) or # => tagId */
 	public $tags = array();
 
 	/** @var int total times this addon was downloaded */
@@ -95,9 +95,35 @@ class Addon extends Nette\Object
 		}
 
 		foreach ($row->related('tags') as $tagRow) {
-			$addon->tags[] = $tagRow->tag->name;
+			$addon->tags[$tagRow->tag->id] = Tag::fromActiveRow($tagRow->tag);
 		}
 
 		return $addon;
+	}
+
+
+
+	/**
+	 * @return int[]
+	 */
+	public function getTagsIds()
+	{
+		$ids = array();
+		foreach ($this->tags as $tag) {
+			if ($tag instanceof Tag) {
+				$ids[] = $tag->id;
+			} elseif (is_int($tag) || ctype_digit($tag)) {
+				$ids[] = (int) $tag;
+			}
+		}
+		return $ids;
+
+		/*if (empty($this->tags)) {
+			return array();
+		} else if (count(array_filter($this->tags, 'ctype_digit')) === count($this->tags)) {
+			return array_map('intval', $this->tags); // TODO: remove converting to int
+		} else {
+			return array_keys($this->tags);
+		}*/
 	}
 }
