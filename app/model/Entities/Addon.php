@@ -115,11 +115,11 @@ class Addon extends Nette\Object
 	 */
 	public function updateComposerName($owner)
 	{
-		if (!isset($owner->name)) {
+		if (!isset($owner->realname)) {
 			throw new Nette\InvalidArgumentException("Owner has no name!");
 		}
 
-		$this->composerName = $this->sanitizeName($owner->name) . '/' . $this->sanitizeName($this->name);
+		$this->composerName = $this->sanitizeName($owner->realname) . '/' . $this->sanitizeName($this->name);
 	}
 
 

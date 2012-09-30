@@ -1,4 +1,4 @@
-{var $title = 'Author: ' . $author->name}
+{var $title = 'Author: ' . $author->realname}
 
 {block main}
 <div id="main">
@@ -7,12 +7,12 @@
 			<a href="http://nette.org/en/">Nette Framework</a> »
 			<a n:href=":Homepage:">Addons, plugins and components</a> »
 			<a n:href=":People:">Authors</a> »
-			<span>{$author->name}</span>
+			<span>{$author->realname}</span>
 		</div>
 
 		{foreach $flashes as $flash}<div class="flash {$flash->type}">{$flash->message}</div>{/foreach}
 
-		<h1>{$author->name}</h1>
+		<h1>{$author->realname}</h1>
 		<img src="http://forum.nette.org/cs/img/avatars/2118.jpg" class="avatar" alt="Avatar">
 
 		<h2>List addons</h2>

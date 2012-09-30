@@ -193,7 +193,7 @@ class AddonManageFacade extends Nette\Object
 		$version->composerJson = Model\Utils\Composer::createComposerJson($version);
 		$version->composerJson->authors = array(
 			(object) array(
-				'name' => $owner->name,
+				'name' => $owner->realname,
 				'email' => $owner->email, // Note: Some users may not like disclosing their e-mail.
 			)
 		);
@@ -263,7 +263,7 @@ class AddonManageFacade extends Nette\Object
 			if (empty($version->composerJson->authors)) {
 				$version->composerJson->authors = array(
 					(object) array(
-						'name' => $owner->name,
+						'name' => $owner->realname,
 						'email' => $owner->email, // Note: Some users may not like disclosing their e-mail.
 					)
 				);

@@ -15,7 +15,7 @@
 
 		{foreach $authors as $author}
 		<div>
-			<h3><a n:href=":People:detail id => $author->id" title="$author->name">{$author->name}</a></h3>
+			<h3><a n:href=":People:detail id => $author->id" title="$author->realname">{$author->realname}</a></h3>
 			<img src="http://forum.nette.org/cs/img/avatars/2118.jpg" class="avatar" alt="Avatar">
 			<p>{$author->related('addons', 'userId')->count('id')}</p>
 		</div>
