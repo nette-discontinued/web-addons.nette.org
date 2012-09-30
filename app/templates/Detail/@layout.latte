@@ -30,7 +30,7 @@
 	</div>
 	<div style="margin-bottom:2em">
 		<h3>License</h3>
-		<p>{$version->license}</p>
+		<p>{!$version->license|escapeHtml|licenses}</p>
 	</div>
 
 	{snippet rating}

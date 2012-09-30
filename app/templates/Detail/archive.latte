@@ -20,7 +20,7 @@
 			<h2>{$version->version}</h2>
 			<tr>
 				<th>License</th>
-				<td>{$version->license}</td>
+				<td>{!$version->license|escapeHtml|licenses}</td>
 			</tr>
 			<tr>
 				<th>Download link</th>
