@@ -14,21 +14,20 @@
 
 		<h1>{$title}</h1>
 
-		<p>Please select an option:</p>
+		<p>Please select an option</p>
 
-		<ol>
-			<li>
-				<a href="#" rel="#fromGitHub" data-addons-toggle="#manualCreate">Import from GitHub repository</a><br/><br/>
-				<div id="fromGitHub" n:class="$presenter['addAddonForm']->submitted ? hide">
-					{control importAddonForm}
-				</div>
-			</li>
-			<li>
-				<a href="#" rel="#manualCreate" data-addons-toggle="#fromGitHub">Manually create the addon</a><br><br>
-				<div id="manualCreate" n:class="!$presenter['addAddonForm']->submitted ? hide">
-					{control addAddonForm}
-				</div>
-			</li>
-		</ol>
+		<h2>
+			<a href="#" rel="#fromGitHub" data-addons-toggle="#manualCreate">Import from GitHub repository</a>
+		</h2>
+		<div id="fromGitHub" n:class="$presenter['addAddonForm']->submitted ? hide">
+			{control importAddonForm}
+		</div>
+
+		<h2>
+			<a href="#" rel="#manualCreate" data-addons-toggle="#fromGitHub">Manually create the addon</a>
+		</h2>
+		<div id="manualCreate" n:class="!$presenter['addAddonForm']->submitted ? hide">
+			{control addAddonForm}
+		</div>
 	</div>
 </div>
