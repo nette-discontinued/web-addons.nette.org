@@ -20,16 +20,21 @@ class TemplateFactory extends Nette\Object
 	/** @var Nette\Localization\ITranslator|NULL */
 	private $translator;
 
+	/** @var TextPreprocessor */
+	private $preprocessor;
+
 
 
 	/**
+	 * @param TextPreprocessor
 	 * @param Nette\Caching\IStorage cache storage for templates
 	 * @param Nette\Localization\ITranslator|NULL
 	 */
-	public function __construct(Nette\Caching\IStorage $cacheStorage, Nette\Localization\ITranslator $translator = NULL)
+	public function __construct(TextPreprocessor $preprocessor, Nette\Caching\IStorage $cacheStorage, Nette\Localization\ITranslator $translator = NULL)
 	{
 		$this->cacheStorage = $cacheStorage;
 		$this->translator = $translator;
+		$this->preprocessor = $preprocessor;
 	}
 
 
@@ -56,6 +61,8 @@ class TemplateFactory extends Nette\Object
 
 		// Helpers
 		$template->registerHelperLoader('Nette\Templating\Helpers::loader');
+		$template->registerHelper('description', callback($this->preprocessor, 'processDescription'));
+		$template->registerHelper('licenses', callback($this->preprocessor, 'processLicenses'));
 
 		if ($this->translator)
 		{

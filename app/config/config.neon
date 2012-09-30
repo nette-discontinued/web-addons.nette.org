@@ -36,7 +36,6 @@ nette:
 
 
 services:
-	templateFactory: NetteAddons\TemplateFactory(@nette.templateCacheStorage)
 
 	# security
 	authenticator: NetteAddons\Model\Authenticator
@@ -44,6 +43,7 @@ services:
 
 	# view
 	textPreprocessor: NetteAddons\TextPreprocessor
+	templateFactory: NetteAddons\TemplateFactory(@textPreprocessor, @nette.templateCacheStorage)
 
 	# tables
 	users: NetteAddons\Model\Users
