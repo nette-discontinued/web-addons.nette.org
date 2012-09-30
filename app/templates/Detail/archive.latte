@@ -17,7 +17,9 @@
 	{foreach $addon->versions as $version}
 		{var $composer = $version->composerJson}
 		<table>
-			<h2>{$version->version}</h2>
+			{var $anchor = "v" . $template->webalize($version->version, '.')}
+			<h2 id="{$anchor}">{$version->version} <a href="#{$anchor}">#</a></h2>
+
 			<tr>
 				<th>License</th>
 				<td>{!$version->license|escapeHtml|licenses}</td>
