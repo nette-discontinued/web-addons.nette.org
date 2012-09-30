@@ -2,6 +2,19 @@
 
 {block title}Addons, plugins and components | Nette Framework{/block}
 
+{define list}
+<table class="table-full">
+	<tbody>
+		{foreach $addons as $addon}
+		<tr n:class="$iterator->odd ? alt">
+			<td style="width: 30%"><a title="{$addon->name}" n:href=":Detail: id => $addon->id">{$addon->name}</a></td>
+			<td>{$addon->shortDescription}</td>
+		</tr>
+		{/foreach}
+	</tbody>
+</table>
+{/define}
+
 {block content}
 	<div id="breadcrumbs">
 		<a href="http://nette.org/en/">Nette Framework</a> »
@@ -19,16 +32,15 @@
 
 	<h2>Recently updated</h2>
 
-	<table>
-		<tbody>
-			{foreach $updatedAddons as $addon}
-			<tr n:class="$iterator->odd ? alt">
-				<td><a title="{$addon->name}" n:href=":Detail: id => $addon->id">{$addon->name}</a></td>
-				<td>{$addon->shortDescription}</td>
-			</tr>
-			{/foreach}
-		</tbody>
-	</table>
+	{include #list addons => $updatedAddons}
+
+	<h2>Most favorited</h2>
+
+	{include #list addons => $favoritedAddons}
+
+	<h2>Most used</h2>
+
+	{include #list addons => $usedAddons}
 {/block}
 
 {block sidebar}

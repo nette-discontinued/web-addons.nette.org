@@ -35,6 +35,10 @@ class HomepagePresenter extends BasePresenter
 	{
 		$this->template->updatedAddons = $this->addons->findAll()
 			->order('updatedAt DESC')->limit(3);
+		$this->template->favoritedAddons = $this->addons->findAll()->group('id')
+			->order('SUM(addons_vote:vote) DESC')->limit(3);
+		$this->template->usedAddons = $this->addons->findAll()->group('id')
+			->order('SUM(totalDownloadsCount + totalInstallsCount) DESC')->limit(3);
 	}
 
 
