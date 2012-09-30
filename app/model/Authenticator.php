@@ -3,6 +3,9 @@
 namespace NetteAddons\Model;
 
 use Nette\Object;
+use Nette\Utils\Strings;
+use Nette\Database\SqlLiteral;
+use Nette\Database\Table\ActiveRow;
 use Nette\Security as NS;
 
 
@@ -47,6 +50,10 @@ class Authenticator extends Object implements NS\IAuthenticator
 			throw new NS\AuthenticationException("Invalid password.", self::INVALID_CREDENTIAL);
 		}
 
+		if (empty($user->created)) {
+			$this->onFirstLogin($user);
+		}
+
 		return $this->users->createIdentity($user);
 	}
 
@@ -62,4 +69,20 @@ class Authenticator extends Object implements NS\IAuthenticator
 	{
 		return sha1($password);
 	}
+
+
+
+	/**
+	 * Called when user logs in to the portal for the first time, so that we can initialize some columns
+	 * @param  ActiveRow
+	 */
+	private function onFirstLogin(ActiveRow $user)
+	{
+		$user->getTable()->getConnection()->table('users_details')->insert(array(
+			'id' => $user->id,
+			'created' => new SqlLiteral('NOW()'),
+			'apiToken' => Strings::random(),
+		));
+	}
+
 }
