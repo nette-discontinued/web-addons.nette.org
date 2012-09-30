@@ -149,7 +149,10 @@ class DetailPresenter extends BasePresenter
 		$popularity = $this->addonVotes->calculatePopularity($this->addon->id);
 
 		if ($this->getUser()->isLoggedIn()) {
-			$row = $this->addonVotes->findOneBy(array('userId' => $this->getUser()->getId()));
+			$row = $this->addonVotes->findOneBy(array(
+				'userId' => $this->getUser()->getId(),
+				'addonId' => $this->addon->id,
+			));
 			$myVote = $row ? $row->vote : NULL;
 		} else {
 			$myVote = NULL;
