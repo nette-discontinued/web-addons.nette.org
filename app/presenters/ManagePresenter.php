@@ -371,7 +371,7 @@ final class ManagePresenter extends BasePresenter
 	{
 		if (!$this->addon) $this->error();
 
-		$form = new EditAddonForm($this->formValidators);
+		$form = new EditAddonForm($this->formValidators, $this->tags, $this->licenses);
 		$form->setAddonDefaults($this->addon);
 		$form->onSuccess[] = $this->editAddonFormSubmitted;
 
