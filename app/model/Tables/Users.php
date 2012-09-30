@@ -79,4 +79,24 @@ class Users extends Table
 		$users = $this->connection->table('addons')->select('DISTINCT(userId)');
 		return $this->findAll()->where('id', $users);
 	}
+
+
+
+	/**
+	 * Create new user record (temporary)
+	 * @param  int
+	 * @param  string
+	 * @param  string
+	 * @return \Nette\Database\Table\ActiveRow
+	 */
+	public function createUser($id, $username, $password)
+	{
+		return $this->connection->table('users')->insert(array(
+			'id' => $id,
+			'username' => $username,
+			'password' => sha1($password),
+			'group_id' => 4,
+		));
+	}
+
 }

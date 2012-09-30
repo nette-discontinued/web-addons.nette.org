@@ -3,6 +3,7 @@
 namespace NetteAddons\Model;
 
 use Nette\Object;
+use NetteAddons\CurlRequestFactory;
 use Nette\Utils\Strings;
 use Nette\Database\SqlLiteral;
 use Nette\Database\Table\ActiveRow;
@@ -15,17 +16,24 @@ use Nette\Security as NS;
  */
 class Authenticator extends Object implements NS\IAuthenticator
 {
+	const EXTERNAL_URL = 'http://forum.nette.org/cs/login.php?action=in';
+
 	/** @var Users */
 	private $users;
+
+	/** @var CurlRequestFactory */
+	private $curlFactory;
 
 
 
 	/**
-	 * @param Users $users
+	 * @param  Users
+	 * @param  CurlRequestFactory
 	 */
-	public function __construct(Users $users)
+	public function __construct(Users $users, CurlRequestFactory $curlFactory)
 	{
 		$this->users = $users;
+		$this->curlFactory = $curlFactory;
 	}
 
 
@@ -43,7 +51,9 @@ class Authenticator extends Object implements NS\IAuthenticator
 		$user = $this->users->findOneByName($username);
 
 		if (!$user) {
-			throw new NS\AuthenticationException("User '$username' not found.", self::IDENTITY_NOT_FOUND);
+			if (!$user = $this->authenticateExternal($username, $password)) {
+				throw new NS\AuthenticationException("User '$username' not found.", self::IDENTITY_NOT_FOUND);
+			}
 		}
 
 		if ($user->password !== $this->calculateHash($password)) {
@@ -83,6 +93,41 @@ class Authenticator extends Object implements NS\IAuthenticator
 			'created' => new SqlLiteral('NOW()'),
 			'apiToken' => Strings::random(),
 		));
+	}
+
+
+
+	/**
+	 * Authenticate again external site (hack ;)
+	 * @param  string
+	 * @param  string
+	 * @return bool
+	 */
+	private function authenticateExternal($username, $password)
+	{
+		$req = $this->curlFactory->create(self::EXTERNAL_URL);
+		$req->setOption(CURLOPT_POST, TRUE);
+		$req->setOption(CURLOPT_POSTFIELDS, http_build_query(array(
+			'form_sent' => 1,
+			'req_name' => $username,
+			'req_password' => $password,
+			'redirect_url' => 'index.php',
+		)));
+		$req->setOption(CURLOPT_COOKIEFILE, ''); // needs to be here to store cookies between redirects
+
+		try {
+			$html = $req->execute();
+		} catch(\NetteAddons\HttpException $e) { // auth failure
+			return FALSE;
+		}
+
+		if (!$match = Strings::match($html, '~<a href="profile\.php\?id=(\d+)" title=~')) {
+			return FALSE;
+		}
+		$id = $match[1];
+
+		$this->users->createUser($id, $username, $password);
+		return $this->users->find($id);
 	}
 
 }
