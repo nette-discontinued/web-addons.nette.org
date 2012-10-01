@@ -138,7 +138,7 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 	{
 		$control = get_class($this);
 		$session = $this->getSession('Addons.Presenter/CSRF');
-		if (!isset($session->token)) {	
+		if (!isset($session->token)) {
 			$session->token = \Nette\Utils\Strings::random();
 		}
 

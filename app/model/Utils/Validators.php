@@ -61,6 +61,6 @@ class Validators extends Nette\Object
 
 	public function isLicenseValid($license)
 	{
-		return $this->licenseValidator->validate($license);
+		return $this->licenseValidator->isValid($license);
 	}
 }

@@ -74,10 +74,10 @@ class TextPreprocessor extends Nette\Object
 
 		foreach ($licenses as $license) {
 			$el = $license;
-			if ($this->licenses->validate($license)) {
+			if ($this->licenses->isValid($license)) {
 				$el = \Nette\Utils\Html::el('a');
 				$el->href = $this->licenses->getUrl($license);
-				$el->title = $this->licenses->getLicense($license);
+				$el->title = $this->licenses->getFullName($license);
 				$el->add($license);
 			}
 

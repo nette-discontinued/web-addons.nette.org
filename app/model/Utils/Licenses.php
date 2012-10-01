@@ -231,12 +231,12 @@ class Licenses extends \Nette\Object
 
 
 	/**
-	 * @param string license key
+	 * @param  string license key
 	 * @return string|NULL
 	 */
-	public function getLicense($key)
+	public function getFullName($key)
 	{
-		if (!$this->validate($key)) {
+		if (!$this->isValid($key)) {
 			return NULL;
 		}
 		return $this->list[$key];
@@ -245,12 +245,12 @@ class Licenses extends \Nette\Object
 
 
 	/**
-	 * @param string license key
+	 * @param  string license key
 	 * @return string|NULL
 	 */
 	public function getUrl($key)
 	{
-		if (!$this->validate($key)) {
+		if (!$this->isValid($key)) {
 			return NULL;
 		}
 		return str_replace('%key%', $key, $this->urlMask);
@@ -259,10 +259,10 @@ class Licenses extends \Nette\Object
 
 
 	/**
-	 * @param string license key
+	 * @param  string license key
 	 * @return bool
 	 */
-	public function validate($key)
+	public function isValid($key)
 	{
 		return array_key_exists($key, $this->list);
 	}
