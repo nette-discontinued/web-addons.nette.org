@@ -1,4 +1,4 @@
-# copy this file to congig.local.neon
+# copy this file to config.local.neon
 
 parameters:
 	database:
