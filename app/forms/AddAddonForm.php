@@ -57,7 +57,7 @@ class AddAddonForm extends BaseForm
 		$this->addSelect('descriptionFormat', 'Description format', array('texy' => 'Texy!', 'markdown' => 'Markdown'))
 			->setDefaultValue('texy')
 			->setRequired();
-		$this->addMultiSelect('defaultLicense', 'Default license', $this->licenses->getLicenses())
+		$this->addMultiSelect('defaultLicense', 'Default license', $this->licenses->getLicenses(TRUE))
 			->setAttribute('class', 'chzn-select')
 			->setAttribute('style', 'width: 500px;')
 			->setRequired()

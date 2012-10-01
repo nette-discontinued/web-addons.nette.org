@@ -37,7 +37,7 @@ class AddVersionForm extends BaseForm
 			->setRequired("%label is required")
 			->addRule($this->validators->isVersionValid, 'Invalid version.');
 
-		$this->addMultiSelect('license', 'License', $this->licenses->getLicenses())
+		$this->addMultiSelect('license', 'License', $this->licenses->getLicenses(TRUE))
 			->setAttribute('class', 'chzn-select')
 			->setAttribute('style', 'width: 500px;')
 			->setRequired()
