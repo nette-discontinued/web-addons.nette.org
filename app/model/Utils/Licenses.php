@@ -225,7 +225,7 @@ class Licenses extends \Nette\Object
 	 */
 	public function getMostCommon()
 	{
-		return array('MIT', 'BSD-3-Clause', 'LGPL-3.0', 'GPL-2.0+');
+		return array('MIT', 'BSD-3-Clause', 'Apache-2.0', 'LGPL-3.0', 'GPL-2.0+', 'GPL-2.0', 'GPL-3.0');
 	}
 
 
