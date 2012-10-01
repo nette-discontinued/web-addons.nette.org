@@ -1,5 +1,5 @@
 {var $title = 'List addons'}
-{var $themeicon = 'box-full'}
+
 {block content}
 	<div id="breadcrumbs">
 		<a href="http://nette.org/en/">Nette Framework</a> »
@@ -35,16 +35,14 @@
 {/block}
 
 {block sidebar}
-	<div class="info">
-		<a n:href="Manage:add" class="bigbutton">Create New Addon</a>
+	{include #parent}
 
-		<h3>Categories</h3>
+	<h3>Categories</h3>
 
-		<ul class="nostyle">
-			<li><a n:href=":List:">All</a></li>
-			<li n:foreach="$categories as $category">
-				<a n:href=":List: tag => $category->id">{$category->name}</a>
-			</li>
-		</ul>
-	</div>
+	<ul class="nostyle">
+		<li><a n:href=":List:">All</a></li>
+		<li n:foreach="$categories as $category">
+			<a n:href=":List: tag => $category->id">{$category->name}</a>
+		</li>
+	</ul>
 {/block}

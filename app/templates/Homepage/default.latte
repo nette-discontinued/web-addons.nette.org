@@ -1,18 +1,16 @@
-{var $themeicon = 'box-full'}
-
 {block title}Addons, plugins and components | Nette Framework{/block}
 
 {define list}
-<table class="table-full">
-	<tbody>
-		{foreach $addons as $addon}
-		<tr n:class="$iterator->odd ? alt">
-			<td style="width: 30%"><a title="{$addon->name}" n:href=":Detail: id => $addon->id">{$addon->name}</a></td>
-			<td>{$addon->shortDescription}</td>
-		</tr>
-		{/foreach}
-	</tbody>
-</table>
+	<table class="table-full">
+		<tbody>
+			{foreach $addons as $addon}
+			<tr n:class="$iterator->odd ? alt">
+				<td style="width: 30%"><a title="{$addon->name}" n:href=":Detail: id => $addon->id">{$addon->name}</a></td>
+				<td>{$addon->shortDescription}</td>
+			</tr>
+			{/foreach}
+		</tbody>
+	</table>
 {/define}
 
 {block content}
@@ -52,25 +50,22 @@
 {/block}
 
 {block sidebar}
-	<div class="info">
-		{default $disableAdd = false}
-		<a n:if="!$disableAdd" n:href="Manage:add" class="bigbutton">Create New Addon</a>
+	{include #parent}
 
-		<h3>Categories</h3>
+	<h3>Categories</h3>
 
-		<ul class="nostyle">
-			<li><a n:href=":List:">All</a></li>
-			<li n:foreach="$categories as $category">
-				<a n:href=":List: tag => $category->id">{$category->name}</a>
-			</li>
-		</ul>
+	<ul class="nostyle">
+		<li><a n:href=":List:">All</a></li>
+		<li n:foreach="$categories as $category">
+			<a n:href=":List: tag => $category->id">{$category->name}</a>
+		</li>
+	</ul>
 
-		<h3>Resources</h3>
+	<h3>Resources</h3>
 
-		<ul class="nostyle">
-			<li><a n:href=":Page:howToAddPlugin">How to Add a Plugin</a></li>
-			<li><a n:href=":Page:pluginWritingGuidelines">Plugin Writing Guidelines</a></li>
-			<li><a n:href=":Page:sendFeedback">Send Feedback</a></li>
-		</ul>
-	</div>
+	<ul class="nostyle">
+		<li><a n:href=":Page:howToAddPlugin">How to Add a Plugin</a></li>
+		<li><a n:href=":Page:pluginWritingGuidelines">Plugin Writing Guidelines</a></li>
+		<li><a n:href=":Page:sendFeedback">Send Feedback</a></li>
+	</ul>
 {/block}

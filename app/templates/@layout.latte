@@ -1,3 +1,6 @@
+{default $showAddAddonButton = TRUE}
+{default $themeicon = 'box-full'}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -69,10 +72,13 @@
 				{include #content}
 			</div>
 
-			<div id="sidebar" n:ifset="#sidebar">
-				{block sidebar}{/block}
+			<div id="sidebar">
+				<div class="info">
+					{block sidebar}
+						<a n:if="$showAddAddonButton" n:href="Manage:add" class="bigbutton">Create New Addon</a>
+					{/block}
+				</div>
 			</div>
-
 			<div class="clear"></div>
 		</div>
 		{/block}
