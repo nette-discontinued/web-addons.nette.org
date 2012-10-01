@@ -195,11 +195,37 @@ class Licenses extends \Nette\Object
 
 
 	/**
+	 * @param  bool
 	 * @return string[]|array
 	 */
-	public function getLicenses()
+	public function getLicenses($preferCommon = FALSE)
 	{
-		return $this->list;
+		if (!$preferCommon) {
+			return $this->list;
+
+		} else {
+			$others = $this->list;
+			$mostCommon = array();
+			foreach ($this->getMostCommon() as $license) {
+				$mostCommon[$license] = $this->list[$license];
+				unset($others[$license]);
+			}
+
+			return array(
+				'Most common' => $mostCommon,
+				'Others' => $others,
+			);
+		}
+	}
+
+
+
+	/**
+	 * @return string[]
+	 */
+	public function getMostCommon()
+	{
+		return array('MIT', 'BSD-3-Clause', 'LGPL-3.0', 'GPL-2.0+');
 	}
 
 
