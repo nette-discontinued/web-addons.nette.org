@@ -108,19 +108,21 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 	public function signalReceived($signal)
 	{
 		$method = $this->formatSignalMethod($signal);
-		$reflection = new \Nette\Reflection\Method($this, $method);
 
-		if ($reflection->hasAnnotation('secured')) {
-			$params = array();
-			if ($this->params) {
-				foreach ($reflection->getParameters() as $param) {
-					if (isset($this->params[$param->name])) {
-						$params[$param->name] = $this->params[$param->name];
+		if (method_exists($this, $method)) {
+			$reflection = new \Nette\Reflection\Method($this, $method);
+			if ($reflection->hasAnnotation('secured')) {
+				$params = array();
+				if ($this->params) {
+					foreach ($reflection->getParameters() as $param) {
+						if (isset($this->params[$param->name])) {
+							$params[$param->name] = $this->params[$param->name];
+						}
 					}
 				}
-			}
-			if (!isset($this->params[self::CSRF_TOKEN_KEY]) || $this->params[self::CSRF_TOKEN_KEY] !== $this->getCsrfToken($method, $params)) {
-				throw new UI\BadSignalException("Invalid security token for signal '$signal' in class {$this->reflection->name}.");
+				if (!isset($this->params[self::CSRF_TOKEN_KEY]) || $this->params[self::CSRF_TOKEN_KEY] !== $this->getCsrfToken($method, $params)) {
+					throw new UI\BadSignalException("Invalid security token for signal '$signal' in class {$this->reflection->name}.");
+				}
 			}
 		}
 
