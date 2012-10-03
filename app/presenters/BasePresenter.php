@@ -81,7 +81,7 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 
 		// secured signals
 		if (substr($destination, -1) === '!' && strpos($signal = rtrim($destination, '!'), self::NAME_SEPARATOR) === FALSE) {
-			$reflection = new UI\PresenterComponentReflection($this);
+			$reflection = $this->getReflection();
 			$method = $this->formatSignalMethod($signal);
 			$signalReflection = $reflection->getMethod($method);
 
@@ -119,7 +119,6 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 					}
 				}
 			}
-			\Nette\Diagnostics\Debugger::barDump($params, 'params in handle');
 			if (!isset($this->params[self::CSRF_TOKEN_KEY]) || $this->params[self::CSRF_TOKEN_KEY] !== $this->getCsrfToken($method, $params)) {
 				throw new UI\BadSignalException("Invalid security token for signal '$signal' in class {$this->reflection->name}.");
 			}
