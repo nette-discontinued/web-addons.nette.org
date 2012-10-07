@@ -38,7 +38,7 @@ class GithubPresenter extends BasePresenter
 	public function actionPostReceive()
 	{
 		$post = $this->getRequest()->getPost();
-		if (!isset($post['payload'], $post['username']), $post['apiToken']) {
+		if (!isset($post['payload'], $post['username'], $post['apiToken'])) {
 			$this->error('Invalid request.');
 		}
 
