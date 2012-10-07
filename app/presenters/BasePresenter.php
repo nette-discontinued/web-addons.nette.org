@@ -2,7 +2,6 @@
 
 namespace NetteAddons;
 
-use NetteAddons\TemplateFactory;
 use NetteAddons\Model;
 use NetteAddons\Model\Authorizator;
 use Nette\Application\UI;
@@ -16,8 +15,8 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 	/** @var Authorizator */
 	protected $auth;
 
-	/** @var TemplateFactory */
-	protected $tplFactory;
+	/** @var HelperLoader */
+	private $helperLoader;
 
 	/** @var Model\Tags */
 	protected $tags;
@@ -36,10 +35,12 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 	}
 
 
-
-	public function injectTemplateFactory(TemplateFactory $factory)
+	/**
+	 * @param HelperLoader
+	 */
+	public function injectHelperLoader(HelperLoader $loader)
 	{
-		$this->tplFactory = $factory;
+		$this->helperLoader = $loader;
 	}
 
 
@@ -64,10 +65,15 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 	}
 
 
-
+	/**
+	 * @param string|NULL
+	 * @return \Nette\Templating\ITemplate
+	 */
 	public function createTemplate($class = NULL)
 	{
-		return $this->tplFactory->createTemplate(NULL, $this);
+		$template = parent::createTemplate();
+		$template->registerHelperLoader($this->helperLoader);
+		return $template;
 	}
 
 

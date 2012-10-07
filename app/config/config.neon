@@ -43,7 +43,7 @@ services:
 
 	# view
 	textPreprocessor: NetteAddons\TextPreprocessor
-	templateFactory: NetteAddons\TemplateFactory(@textPreprocessor, @nette.templateCacheStorage)
+	helperLoader: NetteAddons\HelperLoader(@textPreprocessor)
 
 	# tables
 	users: NetteAddons\Model\Users
