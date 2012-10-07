@@ -86,6 +86,17 @@ class Addons extends Table
 
 
 	/**
+	 * @param int
+	 * @return \Nette\Database\Table\Selection
+	 */
+	public function findByUser($userId)
+	{
+		return $this->findBy(array('userId' => $userId));
+	}
+
+
+
+	/**
 	 * Filter addons selection by tag.
 	 *
 	 * @param  \Nette\Database\Table\Selection

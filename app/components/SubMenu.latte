@@ -5,6 +5,11 @@
 				<span>Create new addon</span>
 			</a>
 		</li>
+		<li>
+			<a rel="nofollow" href="{plink :List:mine}" n:class="$presenter->linkCurrent ? active">
+				<span>Mine</span>
+			</a>
+		</li>
 		{ifset $addon}
 		<li>
 			<a rel="nofollow" href="{plink :Detail:default $addon->id}" n:class="$presenter->linkCurrent ? active">

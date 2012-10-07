@@ -33,6 +33,14 @@ class ListPresenter extends BasePresenter
 
 
 
+	protected function beforeRender()
+	{
+		parent::beforeRender();
+		$this->template->addonVotes = callback($this->addonVotes, 'calculatePopularity');
+	}
+
+
+
 	public function renderDefault($tag = NULL, $author = NULL, $search = NULL)
 	{
 		$addons = $this->addons->findAll();
@@ -49,7 +57,6 @@ class ListPresenter extends BasePresenter
 			$this->addons->filterByString($addons, $search);
 		}
 
-		$this->template->addonVotes = callback($this->addonVotes, 'calculatePopularity');
 		$this->template->addons = $addons;
 	}
 
@@ -77,6 +84,22 @@ class ListPresenter extends BasePresenter
 			'search' => $values->search,
 			'tag' => $values->tag,
 		));
+	}
+
+
+
+	public function actionMine()
+	{
+		if (!$this->getUser()->loggedIn) {
+			$this->flashMessage('Please sign in to continue.');
+			$this->redirect('Sign:in', $this->storeRequest());
+		}
+	}
+
+
+	public function renderMine()
+	{
+		$this->template->addons = $this->addons->findByUser($this->user->id);
 	}
 
 }

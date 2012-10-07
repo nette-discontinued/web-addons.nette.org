@@ -1,0 +1,42 @@
+{var $title = 'List mine addons'}
+
+{block content}
+<div id="breadcrumbs">
+	<a href="http://nette.org/en/">Nette Framework</a> »
+	<a n:href=":Homepage:">Addons, plugins and components</a> »
+	<span>Mine addons</span>
+</div>
+
+<h1>Mine addons</h1>
+
+<h2>List addons</h2>
+
+	{if count($addons)}
+	<table>
+		<tbody>
+			{foreach $addons as $addon}
+			<tr n:class="$iterator->odd ? alt">
+				<td><a title="{$addon->name}" n:href=":Detail: id => $addon->id">{$addon->name}</a></td>
+				<td>{$addon->shortDescription}</td>
+				<td>{=$addonVotes($addon->id)->percent|number:2}%</td>
+			</tr>
+			{/foreach}
+		</tbody>
+	</table>
+	{else}
+	<p>No addons found.</p>
+	{/if}
+{/block}
+
+{block sidebar}
+{include #parent}
+
+<h3>Categories</h3>
+
+<ul class="nostyle">
+	<li><a n:href=":List:">All</a></li>
+	<li n:foreach="$categories as $category">
+		<a n:href=":List: tag => $category->id">{$category->name}</a>
+	</li>
+</ul>
+{/block}
