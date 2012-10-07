@@ -160,11 +160,6 @@ class DetailPresenter extends BasePresenter
 
 		$this['subMenu']->setAddon($this->addon);
 
-		$gravatar = new \emberlabs\GravatarLib\Gravatar();
-		$gravatar->setAvatarSize(40);
-		$gravatar->setMaxRating('pg');
-		$this->template->gravatar = $gravatar;
-
 		$this->template->addon = $this->addon;
 		$this->template->version = $currentVersion;
 		$this->template->composer = $currentVersion->composerJson;

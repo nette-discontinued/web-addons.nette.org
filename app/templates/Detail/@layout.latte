@@ -13,7 +13,7 @@
 		<ul>
 			<li class="gravatars" n:foreach="$composer->authors as $author">
 				{ifset $author->email}
-					<img src="{=$gravatar->buildGravatarURL($author->email)}" alt="{$author->name}" class="gravatar">
+					<img src="{$author->email|gravatar}" alt="{$author->name}" class="gravatar">
 				{else}
 					<img src="{$basePath}/images/default-gravatar.jpg" alt="{$author->name}" class="gravatar">
 				{/ifset}
@@ -24,7 +24,7 @@
 		{*
 			Author
 			<h3><a n:href=":People:detail id => $addon->user->id" title="$addon->user->realname">{$addon->user->realname}</a></h3>
-			<img src="{=$gravatar->buildGravatarURL($addon->user->email)}" class="gravatar">
+			<img src="{$addon->user->email|gravatar}" class="gravatar">
 		*}
 	</div>
 	<div style="margin-bottom:2em">
