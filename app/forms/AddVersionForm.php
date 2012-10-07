@@ -1,10 +1,10 @@
 <?php
 
-namespace NetteAddons;
+namespace NetteAddons\Forms;
 
+use NetteAddons\Model;
 use NetteAddons\Model\Utils\FormValidators;
 use Nette\Forms;
-use Nette\Utils\Html;
 use Nette\Utils\Strings;
 
 

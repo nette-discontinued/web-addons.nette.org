@@ -1,7 +1,8 @@
 <?php
 
-namespace NetteAddons;
+namespace NetteAddons\Forms;
 
+use NetteAddons\Model;
 use Nette\Application\UI\Form;
 
 

@@ -107,7 +107,7 @@ final class ManagePresenter extends BasePresenter
 	 */
 	protected function createComponentAddAddonForm()
 	{
-		$form = new AddAddonForm($this->formValidators, $this->context->tags, $this->licenses);
+		$form = new Forms\AddAddonForm($this->formValidators, $this->context->tags, $this->licenses);
 		$form->onSuccess[] = $this->addAddonFormSubmitted;
 
 		if ($this->addon !== NULL) {
@@ -165,7 +165,7 @@ final class ManagePresenter extends BasePresenter
 	 */
 	protected function createComponentImportAddonForm()
 	{
-		$form = new ImportAddonForm();
+		$form = new Forms\ImportAddonForm();
 		$form->onSuccess[] = $this->importAddonFormSubmitted;
 		return $form;
 	}
@@ -228,7 +228,7 @@ final class ManagePresenter extends BasePresenter
 	 */
 	protected function createComponentAddVersionForm()
 	{
-		$form = new AddVersionForm($this->formValidators, $this->licenses);
+		$form = new Forms\AddVersionForm($this->formValidators, $this->licenses);
 		$form->onSuccess[] = $this->addVersionFormSubmitted;
 
 		if ($this->addon) {
@@ -378,7 +378,7 @@ final class ManagePresenter extends BasePresenter
 	{
 		if (!$this->addon) $this->error();
 
-		$form = new EditAddonForm($this->formValidators, $this->tags, $this->licenses);
+		$form = new Forms\EditAddonForm($this->formValidators, $this->tags, $this->licenses);
 		$form->setAddonDefaults($this->addon);
 		$form->onSuccess[] = $this->editAddonFormSubmitted;
 

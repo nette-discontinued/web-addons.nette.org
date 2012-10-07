@@ -1,6 +1,6 @@
 <?php
 
-namespace NetteAddons;
+namespace NetteAddons\Forms;
 
 use Nette;
 use Nette\ComponentModel\IContainer;

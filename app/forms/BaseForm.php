@@ -1,6 +1,6 @@
 <?php
 
-namespace NetteAddons;
+namespace NetteAddons\Forms;
 
 use Nette\Application\UI\Presenter;
 

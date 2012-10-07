@@ -14,7 +14,7 @@ class SignPresenter extends BasePresenter
 
 	protected function createComponentSignInForm()
 	{
-		$form = new SignInForm();
+		$form = new Forms\SignInForm();
 		$form->onSuccess[] = callback($this, 'signInFormSubmitted');
 
 		return $form;

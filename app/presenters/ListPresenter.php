@@ -88,7 +88,7 @@ class ListPresenter extends BasePresenter
 	 */
 	protected function createComponentFilterForm()
 	{
-		$control = new FilterForm($this->tags);
+		$control = new Forms\FilterForm($this->tags);
 		$control->setSearch($this->getParameter('search'))
 			->setCategory($this->getParameter('category'));
 
