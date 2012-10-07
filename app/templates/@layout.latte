@@ -50,7 +50,7 @@
 
 		<div id="tools">
 			{if $user->isLoggedIn()}
-				Logged in as <a n:href=":People:detail $user->identity->id">{$user->identity->username}</a> / <a n:href=":Sign:out">Sign out</a>
+				Logged in as <a href="{$user->identity->id|profile}">{$user->identity->username}</a> / <a n:href=":Sign:out">Sign out</a>
 			{else}
 				<a n:href=":Sign:in">Sign In</a> | <a href="http://forum.nette.org/en/register.php">Register</a>
 			{/if}
