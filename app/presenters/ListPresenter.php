@@ -2,11 +2,13 @@
 
 namespace NetteAddons;
 
+use Nette\Application\UI\Form;
 use NetteAddons\Model\Addons;
 use NetteAddons\Model\AddonVotes;
 
 /**
  * @author Jan Marek
+ * @author Patrik Votoček
  */
 class ListPresenter extends BasePresenter
 {
@@ -62,27 +64,32 @@ class ListPresenter extends BasePresenter
 
 
 
+	/**
+	 * @return FilterForm
+	 */
 	protected function createComponentFilterForm()
 	{
-		$form = new FilterForm($this->tags);
-		$form->onSuccess[] = array($this, 'filterFormSubmitted');
-		$form->setDefaults(array(
-			'search' => $this->getParameter('search'),
-			'tag' => $this->getParameter('tag'),
-		));
+		$control = new FilterForm($this->tags);
+		$control->setSearch($this->getParameter('search'))
+			->setCategory($this->getParameter('tag'));
 
-		return $form;
+		$control->onSuccess[] = callback($this, 'applyFilter');
+
+		return $control;
 	}
 
 
 
-	public function filterFormSubmitted(FilterForm $form)
+	/**
+	 * @param \Nette\Application\UI\Form
+	 * @param string
+	 * @param string
+	 */
+	public function applyFilter(Form $form, $search, $category)
 	{
-		$values = $form->getValues();
-
 		$this->redirect('default', array(
-			'search' => $values->search,
-			'tag' => $values->tag,
+			'search' => $search,
+			'tag' => $category,
 		));
 	}
 

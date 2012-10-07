@@ -2,31 +2,91 @@
 
 namespace NetteAddons;
 
+use Nette\Application\UI\Form;
 
 
-class FilterForm extends BaseForm
+/**
+ * @author  Patrik Votoček
+ */
+class FilterForm extends FormControl
 {
 
 	/** @var \NetteAddons\Model\Tags */
-	private $tagsRepository;
+	private $tagsFacade;
 
 
 
-	public function __construct(Model\Tags $tagsRepository)
+	/**
+	 * @param Model\Tags
+	 */
+	public function __construct(Model\Tags $tagsFacade)
 	{
-		$this->tagsRepository = $tagsRepository;
 		parent::__construct();
+		$this->tagsFacade = $tagsFacade;
 	}
 
 
-	protected function buildForm()
+	/**
+	 * @return \Nette\Application\UI\Form
+	 */
+	protected function createComponentForm()
 	{
-		$tags = $this->tagsRepository->findMainTags()->fetchPairs('id', 'name');
+		$tags = $this->tagsFacade->findMainTags()->fetchPairs('id', 'name');
 
-		$this->addText('search', 'Search', 40, 100);
-		$this->addSelect('tag', 'Tag', $tags)->setPrompt('Choose tag');
+		$form = new Form;
 
-		$this->addSubmit('s', 'Filter');
+		$form->addText('search', 'Search', 40, 100);
+		$form->addSelect('category', 'Category', $tags)
+			->setPrompt('Choose category');
+
+		$form->addSubmit('sub', 'Filter');
+
+		$form->onSuccess[] = callback($this, 'process');
+
+		return $form;
+	}
+
+
+
+	/**
+	 * @param \Nette\Application\UI\Form
+	 */
+	public function process(Form $form)
+	{
+		$values = $form->values;
+		$this->doOnSuccess($form, $values->search, $values->category);
+	}
+
+
+
+	/**
+	 * @param string
+	 * @return FilterForm
+	 */
+	public function setSearch($search)
+	{
+		$this['form-search']->setDefaultValue($search);
+		return $this;
+	}
+
+
+
+	/**
+	 * @param string
+	 * @return FilterForm
+	 */
+	public function setCategory($category)
+	{
+		$this['form-category']->setDefaultValue($category);
+		return $this;
+	}
+
+
+
+	public function render()
+	{
+		$this->template->setFile(__DIR__ . '/templates/FilterForm.latte');
+		$this->template->render();
 	}
 
 }
