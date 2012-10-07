@@ -9,21 +9,27 @@ use NetteAddons\Model\Reinstall;
 
 class HomepagePresenter extends BasePresenter
 {
-	/** @var Addons */
+	const ADDONS_LIMIT = 3;
+
+	/** @var Model\Addons */
 	private $addons;
 
-	/** @var Reinstall */
+	/** @var Model\Reinstall */
 	private $reinstaller;
 
 
-
+	/**
+	 * @param Model\Addons
+	 */
 	public function injectAddons(Addons $addons)
 	{
 		$this->addons = $addons;
 	}
 
 
-
+	/**
+	 * @param Model\Reinstall
+	 */
 	public function injectReinstaller(Reinstall $reinstaller)
 	{
 		$this->reinstaller = $reinstaller;
@@ -33,12 +39,9 @@ class HomepagePresenter extends BasePresenter
 
 	public function renderDefault()
 	{
-		$this->template->updatedAddons = $this->addons->findAll()
-			->order('updatedAt DESC')->limit(3);
-		$this->template->favoritedAddons = $this->addons->findAll()->group('id')
-			->order('SUM(addons_vote:vote) DESC')->limit(3);
-		$this->template->usedAddons = $this->addons->findAll()->group('id')
-			->order('SUM(totalDownloadsCount + totalInstallsCount) DESC')->limit(3);
+		$this->template->updatedAddons = $this->addons->findLastUpdated(self::ADDONS_LIMIT);
+		$this->template->favoritedAddons = $this->addons->findMostFavorited(self::ADDONS_LIMIT);
+		$this->template->usedAddons = $this->addons->findMostUsed(self::ADDONS_LIMIT);
 	}
 
 

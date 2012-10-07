@@ -41,6 +41,51 @@ class Addons extends Table
 // === Selecting addons ========================================================
 
 	/**
+	 * @param int|NULL
+	 * @return \Nette\Database\Table\Selection
+	 */
+	public function findLastUpdated($count = NULL)
+	{
+		$selection = $this->getTable()->order('updatedAt DESC');
+		if (!is_null($count)) {
+			$selection->limit($count);
+		}
+		return $selection;
+	}
+
+
+
+	/**
+	 * @param int|NULL
+	 * @return \Nette\Database\Table\Selection
+	 */
+	public function findMostFavorited($count = NULL)
+	{
+		$selection = $this->getTable()->group('id')->order('SUM(addons_vote:vote) DESC');
+		if (!is_null($count)) {
+			$selection->limit($count);
+		}
+		return $selection;
+	}
+
+
+
+	/**
+	 * @param int|NULL
+	 * @return \Nette\Database\Table\Selection
+	 */
+	public function findMostUsed($count = NULL)
+	{
+		$selection = $this->getTable()->group('id')->order('SUM(totalDownloadsCount + totalInstallsCount) DESC');
+		if (!is_null($count)) {
+			$selection->limit($count);
+		}
+		return $selection;
+	}
+
+
+
+	/**
 	 * Filter addons selection by tag.
 	 *
 	 * @param  \Nette\Database\Table\Selection
