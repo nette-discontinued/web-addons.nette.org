@@ -1,0 +1,10 @@
+<h3>Categories</h3>
+
+<ul class="nostyle">
+	<li><a href="{plink :List:}">All</a></li>
+	{foreach $categories as $category}
+	<li>
+		<a href="{plink :List: tag => $category->id}">{$category->name}</a>
+	</li>
+	{/foreach}
+</ul>
