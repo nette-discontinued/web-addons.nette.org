@@ -31,7 +31,7 @@ class FilterForm extends FormControl
 	 */
 	protected function createComponentForm()
 	{
-		$tags = $this->tagsFacade->findMainTags()->fetchPairs('id', 'name');
+		$tags = $this->tagsFacade->findMainTags()->fetchPairs('slug', 'name');
 
 		$form = new Form;
 

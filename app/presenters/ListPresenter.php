@@ -42,13 +42,32 @@ class ListPresenter extends BasePresenter
 	}
 
 
-
-	public function renderDefault($tag = NULL, $author = NULL, $search = NULL)
+	/**
+	 * @param string
+	 * @param string
+	 * @param string
+	 * @param id
+	 */
+	public function renderDefault($category = NULL, $search = NULL, $tag = NULL, $author = NULL)
 	{
 		$addons = $this->addons->findAll();
 
+		if ($category) {
+			$categoryId = $this->tags->findOneBySlug($category);
+			if (!$categoryId) {
+				$this->flashMessage('Invalid category');
+				$this->redirect('this', array('category' => NULL));
+			}
+			$this->addons->filterByTag($addons, $categoryId);
+		}
+
 		if ($tag) {
-			$this->addons->filterByTag($addons, $tag);
+			$tagId = $this->tags->findOneBySlug($tag);
+			if (!$tagId) {
+				$this->flashMessage('Invalid tag');
+				$this->redirect('this', array('tag' => NULL));
+			}
+			$this->addons->filterByTag($addons, $tagId);
 		}
 
 		if ($author) {
@@ -71,7 +90,7 @@ class ListPresenter extends BasePresenter
 	{
 		$control = new FilterForm($this->tags);
 		$control->setSearch($this->getParameter('search'))
-			->setCategory($this->getParameter('tag'));
+			->setCategory($this->getParameter('category'));
 
 		$control->onSuccess[] = callback($this, 'applyFilter');
 
@@ -89,7 +108,7 @@ class ListPresenter extends BasePresenter
 	{
 		$this->redirect('default', array(
 			'search' => $search,
-			'tag' => $category,
+			'category' => $category,
 		));
 	}
 

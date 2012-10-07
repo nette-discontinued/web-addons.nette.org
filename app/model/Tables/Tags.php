@@ -35,6 +35,17 @@ class Tags extends Table
 
 
 
+	/**
+	 * @param string
+	 * @return \Nette\Database\Table\ActiveRow|FALSE
+	 */
+	public function findOneBySlug($slug)
+	{
+		return $this->findOneBy(array('slug' => $slug));
+	}
+
+
+
 	public function saveAddonTags(Addon $addon)
 	{
 		if (count($addon->tags) === 0) return;
