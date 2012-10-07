@@ -30,8 +30,10 @@
 
 <body class="nette-org">
 	<div id="page">
-		<div id="header">
+		<div id="header" n:class="$user->loggedIn ? loggedin">
 			<a id="logo" title="Homepage" n:href=":Homepage:default"><span>Homepage</span></a>
+
+			{if $user->loggedIn}{control subMenu}{/if}
 
 			<div id="menu">
 				<ul>
@@ -57,8 +59,6 @@
 				<input type="hidden" name="cx" value="011549293477758430224:vxofa9ufnhc"><input type="hidden" name="ie" value="UTF-8"><input type="text" name="q" class="text" size="30"><input type="image" src="http://files.nette.org/images/search.png" alt="Search">
 			</form>*}
 		</div>
-
-		{block adminMenu}{/block}
 
 		{block main}
 		<div id="main" class="sidebar">

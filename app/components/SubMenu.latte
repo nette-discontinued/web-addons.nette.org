@@ -1,0 +1,33 @@
+<div id="submenu" n:if="$user->loggedIn">
+	<ul>
+		<li>
+			<a rel="nofollow" href="{plink :Manage:add}" n:class="$presenter->linkCurrent ? active">
+				<span>Create new addon</span>
+			</a>
+		</li>
+		{ifset $addon}
+		<li>
+			<a rel="nofollow" href="{plink :Detail:default $addon->id}" n:class="$presenter->linkCurrent ? active">
+				<span>View</span>
+			</a>
+		</li>
+		{if $auth->isAllowed($addon, 'manage')}
+		<li>
+			<a rel="nofollow" href="{plink :Manage:editAddon $addon->id}" n:class="$presenter->linkCurrent ? active">
+				<span>Edit</span>
+			</a>
+		</li>
+		<li n:if="isset($addon->repositoryHosting) && $addon->repositoryHosting != NULL">
+			<a rel="nofollow" href="{plink :Manage:checkVersions $addon->id}" n:class="$presenter->linkCurrent ? active">
+				<span>Check updates</span>
+			</a>
+		</li>
+		<li>
+			<a rel="nofollow" href="{plink :Manage:createVersion $addon->id}" n:class="$presenter->linkCurrent ? active">
+				<span>Add new version</span>
+			</a>
+		</li>
+		{/if}
+		{/ifset}
+	</ul>
+</div>

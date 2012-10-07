@@ -158,6 +158,8 @@ class DetailPresenter extends BasePresenter
 			$myVote = NULL;
 		}
 
+		$this['subMenu']->setAddon($this->addon);
+
 		$gravatar = new \emberlabs\GravatarLib\Gravatar();
 		$gravatar->setAvatarSize(40);
 		$gravatar->setMaxRating('pg');
@@ -171,22 +173,5 @@ class DetailPresenter extends BasePresenter
 		$this->template->minus = $popularity->minus;
 		$this->template->percents = $popularity->percent;
 		$this->template->myVote = $myVote;
-	}
-
-
-
-	/**
-	 * @throws \Nette\Application\BadRequestException
-	 * @return WikimenuControl
-	 */
-	protected function createComponentWikimenu()
-	{
-		if (!$this->addon) {
-			throw new \Nette\Application\BadRequestException;
-		}
-
-		$wiki = new WikimenuControl($this->auth);
-		$wiki->setAddon($this->addon);
-		return $wiki;
 	}
 }

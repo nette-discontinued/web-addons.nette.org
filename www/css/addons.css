@@ -359,3 +359,68 @@ background: url(../images/li-download.gif) no-repeat;
 	background-repeat: repeat-x;
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#bfbfbf', endColorstr='#979797', GradientType=0);
 }
+
+#header {
+	background-color: #3484d2;
+}
+
+#header.loggedin {
+	height: 130px;
+}
+
+#submenu li, div.linkst li, div.linksb li, div.postlinksb li, div.postfootright li {
+	display: inline;
+	height: 0;
+	margin-right: 1em
+}
+
+#submenu ul {
+	font: 11px/27px "Open Sans","Trebuchet MS","Geneva CE",lucida,sans-serif;
+	position: absolute;
+	right: 0;
+	top: 93px;
+	padding: 0;
+	list-style: none;
+	height: 27px;
+}
+
+#submenu li {
+	float: left;
+	padding: 0;
+	margin: 0;
+	height: auto;
+}
+
+#submenu a {
+	display: block;
+	padding: 0 0 0 10px;
+	margin: 0 1px;
+	line-height: 27px;
+	color: white;
+	font-size: 130%;
+	text-decoration: none;
+}
+
+#submenu a span {
+	display: inline-block;
+	padding: 0 10px 0 0;
+	height: 27px;
+}
+
+#submenu a.active {
+	color: black;
+	background: url('../images/menu-button-small-active.gif') no-repeat left;
+}
+
+#submenu a.active span {
+	background: url('../images/menu-button-small-active.gif') no-repeat right;
+}
+
+#submenu a:hover, #submenu a:active, #submenu a:focus {
+	color: black;
+	background: url('../images/menu-button-small.gif') no-repeat left;
+}
+
+#submenu a:hover span, #submenu a:active span, #submenu a:focus span {
+	background: url('../images/menu-button-small.gif') no-repeat right;
+}

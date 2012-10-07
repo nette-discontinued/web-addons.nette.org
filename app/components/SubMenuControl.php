@@ -2,17 +2,16 @@
 
 namespace NetteAddons;
 
-use Kdyby;
+use Nette;
 use NetteAddons\Model\Addon;
 use NetteAddons\Model\Authorizator;
-use Nette;
 
 
 
 /**
  * @author Filip Procházka <filip@prochazka.su>
  */
-class WikimenuControl extends Nette\Application\UI\Control
+class SubMenuControl extends Nette\Application\UI\Control
 {
 
 	/** @var Authorizator */
@@ -35,11 +34,12 @@ class WikimenuControl extends Nette\Application\UI\Control
 
 
 	/**
-	 * @param Model\Addon $addon
+	 * @param Model\Addon
 	 */
 	public function setAddon(Addon $addon)
 	{
 		$this->addon = $addon;
+		return $this;
 	}
 
 
@@ -47,9 +47,11 @@ class WikimenuControl extends Nette\Application\UI\Control
 	public function render()
 	{
 		$this->template->auth = $this->auth;
-		$this->template->addon = $this->addon;
+		if ($this->addon) {
+			$this->template->addon = $this->addon;
+		}
 
-		$this->template->setFile(__DIR__ . '/Wikimenu.latte');
+		$this->template->setFile(__DIR__ . '/SubMenu.latte');
 		$this->template->render();
 	}
 

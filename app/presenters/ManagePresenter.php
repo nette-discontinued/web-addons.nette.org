@@ -357,6 +357,13 @@ final class ManagePresenter extends BasePresenter
 
 
 
+	public function actionEditAddon($addonId)
+	{
+		$this['subMenu']->setAddon($this->addon);
+	}
+
+
+
 	public function renderEditAddon($addonId)
 	{
 		$this->template->addon = $this->addon;
@@ -396,23 +403,6 @@ final class ManagePresenter extends BasePresenter
 
 		$this->flashMessage('Addon saved.');
 		$this->redirect('Detail:', $this->addon->id);
-	}
-
-
-
-	/**
-	 * @throws \Nette\Application\BadRequestException
-	 * @return WikimenuControl
-	 */
-	protected function createComponentWikimenu()
-	{
-		if (!$this->addon) {
-			throw new \Nette\Application\BadRequestException;
-		}
-
-		$wiki = new WikimenuControl($this->auth);
-		$wiki->setAddon($this->addon);
-		return $wiki;
 	}
 
 
