@@ -21,7 +21,8 @@ class HelperLoaderTest extends TestCase
 	{
 		parent::setUp();
 		$preprocessor = Mockery::mock('NetteAddons\TextPreprocessor');
-		$this->loader = new HelperLoader($preprocessor);
+		$gravatar = Mockery::mock('emberlabs\GravatarLib\Gravatar');
+		$this->loader = new HelperLoader($preprocessor, $gravatar);
 	}
 
 
@@ -31,6 +32,7 @@ class HelperLoaderTest extends TestCase
 		return array(
 			array('description'),
 			array('licenses'),
+			array('gravatar'),
 		);
 	}
 

@@ -3,6 +3,7 @@
 namespace NetteAddons;
 
 use Nette;
+use emberlabs\GravatarLib\Gravatar;
 
 
 
@@ -19,11 +20,16 @@ class HelperLoader extends \Nette\Object
 
 	/**
 	 * @param TextPreprocessor
+	 * @param \emberlabs\GravatarLib\Gravatar
 	 */
-	public function __construct(TextPreprocessor $preprocessor)
+	public function __construct(TextPreprocessor $preprocessor, Gravatar $gravatar)
 	{
 		$this->helpers['description'] = $preprocessor->processDescription;
 		$this->helpers['licenses'] = $preprocessor->processLicenses;
+		$this->helpers['gravatar'] = function($email, $size = 40) use($gravatar) {
+			$gravatar->setAvatarSize($size);
+			return $gravatar->buildGravatarURL($email);
+		};
 	}
 
 

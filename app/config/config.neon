@@ -43,7 +43,11 @@ services:
 
 	# view
 	textPreprocessor: NetteAddons\TextPreprocessor
-	helperLoader: NetteAddons\HelperLoader(@textPreprocessor)
+	gravatar:
+		class: emberlabs\GravatarLib\Gravatar
+		setup:
+			- setMaxRating(pg)
+	helperLoader: NetteAddons\HelperLoader(@textPreprocessor, @gravatar)
 
 	# tables
 	users: NetteAddons\Model\Users
