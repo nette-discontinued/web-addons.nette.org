@@ -33,6 +33,7 @@ class HelperLoaderTest extends TestCase
 			array('description'),
 			array('licenses'),
 			array('gravatar'),
+			array('profile'),
 		);
 	}
 

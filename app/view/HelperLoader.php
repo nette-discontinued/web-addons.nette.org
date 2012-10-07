@@ -30,6 +30,9 @@ class HelperLoader extends \Nette\Object
 			$gravatar->setAvatarSize($size);
 			return $gravatar->buildGravatarURL($email);
 		};
+		$this->helpers['profile'] = function($id) {
+			return 'http://forum.nette.org/cs/profile.php?id=' . $id;
+		};
 	}
 
 
