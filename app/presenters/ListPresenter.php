@@ -64,7 +64,7 @@ class ListPresenter extends BasePresenter
 
 	protected function createComponentFilterForm()
 	{
-		$form = new FilterForm($this->context->tags);
+		$form = new FilterForm($this->tags);
 		$form->onSuccess[] = array($this, 'filterFormSubmitted');
 		$form->setDefaults(array(
 			'search' => $this->getParameter('search'),
