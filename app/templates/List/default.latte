@@ -1,34 +1,20 @@
 {var $title = 'List addons'}
 
 {block content}
-	<div id="breadcrumbs">
-		<a href="http://nette.org/en/">Nette Framework</a> »
-		<a n:href=":Homepage:">Addons, plugins and components</a> »
-		<span>Addons</span>
-	</div>
+<div id="breadcrumbs">
+	<a href="http://nette.org/en/">Nette Framework</a> »
+	<a n:href=":Homepage:">Addons, plugins and components</a> »
+	<span>Addons</span>
+</div>
 
-	<h1>Addons</h1>
+<h1>Addons</h1>
 
-	{form filterForm}
-        {input search}
-        {input tag, style => 'width:120px'}
-        {input s}
-    {/form}
+{form filterForm}
+    {input search}
+    {input tag, style => 'width:120px'}
+    {input s}
+{/form}
 
-	<h2>List addons</h2>
+<h2>List addons</h2>
 
-	{include ../@addonsList.latte addons => $addons, addonVotes => $addonVotes}
-{/block}
-
-{block sidebar}
-	{include #parent}
-
-	<h3>Categories</h3>
-
-	<ul class="nostyle">
-		<li><a n:href=":List:">All</a></li>
-		<li n:foreach="$categories as $category">
-			<a n:href=":List: tag => $category->id">{$category->name}</a>
-		</li>
-	</ul>
-{/block}
+{include ../@addonsList.latte addons => $addons, addonVotes => $addonVotes}

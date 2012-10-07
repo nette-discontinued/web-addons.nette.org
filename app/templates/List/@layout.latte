@@ -1,0 +1,14 @@
+{extends '../@layout.latte'}
+
+{block sidebar}
+{include #parent}
+
+<h3>Categories</h3>
+
+<ul class="nostyle">
+	<li><a n:href=":List:">All</a></li>
+	<li n:foreach="$categories as $category">
+		<a n:href=":List: tag => $category->id">{$category->name}</a>
+	</li>
+</ul>
+{/block}
