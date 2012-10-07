@@ -1,0 +1,15 @@
+{if count($addons)}
+	<table>
+		<tbody>
+			{foreach $addons as $addon}
+				<tr n:class="$iterator->odd ? alt">
+					<td><a title="{$addon->name}" n:href=":Detail: id => $addon->id">{$addon->name}</a></td>
+					<td>{$addon->shortDescription}</td>
+					<td>{=$addonVotes($addon->id)->percent|number:2}%</td>
+				</tr>
+			{/foreach}
+		</tbody>
+	</table>
+{else}
+	<p>No addons found.</p>
+{/if}
