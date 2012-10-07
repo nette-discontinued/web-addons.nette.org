@@ -4,6 +4,7 @@ namespace NetteAddons\Model\Importers\GitHub;
 
 use Nette\Utils\Strings;
 use Nette\Http\Url;
+use NetteAddons\Utils\CurlRequestFactory;
 
 
 
@@ -18,7 +19,7 @@ use Nette\Http\Url;
  */
 class Repository extends \Nette\Object
 {
-	/** @var \NetteAddons\CurlRequestFactory */
+	/** @var \NetteAddons\Utils\CurlRequestFactory */
 	private $curl;
 
 	/** @var string */
@@ -36,11 +37,12 @@ class Repository extends \Nette\Object
 
 
 	/**
-	 * @param \NetteAddons\Curl
+	 * @param string
+	 * @param \NetteAddons\Utils\CurlRequestFactory
 	 * @param string
 	 * @param string
 	 */
-	public function __construct($apiVersion, \NetteAddons\CurlRequestFactory $curl, $vendor, $name)
+	public function __construct($apiVersion, CurlRequestFactory $curl, $vendor, $name)
 	{
 		$this->apiVersion;
 		$this->curl = $curl;
@@ -67,7 +69,7 @@ class Repository extends \Nette\Object
 
 			return \Nette\Utils\Json::decode($request->execute());
 
-		} catch (\NetteAddons\CurlException $e) {
+		} catch (\NetteAddons\Utils\CurlException $e) {
 			throw new \NetteAddons\IOException('cURL execution failed.', NULL, $e);
 
 		} catch (\Nette\Utils\JsonException $e) {
@@ -169,7 +171,7 @@ class Repository extends \Nette\Object
 		try {
 			$data = $this->exec("/repos/{$this->vendor}/{$this->name}/readme?ref=$hash");
 
-		} catch (\NetteAddons\HttpException $e) {
+		} catch (\NetteAddons\Utils\HttpException $e) {
 			if ($e->getCode() === 404) {
 				return NULL;
 			}

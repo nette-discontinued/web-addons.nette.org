@@ -63,7 +63,7 @@ services:
 	formValidators: NetteAddons\Model\Utils\FormValidators
 
 	# importing from GitHub
-	curlFactory: NetteAddons\CurlRequestFactory(%curlTimeout%)
+	curlFactory: NetteAddons\Utils\CurlRequestFactory(%curlTimeout%)
 	repositoryImporterFactory:
 		class: NetteAddons\Model\Importers\RepositoryImporterFactory
 		arguments: [{

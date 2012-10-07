@@ -1,6 +1,6 @@
 <?php
 
-namespace NetteAddons;
+namespace NetteAddons\Utils;
 
 
 
@@ -71,7 +71,7 @@ class CurlRequest extends \Nette\FreezableObject
 
 		if (($err = curl_errno($ch)) !== CURLE_OK || $data === FALSE) {
 			if ($err !== CURLE_HTTP_NOT_FOUND) { // correct name is CURLE_HTTP_RETURNED_ERROR
-				$e = new \NetteAddons\CurlException(curl_error($ch), $err);
+				$e = new \NetteAddons\Utils\CurlException(curl_error($ch), $err);
 				curl_close($ch);
 				throw $e;
 			}
@@ -80,7 +80,7 @@ class CurlRequest extends \Nette\FreezableObject
 		$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		if ($httpCode !== 200 || $err === CURLE_HTTP_NOT_FOUND) {
 			curl_close($ch);
-			throw new \NetteAddons\HttpException("Server returned HTTP code other than 200 OK.", (int) $httpCode);
+			throw new \NetteAddons\Utils\HttpException("Server returned HTTP code other than 200 OK.", (int) $httpCode);
 		}
 
 		curl_close($ch);

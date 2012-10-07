@@ -199,7 +199,7 @@ final class ManagePresenter extends BasePresenter
 			$this->flashMessage('Addon has been successfully imported.');
 			$this->redirect('createAddon');
 
-		} catch (\NetteAddons\HttpException $e) {
+		} catch (\NetteAddons\Utils\HttpException $e) {
 			if ($e->getCode() === 404) {
 				$form['url']->addError("Repository with URL '{$form->values->url}' does not exist.");
 			} else {

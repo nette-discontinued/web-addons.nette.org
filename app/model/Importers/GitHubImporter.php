@@ -204,7 +204,7 @@ class GitHubImporter extends Nette\Object implements IAddonImporter
 			}
 			return $composer;
 
-		} catch (\NetteAddons\HttpException $e) {
+		} catch (\NetteAddons\Utils\HttpException $e) {
 			if ($e->getCode() === 404) {
 				return NULL;
 			}

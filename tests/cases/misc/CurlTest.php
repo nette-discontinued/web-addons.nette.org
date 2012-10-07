@@ -1,8 +1,8 @@
 <?php
 
-namespace NetteAddons\Test;
+namespace NetteAddons\Test\Utils;
 
-use NetteAddons\CurlRequestFactory;
+use NetteAddons\Utils\CurlRequestFactory;
 
 
 
@@ -10,9 +10,9 @@ use NetteAddons\CurlRequestFactory;
  * Note: http://httpstat.us/ can be replaced by http://httpbin.org/.
  * @author Jan Tvrdík
  */
-class CurlTest extends TestCase
+class CurlTest extends \NetteAddons\Test\TestCase
 {
-	/** @var CurlRequestFactory */
+	/** @var \NetteAddons\Utils\CurlRequestFactory */
 	private $curl;
 
 
@@ -35,7 +35,7 @@ class CurlTest extends TestCase
 
 	public function testCurlError()
 	{
-		$this->setExpectedException('NetteAddons\CurlException', NULL, CURLE_UNSUPPORTED_PROTOCOL);
+		$this->setExpectedException('NetteAddons\Utils\CurlException', NULL, CURLE_UNSUPPORTED_PROTOCOL);
 		$s = $this->curl->create('foobar://example.com')->execute();
 	}
 
@@ -46,7 +46,7 @@ class CurlTest extends TestCase
 	 */
 	public function testHttpError($code)
 	{
-		$this->setExpectedException('NetteAddons\HttpException', NULL, $code);
+		$this->setExpectedException('NetteAddons\Utils\HttpException', NULL, $code);
 		$this->curl->create('http://httpstat.us/' . $code)->execute();
 	}
 

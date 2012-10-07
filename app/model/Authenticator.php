@@ -3,7 +3,7 @@
 namespace NetteAddons\Model;
 
 use Nette\Object;
-use NetteAddons\CurlRequestFactory;
+use NetteAddons\Utils\CurlRequestFactory;
 use Nette\Utils\Strings;
 use Nette\Database\SqlLiteral;
 use Nette\Database\Table\ActiveRow;
@@ -21,14 +21,14 @@ class Authenticator extends Object implements NS\IAuthenticator
 	/** @var Users */
 	private $users;
 
-	/** @var CurlRequestFactory */
+	/** @var \NetteAddons\Utils\CurlRequestFactory */
 	private $curlFactory;
 
 
 
 	/**
 	 * @param  Users
-	 * @param  CurlRequestFactory
+	 * @param  \NetteAddons\Utils\CurlRequestFactory
 	 */
 	public function __construct(Users $users, CurlRequestFactory $curlFactory)
 	{
@@ -123,7 +123,7 @@ class Authenticator extends Object implements NS\IAuthenticator
 
 		try {
 			$html = $req->execute();
-		} catch(\NetteAddons\HttpException $e) { // auth failure
+		} catch(\NetteAddons\Utils\HttpException $e) { // auth failure
 			return FALSE;
 		}
 

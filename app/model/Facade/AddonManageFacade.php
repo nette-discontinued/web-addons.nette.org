@@ -43,7 +43,7 @@ class AddonManageFacade extends Nette\Object
 	 * @param  Model\IAddonImporter
 	 * @param  Nette\Security\IIdentity
 	 * @return Model\Addon
-	 * @throws \NetteAddons\HttpException
+	 * @throws \NetteAddons\Utils\HttpException
 	 * @throws \NetteAddons\IOException
 	 */
 	public function import(Model\IAddonImporter $importer, Nette\Security\IIdentity $owner)

@@ -25,7 +25,7 @@ class RepositoryTest extends TestCase
 	protected function setUp()
 	{
 		parent::setUp();
-		$this->curl = $this->getMockBuilder('NetteAddons\CurlRequestFactory')->disableOriginalConstructor()->getMock();
+		$this->curl = $this->getMockBuilder('NetteAddons\Utils\CurlRequestFactory')->disableOriginalConstructor()->getMock();
 		$this->repo = new Repository('beta', $this->curl, 'smith', 'browser');
 	}
 
@@ -51,11 +51,11 @@ class RepositoryTest extends TestCase
 
 	/**
 	 * @param string $url
-	 * @return \PHPUnit_Framework_MockObject_MockObject|\NetteAddons\CurlRequest
+	 * @return \PHPUnit_Framework_MockObject_MockObject|\NetteAddons\Utils\CurlRequest
 	 */
 	private function mockRequest($url = NULL)
 	{
-		$request = $this->getMockBuilder('NetteAddons\CurlRequest')
+		$request = $this->getMockBuilder('NetteAddons\Utils\CurlRequest')
 			->disableOriginalConstructor()->getMock();
 		$request->expects($this->any())->method('setOption');
 
@@ -89,7 +89,7 @@ class RepositoryTest extends TestCase
 
 	public function testCurlError()
 	{
-		$ex = new NetteAddons\CurlException(NULL, CURLE_COULDNT_RESOLVE_HOST);
+		$ex = new NetteAddons\Utils\CurlException(NULL, CURLE_COULDNT_RESOLVE_HOST);
 		$this->mockRequest()
 			->expects($this->once())
 			->method('execute')
@@ -108,7 +108,7 @@ class RepositoryTest extends TestCase
 
 	public function testHttpError()
 	{
-		$ex = new NetteAddons\HttpException(NULL, 404);
+		$ex = new NetteAddons\Utils\HttpException(NULL, 404);
 		$this->mockRequest()
 			->expects($this->once())
 			->method('execute')
@@ -226,7 +226,7 @@ class RepositoryTest extends TestCase
 		$request = $this->mockRequest('https://api.github.com/repos/smith/browser/readme?ref=cb3a02f');
 		$request->expects($this->once())
 			->method('execute')
-			->will($this->throwException(new NetteAddons\HttpException(NULL, 404)));
+			->will($this->throwException(new NetteAddons\Utils\HttpException(NULL, 404)));
 
 		$s = $this->repo->getReadme('cb3a02f');
 		$this->assertNull($s);

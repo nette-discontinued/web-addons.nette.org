@@ -99,7 +99,7 @@ class GitHubImporterTest extends TestCase
 
 		$this->repo->shouldReceive('getFileContent')
 			->with('work_br', 'composer.json')->once()
-			->andThrow('NetteAddons\HttpException', NULL, 404);
+			->andThrow('NetteAddons\Utils\HttpException', NULL, 404);
 
 		$this->repo->shouldReceive('getReadme')
 			->with('work_br')->once()
@@ -140,7 +140,7 @@ class GitHubImporterTest extends TestCase
 
 		$this->repo->shouldReceive('getFileContent')
 			->with('work_br', 'composer.json')->once()
-			->andThrow('NetteAddons\HttpException', NULL, 404);
+			->andThrow('NetteAddons\Utils\HttpException', NULL, 404);
 
 		$this->repo->shouldReceive('getReadme')
 			->with('work_br')->once()
