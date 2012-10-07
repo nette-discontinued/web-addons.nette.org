@@ -5,6 +5,7 @@ namespace NetteAddons;
 use Nette\Http\Session,
 	Nette\Http\SessionSection,
 	Nette\Utils\Strings,
+	NetteAddons\Forms\Form,
 	NetteAddons\Model\Addon,
 	NetteAddons\Model\Users,
 	NetteAddons\Model\Addons,
@@ -130,9 +131,9 @@ final class ManagePresenter extends BasePresenter
 	/**
 	 * Handles the new addon form submission.
 	 *
-	 * @param AddAddonForm
+	 * @param Form
 	 */
-	public function addAddonFormSubmitted(AddAddonForm $form)
+	public function addAddonFormSubmitted(Form $form)
 	{
 		if ($this->addon === NULL) {
 			$this->addon = new Addon();
@@ -173,9 +174,9 @@ final class ManagePresenter extends BasePresenter
 
 
 	/**
-	 * @param ImportAddonForm
+	 * @param Form
 	 */
-	public function importAddonFormSubmitted(ImportAddonForm $form)
+	public function importAddonFormSubmitted(Form $form)
 	{
 		try {
 			$url = $form->getValues()->url;
@@ -247,9 +248,9 @@ final class ManagePresenter extends BasePresenter
 
 
 	/**
-	 * @param AddVersionForm
+	 * @param Form
 	 */
-	public function addVersionFormSubmitted(AddVersionForm $form)
+	public function addVersionFormSubmitted(Form $form)
 	{
 		try {
 			$values = $form->getValues();
@@ -388,9 +389,9 @@ final class ManagePresenter extends BasePresenter
 
 
 	/**
-	 * @param EditAddonForm
+	 * @param Form
 	 */
-	public function editAddonFormSubmitted(EditAddonForm $form)
+	public function editAddonFormSubmitted(Form $form)
 	{
 		$values = $form->getValues(TRUE);
 
