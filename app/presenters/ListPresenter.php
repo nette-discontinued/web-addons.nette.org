@@ -1,6 +1,8 @@
 <?php
 
 namespace NetteAddons;
+
+use NetteAddons\Model\Addons;
 use NetteAddons\Model\AddonVotes;
 
 /**
@@ -9,12 +11,22 @@ use NetteAddons\Model\AddonVotes;
 class ListPresenter extends BasePresenter
 {
 
-	/** @var AddonVotes */
+	/** @var Model\Addons */
+	private $addons;
+
+	/** @var Model\AddonVotes */
 	private $addonVotes;
 
 
 
-	public function injectAddons(AddonVotes $addonVotes)
+	public function injectAddons(Addons $addons)
+	{
+		$this->addons = $addons;
+	}
+
+
+
+	public function injectAddonsVotes(AddonVotes $addonVotes)
 	{
 		$this->addonVotes = $addonVotes;
 	}
@@ -23,11 +35,10 @@ class ListPresenter extends BasePresenter
 
 	public function renderDefault($tag = NULL, $author = NULL, $search = NULL)
 	{
-		$addonRepository = $this->context->addons;
-		$addons = $addonRepository->findAll();
+		$addons = $this->addons->findAll();
 
 		if ($tag) {
-			$addonRepository->filterByTag($addons, $tag);
+			$this->addons->filterByTag($addons, $tag);
 		}
 
 		if ($author) {
@@ -35,12 +46,13 @@ class ListPresenter extends BasePresenter
 		}
 
 		if ($search) {
-			$addonRepository->filterByString($addons, $search);
+			$this->addons->filterByString($addons, $search);
 		}
 
 		$this->template->addonVotes = callback($this->addonVotes, 'calculatePopularity');
 		$this->template->addons = $addons;
 	}
+
 
 
 	protected function createComponentFilterForm()
