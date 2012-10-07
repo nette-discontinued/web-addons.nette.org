@@ -43,8 +43,7 @@ form .form .required small {
 }
 
 .sidebar .bigbutton:hover, .sidebar .bigbutton:focus {
-	background: url('../images/download-button.gif') repeat-x left;
-	border-radius: 8px;
+	background-color: #78AFE5;
 	color: black;
 }
 
@@ -409,18 +408,18 @@ background: url(../images/li-download.gif) no-repeat;
 
 #submenu a.active {
 	color: black;
-	background: url('../images/menu-button-small-active.gif') no-repeat left;
+	background: #78AFE5 url('../images/menu-button-small-active.gif') no-repeat left;
 }
 
 #submenu a.active span {
-	background: url('../images/menu-button-small-active.gif') no-repeat right;
+	background: #78AFE5 url('../images/menu-button-small-active.gif') no-repeat right;
 }
 
 #submenu a:hover, #submenu a:active, #submenu a:focus {
 	color: black;
-	background: url('../images/menu-button-small.gif') no-repeat left;
+	background: #FFEA99 url('../images/menu-button-small.gif') no-repeat left;
 }
 
 #submenu a:hover span, #submenu a:active span, #submenu a:focus span {
-	background: url('../images/menu-button-small.gif') no-repeat right;
+	background: #FFEA99 url('../images/menu-button-small.gif') no-repeat right;
 }
