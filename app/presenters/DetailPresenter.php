@@ -2,11 +2,11 @@
 
 namespace NetteAddons;
 
-use Nette\Http;
-use NetteAddons\Model\Addon;
-use NetteAddons\Model\Addons;
-use NetteAddons\Model\AddonVersions;
-use NetteAddons\Model\AddonVotes;
+use Nette\Http,
+	NetteAddons\Model\Addon,
+	NetteAddons\Model\Addons,
+	NetteAddons\Model\AddonVersions,
+	NetteAddons\Model\AddonVotes;
 
 
 

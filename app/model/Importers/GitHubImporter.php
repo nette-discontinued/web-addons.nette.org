@@ -2,15 +2,15 @@
 
 namespace NetteAddons\Model\Importers;
 
-use NetteAddons\Model;
-use NetteAddons\Model\Addon;
-use NetteAddons\Model\AddonVersion;
-use NetteAddons\Model\IAddonImporter;
-use NetteAddons\Model\Utils;
-use Nette;
-use Nette\Utils\Json;
-use Nette\Utils\Strings;
-use stdClass;
+use stdClass,
+	Nette,
+	Nette\Utils\Json,
+	Nette\Utils\Strings,
+	NetteAddons\Model,
+	NetteAddons\Model\Addon,
+	NetteAddons\Model\AddonVersion,
+	NetteAddons\Model\IAddonImporter,
+	NetteAddons\Model\Utils;
 
 
 

@@ -2,8 +2,8 @@
 
 namespace NetteAddons\Test;
 
-use NetteAddons\HelperLoader;
-use Mockery;
+use Mockery,
+	NetteAddons\HelperLoader;
 
 
 

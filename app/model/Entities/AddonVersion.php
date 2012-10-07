@@ -2,10 +2,10 @@
 
 namespace NetteAddons\Model;
 
-use Nette;
-use Nette\Utils\Json;
-use Nette\Utils\Strings;
-use Nette\Database\Table\ActiveRow;
+use Nette,
+	Nette\Utils\Json,
+	Nette\Utils\Strings,
+	Nette\Database\Table\ActiveRow;
 
 
 /**

@@ -2,10 +2,10 @@
 
 namespace NetteAddons\Model\Utils;
 
-use NetteAddons\Model\AddonVersion;
-use Nette;
-use Composer\Package\Version\VersionParser as ComposerVersionParser;
-use Composer\Package\LinkConstraint\VersionConstraint;
+use Nette,
+	NetteAddons\Model\AddonVersion,
+	Composer\Package\Version\VersionParser as ComposerVersionParser,
+	Composer\Package\LinkConstraint\VersionConstraint;
 
 
 

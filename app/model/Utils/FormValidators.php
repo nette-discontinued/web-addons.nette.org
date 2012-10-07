@@ -2,8 +2,8 @@
 
 namespace NetteAddons\Model\Utils;
 
-use Nette;
-use Nette\Forms;
+use Nette,
+	Nette\Forms;
 
 
 

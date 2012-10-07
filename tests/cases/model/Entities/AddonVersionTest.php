@@ -2,9 +2,8 @@
 
 namespace NetteAddons\Test;
 
-use NetteAddons\Model\AddonVersion;
-use Nette\Database\Table\ActiveRow;
-use Mockery;
+use Mockery,
+	NetteAddons\Model\AddonVersion;
 
 
 

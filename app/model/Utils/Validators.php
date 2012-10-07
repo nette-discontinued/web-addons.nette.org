@@ -2,11 +2,10 @@
 
 namespace NetteAddons\Model\Utils;
 
-use NetteAddons\Model\Addons;
-use Nette;
-use Nette\Forms;
-use Nette\Utils\Strings;
-use Composer\Util\SpdxLicenseIdentifier;
+use Nette,
+	Nette\Forms,
+	Nette\Utils\Strings,
+	NetteAddons\Model\Addons;
 
 
 

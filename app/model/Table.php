@@ -2,9 +2,9 @@
 
 namespace NetteAddons\Model;
 
-use Nette;
-use Nette\Database\Table\ActiveRow;
-use Nette\Database\Table\Selection;
+use Nette,
+	Nette\Database\Table\ActiveRow,
+	Nette\Database\Table\Selection;
 
 
 

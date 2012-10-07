@@ -2,17 +2,17 @@
 
 namespace NetteAddons;
 
-use NetteAddons\Model\Addon;
-use NetteAddons\Model\Users;
-use NetteAddons\Model\Addons;
-use NetteAddons\Model\AddonVersion;
-use NetteAddons\Model\AddonVersions;
-use NetteAddons\Model\IAddonImporter;
-use NetteAddons\Model\Facade\AddonManageFacade;
-use NetteAddons\Model\Utils\FormValidators;
-use Nette\Http\Session;
-use Nette\Http\SessionSection;
-use Nette\Utils\Strings;
+use Nette\Http\Session,
+	Nette\Http\SessionSection,
+	Nette\Utils\Strings,
+	NetteAddons\Model\Addon,
+	NetteAddons\Model\Users,
+	NetteAddons\Model\Addons,
+	NetteAddons\Model\AddonVersion,
+	NetteAddons\Model\AddonVersions,
+	NetteAddons\Model\IAddonImporter,
+	NetteAddons\Model\Facade\AddonManageFacade,
+	NetteAddons\Model\Utils\FormValidators;
 
 
 

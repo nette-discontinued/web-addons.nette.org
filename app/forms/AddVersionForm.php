@@ -2,10 +2,10 @@
 
 namespace NetteAddons\Forms;
 
-use NetteAddons\Model;
-use NetteAddons\Model\Utils\FormValidators;
-use Nette\Forms;
-use Nette\Utils\Strings;
+use NetteAddons\Model,
+	NetteAddons\Model\Utils\FormValidators,
+	Nette\Forms,
+	Nette\Utils\Strings;
 
 
 

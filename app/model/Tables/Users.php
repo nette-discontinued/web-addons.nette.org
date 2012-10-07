@@ -2,10 +2,9 @@
 
 namespace NetteAddons\Model;
 
-use Nette\Object;
-use Nette\Database\Table\ActiveRow;
-use Nette\Database\Table\Selection as TableSelection;
-use Nette\Security\Identity;
+use Nette\Security\Identity,
+	Nette\Database\Table\ActiveRow,
+	Nette\Database\Table\Selection as TableSelection;
 
 
 /**

@@ -2,8 +2,8 @@
 
 namespace NetteAddons;
 
-use Nette;
-use emberlabs\GravatarLib\Gravatar;
+use Nette,
+	emberlabs\GravatarLib\Gravatar;
 
 
 

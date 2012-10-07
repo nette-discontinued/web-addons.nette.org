@@ -2,8 +2,8 @@
 
 namespace NetteAddons\Components;
 
-use Nette;
-use NetteAddons\Model\Tags;
+use Nette,
+	NetteAddons\Model\Tags;
 
 
 

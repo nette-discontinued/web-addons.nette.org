@@ -2,13 +2,13 @@
 
 namespace NetteAddons\Model;
 
-use NetteAddons;
-use Nette;
-use Nette\Database\SqlLiteral;
-use Nette\Database\Table\ActiveRow;
-use Nette\Database\Table\Selection;
-use Nette\DateTime;
-use Nette\Http;
+use Nette,
+	Nette\Database\SqlLiteral,
+	Nette\Database\Table\ActiveRow,
+	Nette\Database\Table\Selection,
+	Nette\DateTime,
+	Nette\Http,
+	NetteAddons;
 
 
 

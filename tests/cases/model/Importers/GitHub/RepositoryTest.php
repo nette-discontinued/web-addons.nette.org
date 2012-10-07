@@ -2,10 +2,10 @@
 
 namespace NetteAddons\Test;
 
-use Nette;
-use NetteAddons;
-use NetteAddons\Model\Importers\GitHub\Repository;
-use Mockery;
+use Mockery,
+	Nette\Http\Url,
+	NetteAddons,
+	NetteAddons\Model\Importers\GitHub\Repository;
 
 
 
@@ -60,7 +60,7 @@ class RepositoryTest extends TestCase
 		$request->expects($this->any())->method('setOption');
 
 		$urlConstraint = $url !== NULL
-			? $this->equalTo(new Nette\Http\Url($url))
+			? $this->equalTo(new Url($url))
 			: $this->isInstanceOf('Nette\Http\Url'); // https://api.github.com/repos/smith/browser
 
 		$this->curl->expects($this->once())->method('create')

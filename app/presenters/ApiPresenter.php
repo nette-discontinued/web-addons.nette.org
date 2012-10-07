@@ -2,10 +2,10 @@
 
 namespace NetteAddons;
 
-use NetteAddons\Model\Addon;
-use NetteAddons\Model\Addons;
-use NetteAddons\Model\AddonVersion;
-use NetteAddons\Model\AddonVersions;
+use NetteAddons\Model\Addon,
+	NetteAddons\Model\Addons,
+	NetteAddons\Model\AddonVersion,
+	NetteAddons\Model\AddonVersions;
 
 
 

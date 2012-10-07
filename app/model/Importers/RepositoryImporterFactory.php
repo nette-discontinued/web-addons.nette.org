@@ -2,10 +2,10 @@
 
 namespace NetteAddons\Model\Importers;
 
-use NetteAddons\Model\IAddonImporter;
-use Nette;
-use Nette\Http\Url;
-use Nette\Utils\Strings;
+use Nette,
+	Nette\Http\Url,
+	Nette\Utils\Strings,
+	NetteAddons\Model\IAddonImporter;
 
 
 

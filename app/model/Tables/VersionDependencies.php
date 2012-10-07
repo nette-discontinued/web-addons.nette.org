@@ -2,8 +2,8 @@
 
 namespace NetteAddons\Model;
 
-use Nette;
-use Nette\Database\Table\ActiveRow;
+use Nette,
+	Nette\Database\Table\ActiveRow;
 
 
 

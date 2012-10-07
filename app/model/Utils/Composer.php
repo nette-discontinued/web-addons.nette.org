@@ -2,11 +2,10 @@
 
 namespace NetteAddons\Model\Utils;
 
-use NetteAddons\Model\Addon;
-use NetteAddons\Model\AddonVersion;
-use Nette\Utils\Json;
-use JsonSchema;
-use stdClass;
+use stdClass,
+	JsonSchema,
+	Nette\Utils\Json,
+	NetteAddons\Model\AddonVersion;
 
 
 

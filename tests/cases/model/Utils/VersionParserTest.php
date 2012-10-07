@@ -2,8 +2,8 @@
 
 namespace NetteAddons\Test;
 
-use NetteAddons;
-use NetteAddons\Model\Utils\VersionParser;
+use NetteAddons,
+	NetteAddons\Model\Utils\VersionParser;
 
 
 

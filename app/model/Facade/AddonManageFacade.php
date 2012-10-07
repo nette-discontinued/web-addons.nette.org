@@ -2,12 +2,12 @@
 
 namespace NetteAddons\Model\Facade;
 
-use NetteAddons\Model;
-use NetteAddons\Model\Utils\VersionParser;
-use Nette;
-use Nette\Http\Url;
-use Nette\Utils\Strings;
-use stdClass;
+use stdClass,
+	Nette,
+	Nette\Http\Url,
+	Nette\Utils\Strings,
+	NetteAddons\Model,
+	NetteAddons\Model\Utils\VersionParser;
 
 
 

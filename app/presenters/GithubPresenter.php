@@ -2,10 +2,10 @@
 
 namespace NetteAddons;
 
-use NetteAddons\Model\Addon;
-use NetteAddons\Model\Addons;
-use NetteAddons\Model\Users;
-use Nette\Utils\Json;
+use Nette\Utils\Json,
+	NetteAddons\Model\Addon,
+	NetteAddons\Model\Addons,
+	NetteAddons\Model\Users;
 
 
 

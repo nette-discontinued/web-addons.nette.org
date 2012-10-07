@@ -2,19 +2,19 @@
 
 namespace NetteAddons\Model;
 
-use Nette\Object;
-use NetteAddons\Utils\CurlRequestFactory;
-use Nette\Utils\Strings;
-use Nette\Database\SqlLiteral;
-use Nette\Database\Table\ActiveRow;
-use Nette\Security as NS;
+use Nette,
+	Nette\Utils\Strings,
+	Nette\Database\SqlLiteral,
+	Nette\Database\Table\ActiveRow,
+	Nette\Security as NS,
+	NetteAddons\Utils\CurlRequestFactory;
 
 
 
 /**
  * Users authenticator.
  */
-class Authenticator extends Object implements NS\IAuthenticator
+class Authenticator extends Nette\Object implements NS\IAuthenticator
 {
 	const EXTERNAL_URL = 'http://forum.nette.org/cs/login.php?action=in';
 

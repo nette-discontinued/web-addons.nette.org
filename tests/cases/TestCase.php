@@ -2,8 +2,8 @@
 
 namespace NetteAddons\Test;
 
-use PHPUnit_Framework_TestCase;
-use Mockery;
+use Mockery,
+	PHPUnit_Framework_TestCase;
 
 
 

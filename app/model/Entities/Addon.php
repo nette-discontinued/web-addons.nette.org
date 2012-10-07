@@ -2,9 +2,9 @@
 
 namespace NetteAddons\Model;
 
-use Nette;
-use Nette\Utils\Strings;
-use Nette\DateTime;
+use Nette,
+	Nette\DateTime,
+	Nette\Utils\Strings;
 
 
 

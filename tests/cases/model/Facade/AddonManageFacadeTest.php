@@ -2,10 +2,10 @@
 
 namespace NetteAddons\Test;
 
-use NetteAddons;
-use NetteAddons\Model\Addon;
-use NetteAddons\Model\Facade\AddonManageFacade;
-use Mockery;
+use Mockery,
+	NetteAddons,
+	NetteAddons\Model\Addon,
+	NetteAddons\Model\Facade\AddonManageFacade;
 
 
 

@@ -2,9 +2,9 @@
 
 namespace NetteAddons\Model\Importers\GitHub;
 
-use Nette\Utils\Strings;
-use Nette\Http\Url;
-use NetteAddons\Utils\CurlRequestFactory;
+use Nette\Http\Url,
+	Nette\Utils\Strings,
+	NetteAddons\Utils\CurlRequestFactory;
 
 
 

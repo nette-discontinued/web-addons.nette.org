@@ -2,9 +2,9 @@
 
 namespace NetteAddons\Components;
 
-use Nette;
-use NetteAddons\Model\Addon;
-use NetteAddons\Model\Authorizator;
+use Nette,
+	NetteAddons\Model\Addon,
+	NetteAddons\Model\Authorizator;
 
 
 

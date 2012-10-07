@@ -2,11 +2,11 @@
 
 namespace NetteAddons\Test;
 
-use NetteAddons;
-use NetteAddons\Model\Addon;
-use NetteAddons\Model\AddonVersion;
-use NetteAddons\Model\Utils\Composer;
-use stdClass;
+use stdClass,
+	NetteAddons,
+	NetteAddons\Model\Addon,
+	NetteAddons\Model\AddonVersion,
+	NetteAddons\Model\Utils\Composer;
 
 
 

@@ -2,9 +2,9 @@
 
 namespace NetteAddons;
 
-use Nette\Application\UI\Form;
-use NetteAddons\Model\Addons;
-use NetteAddons\Model\AddonVotes;
+use Nette\Application\UI\Form,
+	NetteAddons\Model\Addons,
+	NetteAddons\Model\AddonVotes;
 
 /**
  * @author Jan Marek

@@ -2,8 +2,8 @@
 
 namespace NetteAddons;
 
-use NetteAddons\Model\Addons;
-use NetteAddons\Model\Utils\Composer;
+use NetteAddons\Model\Addons,
+	NetteAddons\Model\Utils\Composer;
 
 
 

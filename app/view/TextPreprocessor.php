@@ -2,14 +2,14 @@
 
 namespace NetteAddons;
 
-use Nette;
-use NetteAddons\Model\Addon;
-use Texy;
-use TexyHtml;
-use Nette\Utils\Strings;
-use FSHL\Highlighter;
-use FSHL\Output\Html;
-use FSHL\Lexer;
+use Nette,
+	Nette\Utils\Strings,
+	Texy,
+	TexyHtml,
+	FSHL\Highlighter,
+	FSHL\Output\Html,
+	FSHL\Lexer,
+	NetteAddons\Model\Addon;
 
 
 

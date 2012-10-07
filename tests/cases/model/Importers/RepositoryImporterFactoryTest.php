@@ -2,10 +2,10 @@
 
 namespace NetteAddons\Test;
 
-use NetteAddons;
-use NetteAddons\Model\Importers\RepositoryImporterFactory;
-use Nette\Http\Url;
-use Mockery;
+use Mockery,
+	Nette\Http\Url,
+	NetteAddons,
+	NetteAddons\Model\Importers\RepositoryImporterFactory;
 
 
 

@@ -3,7 +3,6 @@
 namespace NetteAddons\Model;
 
 use Nette;
-use Nette\Database\Table\ActiveRow;
 
 
 

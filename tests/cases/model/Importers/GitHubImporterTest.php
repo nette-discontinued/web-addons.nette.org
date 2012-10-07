@@ -2,9 +2,9 @@
 
 namespace NetteAddons\Test;
 
-use NetteAddons;
-use NetteAddons\Model\Importers\GitHubImporter;
-use Mockery;
+use Mockery,
+	NetteAddons,
+	NetteAddons\Model\Importers\GitHubImporter;
 
 
 
