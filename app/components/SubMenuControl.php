@@ -1,6 +1,6 @@
 <?php
 
-namespace NetteAddons;
+namespace NetteAddons\Components;
 
 use Nette;
 use NetteAddons\Model\Addon;
@@ -14,16 +14,16 @@ use NetteAddons\Model\Authorizator;
 class SubMenuControl extends Nette\Application\UI\Control
 {
 
-	/** @var Authorizator */
+	/** @var \NetteAddons\Model\Authorizator */
 	protected $auth;
 
-	/** @var Addon */
+	/** @var \NetteAddons\Model\Addon */
 	private $addon;
 
 
 
 	/**
-	 * @param Model\Authorizator $auth
+	 * @param \NetteAddons\Model\Authorizator $auth
 	 */
 	public function __construct(Authorizator $auth)
 	{
@@ -34,7 +34,7 @@ class SubMenuControl extends Nette\Application\UI\Control
 
 
 	/**
-	 * @param Model\Addon
+	 * @param \NetteAddons\Model\Addon
 	 */
 	public function setAddon(Addon $addon)
 	{

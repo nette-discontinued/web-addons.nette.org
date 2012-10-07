@@ -1,6 +1,6 @@
 <?php
 
-namespace NetteAddons;
+namespace NetteAddons\Components;
 
 use Nette;
 use NetteAddons\Model\Tags;
@@ -13,13 +13,13 @@ use NetteAddons\Model\Tags;
 class CategoriesControl extends Nette\Application\UI\Control
 {
 
-	/** @var Tags */
+	/** @var \NetteAddons\Model\Tags */
 	private $tags;
 
 
 
 	/**
-	 * @param Model\Tags
+	 * @param \NetteAddons\Model\Tags
 	 */
 	public function __construct(Tags $tags)
 	{

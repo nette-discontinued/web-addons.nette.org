@@ -157,21 +157,21 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 
 
 	/**
-	 * @return SubMenuControl
+	 * @return Components\SubMenuControl
 	 */
 	protected function createComponentSubMenu()
 	{
-		return new SubMenuControl($this->auth);
+		return new Components\SubMenuControl($this->auth);
 	}
 
 
 
 	/**
-	 * @return CategoriesControl
+	 * @return Components\CategoriesControl
 	 */
 	protected function createComponentCategories()
 	{
-		return new CategoriesControl($this->tags);
+		return new Components\CategoriesControl($this->tags);
 	}
 
 
