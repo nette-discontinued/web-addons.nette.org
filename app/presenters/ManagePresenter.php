@@ -104,11 +104,13 @@ final class ManagePresenter extends BasePresenter
 	/**
 	 * Creates a new form for addon information.
 	 *
+	 * @param string
 	 * @return AddAddonForm
 	 */
-	protected function createComponentAddAddonForm()
+	protected function createComponentAddAddonForm($name)
 	{
 		$form = new Forms\AddAddonForm($this->formValidators, $this->context->tags, $this->licenses);
+		$this->addComponent($form, $name);
 		$form->onSuccess[] = $this->addAddonFormSubmitted;
 
 		if ($this->addon !== NULL) {
