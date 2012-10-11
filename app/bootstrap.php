@@ -4,6 +4,7 @@ namespace NetteAddons;
 
 use Nette\Application\Routers\Route;
 use Nette\Config\Configurator;
+use NetteAddons\Model\Addon;
 
 require_once LIBS_DIR . '/autoload.php';
 
@@ -47,6 +48,24 @@ $container->router[] = new Route('<id>[/<action>]', array(
 			return $row->composerName;
 		},
 	)
+));
+$container->router[] = new Route('<vendor>', array(
+	'presenter' => 'List',
+	'action' => 'byVendor',
+	'vendor' => array(
+		Route::FILTER_IN => function ($vendor) use ($container) {
+			$row = $container->addons->findByVendor($vendor)->limit(1)->fetch();
+			if (!$row) return NULL;
+			$addon = Addon::fromActiveRow($row);
+			return $addon->getVendorName();
+		},
+		Route::FILTER_OUT => function ($vendor) use ($container) {
+			$row = $container->addons->findByVendor($vendor)->limit(1)->fetch();
+			if (!$row) return NULL;
+			$addon = Addon::fromActiveRow($row);
+			return $addon->getVendorName();
+		},
+	),
 ));
 $container->router[] = new Route('<presenter>[/<action>]', 'Homepage:default');
 

@@ -126,4 +126,20 @@ class Addon extends Nette\Object
 			return array_keys($this->tags);
 		}*/
 	}
+
+	/**
+	 * @return string
+	 */
+	public function getVendorName()
+	{
+		return Strings::replace($this->composerName, '~/.+$~', '');
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getPackageName()
+	{
+		return Strings::replace($this->composerName, '~.+/~A', '');
+	}
 }

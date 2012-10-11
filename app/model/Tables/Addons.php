@@ -97,6 +97,17 @@ class Addons extends Table
 
 
 	/**
+	 * @param string
+	 * @return \Nette\Database\Table\Selection
+	 */
+	public function findByVendor($vendor)
+	{
+		return $this->findBy(array('composerName LIKE ?' => "$vendor/%")); // FIXME any better variant?
+	}
+
+
+
+	/**
 	 * Filter addons selection by tag.
 	 *
 	 * @param  \Nette\Database\Table\Selection

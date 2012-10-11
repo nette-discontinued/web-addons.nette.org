@@ -123,9 +123,18 @@ class ListPresenter extends BasePresenter
 	}
 
 
+
 	public function renderMine()
 	{
 		$this->template->addons = $this->addons->findByUser($this->user->id);
+	}
+
+
+
+	public function renderByVendor($vendor)
+	{
+		$this->template->vendor = $vendor;
+		$this->template->addons = $this->addons->findByVendor($vendor);
 	}
 
 }
