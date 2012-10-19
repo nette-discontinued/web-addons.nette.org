@@ -45,9 +45,9 @@ class TextPreprocessor extends Nette\Object
 	public function processDescription(Addon $addon)
 	{
 		if ($addon->descriptionFormat === self::FORMAT_MARKDOWN) {
-			$markdown = new \MarkdownExtra_Parser();
+			$markdown = $this->createMarkdown();
 			return array(
-				'content' => $markdown->transform($addon->description),
+				'content' => $markdown->invoke($addon->description),
 				'toc' => array()
 			);
 
@@ -88,6 +88,25 @@ class TextPreprocessor extends Nette\Object
 			}
 		}
 		return $s;
+	}
+
+
+
+	/**
+	 * @return Nette\Callback
+	 */
+	public function createMarkdown()
+	{
+		$markdown = new \MarkdownExtra_Parser();
+		return new Nette\Callback(function ($description) use ($markdown) {
+			return $markdown->transform(Strings::replace(
+				$description,
+				'/([^#]*)(#{1,6})(.*)/',
+				function ($matches) {
+					return $matches[1] . (strlen($matches[2]) < 6 ? '#' : '') . $matches[2] . $matches[3];
+				}
+			));
+		});
 	}
 
 
