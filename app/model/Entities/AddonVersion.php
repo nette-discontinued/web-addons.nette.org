@@ -150,7 +150,7 @@ class AddonVersion extends Nette\Object
 	 */
 	public function getNetteVersion()
 	{
-		if (isset($this->require) && isset($this->require['nette/nette'])) {
+		if (isset($this->require['nette/nette'])) {
 			return $this->require['nette/nette'];
 		}
 	}
