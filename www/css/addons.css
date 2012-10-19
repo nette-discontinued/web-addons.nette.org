@@ -110,6 +110,7 @@ form .form .required small {
 	position: relative;
 }
 .addon-composer h2 {
+	margin-bottom: 0;
 	margin-top: 0;
 	padding: 0 10px;
 	background-color: #F5EABC;
@@ -125,11 +126,21 @@ form .form .required small {
 	text-decoration: none !important;
 }
 .addon-composer p {
-	color: #999;
+	color: #CCCCCC;
 	font-size: 90%;
 	font-style: italic;
 	margin: 0;
 	text-indent: 0;
+}
+p.addon-composer-help {
+	margin: 10px 0 -5px;
+}
+.addon-composer-help a {
+	opacity: 0.5;
+	text-decoration: none !important;
+}
+#addon-composer-help {
+	margin: 10px 0 0;
 }
 #addon-cvs-details-link {
 	background-image: url('../images/git.png') !important;
