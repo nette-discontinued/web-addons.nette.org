@@ -111,6 +111,22 @@ form .form .required small {
 	right: 10px;
 }
 
+.addon-nette-version {
+	font-size: 140%;
+	margin-bottom: 1em;
+	text-align: center;
+}
+.addon-nette-version div {
+	background: #FCF8E1;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+	-webkit-box-shadow: inset 1px 1px 10px #FCF4D9;
+	-moz-box-shadow: inset 1px 1px 10px #FCF4D9;
+	box-shadow: inset 1px 1px 10px #FCF4D9;
+	font-size: 200%;
+}
+
 .addon-composer {
 	margin-bottom: 25px;
 	overflow: visible;
