@@ -36,4 +36,4 @@ You can run tests via web browser or via CLI.
 * **Browser**: Open `http://localhost/addons.nette.org/tests/` and click on "START".
 * **CLI**: You should already know what to do.
 
-[![Build Status](https://secure.travis-ci.org/nette/addons.nette.org.png?branch=master)](http://github.com/nette/addons.nette.org)
+[![Build Status](https://secure.travis-ci.org/nette/addons.nette.org.png?branch=master)](http://travis-ci.org/nette/addons.nette.org)
