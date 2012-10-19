@@ -123,4 +123,35 @@ class AddonVersion extends Nette\Object
 			'requireDev' => 'require-dev',
 		);
 	}
+
+
+
+	/**
+	 * If version depends on Nette and Nette version is not specified,
+	 * returns FALSE
+	 *
+	 * @return bool
+	 */
+	public function hasNetteVersion()
+	{
+		$version = $this->getNetteVersion();
+		if (!$version) {
+			return TRUE;
+		}
+		return strpos($version, 'dev') === FALSE;
+	}
+
+
+
+	/**
+	 * Returns version of Nette this addon depends on
+	 *
+	 * @return string|NULL
+	 */
+	public function getNetteVersion()
+	{
+		if (isset($this->require) && isset($this->require['nette/nette'])) {
+			return $this->require['nette/nette'];
+		}
+	}
 }

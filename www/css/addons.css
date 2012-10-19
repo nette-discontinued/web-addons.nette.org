@@ -92,6 +92,11 @@ form .form .required small {
 .addon-heading h1 {
 	padding-right: 100px;
 }
+.addon-heading h1.warning {
+	background-position: 15px center;
+	margin: .3em 0;
+	padding: 5px 10px 5px 80px;
+}
 .addon-version {
 	color: #999;
 	font-size: 65%;
@@ -101,6 +106,9 @@ form .form .required small {
 	position: absolute;
 	right: 0;
 	top: 23px;
+}
+.addon-warning .addon-archive-link {
+	right: 10px;
 }
 
 .addon-composer {
