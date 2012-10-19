@@ -462,3 +462,7 @@ background: url(../images/li-download.gif) no-repeat;
 #submenu a:hover span, #submenu a:active span, #submenu a:focus span {
 	background: #FFEA99 url('../images/menu-button-small.gif') no-repeat right;
 }
+
+#sidebar {
+	padding-top: 25px;
+}
