@@ -9,8 +9,8 @@ Installation
 
 ```
 # Clone repository
-git clone git://github.com/Vrtak-CZ/nette-addons.git
-cd nette-addons
+git clone git://github.com/nette/addons.nette.org.git
+cd addons.nette.org
 
 # Install dependencies via Composer
 composer install
@@ -33,7 +33,7 @@ Tests
 -----
 You can run tests via web browser or via CLI.
 
-* **Browser**: Open `http://localhost/nette-addons/tests/` and click on "START".
+* **Browser**: Open `http://localhost/addons.nette.org/tests/` and click on "START".
 * **CLI**: You should already know what to do.
 
-[![Build Status](https://secure.travis-ci.org/Vrtak-CZ/nette-addons.png?branch=master)](http://travis-ci.org/Vrtak-CZ/nette-addons)
+[![Build Status](https://secure.travis-ci.org/nette/addons.nette.org.png?branch=master)](http://github.com/nette/addons.nette.org)
