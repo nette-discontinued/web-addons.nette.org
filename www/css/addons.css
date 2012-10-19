@@ -127,8 +127,9 @@ form .form .required small {
 	font-size: 200%;
 }
 
-.addon-composer {
-	margin-bottom: 25px;
+div.addon-composer {
+	margin-left: 0;
+	margin-bottom: -15px;
 	overflow: visible;
 	padding: 15px;
 	position: relative;
@@ -146,7 +147,6 @@ form .form .required small {
 	box-shadow: inset 1px 1px 10px #F4E4B3;
 }
 .addon-composer h2 span {
-	color: #999;
 	padding-right: 15px;
 	font-size: 70%;
 }
@@ -157,17 +157,10 @@ form .form .required small {
 	color: #CCCCCC;
 	font-size: 90%;
 	font-style: italic;
-	margin: 0;
+	margin: 10px 0 -5px;
 	text-indent: 0;
 }
-p.addon-composer-help {
-	margin: 10px 0 -5px;
-}
-.addon-composer-help a {
-	opacity: 0.5;
-	text-decoration: none !important;
-}
-#addon-composer-help {
+#addon-composer-help pre {
 	margin: 10px 0 0;
 }
 #addon-cvs-details-link {
