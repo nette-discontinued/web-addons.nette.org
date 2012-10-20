@@ -10,7 +10,7 @@ use Nette\Utils\Strings,
 
 
 
-class BasePresenter extends \NetteAddons\BasePresenter
+abstract class BasePresenter extends \NetteAddons\BasePresenter
 {
 	/**
 	 * @var string token used for storing addon in session
