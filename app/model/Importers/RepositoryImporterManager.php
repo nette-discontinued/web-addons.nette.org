@@ -62,15 +62,42 @@ class RepositoryImporterManager extends Nette\Object
 	}
 
 
+
+	/**
+	 * @param string
+	 * @return bool
+	 */
+	public function isSupported($url)
+	{
+		return !is_null($this->getNameByUrl($url));
+	}
+
+
+
+	/**
+	 * @param string
+	 * @return bool
+	 */
+	public function isValid($url)
+	{
+		$name = $this->getNameByUrl($url);
+		if (is_null($name)) {
+			return FALSE;
+		}
+		return callback($this->classes[$name], 'isValid')->invoke($url);
+	}
+
+
+
 	/**
 	 * @param bool
 	 * @return array|string
 	 */
-	protected function getNames($asArray = FALSE)
+	public function getNames($asArray = FALSE)
 	{
 		$names = array();
 		foreach ($this->classes as $class) {
-			$names[] = callback($class, 'isName')->invoke();
+			$names[] = callback($class, 'getName')->invoke();
 		}
 
 		return $asArray ? $names : implode(', ', $names);

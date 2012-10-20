@@ -168,7 +168,7 @@ final class ManagePresenter extends BasePresenter
 	 */
 	protected function createComponentImportAddonForm()
 	{
-		$form = new Forms\ImportAddonForm();
+		$form = new Forms\ImportAddonForm($this->getContext()->repositoryImporterManager);
 		$form->onSuccess[] = $this->importAddonFormSubmitted;
 		return $form;
 	}
@@ -421,7 +421,7 @@ final class ManagePresenter extends BasePresenter
 	 */
 	private function createAddonImporter($url)
 	{
-		return $this->getContext()->repositoryImporterFactory->createFromUrl($url);
+		return $this->getContext()->repositoryImporterManager->createFromUrl($url);
 	}
 
 
