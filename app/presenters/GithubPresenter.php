@@ -81,7 +81,7 @@ class GithubPresenter extends BasePresenter
 		$addon = Addon::fromActiveRow($row);
 
 		$importer = $this->context->repositoryImporterManager->createFromUrl($addon->repository);
-		$manager = new \NetteAddons\Model\Facade\AddonManageFacade(NULL, NULL); // FIXME: parameters are not really needed
+		$manager = new \NetteAddons\Model\Facade\AddonManageFacade($this->getSession(), NULL, NULL); // FIXME: parameters are not really needed
 		$result = $manager->updateVersions($addon, $importer, $this->users->createIdentity($user));
 
 		$this->sendJson(array('status' => "success"));
