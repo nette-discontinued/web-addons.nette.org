@@ -11,36 +11,95 @@ use Mockery,
 
 /**
  * @author Jan Tvrdík
+ * @author Patrik Votoček
  */
 class RepositoryImporterFactoryTest extends TestCase
 {
-	public function testCreateFromUrl()
+	/** @var \NetteAddons\Model\Importers\RepositoryImporterFactory */
+	private $factory;
+
+
+
+	protected function setUp()
 	{
+		parent::setUp();
+
+		$this->factory = new RepositoryImporterFactory;
+	}
+
+
+	/**
+	 * @param string
+	 * @param string
+	 * @return \NetteAddons\Model\IAddonImporter
+	 */
+	protected function setupGithubImporter($expectedVendor, $expectedName)
+	{
+		$class = 'NetteAddons\Model\Importers\GitHubImporter';
+		$importer = Mockery::mock($class);
 		$test = $this;
-		$importer = Mockery::mock('NetteAddons\Model\Importers\GitHubImporter');
+		$callback = function ($vendor, $name) use ($test, $importer, $expectedVendor, $expectedName) {
+			$test->assertSame($expectedVendor, $vendor);
+			$test->assertSame($expectedName, $name);
+			return $importer;
+		};
 
-		$factory = new RepositoryImporterFactory(array(
-			'github' => function ($vendor, $name) use ($test, $importer) {
-				$test->assertSame('smith', $vendor);
-				$test->assertSame('browser', $name);
-				return $importer;
-			},
-		));
+		$this->factory->addImporter('github', $callback, $class);
 
-		$url = new Url('https://github.com/smith/browser');
-		$this->assertSame($importer, $factory->createFromUrl($url));
+		return $importer;
 	}
 
 
 
 	/**
-	 * @dataProvider dataUnsupportedUrls
+	 * @expectedException NetteAddons\InvalidStateException
 	 */
-	public function testCreateFromUnsupportedUrl($url)
+	public function testAddAlreadyRegisteredImporter()
 	{
-		$this->setExpectedException('NetteAddons\NotSupportedException');
-		$factory = new RepositoryImporterFactory(array());
-		$factory->createFromUrl(new Url($url));
+		$this->setupGithubImporter('foo', 'bar');
+
+		$this->factory->addImporter('github', 'invalid', 'invalid');
+	}
+
+
+
+	/**
+	 * @expectedException NetteAddons\InvalidArgumentException
+	 */
+	public function testAddInvalidCallback()
+	{
+		$this->factory->addImporter('github', 'invalid', 'invalid');
+	}
+
+
+
+	/**
+	 * @expectedException NetteAddons\InvalidArgumentException
+	 */
+	public function testAddInvalidClass()
+	{
+		$this->factory->addImporter('github', function() {}, get_called_class());
+	}
+
+
+
+	public function dataSupportedUrls()
+	{
+		return array(
+			array('https://github.com/smith/browser', 'smith', 'browser'),
+		);
+	}
+
+
+
+	/**
+	 * @dataProvider dataSupportedUrls
+	 */
+	public function testCreateFromUrl($url, $expectedVendor, $expectedName)
+	{
+		$importer = $this->setupGithubImporter($expectedVendor, $expectedName);
+
+		$this->assertSame($importer, $this->factory->createFromUrl(new Url($url)));
 	}
 
 
@@ -50,5 +109,17 @@ class RepositoryImporterFactoryTest extends TestCase
 		return array(
 			array('https://bitbucket.org/jiriknesl/mockista'),
 		);
+	}
+
+
+
+	/**
+	 * @expectedException NetteAddons\NotSupportedException
+	 * @dataProvider dataUnsupportedUrls
+	 */
+	public function testCreateFromUnsupportedUrl($url)
+	{
+		$factory = new RepositoryImporterFactory;
+		$factory->createFromUrl(new Url($url));
 	}
 }

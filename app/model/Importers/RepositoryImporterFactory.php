@@ -18,16 +18,30 @@ use Nette,
 class RepositoryImporterFactory extends Nette\Object
 {
 	/** @var array (name => callback) */
-	private $factories;
+	private $factories = array();
+	/** @var array (name => class) */
+	private $classes = array();
 
 
 
 	/**
-	 * @param array (name => callback)
+	 * @param string
+	 * @param callable
+	 * @param string
 	 */
-	public function __construct(array $factories)
+	public function addImporter($name, $factory, $class)
 	{
-		$this->factories = $factories;
+		if (isset($this->factories[$name])) {
+			throw new \NetteAddons\InvalidStateException("Importer '$name' already registered");
+		}
+		if (!is_callable($factory)) {
+			throw new \NetteAddons\InvalidArgumentException('Factory is not callable');
+		}
+		if (!is_subclass_of($class, 'NetteAddons\Model\IAddonImporter')) {
+			throw new \NetteAddons\InvalidArgumentException("Class '$class' does not implement IAddonImporter");
+		}
+		$this->factories[$name] = $factory;
+		$this->classes[$name] = $class;
 	}
 
 
