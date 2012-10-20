@@ -2,7 +2,7 @@
 
 namespace NetteAddons\Forms;
 
-use Nette\Application\UI\Presenter;
+use Nette\ComponentModel\IContainer;
 
 
 /**
@@ -12,19 +12,11 @@ use Nette\Application\UI\Presenter;
  */
 abstract class BaseForm extends Form
 {
-	/**
-	 * This method will be called when the component (or component's parent)
-	 * becomes attached to a monitored object. Do not call this method yourself.
-	 *
-	 * @param  \Nette\ComponentModel\IComponent
-	 * @return void
-	 */
-	protected function attached($presenter)
+	public function __construct(IContainer $parent = NULL, $name = NULL)
 	{
-		parent::attached($presenter);
-		if ($presenter instanceof Presenter) {
-			$this->buildForm();
-		}
+		parent::__construct($parent, $name);
+
+		$this->buildForm();
 	}
 
 
@@ -33,5 +25,5 @@ abstract class BaseForm extends Form
 	 * @abstract
 	 * @return void
 	 */
-	abstract protected function buildForm();
+	protected abstract function buildForm();
 }
