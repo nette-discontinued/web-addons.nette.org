@@ -2,50 +2,19 @@
 
 namespace NetteAddons;
 
-use Nette\Http\Session,
-	Nette\Http\SessionSection,
-	Nette\Utils\Strings,
-	NetteAddons\Forms\Form,
+use NetteAddons\Forms\Form,
 	NetteAddons\Model\Addon,
 	NetteAddons\Model\Users,
-	NetteAddons\Model\Addons,
 	NetteAddons\Model\AddonVersion,
 	NetteAddons\Model\AddonVersions,
-	NetteAddons\Model\IAddonImporter,
-	NetteAddons\Model\Facade\AddonManageFacade,
 	NetteAddons\Model\Utils\Validators,
 	NetteAddons\Model\Utils\FormValidators,
-	NetteAddons\Model\Utils\VersionParser,
-	NetteAddons\Model\Importers\RepositoryImporterManager;
+	NetteAddons\Model\Utils\VersionParser;
 
 
 
-final class ManagePresenter extends BasePresenter
+final class ManagePresenter extends \NetteAddons\ManageModule\BasePresenter
 {
-	/**
-	 * @var string token used for storing addon in session
-	 * @persistent
-	 */
-	public $token;
-
-	/**
-	 * @var int
-	 * @persistent
-	 */
-	public $addonId;
-
-	/** @var SessionSection */
-	private $session;
-
-	/** @var AddonManageFacade */
-	private $manager;
-
-	/** @var RepositoryImporterManager */
-	private $importerManager;
-
-	/** @var Addons */
-	private $addons;
-
 	/** @var AddonVersions */
 	private $versions;
 
@@ -60,23 +29,6 @@ final class ManagePresenter extends BasePresenter
 
 	/** @var VersionParser */
 	private $versionParser;
-
-	/** @var Addon|NULL from the session. */
-	private $addon;
-
-
-
-	public function injectSession(Session $session)
-	{
-		$this->session = $session->getSection(__CLASS__);
-	}
-
-
-
-	public function injectImporterManager(RepositoryImporterManager $manager)
-	{
-		$this->importerManager = $manager;
-	}
 
 
 
@@ -95,41 +47,10 @@ final class ManagePresenter extends BasePresenter
 
 
 
-	public function injectAddons(Addons $addons, AddonVersions $versions, Users $users)
+	public function injectAddons(AddonVersions $versions, Users $users)
 	{
-		$this->addons = $addons;
 		$this->versions = $versions;
 		$this->users = $users;
-	}
-
-
-
-	protected function startup()
-	{
-		parent::startup();
-
-		if (!$this->getUser()->isLoggedIn()) {
-			$this->flashMessage('Please sign in to continue.');
-			$this->redirect('Sign:in', $this->storeRequest());
-		}
-
-		if ($this->token && $this->addonId) {
-			$this->error('Parameters token and addonId must not be present at the same time.');
-		}
-
-		$this->manager = $this->createAddonManageFacade();
-
-		if ($this->token) {
-			$this->addon = $this->manager->restoreAddon($this->getSessionKey());
-		} elseif ($this->addonId) {
-			$row = $this->addons->find($this->addonId);
-			if (!$row) $this->error();
-			$this->addon = Addon::fromActiveRow($row);
-		}
-
-		if ($this->addon && !$this->auth->isAllowed($this->addon, 'manage')) {
-			$this->error('You are not allowed to manage this addon.', 403);
-		}
 	}
 
 
@@ -442,48 +363,5 @@ final class ManagePresenter extends BasePresenter
 
 		$this->flashMessage('Addon saved.');
 		$this->redirect('Detail:', $this->addon->id);
-	}
-
-
-
-	/**
-	 * Addon importer factory
-	 *
-	 * @param  string
-	 * @return Model\IAddonImporter
-	 * @throws \NetteAddons\NotSupportedException
-	 */
-	private function createAddonImporter($url)
-	{
-		return $this->importerManager->createFromUrl($url);
-	}
-
-
-
-	private function createAddonManageFacade()
-	{
-		$currentUrl = $this->getHttpRequest()->getUrl();
-		return new AddonManageFacade(
-			$this->getSession(),
-			$this->context->parameters['uploadDir'],
-			$currentUrl->getHostUrl() . rtrim($currentUrl->getBasePath(), '/') . $this->context->parameters['uploadUri']
-		);
-	}
-
-	
-
-	/**
-	 * Gets the session key for the addon stored under the current token.
-	 * If there is no token, it generates a new one.
-	 *
-	 * @return string
-	 */
-	private function getSessionKey()
-	{
-		if ($this->token === NULL) {
-			$this->token = Strings::random();
-		}
-
-		return "addon-$this->token";
 	}
 }
