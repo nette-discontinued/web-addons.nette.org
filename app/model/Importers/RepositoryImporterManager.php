@@ -17,9 +17,9 @@ use Nette,
  */
 class RepositoryImporterManager extends Nette\Object
 {
-	/** @var callable[]|array (name => callback) */
+	/** @var callable[]|array (id => callback) */
 	private $factories = array();
-	/** @var string[]|array (name => class) */
+	/** @var string[]|array (id => class) */
 	private $classes = array();
 
 
@@ -29,10 +29,10 @@ class RepositoryImporterManager extends Nette\Object
 	 * @param callable
 	 * @param string
 	 */
-	public function addImporter($name, $factory, $class)
+	public function addImporter($id, $factory, $class)
 	{
-		if (isset($this->factories[$name])) {
-			throw new \NetteAddons\InvalidStateException("Importer '$name' already registered");
+		if (isset($this->factories[$id])) {
+			throw new \NetteAddons\InvalidStateException("Importer '$id' already registered");
 		}
 		if (!is_callable($factory)) {
 			throw new \NetteAddons\InvalidArgumentException('Factory is not callable');
@@ -40,8 +40,8 @@ class RepositoryImporterManager extends Nette\Object
 		if (!is_subclass_of($class, 'NetteAddons\Model\IAddonImporter')) {
 			throw new \NetteAddons\InvalidArgumentException("Class '$class' does not implement IAddonImporter");
 		}
-		$this->factories[$name] = $factory;
-		$this->classes[$name] = $class;
+		$this->factories[$id] = $factory;
+		$this->classes[$id] = $class;
 	}
 
 
@@ -50,7 +50,7 @@ class RepositoryImporterManager extends Nette\Object
 	 * @param string
 	 * @return string|NULL
 	 */
-	protected function getNameByUrl($url)
+	public function getIdByUrl($url)
 	{
 		foreach ($this->classes as $name => $class) {
 			if (callback($class, 'isSupported')->invoke($url)) {
@@ -80,7 +80,7 @@ class RepositoryImporterManager extends Nette\Object
 	 */
 	public function isValid($url)
 	{
-		$name = $this->getNameByUrl($url);
+		$name = $this->getIdByUrl($url);
 		if (is_null($name)) {
 			return FALSE;
 		}
@@ -115,7 +115,7 @@ class RepositoryImporterManager extends Nette\Object
 	public function createFromUrl($url)
 	{
 		$url = (string) $url;
-		if (($name = static::getNameByUrl($url)) != NULL) {
+		if (($name = static::getIdByUrl($url)) != NULL) {
 			return callback($this->factories[$name])->invoke($url);
 		} else {
 			throw new \NetteAddons\NotSupportedException('We support only ' . static::getNames() . '.');
