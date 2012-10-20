@@ -13,7 +13,9 @@ use Nette\Http\Session,
 	NetteAddons\Model\AddonVersions,
 	NetteAddons\Model\IAddonImporter,
 	NetteAddons\Model\Facade\AddonManageFacade,
+	NetteAddons\Model\Utils\Validators,
 	NetteAddons\Model\Utils\FormValidators,
+	NetteAddons\Model\Utils\VersionParser,
 	NetteAddons\Model\Importers\RepositoryImporterManager;
 
 
@@ -50,8 +52,14 @@ final class ManagePresenter extends BasePresenter
 	/** @var Users */
 	private $users;
 
+	/** @var Validators */
+	private $validators;
+
 	/** @var FormValidators */
 	private $formValidators;
+
+	/** @var VersionParser */
+	private $versionParser;
 
 	/** @var Addon|NULL from the session. */
 	private $addon;
@@ -72,11 +80,25 @@ final class ManagePresenter extends BasePresenter
 
 
 
-	public function injectAddons(Addons $addons, AddonVersions $versions, FormValidators $formValidators, Users $users)
+	public function injectValidators(Validators $validators, FormValidators $formValidators)
+	{
+		$this->validators = $validators;
+		$this->formValidators = $formValidators;
+	}
+
+
+
+	public function injectVersionParser(VersionParser $parser)
+	{
+		$this->versionParser = $parser;
+	}
+
+
+
+	public function injectAddons(Addons $addons, AddonVersions $versions, Users $users)
 	{
 		$this->addons = $addons;
 		$this->versions = $versions;
-		$this->formValidators = $formValidators;
 		$this->users = $users;
 	}
 
@@ -120,7 +142,7 @@ final class ManagePresenter extends BasePresenter
 	 */
 	protected function createComponentAddAddonForm($name)
 	{
-		$form = new Forms\AddAddonForm($this->formValidators, $this->context->tags, $this->licenses);
+		$form = new Forms\AddAddonForm($this->formValidators, $this->tags, $this->licenses);
 		$this->addComponent($form, $name);
 		$form->onSuccess[] = $this->addAddonFormSubmitted;
 
@@ -204,7 +226,7 @@ final class ManagePresenter extends BasePresenter
 		try {
 			$this->addon = $this->manager->import($importer, $this->getUser()->getIdentity());
 
-			if ($this->addon->composerName && !$this->context->validators->isComposerNameUnique($this->addon->composerName)) {
+			if ($this->addon->composerName && !$this->validators->isComposerNameUnique($this->addon->composerName)) {
 				$form->addError("Addon with composer name '{$this->addon->composerName}' already exist.");
 				return;
 			}
@@ -267,7 +289,7 @@ final class ManagePresenter extends BasePresenter
 	{
 		try {
 			$values = $form->getValues();
-			$version = $this->manager->addVersionFromValues($this->addon, $values, $this->getUser()->getIdentity(), $this->context->versionParser);
+			$version = $this->manager->addVersionFromValues($this->addon, $values, $this->getUser()->getIdentity(), $this->versionParser);
 
 		} catch (\NetteAddons\IOException $e) {
 			$form['archive']->addError('Uploading file failed.');
