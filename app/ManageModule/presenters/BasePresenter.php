@@ -24,6 +24,9 @@ class BasePresenter extends \NetteAddons\BasePresenter
 	 */
 	public $addonId;
 
+	/** @var Addon|NULL from the session. */
+	protected $addon;
+
 	/** @var AddonManageFacade */
 	protected $manager;
 
@@ -33,8 +36,12 @@ class BasePresenter extends \NetteAddons\BasePresenter
 	/** @var Addons */
 	protected $addons;
 
-	/** @var Addon|NULL from the session. */
-	protected $addon;
+
+
+	public function injectManager(AddonManageFacade $manager)
+	{
+		$this->manager = $manager;
+	}
 
 
 
@@ -51,21 +58,26 @@ class BasePresenter extends \NetteAddons\BasePresenter
 	}
 
 
+	/**
+	 * @param \Nette\Application\UI\PresenterComponentReflection
+	 */
+	public function checkRequirements($element)
+	{
+		if (!$this->getUser()->loggedIn) {
+			$this->flashMessage('Please sign in to continue.');
+			$this->redirect('Sign:in', $this->storeRequest());
+		}
+	}
+
+
 
 	protected function startup()
 	{
 		parent::startup();
 
-		if (!$this->getUser()->isLoggedIn()) {
-			$this->flashMessage('Please sign in to continue.');
-			$this->redirect('Sign:in', $this->storeRequest());
-		}
-
 		if ($this->token && $this->addonId) {
 			$this->error('Parameters token and addonId must not be present at the same time.', 409);
 		}
-
-		$this->manager = $this->createAddonManageFacade();
 
 		if ($this->token) {
 			$this->addon = $this->manager->restoreAddon($this->getSessionKey());
@@ -92,18 +104,6 @@ class BasePresenter extends \NetteAddons\BasePresenter
 	protected function createAddonImporter($url)
 	{
 		return $this->importerManager->createFromUrl($url);
-	}
-
-
-
-	protected function createAddonManageFacade()
-	{
-		$currentUrl = $this->getHttpRequest()->getUrl();
-		return new AddonManageFacade(
-			$this->getSession(),
-			$this->context->parameters['uploadDir'],
-			$currentUrl->getHostUrl() . rtrim($currentUrl->getBasePath(), '/') . $this->context->parameters['uploadUri']
-		);
 	}
 
 

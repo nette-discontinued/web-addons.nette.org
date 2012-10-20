@@ -58,6 +58,11 @@ services:
 	versionDependencies: NetteAddons\Model\VersionDependencies
 	tags: NetteAddons\Model\Tags
 
+	# facades
+	addonsManager:
+		class: NetteAddons\Model\Facade\AddonManageFacade
+		factory: NetteAddons\Model\Facade\AddonManageFacade::create(@session, @httpRequest::getUrl(), %uploadDir%, %uploadUri%)
+
 	# validators
 	licenses: NetteAddons\Model\Utils\Licenses
 	validators: NetteAddons\Model\Utils\Validators

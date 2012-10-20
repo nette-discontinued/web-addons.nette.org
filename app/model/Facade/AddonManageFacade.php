@@ -4,8 +4,8 @@ namespace NetteAddons\Model\Facade;
 
 use stdClass,
 	Nette,
-	Nette\Http\Url,
 	Nette\Utils\Strings,
+	Nette\Http\Url,
 	Nette\Http\Session,
 	Nette\Http\SessionSection,
 	NetteAddons\Model,
@@ -349,4 +349,19 @@ class AddonManageFacade extends Nette\Object
 			unset($this->session[$token]);
 		}
 	}
+
+
+	/**
+	 * @param \Nette\Http\Session
+	 * @param \Nette\Http\Url
+	 * @param string
+	 * @param string
+	 * @return AddonManageFacade
+	 */
+	public static function create(Session $session, Url $currentUrl, $uploadDir, $uploadUri)
+	{
+		$url = $currentUrl->getHostUrl() . rtrim($currentUrl->getBasePath(), '/') . $uploadUri;
+		return new static($session, $uploadDir, $url);
+	}
+
 }
