@@ -18,6 +18,7 @@ parameters:
 
 nette:
 	application:
+		errorPresenter: 'Error'
 		mapping:
 			*: NetteAddons\*\*Presenter
 

@@ -1,8 +1,14 @@
 {var $robots = noindex}
-{block #content}
+{var $title = 'Page Not Found'}
+{block main}
+<div id="main">
+	<div id="content">
+		<h1>{$title}</h1>
 
-<h1>Page Not Found</h1>
+		<p>The page you requested has been taken off the site. We apologize for the inconvenience.</p>
 
-<p>The page you requested has been taken off the site. We apologize for the inconvenience.</p>
+		<p><small>error 410</small></p>
 
-<p><small>error 410</small></p>
+		<img src="{$basePath}/images/400.jpg" alt="" class="noborder right">
+	</div>
+</div>

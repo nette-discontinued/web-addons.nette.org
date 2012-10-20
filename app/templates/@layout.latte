@@ -12,7 +12,7 @@
 
 	<meta name="copyright" content="c 2008, 2012 Nette Foundation">
 
-	<title>{block #title}{ifset $title}{$title} | {/ifset}Nette Framework - Addons, plugins and components{/block}</title>
+	<title>{block #title|striptags}{ifset $title}{$title} | {/ifset}Nette Framework - Addons, plugins and components{/block}</title>
 
 	<link rel="stylesheet" href="{$basePath}/css/addons.css">
 	<link rel="stylesheet" href="{$basePath}/assets/plugins/chosen/chosen.css">
@@ -33,7 +33,7 @@
 		<div id="header" n:class="$user->loggedIn ? loggedin">
 			<a id="logo" title="Homepage" n:href=":Homepage:default"><span>Homepage</span></a>
 
-			{if $user->loggedIn}{control subMenu}{/if}
+			{if $user->loggedIn && $presenter->name != 'Error'}{control subMenu}{/if}
 
 			<div id="menu">
 				<ul>
@@ -49,7 +49,7 @@
 		</div>
 
 		<div id="tools">
-			{if $user->isLoggedIn()}
+			{if $user->loggedIn}
 				Logged in as <a href="{$user->identity->id|profile}">{$user->identity->username}</a> / <a n:href=":Sign:out">Sign out</a>
 			{else}
 				<a n:href=":Sign:in">Sign In</a> | <a href="http://forum.nette.org/en/register.php">Register</a>

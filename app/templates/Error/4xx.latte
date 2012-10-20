@@ -1,6 +1,12 @@
 {var $robots = noindex}
-{block #content}
+{var $title = 'Oops...'}
+{block main}
+<div id="main">
+	<div id="content">
+		<h1>{$title}</h1>
 
-<h1>Oops...</h1>
+		<p>Your browser sent a request that this server could not understand or process.</p>
 
-<p>Your browser sent a request that this server could not understand or process.</p>
+		<img src="{$basePath}/images/400.jpg" alt="" class="noborder right">
+	</div>
+</div>

@@ -1,8 +1,14 @@
 {var $robots = noindex}
-{block #content}
+{var $title = 'Method Not Allowed'}
+{block main}
+<div id="main">
+	<div id="content">
+		<h1>{$title}</h1>
 
-<h1>Method Not Allowed</h1>
+		<p>The requested method is not allowed for the URL.</p>
 
-<p>The requested method is not allowed for the URL.</p>
+		<p><small>error 405</small></p>
 
-<p><small>error 405</small></p>
+		<img src="{$basePath}/images/400.jpg" alt="" class="noborder right">
+	</div>
+</div>
