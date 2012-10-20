@@ -5,7 +5,7 @@ namespace NetteAddons\Test;
 use Mockery,
 	Nette\Http\Url,
 	NetteAddons,
-	NetteAddons\Model\Importers\RepositoryImporterFactory;
+	NetteAddons\Model\Importers\RepositoryImporterManager;
 
 
 
@@ -13,9 +13,9 @@ use Mockery,
  * @author Jan Tvrdík
  * @author Patrik Votoček
  */
-class RepositoryImporterFactoryTest extends TestCase
+class RepositoryImporterManagerTest extends TestCase
 {
-	/** @var \NetteAddons\Model\Importers\RepositoryImporterFactory */
+	/** @var \NetteAddons\Model\Importers\RepositoryImporterManager */
 	private $factory;
 
 
@@ -24,7 +24,7 @@ class RepositoryImporterFactoryTest extends TestCase
 	{
 		parent::setUp();
 
-		$this->factory = new RepositoryImporterFactory;
+		$this->factory = new RepositoryImporterManager;
 	}
 
 
@@ -117,7 +117,7 @@ class RepositoryImporterFactoryTest extends TestCase
 	 */
 	public function testCreateFromUnsupportedUrl($url)
 	{
-		$factory = new RepositoryImporterFactory;
+		$factory = new RepositoryImporterManager;
 		$factory->createFromUrl($url);
 	}
 }

@@ -15,7 +15,7 @@ use Nette,
  * @author Jan Tvrdík
  * @author Patrik Votoček
  */
-class RepositoryImporterFactory extends Nette\Object
+class RepositoryImporterManager extends Nette\Object
 {
 	/** @var callable[]|array (name => callback) */
 	private $factories = array();
