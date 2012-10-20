@@ -6,6 +6,8 @@ use stdClass,
 	Nette,
 	Nette\Http\Url,
 	Nette\Utils\Strings,
+	Nette\Http\Session,
+	Nette\Http\SessionSection,
 	NetteAddons\Model,
 	NetteAddons\Model\Utils\VersionParser;
 
@@ -14,23 +16,31 @@ use stdClass,
 /**
  * @author Filip Procházka <filip.prochazka@kdyby.org>
  * @author Jan Tvrdík
+ * @author Patrik Votoček
  */
 class AddonManageFacade extends Nette\Object
 {
+	const SESSION_SECTION = 'addons';
+
 	/** @var string */
 	private $uploadDir;
 
 	/** @var string */
 	private $uploadUrl;
 
+	/** @var \Nette\Http\SessionSection */
+	private $session;
+
 
 
 	/**
+	 * @param \Nette\Http\Session
 	 * @param string
 	 * @param string
 	 */
-	public function __construct($uploadDir, $uploadUrl)
+	public function __construct(Session $session, $uploadDir, $uploadUrl)
 	{
+		$this->session = $session->getSection(static::SESSION_SECTION);
 		$this->uploadDir = $uploadDir;
 		$this->uploadUrl = $uploadUrl;
 	}
@@ -99,15 +109,15 @@ class AddonManageFacade extends Nette\Object
 	public function fillAddonWithValues(Model\Addon $addon, array $values, Nette\Security\Identity $owner)
 	{
 		$overWritable = array(
-				'name' => TRUE,
-				'shortDescription' => TRUE,
-				'description' => TRUE,
-				'descriptionFormat' => TRUE,
-				'demo' => TRUE,
-				'defaultLicense' => FALSE,
-				'repository' => FALSE,
-				'repositoryHosting' => FALSE,
-				'tags' => FALSE,
+			'name' => TRUE,
+			'shortDescription' => TRUE,
+			'description' => TRUE,
+			'descriptionFormat' => TRUE,
+			'demo' => TRUE,
+			'defaultLicense' => FALSE,
+			'repository' => FALSE,
+			'repositoryHosting' => FALSE,
+			'tags' => FALSE,
 		);
 		$ifEmpty = array(
 			'composerName' => TRUE,
@@ -293,7 +303,7 @@ class AddonManageFacade extends Nette\Object
 	private function getFileName(Model\AddonVersion $version)
 	{
 		$name = Strings::webalize($version->addon->composerName)
-		      . '-' . $version->version . '.zip';
+			. '-' . $version->version . '.zip';
 
 		return $name;
 	}
@@ -342,5 +352,41 @@ class AddonManageFacade extends Nette\Object
 			'new' => $new,
 			'conflicted' => $conflicted,
 		);
+	}
+
+
+
+	/**
+	 * @param string
+	 * @param \NetteAddons\Model\Addon
+	 */
+	public function storeAddon($token, Model\Addon $addon)
+	{
+		$this->session[$token] = $addon;
+	}
+
+
+
+	/**
+	 * @param string
+	 * @return \NetteAddons\Model\Addon|NULL
+	 */
+	public function restoreAddon($token)
+	{
+		if (isset($this->session[$token])) {
+			return $this->session[$token];
+		}
+	}
+
+
+
+	/**
+	 * @param string
+	 */
+	public function destroyAddon($token)
+	{
+		if (isset($this->session[$token])) {
+			unset($this->session[$token]);
+		}
 	}
 }

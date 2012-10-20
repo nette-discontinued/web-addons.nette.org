@@ -84,8 +84,10 @@ final class ManagePresenter extends BasePresenter
 			$this->error('Parameters token and addonId must not be present at the same time.');
 		}
 
+		$this->manager = $this->createAddonManageFacade();
+
 		if ($this->token) {
-			$this->restoreAddon();
+			$this->addon = $this->manager->restoreAddon($this->getSessionKey());
 		} elseif ($this->addonId) {
 			$row = $this->addons->find($this->addonId);
 			if (!$row) $this->error();
@@ -95,8 +97,6 @@ final class ManagePresenter extends BasePresenter
 		if ($this->addon && !$this->auth->isAllowed($this->addon, 'manage')) {
 			$this->error('You are not allowed to manage this addon.', 403);
 		}
-
-		$this->manager = $this->createAddonManageFacade();
 	}
 
 
@@ -149,7 +149,7 @@ final class ManagePresenter extends BasePresenter
 		}
 
 		$this->manager->fillAddonWithValues($this->addon, $values, $this->getUser()->getIdentity());
-		$this->storeAddon();
+		$this->manager->storeAddon($this->getSessionKey(), $this->addon);
 
 		if ($imported) {
 			$this->flashMessage('Addon created.');
@@ -198,7 +198,7 @@ final class ManagePresenter extends BasePresenter
 				return;
 			}
 
-			$this->storeAddon();
+			$this->manager->storeAddon($this->getSessionKey(), $this->addon);
 			$this->flashMessage('Addon has been successfully imported.');
 			$this->redirect('createAddon');
 
@@ -269,7 +269,7 @@ final class ManagePresenter extends BasePresenter
 			$this->redirect('Detail:', $this->addonId);
 
 		} else {
-			$this->storeAddon();
+			$this->manager->storeAddon($this->getSessionKey(), $this->addon);
 			$this->redirect('finish');
 		}
 	}
@@ -327,7 +327,7 @@ final class ManagePresenter extends BasePresenter
 		try {
 			$importer = $this->createAddonImporter($this->addon->repository);
 			$this->manager->importVersions($this->addon, $importer, $this->getUser()->getIdentity());
-			$this->storeAddon();
+			$this->manager->storeAddon($this->getSessionKey(), $this->addon);
 			$this->redirect('finish');
 
 		} catch (\NetteAddons\NotSupportedException $e) {
@@ -348,7 +348,7 @@ final class ManagePresenter extends BasePresenter
 
 		try {
 			$this->addons->add($this->addon);
-			$this->removeStoredAddon();
+			$this->manager->destroyAddon($this->getSessionKey());
 			$this->flashMessage('Addon was successfully registered.');
 			$this->redirect('Detail:', $this->addon->id);
 
@@ -429,15 +429,13 @@ final class ManagePresenter extends BasePresenter
 	{
 		$currentUrl = $this->getHttpRequest()->getUrl();
 		return new AddonManageFacade(
+			$this->getSession(),
 			$this->context->parameters['uploadDir'],
 			$currentUrl->getHostUrl() . rtrim($currentUrl->getBasePath(), '/') . $this->context->parameters['uploadUri']
 		);
 	}
 
-
-
-// === Storing addon in session ================================================
-
+	
 
 	/**
 	 * Gets the session key for the addon stored under the current token.
@@ -452,48 +450,5 @@ final class ManagePresenter extends BasePresenter
 		}
 
 		return "addon-$this->token";
-	}
-
-
-
-	/**
-	 * Stores the addon object into the session.
-	 *
-	 * @return void
-	 */
-	private function storeAddon()
-	{
-		$key = $this->getSessionKey();
-		$this->session[$key] = $this->addon;
-	}
-
-
-
-	/**
-	 * Tries to restore the addon object from session.
-	 *
-	 * @return void
-	 */
-	private function restoreAddon()
-	{
-		if ($this->token !== NULL) {
-			$key = $this->getSessionKey();
-			if (isset($this->session[$key]) && $this->session[$key] instanceof Addon) {
-				$this->addon = $this->session[$key];
-			}
-		}
-	}
-
-
-
-	/**
-	 * Removes the addon from session.
-	 *
-	 * @return void
-	 */
-	private function removeStoredAddon()
-	{
-		$key = $this->getSessionKey();
-		unset($this->session[$key]);
 	}
 }
