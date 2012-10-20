@@ -83,7 +83,9 @@ abstract class BasePresenter extends \NetteAddons\BasePresenter
 			$this->addon = $this->manager->restoreAddon($this->getSessionKey());
 		} elseif ($this->addonId) {
 			$row = $this->addons->find($this->addonId);
-			if (!$row) $this->error();
+			if (!$row) {
+				$this->error('Addon not found.');
+			}
 			$this->addon = Addon::fromActiveRow($row);
 		}
 
