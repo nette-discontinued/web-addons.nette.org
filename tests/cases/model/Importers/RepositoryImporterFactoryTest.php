@@ -97,7 +97,7 @@ class RepositoryImporterFactoryTest extends TestCase
 	{
 		$importer = $this->setupGithubImporter($url);
 
-		$this->assertSame($importer, $this->factory->createFromUrl(new Url($url)));
+		$this->assertSame($importer, $this->factory->createFromUrl($url));
 	}
 
 
@@ -118,6 +118,6 @@ class RepositoryImporterFactoryTest extends TestCase
 	public function testCreateFromUnsupportedUrl($url)
 	{
 		$factory = new RepositoryImporterFactory;
-		$factory->createFromUrl(new Url($url));
+		$factory->createFromUrl($url);
 	}
 }

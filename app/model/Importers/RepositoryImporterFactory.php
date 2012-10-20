@@ -81,14 +81,15 @@ class RepositoryImporterFactory extends Nette\Object
 	/**
 	 * Creates repository importer from url.
 	 *
-	 * @param  Url
+	 * @param  string|\Nette\Http\Url
 	 * @return IAddonImporter
 	 * @throws \NetteAddons\NotSupportedException
 	 */
-	public function createFromUrl(Url $url)
+	public function createFromUrl($url)
 	{
-		if (($name = static::getNameByUrl((string) $url)) != NULL) {
-			return callback($this->factories[$name])->invoke((string) $url);
+		$url = (string) $url;
+		if (($name = static::getNameByUrl($url)) != NULL) {
+			return callback($this->factories[$name])->invoke($url);
 		} else {
 			throw new \NetteAddons\NotSupportedException('We support only ' . static::getNames() . '.');
 		}

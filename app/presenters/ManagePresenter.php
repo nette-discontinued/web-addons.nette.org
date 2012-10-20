@@ -421,7 +421,6 @@ final class ManagePresenter extends BasePresenter
 	 */
 	private function createAddonImporter($url)
 	{
-		$url = new \Nette\Http\Url($url);
 		return $this->getContext()->repositoryImporterFactory->createFromUrl($url);
 	}
 
