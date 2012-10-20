@@ -69,7 +69,7 @@ class RepositoryImporterManager extends Nette\Object
 	 */
 	public function isSupported($url)
 	{
-		return !is_null($this->getNameByUrl($url));
+		return !is_null($this->getIdByUrl($url));
 	}
 
 
@@ -137,7 +137,7 @@ class RepositoryImporterManager extends Nette\Object
 		if (($name = static::getIdByUrl($url)) != NULL) {
 			return callback($this->factories[$name])->invoke($url);
 		} else {
-			throw new \NetteAddons\NotSupportedException('We support only ' . static::getNames() . '.');
+			throw new \NetteAddons\NotSupportedException('We support only ' . $this->getNames() . '.');
 		}
 	}
 }
