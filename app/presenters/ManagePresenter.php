@@ -156,7 +156,8 @@ final class ManagePresenter extends BasePresenter
 
 		$values = $form->getValues(TRUE);
 		if (!empty($values['repository'])) {
-			$values['repository'] = $this->manager->tryNormalizeRepoUrl($values['repository'], $values['repositoryHosting']);
+			$values['repository'] = $this->importerManager->normalizeUrl($values['repository']);
+			$values['repositoryHosting'] = $this->importerManager->getIdByUrl($values['repository']);
 		}
 
 		$this->manager->fillAddonWithValues($this->addon, $values, $this->getUser()->getIdentity());
@@ -410,7 +411,8 @@ final class ManagePresenter extends BasePresenter
 		$values = $form->getValues(TRUE);
 
 		if (!empty($values['repository'])) {
-			$values['repository'] = $this->manager->tryNormalizeRepoUrl($values['repository'], $values['repositoryHosting']);
+			$values['repository'] = $this->importerManager->normalizeUrl($values['repository']);
+			$values['repositoryHosting'] = $this->importerManager->getIdByUrl($values['repository']);
 		}
 
 		$this->manager->fillAddonWithValues($this->addon, $values, $this->getUser()->getIdentity());

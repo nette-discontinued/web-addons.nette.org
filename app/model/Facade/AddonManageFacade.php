@@ -225,46 +225,6 @@ class AddonManageFacade extends Nette\Object
 
 
 	/**
-	 * Tries normalize repository URL. Returns the same URL if normalization failed.
-	 * In case of success returns hosting name via output parameter.
-	 *
-	 * @author Patrik Votoček
-	 * @author Jan Tvrdík
-	 * @param  string repository url
-	 * @param  string repository hosting (output parameter)
-	 * @return string
-	 */
-	public function tryNormalizeRepoUrl($url, &$hosting)
-	{
-		if (!Strings::match($url, '#^[a-z]+://#i')) {
-			$url = 'http://' . $url;
-		}
-
-		$obj = new Url($url);
-		if ($obj->getHost() === 'github.com') {
-			$path = substr($obj->getPath(), 1); // without leading slash
-			if (strpos($path, '/') === FALSE) {
-				return $url;
-			}
-
-			if (Strings::endsWith($path, '.git')) {
-				$path = Strings::substring($path, 0, -4);
-			}
-
-			list($vendor, $name) = explode('/', $path);
-			$url = "https://github.com/$vendor/$name";
-			$hosting = 'github';
-
-		} else {
-			return $url;
-		}
-
-		return $url;
-	}
-
-
-
-	/**
 	 * Returns versions imported from addon importer.
 	 *
 	 * @param  Model\Addon

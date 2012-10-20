@@ -33,6 +33,14 @@ interface IAddonImporter
 	public static function isValid($url);
 
 
+
+	/**
+	 * @param string
+	 * @return string
+	 */
+	public static function normalizeUrl($url);
+
+
 	/**
 	 * @return Addon
 	 */

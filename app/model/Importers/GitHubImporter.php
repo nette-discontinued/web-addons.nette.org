@@ -63,6 +63,21 @@ class GitHubImporter extends Nette\Object implements IAddonImporter
 
 
 	/**
+	 * @param string
+	 * @return string
+	 */
+	public static function normalizeUrl($url)
+	{
+		$data = Github\Repository::getVendorAndName($url);
+		if (is_null($data)) {
+			return NULL;
+		}
+		return 'https://github.com/' . $data[0] . '/' . $data[1];
+	}
+
+
+
+	/**
 	 * @param GitHub\Repository
 	 * @param Utils\Validators
 	 */

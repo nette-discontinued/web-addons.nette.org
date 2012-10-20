@@ -90,6 +90,25 @@ class RepositoryImporterManager extends Nette\Object
 
 
 	/**
+	 * @param string
+	 * @return string
+	 */
+	public function normalizeUrl($url)
+	{
+		$name = $this->getIdByUrl($url);
+		if (is_null($name)) {
+			return $url;
+		}
+		$data = callback($this->classes[$name], 'normalizeUrl')->invoke($url);
+		if (is_null($data)) {
+			return $url;
+		}
+		return $data;
+	}
+
+
+
+	/**
 	 * @param bool
 	 * @return array|string
 	 */
