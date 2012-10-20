@@ -6,6 +6,8 @@ use stdClass,
 	Nette,
 	Nette\Utils\Json,
 	Nette\Utils\Strings,
+	Nette\Http\Url,
+	Nette\Diagnostics\Debugger,
 	NetteAddons\Model,
 	NetteAddons\Model\Addon,
 	NetteAddons\Model\AddonVersion,
@@ -25,6 +27,38 @@ class GitHubImporter extends Nette\Object implements IAddonImporter
 
 	/** @var Utils\Validators */
 	private $validators;
+
+
+
+	/**
+	 * @return string
+	 */
+	public static function getName()
+	{
+		return 'GitHub';
+	}
+
+
+
+	/**
+	 * @param string
+	 * @return bool
+	 */
+	public static function isSupported($url)
+	{
+		return (bool) Strings::match($url, '~(\:\/\/|git@)github.com~i');
+	}
+
+
+
+	/**
+	 * @param string
+	 * @return bool
+	 */
+	public static function isValid($url)
+	{
+		return is_array(GitHub\Repository::getVendorAndName($url));
+	}
 
 
 

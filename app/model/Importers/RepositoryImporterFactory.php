@@ -47,6 +47,38 @@ class RepositoryImporterFactory extends Nette\Object
 
 
 	/**
+	 * @param string
+	 * @return string|NULL
+	 */
+	protected function getNameByUrl($url)
+	{
+		foreach ($this->classes as $name => $class) {
+			if (callback($class, 'isSupported')->invoke($url)) {
+				return $name;
+			}
+		}
+
+		return NULL;
+	}
+
+
+	/**
+	 * @param bool
+	 * @return array|string
+	 */
+	protected function getNames($asArray = FALSE)
+	{
+		$names = array();
+		foreach ($this->classes as $class) {
+			$names[] = callback($class, 'isName')->invoke();
+		}
+
+		return $asArray ? $names : implode(', ', $names);
+	}
+
+
+
+	/**
 	 * Creates repository importer from url.
 	 *
 	 * @param  Url
@@ -55,10 +87,10 @@ class RepositoryImporterFactory extends Nette\Object
 	 */
 	public function createFromUrl(Url $url)
 	{
-		if ($url->getHost() === 'github.com') {
-			return callback($this->factories['github'])->invoke((string) $url);
+		if (($name = static::getNameByUrl((string) $url)) != NULL) {
+			return callback($this->factories[$name])->invoke((string) $url);
 		} else {
-			throw new \NetteAddons\NotSupportedException("Currently only GitHub is supported.");
+			throw new \NetteAddons\NotSupportedException('We support only ' . static::getNames() . '.');
 		}
 	}
 }

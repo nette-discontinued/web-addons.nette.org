@@ -31,7 +31,7 @@ class AddonManageFacadeTest extends TestCase
 
 	public function testImport()
 	{
-		$importer = Mockery::mock('NetteAddons\Model\IAddonImporter');
+		$importer = Mockery::mock('NetteAddons\Model\Importers\GitHubImporter');
 		$identity = Mockery::mock('Nette\Security\IIdentity');
 		$addons = Mockery::mock('NetteAddons\Model\Addons');
 		$addon = new Addon();
