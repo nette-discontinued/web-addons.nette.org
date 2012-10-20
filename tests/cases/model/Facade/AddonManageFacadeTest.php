@@ -22,7 +22,9 @@ class AddonManageFacadeTest extends TestCase
 	protected function setUp()
 	{
 		parent::setUp();
-		$this->facade = new AddonManageFacade('...', '...');
+		$session = Mockery::mock('Nette\Http\Session');
+		$session->shouldReceive('getSection')->andReturn(new \Nette\Http\SessionSection($session, 'foo'));
+		$this->facade = new AddonManageFacade($session, '...', '...');
 	}
 
 
