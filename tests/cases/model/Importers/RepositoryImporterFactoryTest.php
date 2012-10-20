@@ -30,17 +30,15 @@ class RepositoryImporterFactoryTest extends TestCase
 
 	/**
 	 * @param string
-	 * @param string
 	 * @return \NetteAddons\Model\IAddonImporter
 	 */
-	protected function setupGithubImporter($expectedVendor, $expectedName)
+	protected function setupGithubImporter($expectedUrl)
 	{
 		$class = 'NetteAddons\Model\Importers\GitHubImporter';
 		$importer = Mockery::mock($class);
 		$test = $this;
-		$callback = function ($vendor, $name) use ($test, $importer, $expectedVendor, $expectedName) {
-			$test->assertSame($expectedVendor, $vendor);
-			$test->assertSame($expectedName, $name);
+		$callback = function ($url) use ($test, $importer, $expectedUrl) {
+			$test->assertSame($expectedUrl, $url);
 			return $importer;
 		};
 
@@ -56,7 +54,7 @@ class RepositoryImporterFactoryTest extends TestCase
 	 */
 	public function testAddAlreadyRegisteredImporter()
 	{
-		$this->setupGithubImporter('foo', 'bar');
+		$this->setupGithubImporter('foo');
 
 		$this->factory->addImporter('github', 'invalid', 'invalid');
 	}
@@ -86,7 +84,7 @@ class RepositoryImporterFactoryTest extends TestCase
 	public function dataSupportedUrls()
 	{
 		return array(
-			array('https://github.com/smith/browser', 'smith', 'browser'),
+			array('https://github.com/smith/browser'),
 		);
 	}
 
@@ -95,9 +93,9 @@ class RepositoryImporterFactoryTest extends TestCase
 	/**
 	 * @dataProvider dataSupportedUrls
 	 */
-	public function testCreateFromUrl($url, $expectedVendor, $expectedName)
+	public function testCreateFromUrl($url)
 	{
-		$importer = $this->setupGithubImporter($expectedVendor, $expectedName);
+		$importer = $this->setupGithubImporter($url);
 
 		$this->assertSame($importer, $this->factory->createFromUrl(new Url($url)));
 	}

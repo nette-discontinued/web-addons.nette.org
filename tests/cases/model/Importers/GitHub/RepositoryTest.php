@@ -11,6 +11,7 @@ use Mockery,
 
 /**
  * @author Jan Tvrdík
+ * @author Patrik Votoček
  */
 class RepositoryTest extends TestCase
 {
@@ -26,7 +27,7 @@ class RepositoryTest extends TestCase
 	{
 		parent::setUp();
 		$this->curl = $this->getMockBuilder('NetteAddons\Utils\CurlRequestFactory')->disableOriginalConstructor()->getMock();
-		$this->repo = new Repository('beta', $this->curl, 'smith', 'browser');
+		$this->repo = new Repository('beta', $this->curl, 'http://github.com/smith/browser');
 	}
 
 
@@ -279,6 +280,71 @@ class RepositoryTest extends TestCase
 
 		$this->setExpectedException('NetteAddons\NotSupportedException');
 		$this->repo->getArchiveLink('rar', 'cb3a02f');
+	}
+
+
+
+	public function dataGetVendorAndName()
+	{
+		return array(
+			array('http://github.com/foo/bar', 'foo', 'bar'),
+			array('https://github.com/foo/bar', 'foo', 'bar'),
+			array('git://github.com/foo/bar', 'foo', 'bar'),
+			array('git@github.com/foo/bar', 'foo', 'bar'),
+			array('ssh://git@github.com/foo/bar', 'foo', 'bar'),
+			array('http://github.com/foo/bar.git', 'foo', 'bar'),
+			array('https://github.com/foo/bar.git', 'foo', 'bar'),
+			array('git://github.com/foo/bar.git', 'foo', 'bar'),
+			array('git@github.com:foo/bar.git', 'foo', 'bar'),
+			array('ssh://git@github.com:foo/bar.git', 'foo', 'bar'),
+			array('http://github.com/Foo/Bar', 'Foo', 'Bar'),
+			array('http://github.com/Foo/Bar.json', 'Foo', 'Bar'),
+			array('http://github.com/Foo/Bar/tree', 'Foo', 'Bar'),
+			array('http://github.com/Foo/Bar/issues/42', 'Foo', 'Bar'),
+		);
+	}
+
+
+
+	/**
+	 * @dataProvider dataGetVendorAndName
+	 * @param string
+	 * @param string
+	 * @param string
+	 */
+	public function testGetVendorAndName($url, $vendor, $name)
+	{
+		$data = Repository::getVendorAndName($url);
+		$this->assertInternalType('array', $data);
+		$this->assertSame($vendor, $data[0]);
+		$this->assertSame($name, $data[1]);
+	}
+
+
+
+	public function dataGetInvalidVendorAndName()
+	{
+		return array(
+			array('ftp://github.com/foo/bar'),
+			array('http://www.github.com/foo/bar'),
+			array('git@bitbucket.org/foo/bar'),
+			array('http://github.com/foo'),
+			array('http://github.com/'),
+			array('http://github.com/foo.bar/baz'),
+			array('http://'),
+			array(''),
+		);
+	}
+
+
+
+	/**
+	 * @dataProvider dataGetInvalidVendorAndName
+	 * @param string
+	 */
+	public function testGetInvalidVendorAndName($url)
+	{
+		$this->assertNull(Repository::getVendorAndName($url));
 	}
 
 }

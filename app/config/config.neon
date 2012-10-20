@@ -77,9 +77,9 @@ services:
 
 factories:
 	ghRepository:
-		parameters: [vendor, name]
-		class: NetteAddons\Model\Importers\GitHub\Repository(%ghApiVersion%, @curlFactory, %vendor%, %name%)
+		parameters: [url]
+		class: NetteAddons\Model\Importers\GitHub\Repository(%ghApiVersion%, @curlFactory, %url%)
 
 	ghImporter:
-		parameters: [vendor, name]
-		class: NetteAddons\Model\Importers\GitHubImporter(@ghRepository(%vendor%, %name%))
+		parameters: [url]
+		class: NetteAddons\Model\Importers\GitHubImporter(@ghRepository(%url%))

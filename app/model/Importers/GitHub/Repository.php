@@ -40,14 +40,36 @@ class Repository extends \Nette\Object
 	 * @param string
 	 * @param \NetteAddons\Utils\CurlRequestFactory
 	 * @param string
-	 * @param string
 	 */
-	public function __construct($apiVersion, CurlRequestFactory $curl, $vendor, $name)
+	public function __construct($apiVersion, CurlRequestFactory $curl, $url)
 	{
 		$this->apiVersion;
 		$this->curl = $curl;
-		$this->vendor = $vendor;
-		$this->name = $name;
+
+		$data = static::getVendorAndName($url);
+		if (!is_array($data)) {
+			throw new \NetteAddons\InvalidArgumentException("Url '$url' is not valid GitHub url");
+		}
+		list($this->vendor, $this->name) = $data;
+	}
+
+
+
+	/**
+	 * @param string|\Nette\Http\Url
+	 * @return array|NULL (vendor, name)
+	 */
+	public static function getVendorAndName($url)
+	{
+		$publicRegexp = '~^(http|https|git)://github.com/(?P<vendor>[a-z0-9_-]+)/(?P<name>[a-z0-9_-]+)~i';
+		$privateRegexp = '~^(ssh://)?git@github.com(\/|\:)(?P<vendor>[a-z0-9_-]+)/(?P<name>[a-z0-9_-]+)~i';
+		if (($matches = Strings::match((string) $url, $publicRegexp)) !== NULL) {
+			return array($matches['vendor'], $matches['name']);
+		} elseif (($matches = Strings::match((string) $url, $privateRegexp)) !== NULL) {
+			return array($matches['vendor'], $matches['name']);
+		}
+
+		return NULL;
 	}
 
 

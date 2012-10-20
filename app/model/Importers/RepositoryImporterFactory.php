@@ -17,9 +17,9 @@ use Nette,
  */
 class RepositoryImporterFactory extends Nette\Object
 {
-	/** @var array (name => callback) */
+	/** @var callable[]|array (name => callback) */
 	private $factories = array();
-	/** @var array (name => class) */
+	/** @var string[]|array (name => class) */
 	private $classes = array();
 
 
@@ -56,10 +56,7 @@ class RepositoryImporterFactory extends Nette\Object
 	public function createFromUrl(Url $url)
 	{
 		if ($url->getHost() === 'github.com') {
-			$path = substr($url->getPath(), 1); // removed leading slash
-			list($vendor, $name) = explode('/', $path);
-			return callback($this->factories['github'])->invoke($vendor, $name);
-
+			return callback($this->factories['github'])->invoke((string) $url);
 		} else {
 			throw new \NetteAddons\NotSupportedException("Currently only GitHub is supported.");
 		}
