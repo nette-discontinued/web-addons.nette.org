@@ -13,7 +13,8 @@ use Nette\Http\Session,
 	NetteAddons\Model\AddonVersions,
 	NetteAddons\Model\IAddonImporter,
 	NetteAddons\Model\Facade\AddonManageFacade,
-	NetteAddons\Model\Utils\FormValidators;
+	NetteAddons\Model\Utils\FormValidators,
+	NetteAddons\Model\Importers\RepositoryImporterManager;
 
 
 
@@ -37,6 +38,9 @@ final class ManagePresenter extends BasePresenter
 	/** @var AddonManageFacade */
 	private $manager;
 
+	/** @var RepositoryImporterManager */
+	private $importerManager;
+
 	/** @var Addons */
 	private $addons;
 
@@ -57,6 +61,13 @@ final class ManagePresenter extends BasePresenter
 	public function injectSession(Session $session)
 	{
 		$this->session = $session->getSection(__CLASS__);
+	}
+
+
+
+	public function injectImporterManager(RepositoryImporterManager $manager)
+	{
+		$this->importerManager = $manager;
 	}
 
 
@@ -168,7 +179,7 @@ final class ManagePresenter extends BasePresenter
 	 */
 	protected function createComponentImportAddonForm()
 	{
-		$form = new Forms\ImportAddonForm($this->getContext()->repositoryImporterManager);
+		$form = new Forms\ImportAddonForm($this->importerManager);
 		$form->onSuccess[] = $this->importAddonFormSubmitted;
 		return $form;
 	}
@@ -182,7 +193,6 @@ final class ManagePresenter extends BasePresenter
 	{
 		try {
 			$url = $form->getValues()->url;
-			$url = $this->manager->tryNormalizeRepoUrl($url, $hosting);
 			$importer = $this->createAddonImporter($url);
 
 		} catch (\NetteAddons\NotSupportedException $e) {
@@ -421,7 +431,7 @@ final class ManagePresenter extends BasePresenter
 	 */
 	private function createAddonImporter($url)
 	{
-		return $this->getContext()->repositoryImporterManager->createFromUrl($url);
+		return $this->importerManager->createFromUrl($url);
 	}
 
 
