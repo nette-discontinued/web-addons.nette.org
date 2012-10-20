@@ -375,17 +375,19 @@ final class ManagePresenter extends BasePresenter
 
 
 	/**
+	 * @param string
 	 * @return EditAddonForm
 	 */
-	protected function createComponentEditAddonForm()
+	protected function createComponentEditAddonForm($name)
 	{
 		if (!$this->addon) $this->error();
 
 		$form = new Forms\EditAddonForm($this->formValidators, $this->tags, $this->licenses);
-		$form->setAddonDefaults($this->addon);
 		$form->onSuccess[] = $this->editAddonFormSubmitted;
 
-		return $form;
+		$this->addComponent($form, $name);
+
+		$form->setAddonDefaults($this->addon);
 	}
 
 
