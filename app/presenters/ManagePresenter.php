@@ -119,52 +119,27 @@ final class ManagePresenter extends \NetteAddons\ManageModule\BasePresenter
 
 
 	/**
-	 * @return ImportAddonForm
+	 * @return ManageModule\Forms\ImportAddonForm
 	 */
 	protected function createComponentImportAddonForm()
 	{
-		$form = new Forms\ImportAddonForm($this->importerManager);
+		$form = new ManageModule\Forms\ImportAddonForm($this->manager, $this->importerManager, $this->validators);
+		$form->setUser($this->getUser()->identity);
 		$form->onSuccess[] = $this->importAddonFormSubmitted;
 		return $form;
 	}
 
 
-
 	/**
-	 * @param Form
+	 * @param ManageModule\Forms\ImportAddonForm
 	 */
-	public function importAddonFormSubmitted(Form $form)
+	public function importAddonFormSubmitted(ManageModule\Forms\ImportAddonForm $form)
 	{
-		try {
-			$url = $form->getValues()->url;
-			$importer = $this->createAddonImporter($url);
+		if ($form->valid) {
+			$this->token = $form->token;
 
-		} catch (\NetteAddons\NotSupportedException $e) {
-			$form['url']->addError("'$url' is not valid GitHub URL.");
-			return;
-		}
-
-		try {
-			$this->addon = $this->manager->import($importer, $this->getUser()->getIdentity());
-
-			if ($this->addon->composerName && !$this->validators->isComposerNameUnique($this->addon->composerName)) {
-				$form->addError("Addon with composer name '{$this->addon->composerName}' already exist.");
-				return;
-			}
-
-			$this->manager->storeAddon($this->getSessionKey(), $this->addon);
-			$this->flashMessage('Addon has been successfully imported.');
+			$this->flashMessage('Addon has been successfully loaded.');
 			$this->redirect('createAddon');
-
-		} catch (\NetteAddons\Utils\HttpException $e) {
-			if ($e->getCode() === 404) {
-				$form['url']->addError("Repository with URL '{$form->values->url}' does not exist.");
-			} else {
-				$form['url']->addError("Importing failed because GitHub returned HTTP error #" . $e->getCode() . ".");
-			}
-
-		} catch (\NetteAddons\IOException $e) {
-			$form['url']->addError("Importing failed. Try again later.");
 		}
 	}
 

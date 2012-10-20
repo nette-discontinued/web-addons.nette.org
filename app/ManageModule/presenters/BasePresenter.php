@@ -122,6 +122,6 @@ abstract class BasePresenter extends \NetteAddons\BasePresenter
 			$this->token = Strings::random();
 		}
 
-		return "addon-$this->token";
+		return $this->token;
 	}
 }
