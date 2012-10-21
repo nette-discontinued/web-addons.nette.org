@@ -324,3 +324,21 @@ BEGIN
 END;;
 
 DELIMITER ;
+
+-- add delete support
+ALTER TABLE `addons`
+ADD `deletedAt` datetime NULL COMMENT 'time when is marked as deleted',
+ADD `deletedBy` int(10) unsigned NULL COMMENT 'user who marked as deleted' AFTER `deletedAt`,
+ADD FOREIGN KEY (`deletedBy`) REFERENCES `users` (`id`) ON DELETE SET NULL,
+ADD UNIQUE `composerVendor_composerName_deletedAt` (`composerVendor`, `composerName`, `deletedAt`),
+DROP INDEX `composerFullName`,
+COMMENT='';
+ALTER TABLE `addons_versions`
+DROP FOREIGN KEY `addons_versions_ibfk_1`,
+ADD FOREIGN KEY (`addonId`) REFERENCES `addons` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT;
+ALTER TABLE `addons_downloads`
+DROP FOREIGN KEY `addons_downloads_ibfk_2`,
+ADD FOREIGN KEY (`versionId`) REFERENCES `addons_versions` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT;
+ALTER TABLE `addons_dependencies`
+DROP FOREIGN KEY `addons_dependencies_ibfk_2`,
+ADD FOREIGN KEY (`dependencyId`) REFERENCES `addons` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT;

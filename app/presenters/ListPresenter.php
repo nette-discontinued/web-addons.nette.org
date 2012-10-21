@@ -136,4 +136,20 @@ class ListPresenter extends BasePresenter
 		$this->template->addons = $this->addons->findByComposerVendor($vendor);
 	}
 
+
+
+	public function actionDeleted()
+	{
+		if (!$this->auth->isAllowed('addon', 'delete')) {
+			$this->error('You are not allowed to list deleted addons.', 403);
+		}
+	}
+
+
+
+	public function renderDeleted()
+	{
+		$this->template->addons = $this->addons->findDeleted();
+	}
+
 }

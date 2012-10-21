@@ -58,7 +58,7 @@ class DetailPresenter extends BasePresenter
 	{
 		parent::startup();
 
-		if (!$row = $this->addons->find($this->id)) {
+		if (!$row = $this->addons->find($this->id, $this->auth->isAllowed('addon', 'delete'))) {
 			$this->error('Addon not found!');
 		}
 

@@ -4,6 +4,7 @@ namespace NetteAddons\Model;
 
 use Nette,
 	Nette\Utils\Strings,
+	Nette\Security\IIdentity,
 	Nette\Database\SqlLiteral,
 	Nette\Database\Table\ActiveRow,
 	Nette\Database\Table\Selection,
@@ -42,7 +43,43 @@ class Addons extends Table
 
 
 
+	/**
+	 * @param bool
+	 * @return \Nette\Database\Table\Selection
+	 */
+	protected function getTable($ignoreDeleted = FALSE)
+	{
+		if ($ignoreDeleted) {
+			return parent::getTable();
+		}
+		return parent::getTable()->where('deletedAt IS NULL');
+	}
+
+
+
 // === Selecting addons ========================================================
+
+
+
+	/**
+	 * @param  int
+	 * @param  bool
+	 * @return \Nette\Database\Table\ActiveRow|FALSE
+	 */
+	public function find($id, $ignoreDeleted = FALSE)
+	{
+		return $this->getTable($ignoreDeleted)->find($id)->fetch();
+	}
+
+
+
+	/**
+	 * @return \Nette\Database\Table\Selection
+	 */
+	public function findDeleted()
+	{
+		return $this->getTable(TRUE)->where('deletedAt IS NOT NULL');
+	}
 
 
 
@@ -213,6 +250,49 @@ class Addons extends Table
 
 
 
+	/**
+	 * @param Addon
+	 * @param \Nette\Security\IIdentity
+	 */
+	public function markAsDeleted(Addon $addon, \Nette\Security\IIdentity $user)
+	{
+		$row = $this->find($addon->id);
+
+		if (!$row) {
+			return;
+		}
+
+		$row->update(array(
+			'deletedAt' => new \DateTime,
+			'deletedBy' => $user->getId(),
+		));
+
+		$this->onAddonChange($addon);
+	}
+
+
+
+	/**
+	 * @param Addon
+	 */
+	public function unmarkAsDeleted(Addon $addon)
+	{
+		$row = $this->find($addon->id, TRUE);
+
+		if (!$row) {
+			return;
+		}
+
+		$row->update(array(
+			'deletedAt' => NULL,
+			'deletedBy' => NULL,
+		));
+
+		$this->onAddonChange($addon);
+	}
+
+
+
 // === CRUD ====================================================================
 
 	/**
@@ -251,7 +331,9 @@ class Addons extends Table
 				'defaultLicense'      => $addon->defaultLicense,
 				'updatedAt'           => new Datetime('now'),
 				'totalDownloadsCount' => $addon->totalDownloadsCount ?: 0,
-				'totalInstallsCount' => $addon->totalInstallsCount ?: 0,
+				'totalInstallsCount'  => $addon->totalInstallsCount ?: 0,
+				'deletedAt'           => $addon->deletedAt,
+				'deletedBy'           => $addon->deletedBy,
 			));
 
 			$addon->id = $row->id;
@@ -286,11 +368,32 @@ class Addons extends Table
 			'defaultLicense'      => $addon->defaultLicense,
 			'updatedAt'           => new Datetime('now'),
 			'totalDownloadsCount' => $addon->totalDownloadsCount ?: 0,
-			'totalInstallsCount' => $addon->totalInstallsCount ?: 0,
+			'totalInstallsCount'  => $addon->totalInstallsCount ?: 0,
+			'deletedAt'           => $addon->deletedAt,
+			'deletedBy'           => $addon->deletedBy,
 		));
 
 		$this->onAddonChange($addon);
 
 		$this->tags->saveAddonTags($addon);
 	}
+
+
+
+	/**
+	 * @param Addon
+	 */
+	public function delete(Addon $addon)
+	{
+		$row = $this->find($addon->id, TRUE);
+
+		if (!$row) {
+			return;
+		}
+
+		$row->delete();
+
+		$this->onAddonChange($addon);
+	}
+
 }

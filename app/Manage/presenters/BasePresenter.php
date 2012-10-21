@@ -94,7 +94,8 @@ abstract class BasePresenter extends \NetteAddons\BasePresenter
 		if ($this->token) {
 			$this->addon = $this->manager->restoreAddon($this->token);
 		} elseif ($this->addonId) {
-			$row = $this->addons->find($this->addonId);
+			$deleted = $this->auth->isAllowed('addon', 'delete');
+			$row = $this->addons->find($this->addonId, $deleted);
 			if (!$row) {
 				$this->error('Addon not found.');
 			}

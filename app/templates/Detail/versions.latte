@@ -7,6 +7,8 @@
 		<span>Archive</span>
 	</div>
 
+	<p class="warning" n:if="!empty($addon->deletedAt)">This addon marked as deleted at {$addon->deletedAt|date:'H:i:s Y-m-d'}{if !empty($addon->deletedBy)} by {$addon->deletedBy->realname}{/if}</p>
+
 	<style>
 		table th {
 			vertical-align: top;

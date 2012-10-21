@@ -44,18 +44,21 @@ class Authorizator extends Nette\Object
 			$ownerId = $resource->user->id;
 			$resource = 'addon';
 
-		} else {
+		} elseif ($resource != 'addon') {
 			throw new \NetteAddons\InvalidArgumentException();
 		}
 
 		if ($resource === 'addon') {
+			if ($action === 'delete') {
+				return $this->user->isInRole('administrators') || $this->user->isInRole('moderator');
+			}
 			if ($action === 'view') {
 				return TRUE;
 
 			} elseif ($action === 'manage') {
 				return (
 					($this->user->isLoggedIn() && $ownerId === $this->user->getId()) ||
-					$this->user->isInRole('moderator')
+					$this->user->isInRole('moderator') || $this->user->isInRole('administrators')
 				);
 
 			} elseif ($action === 'vote') {

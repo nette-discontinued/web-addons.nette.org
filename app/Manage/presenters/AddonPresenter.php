@@ -2,6 +2,8 @@
 
 namespace NetteAddons\Manage;
 
+use NetteAddons\Model\Utils\Validators;
+
 
 /**
  * @author Patrik Votoček
@@ -16,6 +18,9 @@ final class AddonPresenter extends BasePresenter
 
 	/** @var Forms\ImportAddonForm */
 	private $importAddonForm;
+
+	/** @var \NetteAddons\Model\Utils\Validators */
+	private $validators;
 
 
 
@@ -45,6 +50,16 @@ final class AddonPresenter extends BasePresenter
 	public function injectImportForm(Forms\ImportAddonForm $importAddonForm)
 	{
 		$this->importAddonForm = $importAddonForm;
+	}
+
+
+
+	/**
+	 * @param \NetteAddons\Model\Utils\Validators
+	 */
+	public function injectValidators(Validators $validators)
+	{
+		$this->validators = $validators;
 	}
 
 
@@ -214,6 +229,72 @@ final class AddonPresenter extends BasePresenter
 	public function renderEdit($addonId)
 	{
 		$this->template->addon = $this->addon;
+	}
+
+
+
+	/**
+	 * @secured
+	 * @param int
+	 * @param bool
+	 */
+	public function handleDelete($addonId, $real = FALSE)
+	{
+		if (!$this->auth->isAllowed($this->addon, 'delete')) {
+			$this->error('You are not allowed to delete this addon.', 403);
+		}
+		if ($real) {
+			$this->addons->delete($this->addon);
+			$this->flashMessage("Addon '{$this->addon->name}' deleted");
+			$this->redirect(':List:');
+		}
+
+		$this->addons->markAsDeleted($this->addon, $this->getUser()->identity);
+		$this->flashMessage("Addon '{$this->addon->name}' marked as deleted");
+		$this->redirect(':Detail:', array($this->addon->id));
+	}
+
+
+
+	/**
+	 * @secured
+	 * @param int
+	 */
+	public function handleRestore($addonId)
+	{
+		if (!$this->auth->isAllowed($this->addon, 'delete')) {
+			$this->error('You are not allowed to restore this addon.', 403);
+		}
+		if (!$this->validators->isComposerFullNameUnique($this->addon->composerFullName)) {
+			$this->error('This addon has newest registered version.', 409);
+		}
+
+		$this->addons->unmarkAsDeleted($this->addon);
+		$this->flashMessage("Addon '{$this->addon->name}' restored");
+		$this->redirect(':Detail:', array($this->addon->id));
+	}
+
+
+
+	/**
+	 * @param int
+	 */
+	public function actionDelete($addonId)
+	{
+		if (!$this->auth->isAllowed($this->addon, 'delete')) {
+			$this->error('You are not allowed to delete this addon.', 403);
+		}
+	}
+
+
+
+	/**
+	 * @param int
+	 */
+	public function renderDelete($addonId)
+	{
+		$this->template->addon = $this->addon;
+		$this->template->newest = !$this->validators->isComposerFullNameUnique($this->addon->composerFullName);
 	}
 
 }

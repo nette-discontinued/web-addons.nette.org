@@ -69,6 +69,12 @@ class Addon extends Nette\Object
 	/** @var int total times this addon was installed using composer */
 	public $totalInstallsCount = 0;
 
+	/** @var DateTime */
+	public $deletedAt;
+
+	/** @var \Nette\Database\Table\ActiveRow|NULL userId */
+	public $deletedBy;
+
 
 	/**
 	 * Creates Addon entity from Nette\Database row.
@@ -96,6 +102,8 @@ class Addon extends Nette\Object
 		$addon->updatedAt = ($row->updatedAt ? DateTime::from($row->updatedAt) : NULL);
 		$addon->totalDownloadsCount = $row->totalDownloadsCount ?: 0;
 		$addon->totalInstallsCount = $row->totalInstallsCount ?: 0;
+		$addon->deletedAt = $row->deletedAt;
+		$addon->deletedBy = $row->ref('deletedBy');
 
 		foreach ($row->related('versions') as $versionRow) {
 			$version = AddonVersion::fromActiveRow($versionRow);

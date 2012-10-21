@@ -22,6 +22,11 @@
 				<span>Edit</span>
 			</a>
 		</li>
+		<li n:if="$auth->isAllowed($addon, 'delete')">
+			<a rel="nofollow" href="{plink :Manage:Addon:delete $addon->id}" n:class="$presenter->linkCurrent ? active">
+				<span>{if empty($addon->deletedAt)}Delete{else}Restore{/if}</span>
+			</a>
+		</li>
 		<li n:if="isset($addon->repositoryHosting) && $addon->repositoryHosting != NULL">
 			<a rel="nofollow" href="{plink :Manage:Versions:check $addon->id}" n:class="$presenter->linkCurrent ? active">
 				<span>Check updates</span>

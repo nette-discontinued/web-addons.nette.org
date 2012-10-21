@@ -1,0 +1,30 @@
+{var $robots = noindex}
+{var $title = 'Delete addon'}
+
+{block main}
+<div id="main">
+	<div id="content">
+		<div id="breadcrumbs">
+			<a href="http://nette.org/en/">Nette Framework</a> »
+			<a n:href=":Homepage:">Addons, plugins and components</a> »
+			<span>{$title}</span>
+		</div>
+
+		{foreach $flashes as $flash}<div class="flash {$flash->type}">{$flash->message}</div>{/foreach}
+
+		<h1>{$title}</h1>
+
+		<h2>{$addon->name}</h2>
+
+		<p>Are you sure remove this addon?</p>
+
+		<p>This addon has {$addon->totalDownloadsCount} download and {$addon->totalInstallsCount} installs.</p>
+
+		<p>
+			{if empty($addon->deletedAt)}<a n:href="delete!">Mark as deleted</a> | {elseif $newest}
+			This addon has newest un-deleted version | {else}
+			<a n:href="restore!">Restore</a> | {/if}
+			<a n:href="delete! real => TRUE">Delete forever</a>
+		</p>
+	</div>
+</div>
