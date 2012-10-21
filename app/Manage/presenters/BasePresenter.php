@@ -77,7 +77,7 @@ abstract class BasePresenter extends \NetteAddons\BasePresenter
 	{
 		if (!$this->getUser()->loggedIn) {
 			$this->flashMessage('Please sign in to continue.');
-			$this->redirect('Sign:in', $this->storeRequest());
+			$this->redirect(':Sign:in', $this->storeRequest());
 		}
 	}
 
