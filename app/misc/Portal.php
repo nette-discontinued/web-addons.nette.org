@@ -6,7 +6,7 @@ namespace NetteAddons;
 /**
  * @author Patrik Votoček
  */
-class Portal extends \Nette\FreezableObject
+class Portal extends \Nette\Object
 {
 	const VERSION = '1.0-dev';
 

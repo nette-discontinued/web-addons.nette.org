@@ -106,7 +106,6 @@ class CurlRequest extends \Nette\FreezableObject
 
 		curl_setopt_array($ch, $this->options);
 
-		curl_setopt($ch, CURLOPT_VERBOSE, TRUE);
 		curl_setopt($ch, CURLOPT_HEADER, TRUE);
 
 		$data = curl_exec($ch);
