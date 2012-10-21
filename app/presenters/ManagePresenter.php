@@ -62,11 +62,7 @@ final class ManagePresenter extends \NetteAddons\ManageModule\BasePresenter
 	 */
 	protected function createComponentAddAddonForm($name)
 	{
-		$form = new ManageModule\Forms\AddAddonForm(
-			$this->manager, $this->importerManager, $this->tags, $this->formValidators, $this->licenses
-		);
-		$form->addDescriptionFormat('texy', 'Texy!');
-		$form->addDescriptionFormat('markdown', 'Markdown');
+		$form = $this->getContext()->addAddonForm;
 
 		if ($this->addon) {
 			$form->setAddon($this->addon);
@@ -112,7 +108,7 @@ final class ManagePresenter extends \NetteAddons\ManageModule\BasePresenter
 	 */
 	protected function createComponentImportAddonForm()
 	{
-		$form = new ManageModule\Forms\ImportAddonForm($this->manager, $this->importerManager, $this->validators);
+		$form = $this->getContext()->importAddonForm;
 		$form->setUser($this->getUser()->identity);
 		$form->onSuccess[] = $this->importAddonFormSubmitted;
 		return $form;
@@ -149,9 +145,7 @@ final class ManagePresenter extends \NetteAddons\ManageModule\BasePresenter
 	 */
 	protected function createComponentAddVersionForm()
 	{
-		$form = new ManageModule\Forms\AddVersionForm(
-			$this->manager, $this->versionParser, $this->formValidators, $this->licenses, $this->versions
-		);
+		$form = $this->getContext()->addAddonVersionForm;
 
 		$form->setAddon($this->addon);
 		$form->setToken($this->token);
@@ -291,12 +285,7 @@ final class ManagePresenter extends \NetteAddons\ManageModule\BasePresenter
 			$this->error('Addon not found.');
 		}
 
-		$form = new ManageModule\Forms\EditAddonForm(
-			$this->manager, $this->importerManager, $this->tags, $this->formValidators, $this->licenses, $this->addons
-		);
-
-		$form->addDescriptionFormat('texy', 'Texy!');
-		$form->addDescriptionFormat('markdown', 'Markdown');
+		$form = $this->getContext()->editAddonForm;
 
 		$form->setAddon($this->addon);
 

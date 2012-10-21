@@ -80,6 +80,20 @@ services:
 	reinstall: NetteAddons\Model\Reinstall
 	versionParser: NetteAddons\Model\Utils\VersionParser
 
+	# forms
+	addAddonForm:
+		class: NetteAddons\ManageModule\Forms\AddAddonForm
+		setup:
+			- addDescriptionFormat('texy', 'Texy!')
+			- addDescriptionFormat('markdown', 'Markdown')
+	editAddonForm:
+		class: NetteAddons\ManageModule\Forms\EditAddonForm
+		setup:
+			- addDescriptionFormat('texy', 'Texy!')
+			- addDescriptionFormat('markdown', 'Markdown')
+	importAddonForm: NetteAddons\ManageModule\Forms\ImportAddonForm
+	addAddonVersionForm: NetteAddons\ManageModule\Forms\AddVersionForm
+
 
 factories:
 	ghRepository:
