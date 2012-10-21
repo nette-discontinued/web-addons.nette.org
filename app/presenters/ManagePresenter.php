@@ -58,26 +58,23 @@ final class ManagePresenter extends \NetteAddons\ManageModule\BasePresenter
 	/**
 	 * Creates a new form for addon information.
 	 *
-	 * @param string
-	 * @return AddAddonForm
+	 * @return ManageModule\Forms\AddAddonForm
 	 */
 	protected function createComponentAddAddonForm($name)
 	{
-		$form = new Forms\AddAddonForm($this->formValidators, $this->tags, $this->licenses);
-		$this->addComponent($form, $name);
-		$form->onSuccess[] = $this->addAddonFormSubmitted;
+		$form = new ManageModule\Forms\AddAddonForm(
+			$this->manager, $this->importerManager, $this->tags, $this->formValidators, $this->licenses
+		);
+		$form->addDescriptionFormat('texy', 'Texy!');
+		$form->addDescriptionFormat('markdown', 'Markdown');
 
-		if ($this->addon !== NULL) {
-			$form->setAddonDefaults($this->addon);
-			$form->removeComponent($form['repository']);
-			if ($this->addon->defaultLicense) {
-				$form->removeComponent($form['defaultLicense']);
-			}
-
-			if ($this->addon->composerName) {
-				$form->removeComponent($form['composerName']);
-			}
+		if ($this->addon) {
+			$form->setAddon($this->addon);
 		}
+		$form->setUser($this->getUser()->identity);
+		$form->setToken($this->token);
+
+		$form->onSuccess[] = $this->addAddonFormSubmitted;
 
 		return $form;
 	}
@@ -87,32 +84,24 @@ final class ManagePresenter extends \NetteAddons\ManageModule\BasePresenter
 	/**
 	 * Handles the new addon form submission.
 	 *
-	 * @param Form
+	 * @param ManageModule\Forms\AddAddonForm
 	 */
-	public function addAddonFormSubmitted(Form $form)
+	public function addAddonFormSubmitted(ManageModule\Forms\AddAddonForm $form)
 	{
-		if ($this->addon === NULL) {
-			$this->addon = new Addon();
-		}
+		if ($form->valid) {
+			$this->addon = $form->addon;
+			$this->token = $form->token;
 
-		$imported = (bool) $this->addon->repositoryHosting; // TODO: remove
+			$imported = (bool) $this->addon->repositoryHosting; // TODO: remove
 
-		$values = $form->getValues(TRUE);
-		if (!empty($values['repository'])) {
-			$values['repository'] = $this->importerManager->normalizeUrl($values['repository']);
-			$values['repositoryHosting'] = $this->importerManager->getIdByUrl($values['repository']);
-		}
+			if ($imported) {
+				$this->flashMessage('Addon created.');
+				$this->redirect('importVersions');
 
-		$this->manager->fillAddonWithValues($this->addon, $values, $this->getUser()->getIdentity());
-		$this->manager->storeAddon($this->getSessionKey(), $this->addon);
-
-		if ($imported) {
-			$this->flashMessage('Addon created.');
-			$this->redirect('importVersions');
-
-		} else {
-			$this->flashMessage('Addon created. Now it\'s time to add the first version.');
-			$this->redirect('createVersion');
+			} else {
+				$this->flashMessage('Addon created. Now it\'s time to add the first version.');
+				$this->redirect('createVersion');
+			}
 		}
 	}
 

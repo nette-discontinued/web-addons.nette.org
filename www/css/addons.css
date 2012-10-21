@@ -72,6 +72,10 @@ form .form .required small {
 	margin: .2em 0 .2em 1.70em;
 }
 
+.chzn-select {
+	width: 500px;
+}
+
 /* Neon */
 .neon-section, .neon-key {color: #448CCB;}
 .neon-sep {color: #000;}
