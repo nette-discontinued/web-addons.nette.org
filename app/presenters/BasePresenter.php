@@ -154,6 +154,7 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 			$session->token = \Nette\Utils\Strings::random();
 		}
 
+		ksort($params);
 		$params = \Nette\Utils\Arrays::flatten($params);
 		$params = implode('|', array_keys($params)) . '|' . implode('|', array_values($params));
 		return substr(md5($control . $method . $params . $session->token), 0, 8);
