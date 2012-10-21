@@ -3,14 +3,26 @@
 namespace NetteAddons\Utils;
 
 
+use Nette\Utils\Strings;
 
 /**
  * @author Michael Moravec
+ * @author Patrik Votoček
+ *
+ * @property-read array $headers
  */
 class CurlRequest extends \Nette\FreezableObject
 {
+	/** regexp's for parsing */
+	const HEADER_REGEXP = '~(?P<header>.*?)\:\s(?P<value>.*)~',
+		VERSION_AND_STATUS = '~HTTP/(?P<version>\d\.\d)\s(?P<code>\d\d\d)\s(?P<status>.*)~',
+		CONTENT_TYPE = '~^(?P<type>[^;]+);[\t ]*charset=(?P<charset>.+)$~i';
+
 	/** @var array */
 	private $options = array();
+
+	/** @var array */
+	private $headers = array();
 
 
 
@@ -57,6 +69,31 @@ class CurlRequest extends \Nette\FreezableObject
 
 
 	/**
+	 * @param string
+	 */
+	private function parseHeader($headerString)
+	{
+		$headers = Strings::split($headerString, "~[\n\r]+~", PREG_SPLIT_NO_EMPTY);
+
+		// Extract the version and status from the first header
+		$versionAndStatus = array_shift($headers);
+		$matches = Strings::match($versionAndStatus, self::VERSION_AND_STATUS);
+		if (count($matches) > 0) {
+			$this->headers['Http-Version'] = $matches['version'];
+			$this->headers['Status-Code'] = $matches['code'];
+			$this->headers['Status'] = $matches['code'].' '.$matches['status'];
+		}
+
+		// Convert headers into an associative array
+		foreach ($headers as $header) {
+			$matches = Strings::match($header, self::HEADER_REGEXP);
+			$this->headers[$matches['header']] = $matches['value'];
+		}
+	}
+
+
+
+	/**
 	 * @return string
 	 * @throws CurlException if cURL execution fails, see http://curl.haxx.se/libcurl/c/libcurl-errors.html
 	 * @throws HttpException if server returns HTTP code other than 200 OK
@@ -66,8 +103,17 @@ class CurlRequest extends \Nette\FreezableObject
 		$this->freeze();
 
 		$ch = curl_init();
+
 		curl_setopt_array($ch, $this->options);
+
+		curl_setopt($ch, CURLOPT_VERBOSE, TRUE);
+		curl_setopt($ch, CURLOPT_HEADER, TRUE);
+
 		$data = curl_exec($ch);
+
+		$headerSize = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+		$this->parseHeader(substr($data, 0, $headerSize));
+		$body = substr($data, $headerSize);
 
 		if (($err = curl_errno($ch)) !== CURLE_OK || $data === FALSE) {
 			if ($err !== CURLE_HTTP_NOT_FOUND) { // correct name is CURLE_HTTP_RETURNED_ERROR
@@ -85,7 +131,7 @@ class CurlRequest extends \Nette\FreezableObject
 
 		curl_close($ch);
 
-		return $data;
+		return $body;
 	}
 
 
@@ -117,6 +163,17 @@ class CurlRequest extends \Nette\FreezableObject
 
 		return $this;
 	}
+
+
+
+	/**
+	 * @return array
+	 */
+	public function getHeaders()
+	{
+		return $this->headers;
+	}
+
 }
 
 
