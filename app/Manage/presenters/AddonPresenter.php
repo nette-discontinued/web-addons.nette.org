@@ -86,11 +86,11 @@ final class AddonPresenter extends BasePresenter
 
 			if ($imported) {
 				$this->flashMessage('Addon created.');
-				$this->redirect(':Manage:importVersions');
+				$this->redirect(':Manage:Versions:import');
 
 			} else {
 				$this->flashMessage('Addon created. Now it\'s time to add the first version.');
-				$this->redirect(':Manage:createVersion');
+				$this->redirect(':Manage:Versions:add');
 			}
 		}
 	}

@@ -23,12 +23,12 @@
 			</a>
 		</li>
 		<li n:if="isset($addon->repositoryHosting) && $addon->repositoryHosting != NULL">
-			<a rel="nofollow" href="{plink :Manage:checkVersions $addon->id}" n:class="$presenter->linkCurrent ? active">
+			<a rel="nofollow" href="{plink :Manage:Versions:check $addon->id}" n:class="$presenter->linkCurrent ? active">
 				<span>Check updates</span>
 			</a>
 		</li>
 		<li>
-			<a rel="nofollow" href="{plink :Manage:createVersion $addon->id}" n:class="$presenter->linkCurrent ? active">
+			<a rel="nofollow" href="{plink :Manage:Versions:add $addon->id}" n:class="$presenter->linkCurrent ? active">
 				<span>Add new version</span>
 			</a>
 		</li>
