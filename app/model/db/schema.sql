@@ -266,3 +266,20 @@ COMMENT='';
 ALTER TABLE `addons`
 ADD UNIQUE `composerFullName` (`composerVendor`, `composerName`),
 DROP INDEX `composerName`;
+
+-- addon downloads statistics
+CREATE TABLE `addons_downloads` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `versionId` int(10) unsigned NOT NULL,
+  `userId` int(10) unsigned DEFAULT NULL,
+  `ipAddress` varchar(39) NOT NULL COMMENT 'ipv6 has <=39 characters',
+  `userAgent` varchar(255) NOT NULL,
+  `time` datetime NOT NULL,
+  `type` enum('download','install') NOT NULL COMMENT 'download via web / install via composer',
+  `fake` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `versionId` (`versionId`),
+  KEY `userId` (`userId`),
+  CONSTRAINT `addons_downloads_ibfk_2` FOREIGN KEY (`versionId`) REFERENCES `addons_versions` (`id`),
+  CONSTRAINT `addons_downloads_ibfk_3` FOREIGN KEY (`userId`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

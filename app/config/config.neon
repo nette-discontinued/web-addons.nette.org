@@ -57,6 +57,7 @@ services:
 	# tables
 	users: NetteAddons\Model\Users
 	addons: NetteAddons\Model\Addons
+	addonDownloads: NetteAddons\Model\AddonDownloads
 	addonVersions: NetteAddons\Model\AddonVersions
 	addonVotes: NetteAddons\Model\AddonVotes
 	versionDependencies: NetteAddons\Model\VersionDependencies

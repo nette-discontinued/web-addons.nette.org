@@ -5,6 +5,7 @@ namespace NetteAddons;
 use Nette\Http,
 	NetteAddons\Model\Addon,
 	NetteAddons\Model\Addons,
+	NetteAddons\Model\AddonDownloads,
 	NetteAddons\Model\AddonVersions,
 	NetteAddons\Model\AddonVotes;
 
@@ -28,19 +29,27 @@ class DetailPresenter extends BasePresenter
 	/** @var Addons */
 	private $addons;
 
+	/** @var AddonDownloads */
+	private $addonDownloads;
+
 	/** @var AddonVersions */
 	private $addonVersions;
 
 	/** @var AddonVotes */
 	private $addonVotes;
 
-
-
-	public function injectAddons(Addons $addons, AddonVersions $addonVersions, AddonVotes $addonVotes)
+	/**
+	 * @param Addons
+	 * @param AddonDownloads
+	 * @param AddonVersions
+	 * @param AddonVotes
+	 */
+	public function injectAddons(Addons $addons, AddonDownloads $downloads, AddonVersions $versions, AddonVotes $votes)
 	{
 		$this->addons = $addons;
-		$this->addonVersions = $addonVersions;
-		$this->addonVotes = $addonVotes;
+		$this->addonDownloads = $downloads;
+		$this->addonVersions = $versions;
+		$this->addonVotes = $votes;
 	}
 
 
@@ -96,6 +105,13 @@ class DetailPresenter extends BasePresenter
 			$this->error('Unknown addon version.');
 		}
 
+		$this->addonDownloads->saveDownload(
+			AddonDownloads::TYPE_DOWNLOAD,
+			$version->id,
+			$this->getHttpRequest()->getRemoteAddress(),
+			$this->getHttpRequest()->getHeader('user-agent'),
+			$this->getUser()->isLoggedIn() ? $this->getUser()->getId() : NULL
+		);
 		$this->addonVersions->incrementDownloadsCount($version);
 		$this->addons->incrementDownloadsCount($this->addon);
 

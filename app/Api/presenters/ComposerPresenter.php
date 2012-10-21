@@ -3,6 +3,7 @@
 namespace NetteAddons\Api;
 
 use NetteAddons\Model\Addons,
+	NetteAddons\Model\AddonDownloads,
 	NetteAddons\Model\AddonVersions,
 	NetteAddons\Model\Utils\Composer;
 
@@ -16,21 +17,26 @@ use NetteAddons\Model\Addons,
  */
 class ComposerPresenter extends \NetteAddons\BasePresenter
 {
-	/** @var \NetteAddons\Model\Addons */
+	/** @var Addons */
 	private $addons;
 
-	/** @var \NetteAddons\Model\AddonVersions */
+	/** @var AddonDownloads */
+	private $addonDownloads;
+
+	/** @var AddonVersions */
 	private $addonVersions;
 
 
 
 	/**
-	 * @param \NetteAddons\Model\Addons
-	 * @param \NetteAddons\Model\AddonVersions
+	 * @param Addons
+	 * @param AddonDownloads
+	 * @param AddonVersions
 	 */
-	public function injectAddons(Addons $addons, AddonVersions $versions)
+	public function injectAddons(Addons $addons, AddonDownloads $downloads, AddonVersions $versions)
 	{
 		$this->addons = $addons;
+		$this->addonDownloads = $downloads;
 		$this->addonVersions = $versions;
 	}
 
@@ -83,6 +89,12 @@ class ComposerPresenter extends \NetteAddons\BasePresenter
 
 		$version = AddonVersion::fromActiveRow($versionRow);
 
+		$this->addonDownloads->saveDownload(
+			AddonDownloads::TYPE_INSTALL,
+			$version->id,
+			$this->getHttpRequest()->getRemoteAddress(),
+			$this->getHttpRequest()->getHeader('user-agent')
+		);
 		$this->addons->incrementInstallsCount($addon);
 		$this->addonVersions->incrementInstallsCount($version);
 
