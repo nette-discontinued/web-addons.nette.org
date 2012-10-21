@@ -34,14 +34,22 @@ class Repository extends \Nette\Object
 	/** @var string */
 	private $apiVersion;
 
+	/** @var string|NULL */
+	private $clientId;
+
+	/** @var string|NULL */
+	private $clientSecret;
+
 
 
 	/**
 	 * @param string
 	 * @param \NetteAddons\Utils\CurlRequestFactory
 	 * @param string
+	 * @param string|NULL
+	 * @param string|NULL
 	 */
-	public function __construct($apiVersion, CurlRequestFactory $curl, $url)
+	public function __construct($apiVersion, CurlRequestFactory $curl, $url, $clientId = NULL, $clientSecret = NULL)
 	{
 		$this->apiVersion;
 		$this->curl = $curl;
@@ -51,6 +59,9 @@ class Repository extends \Nette\Object
 			throw new \NetteAddons\InvalidArgumentException("Url '$url' is not valid GitHub url");
 		}
 		list($this->vendor, $this->name) = $data;
+
+		$this->clientId = $clientId;
+		$this->clientSecret = $clientSecret;
 	}
 
 
@@ -84,7 +95,11 @@ class Repository extends \Nette\Object
 	protected function exec($path)
 	{
 		try {
-			$request = $this->curl->create(new Url($this->baseUrl . '/' . ltrim($path, '/')));
+			$url = new Url($this->baseUrl . '/' . ltrim($path, '/'));
+			if ($this->clientId && $this->clientSecret) {
+				$url->appendQuery(array('client_id' => $this->clientId, 'client_secret' => $this->clientSecret));
+			}
+			$request = $this->curl->create($url);
 			$request->setOption(CURLOPT_HTTPHEADER, array(
 				"Accept: application/vnd.github.{$this->apiVersion}+json",
 			));
