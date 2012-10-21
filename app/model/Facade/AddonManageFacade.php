@@ -102,11 +102,11 @@ class AddonManageFacade extends Nette\Object
 	 *
 	 * @param  Model\Addon
 	 * @param  array
-	 * @param  Nette\Security\Identity
+	 * @param  Nette\Security\IIdentity|NULL
 	 * @return Model\Addon
 	 * @throws \NetteAddons\InvalidArgumentException
 	 */
-	public function fillAddonWithValues(Model\Addon $addon, array $values, Nette\Security\Identity $owner)
+	public function fillAddonWithValues(Model\Addon $addon, array $values, Nette\Security\IIdentity $owner = NULL)
 	{
 		$overWritable = array(
 			'name' => TRUE,
@@ -131,7 +131,9 @@ class AddonManageFacade extends Nette\Object
 			$values['tags'] = array_map('intval', $values['tags']);
 		}
 
-		$addon->userId = $owner->getId(); // TODO: this is duplicity to self::import()
+		if ($owner) {
+			$addon->userId = $owner->getId(); // TODO: this is duplicity to self::import()
+		}
 
 		foreach ($overWritable as $field => $required) {
 			if (!array_key_exists($field, $values)) {

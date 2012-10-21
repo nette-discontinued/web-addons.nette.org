@@ -322,7 +322,7 @@ final class ManagePresenter extends \NetteAddons\ManageModule\BasePresenter
 			$values['repositoryHosting'] = $this->importerManager->getIdByUrl($values['repository']);
 		}
 
-		$this->manager->fillAddonWithValues($this->addon, $values, $this->getUser()->getIdentity());
+		$this->manager->fillAddonWithValues($this->addon, $values);
 		$this->addons->update($this->addon);
 
 		$this->flashMessage('Addon saved.');
