@@ -95,7 +95,7 @@ class ComposerTest extends TestCase
 
 		$addons = array();
 		$addons[] = $addon = new Addon();
-		$addon->composerName = 'smith/browser';
+		$addon->composerFullName = 'smith/browser';
 
 		$addon->versions[] = $version = new AddonVersion();
 		$version->version = '1.3.7';

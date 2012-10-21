@@ -9,18 +9,18 @@ use NetteAddons\Model\Addon;
  */
 class AddonTest extends TestCase
 {
-	public function testGetVendorName()
+	public function testGetComposerVendorName()
 	{
 		$addon = $this->createAddon();
-		$this->assertSame('foo', $addon->getVendorName());
+		$this->assertSame('foo', $addon->composerVendor);
 	}
 
 
 
-	public function testGetPackageName()
+	public function testGetComposerName()
 	{
 		$addon = $this->createAddon();
-		$this->assertSame('bar', $addon->getPackageName());
+		$this->assertSame('bar', $addon->composerName);
 	}
 
 
@@ -28,7 +28,7 @@ class AddonTest extends TestCase
 	private function createAddon()
 	{
 		$addon = new Addon();
-		$addon->composerName = 'foo/bar';
+		$addon->composerFullName = 'foo/bar';
 		return $addon;
 	}
 }

@@ -49,7 +49,7 @@ class GitHubImporterTest extends TestCase
 		$this->repo->shouldReceive('getFileContent')
 			->with('work_br', 'composer.json')->once()
 			->andReturn(json_encode(array(
-				'name' => 'c-name',
+				'name' => 'c/name',
 				'description' => 'c-desc',
 				'version' => '1.3.7-beta1',
 				'license' => array('MIT', 'GPL-2.0+'),
@@ -60,8 +60,8 @@ class GitHubImporterTest extends TestCase
 			->with('work_br')->once()
 			->andReturn((object)array('content' => 'readme', 'path' => 'readme.md'));
 
-		$this->validators->shouldReceive('isComposerNameValid')
-			->with('c-name')->once()
+		$this->validators->shouldReceive('isComposerFullNameValid')
+			->with('c/name')->once()
 			->andReturn(TRUE);
 
 		$addon = $this->imp->import();
@@ -69,7 +69,7 @@ class GitHubImporterTest extends TestCase
 		$this->assertInstanceOf('NetteAddons\Model\Addon', $addon);
 		$this->assertSame(NULL, $addon->id);
 		$this->assertSame('gh-name', $addon->name);
-		$this->assertSame('c-name', $addon->composerName);
+		$this->assertSame('c/name', $addon->composerFullName);
 		$this->assertSame(NULL, $addon->userId);
 		$this->assertSame('c-desc', $addon->shortDescription);
 		$this->assertSame('readme', $addon->description);
