@@ -76,7 +76,7 @@ final class AddonPresenter extends BasePresenter
 		if ($this->addon) {
 			$form->setAddon($this->addon);
 		}
-		$form->setUser($this->getUser()->identity);
+		$form->setUser($this->getUser()->getIdentity());
 		$form->setToken($this->token);
 
 		$form->onSuccess[] = $this->addAddonFormSubmitted;
@@ -118,7 +118,7 @@ final class AddonPresenter extends BasePresenter
 	{
 		$form = $this->importAddonForm;
 
-		$form->setUser($this->getUser()->identity);
+		$form->setUser($this->getUser()->getIdentity());
 
 		$form->onSuccess[] = $this->importAddonFormSubmitted;
 

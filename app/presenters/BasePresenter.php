@@ -10,8 +10,6 @@ use NetteAddons\Model,
 
 abstract class BasePresenter extends \Nette\Application\UI\Presenter
 {
-	const CSRF_TOKEN_KEY = '_sec';
-
 	/** @var Authorizator */
 	protected $auth;
 
@@ -66,7 +64,7 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 
 
 	/**
-	 * @param string|NULL
+	 * @param  string|NULL
 	 * @return \Nette\Templating\ITemplate
 	 */
 	public function createTemplate($class = NULL)
@@ -79,58 +77,44 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 
 
 	/**
-	 * Zpracuje anotace u dané metody
+	 * Calls signal handler method and processes the @secured annotation.
 	 *
-	 * Podporované anotace:
-	 *    - @secured
-	 *
-	 * @author   Jan Tvrdík
-	 * @param    string            název metody
-	 * @return   void
-	 */
-	private function processMethodAnnotations($method)
-	{
-		if (!method_exists($this, $method)) return; // přeskočí zpracování, pokud metoda neexistuje
-
-		$reflection = $this->getReflection()->getMethod($method);
-		$annotations = $reflection->getAnnotations();
-
-		if (isset($annotations['secured'])) {
-			$protectedParams = array();
-			foreach ($reflection->getParameters() as $param) {
-				if ($param->isOptional()) continue;
-				$protectedParams[$param->name] = $this->getParameter($param->name);
-			}
-			if ($this->getParameter('__secu') !== $this->createSecureHash($protectedParams)) {
-				throw new ForbiddenRequestException('Secured parameters are not valid.');
-			}
-		}
-	}
-
-
-// === Zabezpečení signalů =====================================================
-
-	/**
-	 * Zajistí vyhodnocení anotací nad handlerem signálu.
-	 *
-	 * @author   Jan Skrasek, Jan Tvrdík
-	 * @param    string            název signálu
-	 * @return   void
-	 * @throws   BadSignalException
+	 * @author Jan Skrasek, Jan Tvrdík
+	 * @param  string
+	 * @return void
+	 * @throws \Nette\Application\BadRequestException
 	 */
 	public function signalReceived($signal)
 	{
-		$this->processMethodAnnotations($this->formatSignalMethod($signal));
+		$method = $this->formatSignalMethod($signal);
+		if (method_exists($this, $method)) {
+			$reflection = $this->getReflection()->getMethod($method);
+			$annotations = $reflection->getAnnotations();
+
+			if (isset($annotations['secured'])) {
+				$protectedParams = array();
+				foreach ($reflection->getParameters() as $param) {
+					if ($param->isOptional()) continue;
+					$protectedParams[$param->name] = $this->getParameter($param->name);
+				}
+				if ($this->getParameter('__sec') !== $this->createSecureHash($protectedParams)) {
+					throw new $this->error('Secured parameters are not valid.', 403);
+				}
+			}
+		}
+
 		parent::signalReceived($signal);
 	}
+
+
 
 	/**
 	 * Generates link. If links points to @secure annotated signal handler method, additonal
 	 * parameter preventing changing parameters will be added.
 	 *
 	 * @author Jan Skrasek
-	 * @param string  $destination
-	 * @param array|mixed $args
+	 * @param  string
+	 * @param  array|mixed $args
 	 * @return string
 	 */
 	public function link($destination, $args = array())
@@ -143,13 +127,13 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 		$link = parent::link($destination, $args);
 		$lastRequest = $this->presenter->lastCreatedRequest;
 
-		// spatny link
+		// bad link
 		if ($lastRequest === NULL) return $link;
 
-		// neni signal
+		// not a signal
 		if (substr($destination, - 1) !== '!') return $link;
 
-		// jen na stejny presenter
+		// signal must lead to this presenter
 		if ($this->getPresenter()->getName() !== $lastRequest->getPresenterName()) return $link;
 
 		$destination = str_replace(':', '-', $destination);
@@ -163,13 +147,13 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 			$component = $this;
 		}
 
-		// jen komponenty
+		// only components
 		if (!$component instanceof \Nette\Application\UI\PresenterComponent) return $link;
 
 		$method = $component->formatSignalMethod($signal);
 		$reflection = \Nette\Reflection\Method::from($component, $method);
 
-		// nema anotaci
+		// does not have annotation
 		if (!$reflection->hasAnnotation('secured')) return $link;
 
 		$origParams = $lastRequest->getParameters();
@@ -181,9 +165,9 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 
 		$uniqueId = $this->getUniqueId();
 		if (empty($uniqueId)) {
-			$paramName = $component->getParameterId('__secu');
+			$paramName = $component->getParameterId('__sec');
 		} else {
-			$paramName = substr($component->getParameterId('__secu'), strlen($uniqueId) + 1);
+			$paramName = substr($component->getParameterId('__sec'), strlen($uniqueId) + 1);
 		}
 
 		$args[$paramName] = $this->createSecureHash($protectedParams);
@@ -192,16 +176,17 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 	}
 
 
+
 	/**
 	 * Creates secure hash from array of arguments.
 	 *
 	 * @author Jan Skrasek
-	 * @param array $param
+	 * @param  array
 	 * @return string
 	 */
 	protected function createSecureHash($params)
 	{
-		$ns = $this->getSession('securedlinks');
+		$ns = $this->getSession('Addons.Presenter/CSRF');
 		if ($ns->key === NULL) {
 			$ns->key = uniqid();
 		}

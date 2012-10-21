@@ -75,7 +75,7 @@ abstract class BasePresenter extends \NetteAddons\BasePresenter
 	 */
 	public function checkRequirements($element)
 	{
-		if (!$this->getUser()->loggedIn) {
+		if (!$this->getUser()->isLoggedIn()) {
 			$this->flashMessage('Please sign in to continue.');
 			$this->redirect(':Sign:in', $this->storeRequest());
 		}
@@ -93,6 +93,7 @@ abstract class BasePresenter extends \NetteAddons\BasePresenter
 
 		if ($this->token) {
 			$this->addon = $this->manager->restoreAddon($this->token);
+
 		} elseif ($this->addonId) {
 			$deleted = $this->auth->isAllowed('addon', 'delete');
 			$row = $this->addons->find($this->addonId, $deleted);
