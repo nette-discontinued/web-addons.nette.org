@@ -10,8 +10,7 @@
 	<a class="bigbutton" n:href="download!, version => $version->version" title="{$addon->totalDownloadsCount}× total downloads, {$version->downloadsCount}× this version"><i class="icon-download"></i>Download</a>
 
 	<div class="addon-nette-version" n:if="$version->netteVersion && $version->hasNetteVersion()">
-		For Nette Framework
-		<div>{$version->netteVersion}</div>
+		Nette: {$version->netteVersion}
 	</div>
 
 	<div style="margin-bottom:2em">
