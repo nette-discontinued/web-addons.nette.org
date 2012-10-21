@@ -1,7 +1,7 @@
 <div id="submenu" n:if="$user->loggedIn">
 	<ul>
 		<li>
-			<a rel="nofollow" href="{plink :Manage:Addon:add}" n:class="$presenter->linkCurrent ? active">
+			<a rel="nofollow" href="{plink :Manage:Addon:add token => NULL, addonId => NULL}" n:class="$presenter->linkCurrent ? active">
 				<span>Create new addon</span>
 			</a>
 		</li>
