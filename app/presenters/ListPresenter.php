@@ -84,7 +84,7 @@ class ListPresenter extends BasePresenter
 
 
 	/**
-	 * @return FilterForm
+	 * @return Forms\FilterForm
 	 */
 	protected function createComponentFilterForm()
 	{
@@ -92,7 +92,7 @@ class ListPresenter extends BasePresenter
 		$control->setSearch($this->getParameter('search'))
 			->setCategory($this->getParameter('category'));
 
-		$control->onSuccess[] = callback($this, 'applyFilter');
+		$control->onSuccess[] = $this->applyFilter;
 
 		return $control;
 	}
@@ -100,15 +100,14 @@ class ListPresenter extends BasePresenter
 
 
 	/**
-	 * @param \Nette\Application\UI\Form
-	 * @param string
-	 * @param string
+	 * @param Forms\FilterForm
 	 */
-	public function applyFilter(Form $form, $search, $category)
+	public function applyFilter(Forms\FilterForm $form)
 	{
+		$values = $form->values;
 		$this->redirect('default', array(
-			'search' => $search,
-			'category' => $category,
+			'search' => $values->search,
+			'category' => $values->category,
 		));
 	}
 

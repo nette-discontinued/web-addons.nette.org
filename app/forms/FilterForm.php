@@ -9,53 +9,36 @@ use NetteAddons\Model,
 /**
  * @author  Patrik Votoček
  */
-class FilterForm extends FormControl
+class FilterForm extends BaseForm
 {
 
 	/** @var \NetteAddons\Model\Tags */
-	private $tagsFacade;
+	private $tags;
 
 
 
 	/**
 	 * @param Model\Tags
 	 */
-	public function __construct(Model\Tags $tagsFacade)
+	public function __construct(Model\Tags $tags)
 	{
+		$this->tags = $tags;
 		parent::__construct();
-		$this->tagsFacade = $tagsFacade;
 	}
 
 
 	/**
 	 * @return \Nette\Application\UI\Form
 	 */
-	protected function createComponentForm()
+	protected function buildForm()
 	{
-		$tags = $this->tagsFacade->findMainTags()->fetchPairs('slug', 'name');
+		$tags = $this->tags->findMainTags()->fetchPairs('slug', 'name');
 
-		$form = new Form;
-
-		$form->addText('search', 'Search', 40, 100);
-		$form->addSelect('category', 'Category', $tags)
+		$this->addText('search', 'Search', NULL, 100);
+		$this->addSelect('category', 'Category', $tags)
 			->setPrompt('Choose category');
 
-		$form->addSubmit('sub', 'Filter');
-
-		$form->onSuccess[] = callback($this, 'process');
-
-		return $form;
-	}
-
-
-
-	/**
-	 * @param \Nette\Application\UI\Form
-	 */
-	public function process(Form $form)
-	{
-		$values = $form->values;
-		$this->doOnSuccess($form, $values->search, $values->category);
+		$this->addSubmit('sub', 'Filter');
 	}
 
 
@@ -66,7 +49,7 @@ class FilterForm extends FormControl
 	 */
 	public function setSearch($search)
 	{
-		$this['form-search']->setDefaultValue($search);
+		$this['search']->setDefaultValue($search);
 		return $this;
 	}
 
@@ -78,16 +61,8 @@ class FilterForm extends FormControl
 	 */
 	public function setCategory($category)
 	{
-		$this['form-category']->setDefaultValue($category);
+		$this['category']->setDefaultValue($category);
 		return $this;
-	}
-
-
-
-	public function render()
-	{
-		$this->template->setFile(__DIR__ . '/templates/FilterForm.latte');
-		$this->template->render();
 	}
 
 }
