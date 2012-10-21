@@ -42,8 +42,19 @@ class Addons extends Table
 
 
 
-
 // === Selecting addons ========================================================
+
+
+
+	/**
+	 * @return \Nette\Database\Table\Selection
+	 */
+	public function findVendors()
+	{
+		return $this->getTable()->select('composerVendor')->group('composerVendor');
+	}
+
+
 
 	/**
 	 * @param int|NULL

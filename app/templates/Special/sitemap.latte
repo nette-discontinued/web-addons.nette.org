@@ -1,0 +1,38 @@
+{var $title = 'Sitemap'}
+{block main}
+<div id="main">
+	<div id="content">
+		<div id="breadcrumbs">
+			<a href="http://nette.org/en/">Nette Framework</a> »
+			<a n:href=":Homepage:">Addons, plugins and components</a> »
+			<span>{$title}</span>
+		</div>
+
+		<h1>{$title}</h1>
+
+		<div class="column item1">
+			<h2>Categories</h2>
+			<ul>
+				{foreach $categories as $category}
+					<li><a n:href=":List: category => $category->slug">{$category->name}</a></li>
+				{/foreach}
+			</ul>
+
+			<h2>Pages</h2>
+			<ul>
+				{foreach $pages as $link => $page}
+					<li><a n:href=":Page:$link">{$page}</a></li>
+				{/foreach}
+			</ul>
+		</div>
+
+		<div class="column item2">
+			<h2>Vendors</h2>
+			<ul>
+				{foreach $vendors as $addon}
+					<li><a n:href=":List:byVendor vendor => $addon->composerVendor">{$addon->composerVendor}</a></li>
+				{/foreach}
+			</ul>
+		</div>
+	</div>
+</div>
