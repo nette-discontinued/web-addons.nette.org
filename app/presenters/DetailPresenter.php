@@ -76,7 +76,7 @@ class DetailPresenter extends BasePresenter
 	/**
 	 * @param int addon ID
 	 */
-	public function renderArchive($id)
+	public function renderVersions($id)
 	{
 	}
 

@@ -9,7 +9,7 @@
 	<div n:class="addon-heading, !$version->hasNetteVersion() ? addon-warning">
 		<h1 n:attr="title => !$version->hasNetteVersion() ? 'version of Nette dependency not specified'" n:class="!$version->hasNetteVersion() ? warning">{$addon->name} <span class="addon-version">{$version->version}</span></h1>
 		<p class="perex">{$addon->shortDescription}</p>
-		<a class="addon-archive-link" n:href="archive">older versions</a>
+		<a class="addon-archive-link" n:href="versions">other versions</a>
 	</div>
 
 	<div class="emphasis addon-composer">
