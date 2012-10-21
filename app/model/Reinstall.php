@@ -12,11 +12,13 @@ class Reinstall extends \Nette\Object
 
 	private $db;
 
+	private $cacheStorage;
 
 
-	public function __construct(\Nette\Database\Connection $db)
+	public function __construct(\Nette\Database\Connection $db, \Nette\Caching\IStorage $cacheStorage)
 	{
 		$this->db = $db;
+		$this->cacheStorage = $cacheStorage;
 	}
 
 
@@ -36,6 +38,8 @@ class Reinstall extends \Nette\Object
 
 		\Nette\Database\Helpers::loadFromFile($connection, __DIR__ . "/db/current-schema.sql");
 		\Nette\Database\Helpers::loadFromFile($connection, __DIR__ . "/db/data.sql");
+
+		$this->cacheStorage->clean(array(\Nette\Caching\Cache::ALL => TRUE));
 	}
 
 }
