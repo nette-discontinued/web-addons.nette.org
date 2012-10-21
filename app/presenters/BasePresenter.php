@@ -98,6 +98,11 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 						$signalParams[$param->name] = $args[$param->name];
 					}
 				}
+				foreach ($this->getPersistentParams() as $param) {
+					if (isset($this->params[$param])) {
+						$signalParams[$param] = $this->params[$param];
+					}
+				}
 				$args[self::CSRF_TOKEN_KEY] = $this->getCsrfToken($method, $signalParams);
 			}
 		}
