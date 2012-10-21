@@ -40,6 +40,7 @@ $container->router[] = new Route('downloads/<package>', array( // same as Packag
 	),
 ));
 $container->router[] = new Route('api/github', 'Api:Github:postReceive'); // same as Packagist's route
+$container->router[] = new Route('special/<action>[.<type=html (html|xml)>]', 'Special:default');
 $composerPackageRouteHelper = $container->packageRouterHelper;
 $container->router[] = new Route('<id>[/<action>]', array(
 	'presenter' => 'Detail',

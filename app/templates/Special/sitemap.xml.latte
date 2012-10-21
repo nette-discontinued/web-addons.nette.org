@@ -1,0 +1,45 @@
+{contentType application/xml}
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+	<url>
+		<loc>{link //:Homepage:}</loc>
+		<changefreq>always</changefreq>
+		<priority>1.0</priority>
+	</url>
+	{foreach $categories as $category}
+	<url>
+		<loc>{link //:List: category => $category->slug}</loc>
+		<changefreq>hourly</changefreq>
+		<priority>1.0</priority>
+	</url>
+	{/foreach}
+	{foreach $addons as $addon}
+		<url>
+			<loc>{link //:Detail: id => $addon->id}</loc>
+			<lastmod>{$addon->updatedAt|date:'Y-m-d'}</lastmod>
+			<changefreq>daily</changefreq>
+			<priority>0.8</priority>
+		</url>
+		<url>
+			<loc>{link //:Detail:versions id => $addon->id}</loc>
+			<lastmod>{$addon->updatedAt|date:'Y-m-d'}</lastmod>
+			<changefreq>daily</changefreq>
+			<priority>0.8</priority>
+		</url>
+	{/foreach}
+	{foreach $vendors as $addon}
+		<url>
+			<loc>{link //:List:byVendor vendor => $addon->composerVendor}</loc>
+			<lastmod>{$addon->updatedAt|date:'Y-m-d'}</lastmod>
+			<changefreq>hourly</changefreq>
+			<priority>0.6</priority>
+		</url>
+	{/foreach}
+	{foreach array_keys($pages) as $link}
+		<url>
+			<loc>{link "//:Page:$link"}</loc>
+			<changefreq>monthly</changefreq>
+			<priority>0.3</priority>
+		</url>
+	{/foreach}
+</urlset>

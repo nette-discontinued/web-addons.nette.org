@@ -51,7 +51,7 @@ class Addons extends Table
 	 */
 	public function findVendors()
 	{
-		return $this->getTable()->select('composerVendor')->group('composerVendor');
+		return $this->getTable()->group('composerVendor')->order('updatedAt DESC');
 	}
 
 
