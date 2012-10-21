@@ -56,81 +56,6 @@ final class ManagePresenter extends Manage\BasePresenter
 
 
 	/**
-	 * Creates a new form for addon information.
-	 *
-	 * @return Manage\Forms\AddAddonForm
-	 */
-	protected function createComponentAddAddonForm()
-	{
-		$form = $this->getContext()->addAddonForm;
-
-		if ($this->addon) {
-			$form->setAddon($this->addon);
-		}
-		$form->setUser($this->getUser()->identity);
-		$form->setToken($this->token);
-
-		$form->onSuccess[] = $this->addAddonFormSubmitted;
-
-		return $form;
-	}
-
-
-
-	/**
-	 * Handles the new addon form submission.
-	 *
-	 * @param Manage\Forms\AddAddonForm
-	 */
-	public function addAddonFormSubmitted(Manage\Forms\AddAddonForm $form)
-	{
-		if ($form->valid) {
-			$this->addon = $form->addon;
-			$this->token = $form->token;
-
-			$imported = (bool) $this->addon->repositoryHosting; // TODO: remove
-
-			if ($imported) {
-				$this->flashMessage('Addon created.');
-				$this->redirect('importVersions');
-
-			} else {
-				$this->flashMessage('Addon created. Now it\'s time to add the first version.');
-				$this->redirect('createVersion');
-			}
-		}
-	}
-
-
-
-	/**
-	 * @return Manage\Forms\ImportAddonForm
-	 */
-	protected function createComponentImportAddonForm()
-	{
-		$form = $this->getContext()->importAddonForm;
-		$form->setUser($this->getUser()->identity);
-		$form->onSuccess[] = $this->importAddonFormSubmitted;
-		return $form;
-	}
-
-
-	/**
-	 * @param Manage\Forms\ImportAddonForm
-	 */
-	public function importAddonFormSubmitted(Manage\Forms\ImportAddonForm $form)
-	{
-		if ($form->valid) {
-			$this->token = $form->token;
-
-			$this->flashMessage('Addon has been successfully loaded.');
-			$this->redirect('createAddon');
-		}
-	}
-
-
-
-	/**
 	 * @param int|NULL addon id
 	 */
 	public function renderCreateVersion($addonId = NULL)
@@ -256,56 +181,7 @@ final class ManagePresenter extends Manage\BasePresenter
 
 		} catch (\NetteAddons\DuplicateEntryException $e) {
 			$this->flashMessage("Adding new addon failed.", 'danger');
-			$this->redirect('createAddon');
-		}
-	}
-
-
-
-	public function actionEditAddon($addonId)
-	{
-		$this['subMenu']->setAddon($this->addon);
-	}
-
-
-
-	public function renderEditAddon($addonId)
-	{
-		$this->template->addon = $this->addon;
-	}
-
-
-
-	/**
-	 * @return Manage\Forms\EditAddonForm
-	 */
-	protected function createComponentEditAddonForm()
-	{
-		if (!$this->addon) {
-			$this->error('Addon not found.');
-		}
-
-		$form = $this->getContext()->editAddonForm;
-
-		$form->setAddon($this->addon);
-
-		$form->onSuccess[] = $this->editAddonFormSubmitted;
-
-		return $form;
-	}
-
-
-
-	/**
-	 * @param Manage\Forms\EditAddonForm
-	 */
-	public function editAddonFormSubmitted(Manage\Forms\EditAddonForm $form)
-	{
-		if ($form->valid) {
-			$this->addon = $form->addon;
-
-			$this->flashMessage('Addon saved.');
-			$this->redirect('Detail:', $this->addon->id);
+			$this->redirect(':Manage:Create:add');
 		}
 	}
 }

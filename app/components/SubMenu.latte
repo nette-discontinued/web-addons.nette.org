@@ -1,7 +1,7 @@
 <div id="submenu" n:if="$user->loggedIn">
 	<ul>
 		<li>
-			<a rel="nofollow" href="{plink :Manage:Create:add}" n:class="$presenter->linkCurrent ? active">
+			<a rel="nofollow" href="{plink :Manage:Addon:add}" n:class="$presenter->linkCurrent ? active">
 				<span>Create new addon</span>
 			</a>
 		</li>
@@ -18,7 +18,7 @@
 		</li>
 		{if $auth->isAllowed($addon, 'manage')}
 		<li>
-			<a rel="nofollow" href="{plink :Manage:editAddon $addon->id}" n:class="$presenter->linkCurrent ? active">
+			<a rel="nofollow" href="{plink :Manage:Addon:edit $addon->id}" n:class="$presenter->linkCurrent ? active">
 				<span>Edit</span>
 			</a>
 		</li>

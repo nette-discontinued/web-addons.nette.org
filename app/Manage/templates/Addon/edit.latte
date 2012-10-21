@@ -1,5 +1,5 @@
 {var $robots = noindex}
-{var $title = 'Create new addon'}
+{var $title = 'Edit addon: ' . $addon->name}
 
 {block main}
 <div id="main">
@@ -14,6 +14,6 @@
 
 		<h1>{$title}</h1>
 
-		{control addAddonForm}
+		{control editAddonForm}
 	</div>
 </div>
