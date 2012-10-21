@@ -37,13 +37,31 @@ class CurlRequestFactory extends \Nette\Object
 
 
 	/**
+	 * @return string
+	 */
+	public static function getUAString()
+	{
+		return sprintf(
+			static::UA . '/%s (%s; %s; PHP %s.%s.%s)',
+			Portal::VERSION,
+			php_uname('s'),
+			php_uname('r'),
+			PHP_MAJOR_VERSION,
+			PHP_MINOR_VERSION,
+			PHP_RELEASE_VERSION
+		);
+	}
+
+
+
+	/**
 	 * @return CurlRequest
 	 */
 	public function create($url = NULL)
 	{
 		$request = new CurlRequest($url);
 
-		$request->setOption(CURLOPT_USERAGENT, self::UA . '/' . Portal::VERSION);
+		$request->setOption(CURLOPT_USERAGENT, static::getUAString());
 		$request->setOption(CURLOPT_FOLLOWLOCATION, TRUE);
 		$request->setOption(CURLOPT_RETURNTRANSFER, TRUE);
 		$request->setOption(CURLOPT_FAILONERROR, FALSE);
