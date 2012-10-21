@@ -31,7 +31,14 @@ $container = $configurator->createContainer();
 // Setup router
 $container->router[] = new Route('index.php', 'Homepage:default', Route::ONE_WAY);
 $container->router[] = new Route('packages.json', 'Api:Composer:packages'); // same as Packagist's route
-$container->router[] = new Route('downloads/<package>', 'Api:Composer:downloadNotify'); // same as Packagist's route
+$container->router[] = new Route('downloads/<package>', array( // same as Packagist's route
+	'module' => 'Api',
+	'presenter' => 'Composer',
+	'action' => 'downloadNotify',
+	'package' => array(
+		Route::PATTERN => '[^/]+/[^/]+',
+	),
+));
 $container->router[] = new Route('api/github', 'Api:Github:postReceive'); // same as Packagist's route
 $composerPackageRouteHelper = $container->packageRouterHelper;
 $container->router[] = new Route('<id>[/<action>]', array(
