@@ -145,22 +145,19 @@ final class ManagePresenter extends \NetteAddons\ManageModule\BasePresenter
 
 
 	/**
-	 * @return AddVersionForm
+	 * @return ManageModule\Forms\AddVersionForm
 	 */
 	protected function createComponentAddVersionForm()
 	{
-		$form = new Forms\AddVersionForm($this->formValidators, $this->licenses);
-		$form->onSuccess[] = $this->addVersionFormSubmitted;
+		$form = new ManageModule\Forms\AddVersionForm(
+			$this->manager, $this->versionParser, $this->formValidators, $this->licenses, $this->versions
+		);
 
-		if ($this->addon) {
-			$license = $this->addon->defaultLicense;
-			if (is_string($license)) {
-				$license = array_map('trim', explode(',', $license));
-			}
-			$form->setDefaults(array(
-				'license' => $license,
-			));
-		}
+		$form->setAddon($this->addon);
+		$form->setToken($this->token);
+		$form->setUser($this->getUser()->identity);
+
+		$form->onSuccess[] = $this->addVersionFormSubmitted;
 
 		return $form;
 	}
@@ -168,27 +165,20 @@ final class ManagePresenter extends \NetteAddons\ManageModule\BasePresenter
 
 
 	/**
-	 * @param Form
+	 * @param ManageModule\Forms\AddVersionForm
 	 */
-	public function addVersionFormSubmitted(Form $form)
+	public function addVersionFormSubmitted(ManageModule\Forms\AddVersionForm $form)
 	{
-		try {
-			$values = $form->getValues();
-			$version = $this->manager->addVersionFromValues($this->addon, $values, $this->getUser()->getIdentity(), $this->versionParser);
+		if ($form->valid) {
+			$this->token = $form->token;
 
-		} catch (\NetteAddons\IOException $e) {
-			$form['archive']->addError('Uploading file failed.');
-			return;
-		}
+			if ($this->addon->id) {
+				$this->flashMessage('Version created.');
+				$this->redirect('Detail:', $this->addon->id);
 
-		if ($this->addonId) { // TODO: better
-			$this->versions->add($version);
-			$this->flashMessage('Version created.');
-			$this->redirect('Detail:', $this->addonId);
-
-		} else {
-			$this->manager->storeAddon($this->getSessionKey(), $this->addon);
-			$this->redirect('finish');
+			} else {
+				$this->redirect('finish');
+			}
 		}
 	}
 
