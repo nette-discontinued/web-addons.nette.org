@@ -1,6 +1,6 @@
 <?php
 
-namespace NetteAddons\ManageModule;
+namespace NetteAddons\Manage;
 
 use Nette\Utils\Strings,
 	NetteAddons\Model\Addon,

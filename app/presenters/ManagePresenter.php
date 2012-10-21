@@ -13,7 +13,7 @@ use NetteAddons\Forms\Form,
 
 
 
-final class ManagePresenter extends \NetteAddons\ManageModule\BasePresenter
+final class ManagePresenter extends Manage\BasePresenter
 {
 	/** @var AddonVersions */
 	private $versions;
@@ -58,9 +58,9 @@ final class ManagePresenter extends \NetteAddons\ManageModule\BasePresenter
 	/**
 	 * Creates a new form for addon information.
 	 *
-	 * @return ManageModule\Forms\AddAddonForm
+	 * @return Manage\Forms\AddAddonForm
 	 */
-	protected function createComponentAddAddonForm($name)
+	protected function createComponentAddAddonForm()
 	{
 		$form = $this->getContext()->addAddonForm;
 
@@ -80,9 +80,9 @@ final class ManagePresenter extends \NetteAddons\ManageModule\BasePresenter
 	/**
 	 * Handles the new addon form submission.
 	 *
-	 * @param ManageModule\Forms\AddAddonForm
+	 * @param Manage\Forms\AddAddonForm
 	 */
-	public function addAddonFormSubmitted(ManageModule\Forms\AddAddonForm $form)
+	public function addAddonFormSubmitted(Manage\Forms\AddAddonForm $form)
 	{
 		if ($form->valid) {
 			$this->addon = $form->addon;
@@ -104,7 +104,7 @@ final class ManagePresenter extends \NetteAddons\ManageModule\BasePresenter
 
 
 	/**
-	 * @return ManageModule\Forms\ImportAddonForm
+	 * @return Manage\Forms\ImportAddonForm
 	 */
 	protected function createComponentImportAddonForm()
 	{
@@ -116,9 +116,9 @@ final class ManagePresenter extends \NetteAddons\ManageModule\BasePresenter
 
 
 	/**
-	 * @param ManageModule\Forms\ImportAddonForm
+	 * @param Manage\Forms\ImportAddonForm
 	 */
-	public function importAddonFormSubmitted(ManageModule\Forms\ImportAddonForm $form)
+	public function importAddonFormSubmitted(Manage\Forms\ImportAddonForm $form)
 	{
 		if ($form->valid) {
 			$this->token = $form->token;
@@ -141,7 +141,7 @@ final class ManagePresenter extends \NetteAddons\ManageModule\BasePresenter
 
 
 	/**
-	 * @return ManageModule\Forms\AddVersionForm
+	 * @return Manage\Forms\AddVersionForm
 	 */
 	protected function createComponentAddVersionForm()
 	{
@@ -159,9 +159,9 @@ final class ManagePresenter extends \NetteAddons\ManageModule\BasePresenter
 
 
 	/**
-	 * @param ManageModule\Forms\AddVersionForm
+	 * @param Manage\Forms\AddVersionForm
 	 */
-	public function addVersionFormSubmitted(ManageModule\Forms\AddVersionForm $form)
+	public function addVersionFormSubmitted(Manage\Forms\AddVersionForm $form)
 	{
 		if ($form->valid) {
 			$this->token = $form->token;
@@ -277,7 +277,7 @@ final class ManagePresenter extends \NetteAddons\ManageModule\BasePresenter
 
 
 	/**
-	 * @return ManageModule\Forms\EditAddonForm
+	 * @return Manage\Forms\EditAddonForm
 	 */
 	protected function createComponentEditAddonForm()
 	{
@@ -297,9 +297,9 @@ final class ManagePresenter extends \NetteAddons\ManageModule\BasePresenter
 
 
 	/**
-	 * @param ManageModule\Forms\EditAddonForm
+	 * @param Manage\Forms\EditAddonForm
 	 */
-	public function editAddonFormSubmitted(ManageModule\Forms\EditAddonForm $form)
+	public function editAddonFormSubmitted(Manage\Forms\EditAddonForm $form)
 	{
 		if ($form->valid) {
 			$this->addon = $form->addon;

@@ -82,17 +82,17 @@ services:
 
 	# forms
 	addAddonForm:
-		class: NetteAddons\ManageModule\Forms\AddAddonForm
+		class: NetteAddons\Manage\Forms\AddAddonForm
 		setup:
 			- addDescriptionFormat('texy', 'Texy!')
 			- addDescriptionFormat('markdown', 'Markdown')
 	editAddonForm:
-		class: NetteAddons\ManageModule\Forms\EditAddonForm
+		class: NetteAddons\Manage\Forms\EditAddonForm
 		setup:
 			- addDescriptionFormat('texy', 'Texy!')
 			- addDescriptionFormat('markdown', 'Markdown')
-	importAddonForm: NetteAddons\ManageModule\Forms\ImportAddonForm
-	addAddonVersionForm: NetteAddons\ManageModule\Forms\AddVersionForm
+	importAddonForm: NetteAddons\Manage\Forms\ImportAddonForm
+	addAddonVersionForm: NetteAddons\Manage\Forms\AddVersionForm
 
 
 factories:

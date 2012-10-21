@@ -1,6 +1,6 @@
 <?php
 
-namespace NetteAddons\ManageModule\Forms;
+namespace NetteAddons\Manage\Forms;
 
 use Nette\Utils\Strings,
 	Nette\Forms\Controls\UploadControl,

@@ -1,6 +1,6 @@
 <?php
 
-namespace NetteAddons\ManageModule\Forms;
+namespace NetteAddons\Manage\Forms;
 
 use NetteAddons\Model,
 	NetteAddons\Model\Addon,
