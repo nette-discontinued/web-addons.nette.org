@@ -293,39 +293,40 @@ final class ManagePresenter extends \NetteAddons\ManageModule\BasePresenter
 
 
 	/**
-	 * @param string
-	 * @return EditAddonForm
+	 * @return ManageModule\Forms\EditAddonForm
 	 */
-	protected function createComponentEditAddonForm($name)
+	protected function createComponentEditAddonForm()
 	{
-		if (!$this->addon) $this->error();
+		if (!$this->addon) {
+			$this->error('Addon not found.');
+		}
 
-		$form = new Forms\EditAddonForm($this->formValidators, $this->tags, $this->licenses);
+		$form = new ManageModule\Forms\EditAddonForm(
+			$this->manager, $this->importerManager, $this->tags, $this->formValidators, $this->licenses, $this->addons
+		);
+
+		$form->addDescriptionFormat('texy', 'Texy!');
+		$form->addDescriptionFormat('markdown', 'Markdown');
+
+		$form->setAddon($this->addon);
+
 		$form->onSuccess[] = $this->editAddonFormSubmitted;
 
-		$this->addComponent($form, $name);
-
-		$form->setAddonDefaults($this->addon);
+		return $form;
 	}
 
 
 
 	/**
-	 * @param Form
+	 * @param ManageModule\Forms\EditAddonForm
 	 */
-	public function editAddonFormSubmitted(Form $form)
+	public function editAddonFormSubmitted(ManageModule\Forms\EditAddonForm $form)
 	{
-		$values = $form->getValues(TRUE);
+		if ($form->valid) {
+			$this->addon = $form->addon;
 
-		if (!empty($values['repository'])) {
-			$values['repository'] = $this->importerManager->normalizeUrl($values['repository']);
-			$values['repositoryHosting'] = $this->importerManager->getIdByUrl($values['repository']);
+			$this->flashMessage('Addon saved.');
+			$this->redirect('Detail:', $this->addon->id);
 		}
-
-		$this->manager->fillAddonWithValues($this->addon, $values);
-		$this->addons->update($this->addon);
-
-		$this->flashMessage('Addon saved.');
-		$this->redirect('Detail:', $this->addon->id);
 	}
 }

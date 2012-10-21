@@ -151,10 +151,10 @@ abstract class AddonForm extends \NetteAddons\Forms\BaseForm
 			if ($addon->defaultLicense) {
 				$this->removeComponent($this['defaultLicense']);
 			}
+		}
 
-			if ($addon->composerName) {
-				$this->removeComponent($this['composerName']);
-			}
+		if ($addon->composerName) {
+			$this->removeComponent($this['composerName']);
 		}
 
 		$license = $addon->defaultLicense;
