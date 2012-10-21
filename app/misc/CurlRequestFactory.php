@@ -2,6 +2,7 @@
 
 namespace NetteAddons\Utils;
 
+use NetteAddons\Portal;
 
 
 /**
@@ -42,7 +43,7 @@ class CurlRequestFactory extends \Nette\Object
 	{
 		$request = new CurlRequest($url);
 
-		$request->setOption(CURLOPT_USERAGENT, self::UA);
+		$request->setOption(CURLOPT_USERAGENT, self::UA . '/' . Portal::VERSION);
 		$request->setOption(CURLOPT_FOLLOWLOCATION, TRUE);
 		$request->setOption(CURLOPT_RETURNTRANSFER, TRUE);
 		$request->setOption(CURLOPT_FAILONERROR, FALSE);
