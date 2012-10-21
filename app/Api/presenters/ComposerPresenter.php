@@ -1,33 +1,52 @@
 <?php
 
-namespace NetteAddons;
+namespace NetteAddons\Api;
 
-use NetteAddons\Model\Addon,
-	NetteAddons\Model\Addons,
-	NetteAddons\Model\AddonVersion,
-	NetteAddons\Model\AddonVersions;
+use NetteAddons\Model\Addons,
+	NetteAddons\Model\AddonVersions,
+	NetteAddons\Model\Utils\Composer;
 
 
 
 /**
- * Misc API calls
- *
+ * @author Jan Marek
+ * @author Jan Tvrdík
  * @author Jan Dolecek <juzna.cz@gmail.com>
+ * @author Patrik Votoček
  */
-class ApiPresenter extends BasePresenter
+class ComposerPresenter extends \NetteAddons\BasePresenter
 {
-	/** @var Addons */
+	/** @var \NetteAddons\Model\Addons */
 	private $addons;
 
-	/** @var AddonVersions */
+	/** @var \NetteAddons\Model\AddonVersions */
 	private $addonVersions;
 
 
 
-	public function injectServices(Addons $addons, AddonVersions $versions)
+	/**
+	 * @param \NetteAddons\Model\Addons
+	 * @param \NetteAddons\Model\AddonVersions
+	 */
+	public function injectAddons(Addons $addons, AddonVersions $versions)
 	{
 		$this->addons = $addons;
 		$this->addonVersions = $versions;
+	}
+
+
+
+	public function renderPackages()
+	{
+		$addons = $this->addons->findAll();
+		$addons = array_map('NetteAddons\Model\Addon::fromActiveRow', iterator_to_array($addons));
+
+		$packagesJson = Composer::createPackagesJson($addons);
+		$packagesJson->notify = str_replace(
+			'placeholder', '%package%',
+			$this->link('downloadNotify', array('package' => 'placeholder'))
+		);
+		$this->sendJson($packagesJson);
 	}
 
 
@@ -40,9 +59,9 @@ class ApiPresenter extends BasePresenter
 	 */
 	public function actionDownloadNotify($package)
 	{
-		$post = $this->getRequest()->getPost();
+		$post = $this->getRequest()->post;
 		if (!isset($post['version'])) {
-			$this->error('Invalid request');
+			$this->error('Invalid request.');
 		}
 		$version = (string) $post['version'];
 

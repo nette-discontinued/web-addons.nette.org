@@ -30,7 +30,7 @@ $container = $configurator->createContainer();
 
 // Setup router
 $container->router[] = new Route('index.php', 'Homepage:default', Route::ONE_WAY);
-$container->router[] = new Route('packages.json', 'Packages:default');
+$container->router[] = new Route('packages.json', 'Api:Composer:packages'); // same as Packagist's route
 $container->router[] = new Route('api/github', 'Api:Github:postReceive'); // same as Packagist's route
 $container->router[] = new Route('<id>[/<action>]', array(
 	'presenter' => 'Detail',
