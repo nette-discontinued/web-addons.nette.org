@@ -85,7 +85,6 @@ final class AddonPresenter extends BasePresenter
 			$imported = (bool) $this->addon->repositoryHosting; // TODO: remove
 
 			if ($imported) {
-				$this->flashMessage('Addon created.');
 				$this->redirect(':Manage:Versions:import');
 
 			} else {
@@ -136,6 +135,32 @@ final class AddonPresenter extends BasePresenter
 
 
 	/**
+	 * Finish the addon creation
+	 */
+	public function actionFinish()
+	{
+		if (!$this->addon) {
+			$this->error('Addon not found.');
+		}
+		if (!$this->token) {
+			$this->error('Invalid token.');
+		}
+
+		try {
+			$this->addons->add($this->addon);
+			$this->manager->destroyAddon($this->token);
+			$this->flashMessage('Addon was successfully registered.');
+			$this->redirect(':Detail:', $this->addon->id);
+
+		} catch (\NetteAddons\DuplicateEntryException $e) {
+			$this->flashMessage("Adding new addon failed.", 'danger');
+			$this->redirect(':Manage:Addon:add');
+		}
+	}
+
+
+
+	/**
 	 * @return Forms\EditAddonForm
 	 */
 	protected function createComponentEditAddonForm()
@@ -175,6 +200,9 @@ final class AddonPresenter extends BasePresenter
 	 */
 	public function actionEdit($addonId)
 	{
+		if (!$this->addon) {
+			$this->error('Addon not found.');
+		}
 		$this['subMenu']->setAddon($this->addon);
 	}
 

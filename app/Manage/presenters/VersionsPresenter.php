@@ -75,9 +75,25 @@ final class VersionsPresenter extends BasePresenter
 				$this->redirect(':Detail:', $this->addon->id);
 
 			} else {
-				$this->redirect(':Manage:finish');
+				$this->redirect(':Manage:Addon:finish');
 			}
 		}
+	}
+
+
+
+	public function actionAdd()
+	{
+		if (!$this->addon) {
+			$this->error('Addon not found.');
+		}
+	}
+
+
+
+	public function renderAdd()
+	{
+		$this->template->addon = $this->addon;
 	}
 
 
@@ -95,7 +111,7 @@ final class VersionsPresenter extends BasePresenter
 			$importer = $this->importerManager->createFromUrl($this->addon->repository);
 			$this->manager->importVersions($this->addon, $importer, $this->getUser()->identity);
 			$this->manager->storeAddon($this->token, $this->addon);
-			$this->redirect(':Manage:finish');
+			$this->redirect(':Manage:Addon:finish');
 
 		} catch (\NetteAddons\NotSupportedException $e) {
 			$this->error(); // @todo message

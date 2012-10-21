@@ -9,7 +9,9 @@ use Nette\Utils\Strings,
 	NetteAddons\Model\Importers\RepositoryImporterManager;
 
 
-
+/**
+ * @author Patrik Votoček
+ */
 abstract class BasePresenter extends \NetteAddons\BasePresenter
 {
 	/**
@@ -24,20 +26,23 @@ abstract class BasePresenter extends \NetteAddons\BasePresenter
 	 */
 	public $addonId;
 
-	/** @var Addon|NULL from the session. */
-	protected $addon;
-
-	/** @var AddonManageFacade */
+	/** @var \NetteAddons\Model\Facade\AddonManageFacade */
 	protected $manager;
 
-	/** @var RepositoryImporterManager */
+	/** @var \NetteAddons\Model\Importers\RepositoryImporterManager */
 	protected $importerManager;
 
-	/** @var Addons */
+	/** @var \NetteAddons\Model\Addons */
 	protected $addons;
 
+	/** @var \NetteAddons\Model\Addon|NULL from the session. */
+	protected $addon;
 
 
+
+	/**
+	 * @param \NetteAddons\Model\Facade\AddonManageFacade
+	 */
 	public function injectManager(AddonManageFacade $manager)
 	{
 		$this->manager = $manager;
@@ -45,6 +50,9 @@ abstract class BasePresenter extends \NetteAddons\BasePresenter
 
 
 
+	/**
+	 * @param \NetteAddons\Model\Importers\RepositoryImporterManager $manager
+	 */
 	public function injectImporterManager(RepositoryImporterManager $manager)
 	{
 		$this->importerManager = $manager;
@@ -52,10 +60,14 @@ abstract class BasePresenter extends \NetteAddons\BasePresenter
 
 
 
+	/**
+	 * @param \NetteAddons\Model\Addons $addons
+	 */
 	public function injectAddonsTable(Addons $addons)
 	{
 		$this->addons = $addons;
 	}
+
 
 
 	/**
@@ -80,7 +92,7 @@ abstract class BasePresenter extends \NetteAddons\BasePresenter
 		}
 
 		if ($this->token) {
-			$this->addon = $this->manager->restoreAddon($this->getSessionKey());
+			$this->addon = $this->manager->restoreAddon($this->token);
 		} elseif ($this->addonId) {
 			$row = $this->addons->find($this->addonId);
 			if (!$row) {
@@ -92,36 +104,5 @@ abstract class BasePresenter extends \NetteAddons\BasePresenter
 		if ($this->addon && !$this->auth->isAllowed($this->addon, 'manage')) {
 			$this->error('You are not allowed to manage this addon.', 403);
 		}
-	}
-
-
-
-	/**
-	 * Addon importer factory
-	 *
-	 * @param  string
-	 * @return \NetteAddons\Model\IAddonImporter
-	 * @throws \NetteAddons\NotSupportedException
-	 */
-	protected function createAddonImporter($url)
-	{
-		return $this->importerManager->createFromUrl($url);
-	}
-
-
-
-	/**
-	 * Gets the session key for the addon stored under the current token.
-	 * If there is no token, it generates a new one.
-	 *
-	 * @return string
-	 */
-	protected function getSessionKey()
-	{
-		if ($this->token === NULL) {
-			$this->token = Strings::random();
-		}
-
-		return $this->token;
 	}
 }
