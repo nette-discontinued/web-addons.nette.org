@@ -78,6 +78,61 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 
 
 
+	/**
+	 * Zpracuje anotace u dané metody
+	 *
+	 * Podporované anotace:
+	 *    - @secured
+	 *
+	 * @author   Jan Tvrdík
+	 * @param    string            název metody
+	 * @return   void
+	 */
+	private function processMethodAnnotations($method)
+	{
+		if (!method_exists($this, $method)) return; // přeskočí zpracování, pokud metoda neexistuje
+
+		$reflection = $this->getReflection()->getMethod($method);
+		$annotations = $reflection->getAnnotations();
+
+		if (isset($annotations['secured'])) {
+			$protectedParams = array();
+			foreach ($reflection->getParameters() as $param) {
+				if ($param->isOptional()) continue;
+				$protectedParams[$param->name] = $this->getParameter($param->name);
+			}
+			if ($this->getParameter('__secu') !== $this->createSecureHash($protectedParams)) {
+				throw new ForbiddenRequestException('Secured parameters are not valid.');
+			}
+		}
+	}
+
+
+// === Zabezpečení signalů =====================================================
+
+	/**
+	 * Zajistí vyhodnocení anotací nad handlerem signálu.
+	 *
+	 * @author   Jan Skrasek, Jan Tvrdík
+	 * @param    string            název signálu
+	 * @return   void
+	 * @throws   BadSignalException
+	 */
+	public function signalReceived($signal)
+	{
+		$this->processMethodAnnotations($this->formatSignalMethod($signal));
+		parent::signalReceived($signal);
+	}
+
+	/**
+	 * Generates link. If links points to @secure annotated signal handler method, additonal
+	 * parameter preventing changing parameters will be added.
+	 *
+	 * @author Jan Skrasek
+	 * @param string  $destination
+	 * @param array|mixed $args
+	 * @return string
+	 */
 	public function link($destination, $args = array())
 	{
 		if (!is_array($args)) {
@@ -85,79 +140,73 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 			array_shift($args);
 		}
 
-		// secured signals
-		if (substr($destination, -1) === '!' && strpos($signal = rtrim($destination, '!'), self::NAME_SEPARATOR) === FALSE) {
-			$reflection = $this->getReflection();
-			$method = $this->formatSignalMethod($signal);
-			$signalReflection = $reflection->getMethod($method);
+		$link = parent::link($destination, $args);
+		$lastRequest = $this->presenter->lastCreatedRequest;
 
-			if ($signalReflection->hasAnnotation('secured')) {
-				$signalParams = array();
-				foreach ($signalReflection->getParameters() as $param) {
-					if (isset($args[$param->name])) {
-						$signalParams[$param->name] = $args[$param->name];
-					}
-				}
-				foreach ($this->getPersistentParams() as $param) {
-					if (isset($this->params[$param])) {
-						$signalParams[$param] = $this->params[$param];
-					}
-				}
-				$args[self::CSRF_TOKEN_KEY] = $this->getCsrfToken($method, $signalParams);
-			}
+		// spatny link
+		if ($lastRequest === NULL) return $link;
+
+		// neni signal
+		if (substr($destination, - 1) !== '!') return $link;
+
+		// jen na stejny presenter
+		if ($this->getPresenter()->getName() !== $lastRequest->getPresenterName()) return $link;
+
+		$destination = str_replace(':', '-', $destination);
+		if (strpos($destination, '-') !== FALSE) {
+			$pos = strrpos($destination, '-');
+			$signal = substr($destination, $pos + 1, -1);
+			$component = substr($destination, 0, $pos);
+			$component = $this->getComponent($component);
+		} else {
+			$signal = substr($destination, 0, -1);
+			$component = $this;
 		}
 
-		try {
-			return $this->getPresenter()->createRequest($this, $destination, $args, 'link');
-		} catch (UI\InvalidLinkException $e) {
-			return $this->getPresenter()->handleInvalidLink($e);
+		// jen komponenty
+		if (!$component instanceof \Nette\Application\UI\PresenterComponent) return $link;
+
+		$method = $component->formatSignalMethod($signal);
+		$reflection = \Nette\Reflection\Method::from($component, $method);
+
+		// nema anotaci
+		if (!$reflection->hasAnnotation('secured')) return $link;
+
+		$origParams = $lastRequest->getParameters();
+		$protectedParams = array();
+		foreach ($reflection->getParameters() as $key => $param) {
+			if ($param->isOptional()) continue;
+			$protectedParams[$param->name] = $origParams[$component->getParameterId($param->name)];
 		}
+
+		$uniqueId = $this->getUniqueId();
+		if (empty($uniqueId)) {
+			$paramName = $component->getParameterId('__secu');
+		} else {
+			$paramName = substr($component->getParameterId('__secu'), strlen($uniqueId) + 1);
+		}
+
+		$args[$paramName] = $this->createSecureHash($protectedParams);
+
+		return parent::link($destination, $args);
 	}
 
 
-
-	public function signalReceived($signal)
+	/**
+	 * Creates secure hash from array of arguments.
+	 *
+	 * @author Jan Skrasek
+	 * @param array $param
+	 * @return string
+	 */
+	protected function createSecureHash($params)
 	{
-		$method = $this->formatSignalMethod($signal);
-
-		if (method_exists($this, $method)) {
-			$reflection = new \Nette\Reflection\Method($this, $method);
-			if ($reflection->hasAnnotation('secured')) {
-				$params = array();
-				if ($this->params) {
-					foreach ($reflection->getParameters() as $param) {
-						if (isset($this->params[$param->name])) {
-							$params[$param->name] = $this->params[$param->name];
-						}
-					}
-				}
-				if (!isset($this->params[self::CSRF_TOKEN_KEY]) || $this->params[self::CSRF_TOKEN_KEY] !== $this->getCsrfToken($method, $params)) {
-					throw new UI\BadSignalException("Invalid security token for signal '$signal' in class {$this->reflection->name}.");
-				}
-			}
+		$ns = $this->getSession('securedlinks');
+		if ($ns->key === NULL) {
+			$ns->key = uniqid();
 		}
-
-		parent::signalReceived($signal);
-
-		if (!$this->isAjax() && isset($this->params[self::CSRF_TOKEN_KEY])) {
-			throw new \RuntimeException("Secured signal '$signal' did not redirect. Possible csrf-token reveal by http referer header.");
-		}
-	}
-
-
-
-	protected function getCsrfToken($method, $params)
-	{
-		$control = get_class($this);
-		$session = $this->getSession('Addons.Presenter/CSRF');
-		if (!isset($session->token)) {
-			$session->token = \Nette\Utils\Strings::random();
-		}
-
-		ksort($params);
-		$params = \Nette\Utils\Arrays::flatten($params);
-		$params = implode('|', array_keys($params)) . '|' . implode('|', array_values($params));
-		return substr(md5($control . $method . $params . $session->token), 0, 8);
+		$s = implode('|', array_keys($params)) . '|' . implode('|', array_values($params)) . $ns->key;
+		return substr(md5($s), 4, 8);
 	}
 
 
