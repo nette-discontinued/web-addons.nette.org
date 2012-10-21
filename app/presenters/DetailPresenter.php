@@ -112,8 +112,6 @@ class DetailPresenter extends BasePresenter
 			$this->getHttpRequest()->getHeader('user-agent'),
 			$this->getUser()->isLoggedIn() ? $this->getUser()->getId() : NULL
 		);
-		$this->addonVersions->incrementDownloadsCount($version);
-		$this->addons->incrementDownloadsCount($this->addon);
 
 		$this->redirectUrl($version->distUrl);
 	}

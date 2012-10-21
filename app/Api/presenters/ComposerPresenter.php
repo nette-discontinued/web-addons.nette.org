@@ -95,8 +95,6 @@ class ComposerPresenter extends \NetteAddons\BasePresenter
 			$this->getHttpRequest()->getRemoteAddress(),
 			$this->getHttpRequest()->getHeader('user-agent')
 		);
-		$this->addons->incrementInstallsCount($addon);
-		$this->addonVersions->incrementInstallsCount($version);
 
 		$this->sendJson(array('status' => "success"));
 	}
