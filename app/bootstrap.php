@@ -32,21 +32,14 @@ $container = $configurator->createContainer();
 $container->router[] = new Route('index.php', 'Homepage:default', Route::ONE_WAY);
 $container->router[] = new Route('packages.json', 'Packages:default');
 $container->router[] = new Route('api/github', 'Github:postReceive'); // same as Packagist's route
+$composerPackageRouteHelper = $container->packageRouterHelper;
 $container->router[] = new Route('<id>[/<action>]', array(
 	'presenter' => 'Detail',
 	'action' => 'default',
 	'id' => array(
 		Route::PATTERN => '[^/]+/[^/]+',
-		Route::FILTER_IN => function ($composerName) use ($container) {
-			$row = $container->addons->findOneBy(array('composerName' => $composerName));
-			if (!$row) return NULL;
-			return $row->id;
-		},
-		Route::FILTER_OUT => function ($id) use ($container) {
-			$row = $container->addons->find($id);
-			if (!$row) return NULL;
-			return $row->composerName;
-		},
+		Route::FILTER_IN => callback($composerPackageRouteHelper, 'filterIn'),
+		Route::FILTER_OUT => callback($composerPackageRouteHelper, 'filterOut'),
 	)
 ));
 $container->router[] = new Route('<vendor>', array(
