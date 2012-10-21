@@ -2,8 +2,12 @@
 
 namespace NetteAddons;
 
-use Nette\Security as NS;
+use Nette\Security\AuthenticationException,
+	Nette\Security\IAuthenticator;
 
+/**
+ * @author Patrik Votoček
+ */
 class SignPresenter extends BasePresenter
 {
 
@@ -12,34 +16,49 @@ class SignPresenter extends BasePresenter
 
 	}
 
+
+	/**
+	 * @return Forms\SignInForm
+	 */
 	protected function createComponentSignInForm()
 	{
 		$form = new Forms\SignInForm();
-		$form->onSuccess[] = callback($this, 'signInFormSubmitted');
+		$form->onSuccess[] = $this->signInFormSubmitted;
 
 		return $form;
 	}
 
 
 
-	public function signInFormSubmitted($form)
+	/**
+	 * @param Forms\SignInForm
+	 */
+	public function signInFormSubmitted(Forms\SignInForm $form)
 	{
 		try {
-			$values = $form->getValues();
+			$values = $form->values;
+			$user = $this->getUser();
+
 			if ($values->remember) {
-				$this->getUser()->setExpiration('+ 14 days', FALSE);
+				$user->setExpiration('+ 14 days', FALSE);
 			} else {
-				$this->getUser()->setExpiration('+ 20 minutes', TRUE);
+				$user->setExpiration('+ 20 minutes', TRUE);
 			}
-			$this->getUser()->login($values->username, $values->password);
+			$user->login($values->username, $values->password);
 			if (($backlink = $this->getParameter('backlink')) === NULL) {
-				$this->redirect('Homepage:');
+				$this->redirect(':Homepage:');
 			} else {
 				$this->restoreRequest($backlink);
 			}
 
-		} catch (NS\AuthenticationException $e) {
-			$this->flashMessage($e->getMessage(), 'error');
+		} catch (AuthenticationException $e) {
+			if ($e->getCode() == IAuthenticator::IDENTITY_NOT_FOUND) {
+				$form['username']->addError("User '$values->username' not found.");
+			} elseif ($e->getCode() == IAuthenticator::INVALID_CREDENTIAL) {
+				$form['password']->addError('Invalid password.');
+			} else {
+				$form->addError('Invalid credentials.');
+			}
 		}
 	}
 
