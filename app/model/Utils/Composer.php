@@ -81,7 +81,7 @@ class Composer
 		$composer = $orig ? (clone $orig) : new stdClass();
 
 		if (empty($composer->name)) {
-			$composer->name = $version->addon->composerName;
+			$composer->name = $version->addon->composerFullName;
 		}
 
 		if (empty($composer->description)) {
@@ -127,9 +127,9 @@ class Composer
 		$file->packages = $packages = new stdClass();
 
 		foreach ($addons as $addon) {
-			$packages->{$addon->composerName} = new stdClass();
+			$packages->{$addon->composerFullName} = new stdClass();
 			foreach ($addon->versions as $version) {
-				$packages->{$addon->composerName}->{$version->version} = $version->composerJson;
+				$packages->{$addon->composerFullName}->{$version->version} = $version->composerJson;
 			}
 		}
 

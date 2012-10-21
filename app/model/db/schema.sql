@@ -257,3 +257,12 @@ COMMENT='';
 -- added addons_votes.datetime
 ALTER TABLE `addons_votes`
 ADD `datetime` datetime NOT NULL;
+
+-- split composerName to composerVendor and composerName
+ALTER TABLE `addons`
+ADD `composerVendor` varchar(50) COLLATE 'utf8_general_ci' NOT NULL COMMENT 'composer valid package vendor name' AFTER `name`,
+CHANGE `composerName` `composerName` varchar(50) COLLATE 'utf8_general_ci' NOT NULL COMMENT 'composer valid package name' AFTER `composerVendor`,
+COMMENT='';
+ALTER TABLE `addons`
+ADD UNIQUE `composerFullName` (`composerVendor`, `composerName`),
+DROP INDEX `composerName`;

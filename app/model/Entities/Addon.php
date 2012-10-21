@@ -10,14 +10,22 @@ use Nette,
 
 /**
  * @author Filip Procházka <filip.prochazka@kdyby.org>
+ * @author Patrik Votoček
+ *
+ * @property string $composerFullName
  */
 class Addon extends Nette\Object
 {
+	const COMPOSER_NAME_RE = '#^(?P<vendor>[a-z0-9]+(-[a-z0-9]+)*)/(?P<name>[a-z0-9]+(-[a-z0-9]+)*)$#i';
+
 	/** @var int */
 	public $id;
 
 	/** @var string */
 	public $name;
+
+	/** @var string */
+	public $composerVendor;
 
 	/** @var string */
 	public $composerName;
@@ -75,6 +83,7 @@ class Addon extends Nette\Object
 		$addon = new static;
 		$addon->id = (int) $row->id;
 		$addon->name = $row->name;
+		$addon->composerVendor = $row->composerVendor;
 		$addon->composerName = $row->composerName;
 		$addon->userId = (int) $row->user->id;
 		$addon->shortDescription = $row->shortDescription;
@@ -127,19 +136,33 @@ class Addon extends Nette\Object
 		}*/
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getVendorName()
-	{
-		return Strings::replace($this->composerName, '~/.+$~', '');
-	}
+
 
 	/**
-	 * @return string
+	 * @return string|NULL (vendor/name)
 	 */
-	public function getPackageName()
+	public function getComposerFullName()
 	{
-		return Strings::replace($this->composerName, '~.+/~A', '');
+		if (!$this->composerVendor || !$this->composerName) {
+			return NULL;
+		}
+		return $this->composerVendor . '/' . $this->composerName;
+	}
+
+
+
+	/**
+	 * @param string (vendor/name)
+	 * @return Addon
+	 * @throws \NetteAddons\InvalidArgumentException
+	 */
+	public function setComposerFullName($composerFullName)
+	{
+		if (($data = Strings::match($composerFullName, static::COMPOSER_NAME_RE)) === NULL) {
+			throw new \NetteAddons\InvalidArgumentException('Invalid full composer name format.');
+		}
+		$this->composerVendor = $data['vendor'];
+		$this->composerName = $data['name'];
+		return $this;
 	}
 }

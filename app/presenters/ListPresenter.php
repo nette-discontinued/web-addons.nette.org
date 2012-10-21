@@ -133,7 +133,7 @@ class ListPresenter extends BasePresenter
 	public function renderByVendor($vendor)
 	{
 		$this->template->vendor = $vendor;
-		$this->template->addons = $this->addons->findByVendor($vendor);
+		$this->template->addons = $this->addons->findByComposerVendor($vendor);
 	}
 
 }

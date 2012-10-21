@@ -38,15 +38,15 @@ $container->router[] = new Route('<id>[/<action>]', array(
 	'action' => 'default',
 	'id' => array(
 		Route::PATTERN => '[^/]+/[^/]+',
-		Route::FILTER_IN => function ($composerName) use ($container) {
-			$row = $container->addons->findOneBy(array('composerName' => $composerName));
+		Route::FILTER_IN => function ($composerFullName) use ($container) {
+			$row = $container->addons->findOneByComposerFullName($composerFullName);
 			if (!$row) return NULL;
 			return $row->id;
 		},
 		Route::FILTER_OUT => function ($id) use ($container) {
 			$row = $container->addons->find($id);
 			if (!$row) return NULL;
-			return $row->composerName;
+			return $row->composerVendor . '/' . $row->composerName;
 		},
 	)
 ));
@@ -55,16 +55,16 @@ $container->router[] = new Route('<vendor>', array(
 	'action' => 'byVendor',
 	'vendor' => array(
 		Route::FILTER_IN => function ($vendor) use ($container) {
-			$row = $container->addons->findByVendor($vendor)->limit(1)->fetch();
+			$row = $container->addons->findByComposerVendor($vendor)->limit(1)->fetch();
 			if (!$row) return NULL;
 			$addon = Addon::fromActiveRow($row);
-			return $addon->getVendorName();
+			return $addon->composerVendor;
 		},
 		Route::FILTER_OUT => function ($vendor) use ($container) {
-			$row = $container->addons->findByVendor($vendor)->limit(1)->fetch();
+			$row = $container->addons->findByComposerVendor($vendor)->limit(1)->fetch();
 			if (!$row) return NULL;
 			$addon = Addon::fromActiveRow($row);
-			return $addon->getVendorName();
+			return $addon->composerVendor;
 		},
 	),
 ));

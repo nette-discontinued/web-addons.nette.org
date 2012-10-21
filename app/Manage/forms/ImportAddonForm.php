@@ -146,8 +146,8 @@ class ImportAddonForm extends \NetteAddons\Forms\BaseForm
 		try {
 			$this->addon = $this->manager->import($importer, $this->user);
 
-			if ($this->addon->composerName && !$this->validators->isComposerNameUnique($this->addon->composerName)) {
-				$this->addError("Addon with composer name '{$this->addon->composerName}' already exist.");
+			if ($this->addon->composerFullName && !$this->validators->isComposerFullNameUnique($this->addon->composerFullName)) {
+				$this->addError("Addon with composer name '{$this->addon->composerFullName}' already exist.");
 				return;
 			}
 

@@ -3,6 +3,7 @@
 namespace NetteAddons\Model;
 
 use Nette,
+	Nette\Utils\Strings,
 	Nette\Database\Table\ActiveRow;
 
 
@@ -52,10 +53,15 @@ class VersionDependencies extends Table
 	 * @param  string
 	 * @return ActiveRow|FALSE
 	 */
-	private function findAddon($composerName)
+	private function findAddon($composerFullName)
 	{
+		$composerVendor = $composerName = NULL;
+		if (($data = Strings::match($composerFullName, Addon::COMPOSER_NAME_RE)) !== NULL) {
+			$composerVendor = $data['vendor'];
+			$composerName = $data['name'];
+		}
 		return $this->connection->table('addons')
-			->where('composerName = ?', $composerName)
+			->where(array('composerVendor' => $composerVendor, 'composerName' => $composerName))
 			->limit(1)->fetch();
 	}
 }

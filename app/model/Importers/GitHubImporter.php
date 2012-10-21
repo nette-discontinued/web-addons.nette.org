@@ -111,8 +111,8 @@ class GitHubImporter extends Nette\Object implements IAddonImporter
 		$addon->name = $info->name;
 
 		// composerName
-		if ($composer && $this->validators->isComposerNameValid($composer->name)) {
-			$addon->composerName = $composer->name;
+		if ($composer && $this->validators->isComposerFullNameValid($composer->name)) {
+			$addon->composerFullName = $composer->name;
 		}
 
 		// shortDescription

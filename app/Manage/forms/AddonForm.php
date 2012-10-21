@@ -78,10 +78,10 @@ abstract class AddonForm extends \NetteAddons\Forms\BaseForm
 	{
 		$this->addText('name', 'Name', NULL, 100)
 			->setRequired();
-		$this->addText('composerName', 'Composer name', NULL, 100)
+		$this->addText('composerFullName', 'Composer name', NULL, 100)
 			->setRequired()
 			->addRule(self::PATTERN, 'Invalid composer name', FormValidators::COMPOSER_NAME_RE)
-			->addRule($this->validators->isComposerNameUnique, 'This composer name has been already taken.')
+			->addRule($this->validators->isComposerFullNameUnique, 'This composer name has been already taken.')
 			->setOption('description', '<vendor>/<project-name>, only lowercase letters and dash separation is allowed');
 		$this->addTextArea('shortDescription', 'Short description')
 			->addRule(self::MAX_LENGTH, NULL, 250)
@@ -153,8 +153,8 @@ abstract class AddonForm extends \NetteAddons\Forms\BaseForm
 			}
 		}
 
-		if ($addon->composerName) {
-			$this->removeComponent($this['composerName']);
+		if ($addon->composerFullName) {
+			$this->removeComponent($this['composerFullName']);
 		}
 
 		$license = $addon->defaultLicense;

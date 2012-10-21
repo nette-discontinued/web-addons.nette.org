@@ -120,7 +120,7 @@ class AddonManageFacade extends Nette\Object
 			'tags' => FALSE,
 		);
 		$ifEmpty = array(
-			'composerName' => TRUE,
+			'composerFullName' => TRUE,
 		);
 
 		if (isset($values['defaultLicense']) && is_array($values['defaultLicense'])) {
@@ -264,7 +264,7 @@ class AddonManageFacade extends Nette\Object
 	 */
 	private function getFileName(Model\AddonVersion $version)
 	{
-		$name = Strings::webalize($version->addon->composerName)
+		$name = Strings::webalize($version->addon->composerFullName)
 			. '-' . $version->version . '.zip';
 
 		return $name;

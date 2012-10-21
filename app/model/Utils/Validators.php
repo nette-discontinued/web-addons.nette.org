@@ -8,7 +8,9 @@ use Nette,
 	NetteAddons\Model\Addons;
 
 
-
+/**
+ * @author Patrik Votoček
+ */
 class Validators extends Nette\Object
 {
 	/** composerName regular expression */
@@ -34,18 +36,24 @@ class Validators extends Nette\Object
 
 
 
-	public function isComposerNameValid($composerName)
+	/**
+	 * @param string
+	 * @return bool
+	 */
+	public function isComposerFullNameValid($composerFullName)
 	{
-		return Strings::match($composerName, '#' . self::COMPOSER_NAME_RE . '#');
+		return Strings::match($composerFullName, '#' . self::COMPOSER_NAME_RE . '#');
 	}
 
 
 
-	public function isComposerNameUnique($composerName)
+	/**
+	 * @param string
+	 * @return bool
+	 */
+	public function isComposerFullNameUnique($composerFullName)
 	{
-		$addon = $this->addonsRepo->findOneBy(array(
-			'composerName' => $composerName,
-		));
+		$addon = $this->addonsRepo->findOneByComposerFullName($composerFullName);
 		return ($addon === FALSE);
 	}
 

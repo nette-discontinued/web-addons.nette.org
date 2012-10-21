@@ -9,7 +9,8 @@ DROP TABLE IF EXISTS `addons`;
 CREATE TABLE `addons` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL COMMENT 'user friendly form',
-  `composerName` varchar(100) NOT NULL COMMENT 'vendor / package',
+  `composerVendor` varchar(50) NOT NULL COMMENT 'composer valid package vendor name',
+  `composerName` varchar(50) NOT NULL COMMENT 'composer valid package name',
   `userId` int(10) unsigned NOT NULL,
   `repository` varchar(500) DEFAULT NULL COMMENT 'repository url (git or svn)',
   `repositoryHosting` enum('github') DEFAULT NULL COMMENT 'repository hosting',
@@ -22,7 +23,7 @@ CREATE TABLE `addons` (
   `totalDownloadsCount` int(11) NOT NULL DEFAULT '0' COMMENT 'total times this addon was downloaded',
   `totalInstallsCount` int(11) NOT NULL DEFAULT '0' COMMENT 'total times this addon was installed using composer',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `composerName` (`composerName`),
+  UNIQUE KEY `composerFullName` (`composerVendor`, `composerName`),
   KEY `userId` (`userId`),
   CONSTRAINT `addons_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

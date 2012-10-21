@@ -65,7 +65,8 @@ class ComposerPresenter extends \NetteAddons\BasePresenter
 		}
 		$version = (string) $post['version'];
 
-		if (!$addonRow = $this->addons->findOneBy(array('composerName' => $package))) {
+
+		if (!$addonRow = $this->addons->findOneByComposerFullName($package)) {
 			$this->error('Package not found.');
 		}
 

@@ -3,17 +3,19 @@
 namespace NetteAddons\Model;
 
 use Nette,
+	Nette\Utils\Strings,
 	Nette\Database\SqlLiteral,
 	Nette\Database\Table\ActiveRow,
 	Nette\Database\Table\Selection,
 	Nette\DateTime,
-	Nette\Http,
-	NetteAddons;
+	Nette\Http;
 
 
 
 /**
  * Addons table repository
+ *
+ * @author Patrik Votoček
  */
 class Addons extends Table
 {
@@ -100,9 +102,37 @@ class Addons extends Table
 	 * @param string
 	 * @return \Nette\Database\Table\Selection
 	 */
-	public function findByVendor($vendor)
+	public function findByComposerVendor($vendor)
 	{
-		return $this->findBy(array('composerName LIKE ?' => "$vendor/%")); // FIXME any better variant?
+		return $this->findBy(array('composerVendor' => $vendor));
+	}
+
+
+
+	/**
+	 * @param string
+	 * @return \Nette\Database\Table\Selection
+	 */
+	public function findOneByComposerFullName($composerFullName)
+	{
+		$composerVendor = $composerName = NULL;
+		if (($data = Strings::match($composerFullName, Addon::COMPOSER_NAME_RE)) !== NULL) {
+			$composerVendor = $data['vendor'];
+			$composerName = $data['name'];
+		}
+		return $this->findOneByComposerVendorAndName($composerVendor, $composerName);
+	}
+
+
+
+	/**
+	 * @param string
+	 * @param string
+	 * @return \Nette\Database\Table\Selection
+	 */
+	public function findOneByComposerVendorAndName($vendor, $name)
+	{
+		return $this->findOneBy(array('composerVendor' => $vendor, 'composerName' => $name));
 	}
 
 
@@ -195,6 +225,7 @@ class Addons extends Table
 		try {
 			$row = $this->createRow(array(
 				'name'                => $addon->name,
+				'composerVendor'      => $addon->composerVendor,
 				'composerName'        => $addon->composerName,
 				'userId'              => $addon->userId,
 				'repository'          => $addon->repository,

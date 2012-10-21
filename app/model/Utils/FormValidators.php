@@ -24,16 +24,16 @@ class FormValidators extends Nette\Object
 
 
 
-	public function isComposerNameValid(Forms\IControl $control)
+	public function isComposerFullNameValid(Forms\IControl $control)
 	{
-		return $this->validators->isComposerNameValid($control->getValue());
+		return $this->validators->isComposerFullNameValid($control->getValue());
 	}
 
 
 
-	public function isComposerNameUnique(Forms\IControl $control)
+	public function isComposerFullNameUnique(Forms\IControl $control)
 	{
-		return $this->validators->isComposerNameUnique($control->getValue());
+		return $this->validators->isComposerFullNameUnique($control->getValue());
 	}
 
 
