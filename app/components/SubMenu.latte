@@ -11,18 +11,18 @@
 			</a>
 		</li>
 		{ifset $addon}
-		<li>
+		<li n:if="!$presenter->isLinkCurrent(':Detail:default', $addon->id)">
 			<a rel="nofollow" href="{plink :Detail:default $addon->id}" n:class="$presenter->linkCurrent ? active">
 				<span>View</span>
 			</a>
 		</li>
 		{if $auth->isAllowed($addon, 'manage')}
-		<li>
+		<li n:if="!$presenter->isLinkCurrent(':Manage:Addon:edit', $addon->id)">
 			<a rel="nofollow" href="{plink :Manage:Addon:edit $addon->id}" n:class="$presenter->linkCurrent ? active">
 				<span>Edit</span>
 			</a>
 		</li>
-		<li n:if="$auth->isAllowed($addon, 'delete')">
+		<li n:if="$auth->isAllowed($addon, 'delete') && !$presenter->isLinkCurrent(':Manage:Addon:delete', $addon->id)">
 			<a rel="nofollow" href="{plink :Manage:Addon:delete $addon->id}" n:class="$presenter->linkCurrent ? active">
 				<span>{if empty($addon->deletedAt)}Delete{else}Restore{/if}</span>
 			</a>
