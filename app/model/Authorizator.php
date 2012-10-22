@@ -58,7 +58,7 @@ class Authorizator extends Nette\Object
 			} elseif ($action === 'manage') {
 				return (
 					($this->user->isLoggedIn() && $ownerId === $this->user->getId()) ||
-					$this->user->isInRole('moderator') || $this->user->isInRole('administrators')
+					$this->user->isInRole('moderators') || $this->user->isInRole('administrators')
 				);
 
 			} elseif ($action === 'vote') {
