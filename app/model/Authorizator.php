@@ -50,7 +50,7 @@ class Authorizator extends Nette\Object
 
 		if ($resource === 'addon') {
 			if ($action === 'delete') {
-				return $this->user->isInRole('administrators') || $this->user->isInRole('moderator');
+				return $this->user->isInRole('administrators') || $this->user->isInRole('moderators');
 			}
 			if ($action === 'view') {
 				return TRUE;
