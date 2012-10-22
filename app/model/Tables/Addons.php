@@ -344,6 +344,9 @@ class Addons extends Table
 			$this->tags->saveAddonTags($addon);
 
 			$this->connection->commit();
+			
+			$this->onAddonChange($addon);
+
 			return $row;
 
 		} catch (\Exception $e) {
