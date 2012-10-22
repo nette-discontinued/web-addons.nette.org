@@ -84,11 +84,9 @@ abstract class AddonForm extends \NetteAddons\Forms\BaseForm
 			->addRule($this->validators->isComposerFullNameUnique, 'This composer name has been already taken.')
 			->setOption('description', '<vendor>/<project-name>, only lowercase letters and dash separation is allowed');
 		$this->addMultiSelect('defaultLicense', 'Default license', $this->licenses->getLicenses(TRUE))
-			->setAttribute('class', 'chzn-select')
 			->setRequired()
 			->addRule($this->validators->isLicenseValid, 'Invalid license identifier.');
-		$this->addMultiSelect('tags', 'Categories', $this->getCategories())
-			->setAttribute('class', 'chzn-select');
+		$this->addMultiSelect('tags', 'Categories', $this->getCategories());
 		$this->addText('repository', 'Repository URL', NULL, 500)
 			->addCondition(self::FILLED)
 			->addRule(self::URL);
@@ -96,8 +94,7 @@ abstract class AddonForm extends \NetteAddons\Forms\BaseForm
 			->setType('url')
 			->addCondition(self::FILLED)
 			->addRule(self::URL);
-		$this->addTextArea('shortDescription', 'Short description')
-			->addRule(self::MAX_LENGTH, NULL, 250)
+		$this->addText('shortDescription', 'Short description', NULL, 250)
 			->setRequired();
 		$this->addTextArea('description', 'Description')
 			->setRequired();

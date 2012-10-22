@@ -5,14 +5,31 @@ a {
 	margin: 0;
 }
 
-form .form label {
-	display: block;
-}
-form .form .required {
+.form .required {
 	color: black;
 }
-form .form .required small {
+.form .required small {
 	font-weight: normal;
+}
+
+.form .input-full, .form chzn-container {
+	width: 100%;
+}
+
+.form .input-half {
+	width: 50%;
+}
+
+.form .input-third {
+	width: 33%;
+}
+
+.form textarea.input-low {
+	height: 30px;
+}
+
+.form .input-large {
+	font-size: 1.4em;
 }
 
 .hide {
