@@ -98,7 +98,7 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 					$protectedParams[$param->name] = $this->getParameter($param->name);
 				}
 				if ($this->getParameter('__sec') !== $this->createSecureHash($protectedParams)) {
-					throw new $this->error('Secured parameters are not valid.', 403);
+					$this->error('Secured parameters are not valid.', 403);
 				}
 			}
 		}
