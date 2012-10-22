@@ -342,3 +342,18 @@ ADD FOREIGN KEY (`versionId`) REFERENCES `addons_versions` (`id`) ON DELETE CASC
 ALTER TABLE `addons_dependencies`
 DROP FOREIGN KEY `addons_dependencies_ibfk_2`,
 ADD FOREIGN KEY (`dependencyId`) REFERENCES `addons` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT;
+
+
+-- add reports
+CREATE TABLE `addons_reports` (
+  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `userId` int(10) unsigned NOT NULL COMMENT 'who reported',
+  `addonId` int(10) unsigned NOT NULL COMMENT 'concerned addon',
+  `reportedAt` datetime NOT NULL COMMENT 'repored at this datetime',
+  `message` text NOT NULL COMMENT 'why is reported',
+  `reason` text NULL COMMENT 'solution description',
+  `zappedBy` int(10) unsigned NULL COMMENT 'who zapped',
+  FOREIGN KEY (`userId`) REFERENCES `users` (`id`),
+  FOREIGN KEY (`addonId`) REFERENCES `addons` (`id`),
+  FOREIGN KEY (`zappedBy`) REFERENCES `users` (`id`)
+) COMMENT='';

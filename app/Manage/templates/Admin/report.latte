@@ -1,0 +1,25 @@
+{var $title = 'Report detail'}
+
+{block content}
+<div id="breadcrumbs">
+	<a href="http://nette.org/en/">Nette Framework</a> »
+	<a n:href=":Homepage:">Addons, plugins and components</a> »
+	<a n:href="reports">Reports</a> »
+	<span>Detail</span>
+</div>
+
+<h1><a n:href=":Detail: $report->addon->id">{$report->addon->name}</a></h1>
+
+<h2>{$title}</h2>
+
+<p class="perex">{$report->reportedAt|date:'H:i:s Y-m-d'} - {$report->user->realname}</p>
+
+<p>{$report->message}</p>
+
+{if empty($report->reason)}
+	{control reportForm}
+{else}
+	<p class="perex">Zapped by: {$report->ref('zappedBy')->realname}</p>
+
+	<p>{$report->reason}</p>
+{/if}

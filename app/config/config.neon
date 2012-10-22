@@ -60,6 +60,7 @@ services:
 	addonDownloads: NetteAddons\Model\AddonDownloads
 	addonVersions: NetteAddons\Model\AddonVersions
 	addonVotes: NetteAddons\Model\AddonVotes
+	addonReports: NetteAddons\Model\AddonReports
 	versionDependencies: NetteAddons\Model\VersionDependencies
 	tags: NetteAddons\Model\Tags
 
@@ -97,6 +98,8 @@ services:
 			- addDescriptionFormat('markdown', 'Markdown')
 	importAddonForm: NetteAddons\Manage\Forms\ImportAddonForm
 	addAddonVersionForm: NetteAddons\Manage\Forms\AddVersionForm
+	reportForm: NetteAddons\Forms\ReportForm
+	manageReportForm: NetteAddons\Manage\Forms\ReportForm
 
 
 factories:

@@ -40,6 +40,10 @@ a {
 	width: 100%;
 }
 
+#content table th a {
+	color: white;
+}
+
 .sidebar .info {
 	clear: both;
 	color: #666;

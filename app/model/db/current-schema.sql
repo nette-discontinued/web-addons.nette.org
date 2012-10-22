@@ -28,8 +28,8 @@ CREATE TABLE `addons` (
   UNIQUE KEY `composerVendor_composerName_deletedAt` (`composerVendor`,`composerName`,`deletedAt`),
   KEY `userId` (`userId`),
   KEY `deletedBy` (`deletedBy`),
-  CONSTRAINT `addons_ibfk_2` FOREIGN KEY (`deletedBy`) REFERENCES `users` (`id`) ON DELETE SET NULL,
-  CONSTRAINT `addons_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`)
+  CONSTRAINT `addons_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`),
+  CONSTRAINT `addons_ibfk_2` FOREIGN KEY (`deletedBy`) REFERENCES `users` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -44,8 +44,8 @@ CREATE TABLE `addons_dependencies` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `versionId_type_packageName` (`versionId`,`type`,`packageName`),
   KEY `dependencyId` (`dependencyId`),
-  CONSTRAINT `addons_dependencies_ibfk_5` FOREIGN KEY (`dependencyId`) REFERENCES `addons` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `addons_dependencies_ibfk_4` FOREIGN KEY (`versionId`) REFERENCES `addons_versions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `addons_dependencies_ibfk_4` FOREIGN KEY (`versionId`) REFERENCES `addons_versions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `addons_dependencies_ibfk_5` FOREIGN KEY (`dependencyId`) REFERENCES `addons` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -62,8 +62,8 @@ CREATE TABLE `addons_downloads` (
   PRIMARY KEY (`id`),
   KEY `versionId` (`versionId`),
   KEY `userId` (`userId`),
-  CONSTRAINT `addons_downloads_ibfk_4` FOREIGN KEY (`versionId`) REFERENCES `addons_versions` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `addons_downloads_ibfk_3` FOREIGN KEY (`userId`) REFERENCES `users` (`id`)
+  CONSTRAINT `addons_downloads_ibfk_3` FOREIGN KEY (`userId`) REFERENCES `users` (`id`),
+  CONSTRAINT `addons_downloads_ibfk_4` FOREIGN KEY (`versionId`) REFERENCES `addons_versions` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -107,6 +107,25 @@ END;;
 
 DELIMITER ;
 
+DROP TABLE IF EXISTS `addons_reports`;
+CREATE TABLE `addons_reports` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userId` int(10) unsigned NOT NULL COMMENT 'who reported',
+  `addonId` int(10) unsigned NOT NULL COMMENT 'concerned addon',
+  `reportedAt` datetime NOT NULL COMMENT 'repored at this datetime',
+  `message` text NOT NULL COMMENT 'why is reported',
+  `reason` text COLLATE utf8_czech_ci COMMENT 'solution description',
+  `zappedBy` int(10) unsigned DEFAULT NULL COMMENT 'who zapped',
+  PRIMARY KEY (`id`),
+  KEY `userId` (`userId`),
+  KEY `addonId` (`addonId`),
+  KEY `zappedBy` (`zappedBy`),
+  CONSTRAINT `addons_reports_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`),
+  CONSTRAINT `addons_reports_ibfk_2` FOREIGN KEY (`addonId`) REFERENCES `addons` (`id`),
+  CONSTRAINT `addons_reports_ibfk_3` FOREIGN KEY (`zappedBy`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
+
+
 DROP TABLE IF EXISTS `addons_tags`;
 CREATE TABLE `addons_tags` (
   `addonId` int(10) unsigned NOT NULL,
@@ -147,8 +166,8 @@ CREATE TABLE `addons_votes` (
   `datetime` datetime NOT NULL,
   PRIMARY KEY (`addonId`,`userId`),
   KEY `userId` (`userId`),
-  CONSTRAINT `addons_votes_ibfk_3` FOREIGN KEY (`addonId`) REFERENCES `addons` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `addons_votes_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `users` (`id`)
+  CONSTRAINT `addons_votes_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `users` (`id`),
+  CONSTRAINT `addons_votes_ibfk_3` FOREIGN KEY (`addonId`) REFERENCES `addons` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -241,4 +260,4 @@ CREATE TABLE `users_details` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- 2012-10-22 01:33:21
+-- 2012-10-22 12:37:12

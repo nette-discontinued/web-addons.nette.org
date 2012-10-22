@@ -49,7 +49,7 @@ class Authorizator extends Nette\Object
 		}
 
 		if ($resource === 'addon') {
-			if ($action === 'delete') {
+			if ($action === 'delete' || $action === 'reports') {
 				return $this->user->isInRole('administrators') || $this->user->isInRole('moderators');
 			}
 			if ($action === 'view') {

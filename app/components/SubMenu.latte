@@ -16,6 +16,11 @@
 				<span>View</span>
 			</a>
 		</li>
+		<li n:if="!$presenter->isLinkCurrent(':Detail:report', $addon->id)">
+			<a rel="nofollow" href="{plink :Detail:report $addon->id}" n:class="$presenter->linkCurrent ? active">
+				<span>Report</span>
+			</a>
+		</li>
 		{if $auth->isAllowed($addon, 'manage')}
 		<li n:if="!$presenter->isLinkCurrent(':Manage:Addon:edit', $addon->id)">
 			<a rel="nofollow" href="{plink :Manage:Addon:edit $addon->id}" n:class="$presenter->linkCurrent ? active">
@@ -42,6 +47,11 @@
 		<li n:if="$auth->isAllowed('addon', 'delete')">
 			<a rel="nofollow" href="{plink :Manage:Admin:deleted}" n:class="$presenter->linkCurrent ? active">
 				<span>List deleted</span>
+			</a>
+		</li>
+		<li n:if="$auth->isAllowed('addon', 'reports')">
+			<a rel="nofollow" href="{plink :Manage:Admin:reports}" n:class="$presenter->linkCurrent ? active">
+				<span>List reports</span>
 			</a>
 		</li>
 		{/ifset}

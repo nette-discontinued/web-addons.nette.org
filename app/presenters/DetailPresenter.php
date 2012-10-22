@@ -14,6 +14,7 @@ use Nette\Http,
 /**
  * @author Jan Marek
  * @author Jan Tvrdík
+ * @author Patrik Votoček
  */
 class DetailPresenter extends BasePresenter
 {
@@ -38,6 +39,11 @@ class DetailPresenter extends BasePresenter
 	/** @var AddonVotes */
 	private $addonVotes;
 
+	/** @var Forms\ReportForm */
+	private $reportForm;
+
+
+
 	/**
 	 * @param Addons
 	 * @param AddonDownloads
@@ -50,6 +56,16 @@ class DetailPresenter extends BasePresenter
 		$this->addonDownloads = $downloads;
 		$this->addonVersions = $versions;
 		$this->addonVotes = $votes;
+	}
+
+
+
+	/**
+	 * @param Forms\ReportForm
+	 */
+	public function injectForms(Forms\ReportForm $reportForm)
+	{
+		$this->reportForm = $reportForm;
 	}
 
 
@@ -151,6 +167,45 @@ class DetailPresenter extends BasePresenter
 			$this->flashMessage('Voting was successfull!');
 			$this->redirect('this');
 		}
+	}
+
+
+
+	/**
+	 * @return Forms\ReportForm
+	 */
+	protected function createComponentReportForm()
+	{
+		$form = $this->reportForm;
+
+		$form->setAddon($this->addon);
+		$form->setUser($this->getUser()->identity);
+
+		$form->onSuccess[] = $this->reportFormSubmitted;
+
+		return $form;
+	}
+
+
+
+	/**
+	 * @param Forms\ReportForm
+	 */
+	public function reportFormSubmitted(Forms\ReportForm $form)
+	{
+		if ($form->valid) {
+			$this->flashMessage('Report sent.');
+			$this->redirect('default');
+		}
+	}
+
+
+	/**
+	 * @param int
+	 */
+	public function renderReport($id)
+	{
+
 	}
 
 

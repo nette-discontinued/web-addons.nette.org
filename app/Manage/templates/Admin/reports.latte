@@ -1,0 +1,37 @@
+{var $title = 'List reports'}
+
+{block content}
+<div id="breadcrumbs">
+	<a href="http://nette.org/en/">Nette Framework</a> »
+	<a n:href=":Homepage:">Addons, plugins and components</a> »
+	<span>Reports</span>
+</div>
+
+<h1>Reports</h1>
+
+<h2>List</h2>
+
+{if count($reports)}
+	{foreach $reports as $report}
+		<table style="width: 100%">
+			<tbody>
+				<tr>
+					<th style="width: 50%;"><a n:href=":Detail: $report->addonId">{$report->addon->name}</a></th>
+					<th>{$report->reportedAt|date:'H:i:s Y-m-d'}</th>
+				</tr>
+				<tr>
+					<td>{$report->user->realname}</td>
+					<td>
+						{if empty($report->reason)}
+						<a n:href="report $report->id">zap</a>
+						{else}
+						<a n:href="report $report->id">zapped</a> by: {$report->ref('zappedBy')->realname}
+						{/if}
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	{/foreach}
+{else}
+	<p>No addons found.</p>
+{/if}

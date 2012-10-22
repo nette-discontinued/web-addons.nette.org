@@ -1,0 +1,14 @@
+{block content}
+<div id="breadcrumbs">
+	<a href="http://nette.org/en/">Nette Framework</a> »
+	<a n:href=":Homepage:">Addons, plugins and components</a> »
+	<a n:href=":List:byVendor vendor => $addon->composerVendor">{$addon->composerVendor}</a> »
+	<a n:href="default">{$addon->name}</a> »
+	<span>Report addon</span>
+</div>
+
+<p class="warning" n:if="!empty($addon->deletedAt)">This addon marked as deleted at {$addon->deletedAt|date:'H:i:s Y-m-d'}{if !empty($addon->deletedBy)} by {$addon->deletedBy->realname}{/if}</p>
+
+<h1>Report addon <a n:href="default">{$addon->name}</a></h1>
+
+{control reportForm}
