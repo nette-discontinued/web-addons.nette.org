@@ -41,6 +41,36 @@ class AddonDownloads extends Table
 		));
 	}
 
+	/**
+	 * Get cumulative download statistics for an addon in a date range
+	 *
+	 * @param int
+	 * @param \DateTime
+	 * @param \DateTime
+	 * @return array day => { day, count }
+	 */
+	public function findDownloadUsage($addonId, \DateTime $from, \DateTime $to)
+	{
+		$result = $this->findAll()
+			->select('DATE(time) day, COUNT(*) c')
+			->where('versionId.addonId = ? AND fake = 0 AND time BETWEEN ? AND ?', $addonId, $from, $to)
+			->group('day');
+
+		$stats = array();
+		for ($day = clone $from; $day <= $to; $day->modify('+ 1 days')) {
+			$stats[$day->format('Y-m-d')] = (object) array(
+				'day' => clone $day,
+				'count' => 0,
+			);
+		}
+
+		foreach ($result as $row) {
+			$stats[$row->day->format('Y-m-d')]->count = $row->c;
+		}
+
+		return $stats;
+	}
+
 
 
 	/**
