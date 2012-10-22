@@ -19,6 +19,9 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 	/** @var Model\Tags */
 	protected $tags;
 
+	/** @var Model\Pages */
+	protected $pages;
+
 	/** @var Model\Utils\Licenses */
 	protected $licenses;
 
@@ -43,9 +46,14 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 
 
 
-	public function injectTags(Model\Tags $tags)
+	/**
+	 * @param Model\Tags
+	 * @param Model\Pages
+	 */
+	public function injectPrimaryModels(Model\Tags $tags, Model\Pages $pages)
 	{
 		$this->tags = $tags;
+		$this->pages = $pages;
 	}
 
 
@@ -221,6 +229,7 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 		$this->template->auth = $this->auth;
 		$this->template->categories = $this->tags->findMainTags();
 		$this->template->tags = $this->tags;
+		$this->template->pages = $this->pages->findAll();
 		$this->template->robots = 'noindex, nofollow'; // TODO: remove in final version
 	}
 }

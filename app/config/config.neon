@@ -63,6 +63,7 @@ services:
 	addonReports: NetteAddons\Model\AddonReports
 	versionDependencies: NetteAddons\Model\VersionDependencies
 	tags: NetteAddons\Model\Tags
+	pages: NetteAddons\Model\Pages
 
 	# facades
 	addonsManager:
@@ -100,6 +101,7 @@ services:
 	addAddonVersionForm: NetteAddons\Manage\Forms\AddVersionForm
 	reportForm: NetteAddons\Forms\ReportForm
 	manageReportForm: NetteAddons\Manage\Forms\ReportForm
+	editPageForm: NetteAddons\Forms\EditPageForm
 
 
 factories:

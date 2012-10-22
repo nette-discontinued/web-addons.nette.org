@@ -1,0 +1,37 @@
+{var $title = $page->name}
+{block content}
+<div id="breadcrumbs">
+	<a href="http://nette.org/en/">Nette Framework</a> »
+	<a n:href=":Homepage:">Addons, plugins and components</a> »
+	<span>{$title}</span>
+</div>
+
+<h1>{$title}</h1>
+
+{!$content}
+
+{/block}
+
+{block sidebar}
+{include #parent}
+
+{if !empty($toc)}
+<div id="toc">
+	<h2>Contents</h2>
+
+	{var $level = 2}
+	<ul>
+		{foreach $toc as $heading}
+			{if $heading['level'] === $level + 1}
+				{var $level = $level + 1}
+				<ul>
+					{elseif $heading['level'] === $level - 1}
+						{var $level = $level - 1}
+				</ul>
+			{/if}
+
+			<li><a href="#{$heading['el']->id}">{$heading['title']}</a>
+		{/foreach}
+	{while $level-- > 1}</ul>{/while}
+</div>
+{/if}

@@ -30,11 +30,6 @@ final class SpecialPresenter extends BasePresenter
 		$this->template->addons = $this->addons->findAll();
 		$this->template->vendors = $this->addons->findVendors();
 		$this->template->categories = $this->tags->findMainTags();
-		$this->template->pages = array(
-			'howToAddPlugin' => 'How to add plugin',
-			'pluginWritingGuidelines' => 'Plugin writing guidelines',
-			'sendFeedback' => 'Send feedback',
-		);
 
 		if ($type == 'xml') {
 			$this->setView('sitemap.xml');

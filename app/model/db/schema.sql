@@ -357,3 +357,19 @@ CREATE TABLE `addons_reports` (
   FOREIGN KEY (`addonId`) REFERENCES `addons` (`id`),
   FOREIGN KEY (`zappedBy`) REFERENCES `users` (`id`)
 ) COMMENT='';
+
+
+-- add pages
+CREATE TABLE `pages` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL COMMENT 'page title',
+  `slug` varchar(100) NOT NULL,
+  `revision` int(5) NOT NULL COMMENT 'revision number',
+  `authorId` int(10) unsigned NOT NULL COMMENT 'revision author',
+  `content` text NOT NULL,
+  `createdAt` datetime NOT NULL COMMENT 'revision created at',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `slug_revision` (`slug`,`revision`),
+  KEY `authorId` (`authorId`),
+  CONSTRAINT `pages_ibfk_1` FOREIGN KEY (`authorId`) REFERENCES `users` (`id`)
+) COMMENT='';

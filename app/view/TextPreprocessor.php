@@ -52,12 +52,23 @@ class TextPreprocessor extends Nette\Object
 			);
 
 		} else {
-			$texy = $this->createTexy();
-			return array(
-				'content' => $texy->process($addon->description),
-				'toc' => $texy->headingModule->TOC
-			);
+			return $this->processTexyContent($addon->description);
 		}
+	}
+
+
+
+	/**
+	 * @param string
+	 * @return array (content, toc)
+	 */
+	public function processTexyContent($content)
+	{
+		$texy = $this->createTexy();
+		return array(
+			'content' => $texy->process($content),
+			'toc' => $texy->headingModule->TOC
+		);
 	}
 
 

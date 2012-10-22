@@ -1,4 +1,5 @@
-{var $title = 'How to Add a Plugin'}
+{var $robots = noindex}
+{var $title = 'Edit page: ' . $page->name}
 
 {block main}
 <div id="main">
@@ -6,11 +7,14 @@
 		<div id="breadcrumbs">
 			<a href="http://nette.org/en/">Nette Framework</a> »
 			<a n:href=":Homepage:">Addons, plugins and components</a> »
-			<span>{$title}</span>
+			<a n:href="default">{$page->name}</a> »
+			<span>Edit</span>
 		</div>
 
 		{foreach $flashes as $flash}<div class="flash {$flash->type}">{$flash->message}</div>{/foreach}
 
 		<h1>{$title}</h1>
+
+		{control editPageForm}
 	</div>
 </div>

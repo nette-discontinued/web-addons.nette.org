@@ -114,7 +114,7 @@ CREATE TABLE `addons_reports` (
   `addonId` int(10) unsigned NOT NULL COMMENT 'concerned addon',
   `reportedAt` datetime NOT NULL COMMENT 'repored at this datetime',
   `message` text NOT NULL COMMENT 'why is reported',
-  `reason` text COLLATE utf8_czech_ci COMMENT 'solution description',
+  `reason` text COMMENT 'solution description',
   `zappedBy` int(10) unsigned DEFAULT NULL COMMENT 'who zapped',
   PRIMARY KEY (`id`),
   KEY `userId` (`userId`),
@@ -123,7 +123,7 @@ CREATE TABLE `addons_reports` (
   CONSTRAINT `addons_reports_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`),
   CONSTRAINT `addons_reports_ibfk_2` FOREIGN KEY (`addonId`) REFERENCES `addons` (`id`),
   CONSTRAINT `addons_reports_ibfk_3` FOREIGN KEY (`zappedBy`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 DROP TABLE IF EXISTS `addons_tags`;
@@ -190,6 +190,22 @@ CREATE TABLE `groups` (
   `g_post_flood` smallint(6) NOT NULL DEFAULT '30',
   `g_search_flood` smallint(6) NOT NULL DEFAULT '30',
   PRIMARY KEY (`g_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `pages`;
+CREATE TABLE `pages` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL COMMENT 'page title',
+  `slug` varchar(100) NOT NULL,
+  `revision` int(5) NOT NULL COMMENT 'revision number',
+  `authorId` int(10) unsigned NOT NULL COMMENT 'revision author',
+  `content` text NOT NULL,
+  `createdAt` datetime NOT NULL COMMENT 'revision created at',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `slug_revision` (`slug`,`revision`),
+  KEY `authorId` (`authorId`),
+  CONSTRAINT `pages_ibfk_1` FOREIGN KEY (`authorId`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -260,4 +276,4 @@ CREATE TABLE `users_details` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- 2012-10-22 12:37:12
+-- 2012-10-22 15:35:17

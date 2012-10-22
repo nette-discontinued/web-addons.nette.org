@@ -36,6 +36,8 @@ class Authorizator extends Nette\Object
 	 */
 	public function isAllowed($resource, $action)
 	{
+		$moderator = $this->user->isInRole('administrators') || $this->user->isInRole('moderators');;
+
 		if ($resource instanceof Addon) {
 			$ownerId = $resource->userId;
 			$resource = 'addon';
@@ -44,13 +46,16 @@ class Authorizator extends Nette\Object
 			$ownerId = $resource->user->id;
 			$resource = 'addon';
 
+		} elseif ($resource == 'page' && $action == 'manage') {
+			return $moderator;
+
 		} elseif ($resource != 'addon') {
 			throw new \NetteAddons\InvalidArgumentException();
 		}
 
 		if ($resource === 'addon') {
 			if ($action === 'delete' || $action === 'reports') {
-				return $this->user->isInRole('administrators') || $this->user->isInRole('moderators');
+				return $moderator;
 			}
 			if ($action === 'view') {
 				return TRUE;
@@ -58,7 +63,7 @@ class Authorizator extends Nette\Object
 			} elseif ($action === 'manage') {
 				return (
 					($this->user->isLoggedIn() && $ownerId === $this->user->getId()) ||
-					$this->user->isInRole('administrators') || $this->user->isInRole('moderators')
+					$moderator
 				);
 
 			} elseif ($action === 'vote') {

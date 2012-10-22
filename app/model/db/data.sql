@@ -29,6 +29,7 @@ INSERT INTO `addons_dependencies` (`id`, `versionId`, `dependencyId`, `packageNa
 (11,	27,	NULL,	'nette/nette',	'2.0.*',	'require');
 
 
+
 INSERT INTO `addons_tags` (`addonId`, `tagId`) VALUES
 (1,	1),
 (2,	1),
@@ -158,6 +159,10 @@ INSERT INTO `groups` (`g_id`, `g_title`, `g_user_title`, `g_read_board`, `g_post
 (3,	'Guest',	NULL,	1,	0,	0,	0,	0,	0,	0,	0,	1,	1,	0,	0,	0),
 (4,	'Members',	NULL,	1,	1,	1,	1,	1,	1,	1,	0,	1,	1,	300,	60,	30);
 
+INSERT INTO `pages` (`id`, `name`, `slug`, `revision`, `authorId`, `content`, `createdAt`) VALUES
+(1,	'How to Add a Plugin',	'how-to-add-plugin',	1,	3,	'@todo',	'2012-10-22 15:34:23'),
+(2,	'Plugin Writing Guidelines',	'plugin-writing-guidelines',	1,	3,	'@todo',	'2012-10-22 15:34:56');
+
 INSERT INTO `tags` (`id`, `name`, `slug`, `level`, `parent_id`, `visible`) VALUES
 (1,	'Visual components',	'visual-components',	1,	0,	1),
 (2,	'Nonvisual components',	'nonvisual-components',	1,	0,	1),
@@ -193,4 +198,4 @@ INSERT INTO `users_details` (`id`, `created`, `apiToken`) VALUES
 (9,	'0000-00-00 00:00:00',	NULL),
 (10,	'0000-00-00 00:00:00',	NULL);
 
--- 2012-10-22 01:34:03
+-- 2012-10-22 15:35:36
