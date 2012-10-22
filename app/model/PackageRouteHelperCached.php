@@ -70,7 +70,6 @@ class PackageRouteHelperCached extends PackageRouteHelper
 		$cacheKey = "id: $id";
 		$composerName = $cache->load($cacheKey);
 		if (!$composerName && $composerName = parent::filterOut($id)) {
-			$composerName = parent::filterOut($id);
 			$cache->save($cacheKey, $composerName, array(
 				$cache::EXPIRE => $this::EXPIRE_TIME,
 				$cache::TAGS => array(
