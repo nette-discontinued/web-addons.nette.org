@@ -14,6 +14,51 @@
 
 		<h1>{$title}</h1>
 
-		{control editAddonForm}
+		{form editAddonForm class => form}
+			{foreach $_form->errors as $error}<p class="caution">{$error}</p>{/foreach}
+			<div n:class="controls, $_form['name']->required ? required">
+					{label name /}<br>
+				{input name class => 'input-full input-large text'}
+			</div>
+			<div n:ifset="$_form['composerFullName']" n:class="controls, $_form['composerFullName']->required ? required">
+					{label composerFullName /}<br>
+				{input composerFullName class => 'input-third text'}
+				<small n:if="$_form['composerFullName']->getOption('description')">
+					{$_form['composerFullName']->getOption('description')}
+				</small>
+			</div>
+			<div n:ifset="$_form['defaultLicense']" n:class="controls, $_form['defaultLicense']->required ? required">
+					{label defaultLicense /}<br>
+				{input defaultLicense class => 'text chzn-select'}
+			</div>
+			<div n:ifset="$_form['tags']" n:class="controls, $_form['tags']->required ? required">
+					{label tags /}<br>
+				{input tags class => 'text chzn-select'}
+			</div>
+			<div class="column item1" n:ifset="$_form['repository']">
+				<div n:class="controls, $_form['repository']->required ? required">
+						{label repository /}<br>
+					{input repository class => 'input-full text'}
+				</div>
+			</div>
+			<div class="column item2" n:ifset="$_form['demo']" n:tag-ifset="$_form['repository']">
+				<div n:ifset="$_form['demo']" n:class="controls, $_form['demo']->required ? required">
+						{label demo /}<br>
+					{input demo class => 'input-full text'}
+				</div>
+			</div>
+			<div n:ifset="$_form['shortDescription']" n:class="controls, $_form['shortDescription']->required ? required">
+					{label shortDescription /}<br>
+				{input shortDescription class => 'input-full text'}
+			</div>
+			<div n:class="controls, $_form['description']->required ? required">
+				{label description /}{ifset $_form['descriptionFormat']}&nbsp;{label descriptionFormat class => 'hide' /}{input descriptionFormat class => 'input-third'}{/ifset}<br>
+				{input description class => 'input-full fullscreenable'}
+			</div>
+
+			<div>
+				{input sub class => 'button'}
+			</div>
+		{/form}
 	</div>
 </div>
