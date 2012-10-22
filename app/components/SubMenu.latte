@@ -38,6 +38,12 @@
 			</a>
 		</li>
 		{/if}
+		{else}
+		<li n:if="$auth->isAllowed('addon', 'delete')">
+			<a rel="nofollow" href="{plink :Manage:Admin:deleted}" n:class="$presenter->linkCurrent ? active">
+				<span>List deleted</span>
+			</a>
+		</li>
 		{/ifset}
 	</ul>
 </div>
