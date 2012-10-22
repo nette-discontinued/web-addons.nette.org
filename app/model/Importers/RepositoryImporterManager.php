@@ -14,6 +14,7 @@ use Nette,
  *
  * @author Jan Tvrdík
  * @author Patrik Votoček
+ * @author Michael Moravec
  */
 class RepositoryImporterManager extends Nette\Object
 {
@@ -96,14 +97,14 @@ class RepositoryImporterManager extends Nette\Object
 	public function normalizeUrl($url)
 	{
 		$name = $this->getIdByUrl($url);
-		if (is_null($name)) {
-			return $url;
+		if ($name !== NULL) {
+			$data = callback($this->classes[$name], 'normalizeUrl')->invoke($url);
+			if ($data !== NULL) {
+				return $data;
+			}
 		}
-		$data = callback($this->classes[$name], 'normalizeUrl')->invoke($url);
-		if (is_null($data)) {
-			return $url;
-		}
-		return $data;
+
+		return Strings::match($url, '~^[a-z+]+://~i') ? $url : 'http://' . $url;
 	}
 
 

@@ -139,6 +139,7 @@ class RepositoryImporterManagerTest extends TestCase
 			array('https://bitbucket.org/jiriknesl/mockista', 'https://bitbucket.org/jiriknesl/mockista'),
 			array('http://example.com/foo', 'http://example.com/foo'),
 			array('example.com/foo', 'http://example.com/foo'),
+			array('git+ssh://example.com/foo', 'git+ssh://example.com/foo'),
 			array('https://github.com/nette/addons.nette.org/commits/master', 'https://github.com/nette/addons.nette.org'), // #104
 		);
 	}

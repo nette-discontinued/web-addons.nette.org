@@ -19,6 +19,7 @@ use stdClass,
 /**
  * @author Patrik Votoček
  * @author Jan Tvrdík
+ * @author Michael Moravec
  */
 class GitHubImporter extends Nette\Object implements IAddonImporter
 {
@@ -46,7 +47,7 @@ class GitHubImporter extends Nette\Object implements IAddonImporter
 	 */
 	public static function isSupported($url)
 	{
-		return (bool) Strings::match($url, '~(\:\/\/|git@)github.com~i');
+		return Strings::match($url, GitHub\Repository::URL_PATTERN_PUBLIC) || Strings::match($url, GitHub\Repository::URL_PATTERN_PRIVATE);
 	}
 
 

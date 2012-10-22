@@ -16,9 +16,13 @@ use Nette\Http\Url,
  * @link http://developer.github.com/v3/ GitHub API documentation
  * @author Patrik Votoček
  * @author Jan Tvrdík
+ * @author Michael Moravec
  */
 class Repository extends \Nette\Object
 {
+	const URL_PATTERN_PUBLIC = '~^(?:(?:https?|git)://)?github\.com/(?<vendor>[a-z0-9][a-z0-9_-]*)/(?<name>[a-z0-9_.-]+?)(?:\.git)?(/.*)?$~i',
+		URL_PATTERN_PRIVATE = '~^(?:ssh://)?git@github.com(?:/|:)(?<vendor>[a-z0-9][a-z0-9_-]*)/(?<name>[a-z0-9_.-]+?)(?:\.git)?$~i';
+
 	/** @var \NetteAddons\Utils\CurlRequestFactory */
 	private $curl;
 
@@ -72,11 +76,9 @@ class Repository extends \Nette\Object
 	 */
 	public static function getVendorAndName($url)
 	{
-		$publicRegexp = '~^(http|https|git)://github.com/(?P<vendor>[a-z0-9_-]+)/(?P<name>[a-z0-9_-]+)~i';
-		$privateRegexp = '~^(ssh://)?git@github.com(\/|\:)(?P<vendor>[a-z0-9_-]+)/(?P<name>[a-z0-9_-]+)~i';
-		if (($matches = Strings::match((string) $url, $publicRegexp)) !== NULL) {
+		if (($matches = Strings::match((string) $url, self::URL_PATTERN_PUBLIC)) !== NULL) {
 			return array($matches['vendor'], $matches['name']);
-		} elseif (($matches = Strings::match((string) $url, $privateRegexp)) !== NULL) {
+		} elseif (($matches = Strings::match((string) $url, self::URL_PATTERN_PRIVATE)) !== NULL) {
 			return array($matches['vendor'], $matches['name']);
 		}
 
