@@ -284,6 +284,7 @@ final class AddonPresenter extends BasePresenter
 		if (!$this->auth->isAllowed($this->addon, 'delete')) {
 			$this->error('You are not allowed to delete this addon.', 403);
 		}
+		$this['subMenu']->setAddon($this->addon);
 	}
 
 
