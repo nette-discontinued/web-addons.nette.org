@@ -14,9 +14,7 @@
 
 		<h1>{$title}</h1>
 
-		<h2>{$addon->name}</h2>
-
-		<p n:if="empty($addon->deletedAt)">Are you sure remove this addon?</p>
+		<p n:if="empty($addon->deletedAt)">Are you sure you want to remove {$addon->name}?</p>
 
 		<p>This addon has {$addon->totalDownloadsCount} download and {$addon->totalInstallsCount} installs.</p>
 

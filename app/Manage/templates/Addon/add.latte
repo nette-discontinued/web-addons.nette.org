@@ -15,7 +15,6 @@
 		<h1>{$title}</h1>
 
 		{if $full}
-		<p>Please select an option</p>
 
 		<h2>
 			<a href="#" rel="#fromGitHub" data-addons-toggle="#manualCreate">Import from GitHub repository</a>
@@ -44,14 +43,13 @@
 				{foreach $_form->errors as $error}<p class="caution">{$error}</p>{/foreach}
 				<div n:class="controls, $_form['name']->required ? required">
 					{label name /}<br>
-					{input name class => 'input-full input-large text'}
+					{input name class => 'input-half input-third text'}
+					<small>user-friendly addon name, may contain spaces and other special characters</small>
 				</div>
 				<div n:ifset="$_form['composerFullName']" n:class="controls, $_form['composerFullName']->required ? required">
 					{label composerFullName /}<br>
 					{input composerFullName class => 'input-third text'}
-					<small n:if="$_form['composerFullName']->getOption('description')">
-						{$_form['composerFullName']->getOption('description')}
-					</small>
+					<small>&lt;vendor&gt;/&lt;project-name&gt;, only lowercase letters and dash separation is allowed</small>
 				</div>
 				<div n:ifset="$_form['defaultLicense']" n:class="controls, $_form['defaultLicense']->required ? required">
 					{label defaultLicense /}<br>
