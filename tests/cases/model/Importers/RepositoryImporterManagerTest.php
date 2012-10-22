@@ -120,4 +120,40 @@ class RepositoryImporterManagerTest extends TestCase
 		$factory = new RepositoryImporterManager;
 		$factory->createFromUrl($url);
 	}
+
+
+
+	/**
+	 * @author Patrik Votoček
+	 * @author Jan Tvrdík
+	 */
+	public function dataNormalizeUrl()
+	{
+		return array(
+			array('https://github.com/smith/browser', 'https://github.com/smith/browser'),
+			array('http://github.com/smith/browser', 'https://github.com/smith/browser'),
+			array('github.com/smith/browser', 'https://github.com/smith/browser'),
+			array('https://github.com/smith/browser/commits/master', 'https://github.com/smith/browser'),
+			array('https://github.com/smith/browser.git', 'https://github.com/smith/browser'),
+			array('git://github.com/smith/browser.git', 'https://github.com/smith/browser'),
+			array('https://bitbucket.org/jiriknesl/mockista', 'https://bitbucket.org/jiriknesl/mockista'),
+			array('http://example.com/foo', 'http://example.com/foo'),
+			array('example.com/foo', 'http://example.com/foo'),
+			array('https://github.com/nette/addons.nette.org/commits/master', 'https://github.com/nette/addons.nette.org'), // #104
+		);
+	}
+
+
+	/**
+	 * @dataProvider dataNormalizeUrl
+	 * @param string
+	 * @param string
+	 */
+	public function testNormalizeUrl($url, $normalizedUrl)
+	{
+		$this->factory->addImporter('github', function() {}, 'NetteAddons\Model\Importers\GitHubImporter');
+
+		$parsedUrl = $this->factory->normalizeUrl($url);
+		$this->assertEquals($normalizedUrl, $parsedUrl);
+	}
 }
