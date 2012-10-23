@@ -80,7 +80,11 @@ class AddVersionForm extends VersionForm
 		}
 
 		if ($this->addon->id) {
-			$this->model->add($version);
+			try {
+				$this->model->add($version);
+			} catch (\NetteAddons\DuplicateEntryException $e) {
+				$this['version']->addError(sprintf('Version %s already exists.', $version->version));
+			}
 
 		} else {
 			$this->manager->storeAddon($this->token, $this->addon);
