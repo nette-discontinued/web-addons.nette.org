@@ -34,6 +34,7 @@ class SignPresenter extends BasePresenter
 		$referer = $this->getHttpRequest()->referer;
 		if (!$backlink && $referer && $referer->host == $this->getHttpRequest()->url->host) {
 			$url = new UrlScript($referer);
+			$url->setScriptPath($this->getHttpRequest()->getUrl()->getScriptPath());
 			$tmp = new Request($url);
 			$req = $this->router->match($tmp);
 			if (!$req) {
