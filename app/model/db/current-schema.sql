@@ -55,7 +55,7 @@ CREATE TABLE `addons_downloads` (
   `versionId` int(10) unsigned NOT NULL,
   `userId` int(10) unsigned DEFAULT NULL,
   `ipAddress` varchar(39) NOT NULL COMMENT 'ipv6 has <=39 characters',
-  `userAgent` varchar(255) NOT NULL,
+  `userAgent` varchar(255) DEFAULT NULL,
   `time` datetime NOT NULL,
   `type` enum('download','install') NOT NULL COMMENT 'download via web / install via composer',
   `fake` tinyint(1) unsigned NOT NULL DEFAULT '0',

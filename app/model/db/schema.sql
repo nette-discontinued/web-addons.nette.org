@@ -415,3 +415,8 @@ BEGIN
 
 END;;
 DELIMITER ;
+
+
+-- addons_downloads.userAgent can be null because Composer does not send user-agent
+ALTER TABLE `addons_downloads`
+CHANGE `userAgent` `userAgent` varchar(255) COLLATE 'utf8_general_ci' NULL AFTER `ipAddress`;
