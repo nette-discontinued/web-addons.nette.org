@@ -36,8 +36,9 @@ class Reinstall extends \Nette\Object
 			$connection->exec($sql);
 		}
 
-		$this->executeFile(__DIR__ . '/db/current-schema.sql');
+		$this->executeFile(__DIR__ . '/db/schema.sql');
 		$this->executeFile(__DIR__ . '/db/data.sql');
+		$this->executeFile(__DIR__ . '/db/schema-triggers.sql');
 
 		$this->cacheStorage->clean(array(\Nette\Caching\Cache::ALL => TRUE));
 	}

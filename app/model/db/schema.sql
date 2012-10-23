@@ -1,35 +1,84 @@
--- Adminer 3.3.3 MySQL dump
+-- Adminer 3.6.1 MySQL dump
 
-SET NAMES 'utf8';
+SET NAMES utf8;
 SET foreign_key_checks = 0;
 SET time_zone = 'SYSTEM';
 SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
 
 CREATE TABLE `addons` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL,
+  `name` varchar(100) NOT NULL COMMENT 'user friendly form',
+  `composerVendor` varchar(50) NOT NULL COMMENT 'composer valid package vendor name',
+  `composerName` varchar(50) NOT NULL COMMENT 'composer valid package name',
   `userId` int(10) unsigned NOT NULL,
-  `repository` varchar(250) NOT NULL COMMENT 'repository url (git or svn)',
+  `repository` varchar(500) DEFAULT NULL COMMENT 'repository url (git or svn)',
+  `repositoryHosting` enum('github') DEFAULT NULL COMMENT 'repository hosting',
+  `shortDescription` varchar(250) NOT NULL COMMENT 'short description',
   `description` text NOT NULL COMMENT 'in Texy! syntax',
+  `descriptionFormat` enum('texy','markdown') NOT NULL COMMENT 'texy',
+  `demo` varchar(500) DEFAULT NULL COMMENT 'url to demo',
   `updatedAt` datetime NOT NULL COMMENT 'time of last update (of anything)',
+  `defaultLicense` varchar(100) NOT NULL COMMENT 'used as default for new versions',
+  `totalDownloadsCount` int(11) NOT NULL DEFAULT '0' COMMENT 'total times this addon was downloaded',
+  `totalInstallsCount` int(11) NOT NULL DEFAULT '0' COMMENT 'total times this addon was installed using composer',
+  `deletedAt` datetime DEFAULT NULL COMMENT 'time when is marked as deleted',
+  `deletedBy` int(10) unsigned DEFAULT NULL COMMENT 'user who marked as deleted',
   PRIMARY KEY (`id`),
+  UNIQUE KEY `composerVendor_composerName_deletedAt` (`composerVendor`,`composerName`,`deletedAt`),
   KEY `userId` (`userId`),
-  CONSTRAINT `addons_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`)
+  KEY `deletedBy` (`deletedBy`),
+  CONSTRAINT `addons_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`),
+  CONSTRAINT `addons_ibfk_2` FOREIGN KEY (`deletedBy`) REFERENCES `users` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 CREATE TABLE `addons_dependencies` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `addonId` int(10) unsigned NOT NULL,
+  `versionId` int(10) unsigned NOT NULL,
   `dependencyId` int(10) unsigned DEFAULT NULL,
-  `packageName` varchar(100) DEFAULT NULL,
+  `packageName` varchar(100) NOT NULL,
   `version` varchar(20) NOT NULL,
-  `type` enum('require','suggest','provide','replace','conflict','recommend') NOT NULL DEFAULT 'require',
+  `type` enum('require','require-dev','suggest','provide','replace','conflict','recommend') NOT NULL DEFAULT 'require',
   PRIMARY KEY (`id`),
-  KEY `addonId` (`addonId`),
+  UNIQUE KEY `versionId_type_packageName` (`versionId`,`type`,`packageName`),
   KEY `dependencyId` (`dependencyId`),
-  CONSTRAINT `addons_dependencies_ibfk_1` FOREIGN KEY (`addonId`) REFERENCES `addons_versions` (`id`),
-  CONSTRAINT `addons_dependencies_ibfk_2` FOREIGN KEY (`dependencyId`) REFERENCES `addons` (`id`)
+  CONSTRAINT `addons_dependencies_ibfk_4` FOREIGN KEY (`versionId`) REFERENCES `addons_versions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `addons_dependencies_ibfk_5` FOREIGN KEY (`dependencyId`) REFERENCES `addons` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `addons_downloads` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `versionId` int(10) unsigned NOT NULL,
+  `userId` int(10) unsigned DEFAULT NULL,
+  `ipAddress` varchar(39) NOT NULL COMMENT 'ipv6 has <=39 characters',
+  `userAgent` varchar(255) DEFAULT NULL,
+  `time` datetime NOT NULL,
+  `type` enum('download','install') NOT NULL COMMENT 'download via web / install via composer',
+  `fake` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `versionId` (`versionId`),
+  KEY `userId` (`userId`),
+  CONSTRAINT `addons_downloads_ibfk_3` FOREIGN KEY (`userId`) REFERENCES `users` (`id`),
+  CONSTRAINT `addons_downloads_ibfk_4` FOREIGN KEY (`versionId`) REFERENCES `addons_versions` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `addons_reports` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userId` int(10) unsigned NOT NULL COMMENT 'who reported',
+  `addonId` int(10) unsigned NOT NULL COMMENT 'concerned addon',
+  `reportedAt` datetime NOT NULL COMMENT 'repored at this datetime',
+  `message` text NOT NULL COMMENT 'why is reported',
+  `reason` text COMMENT 'solution description',
+  `zappedBy` int(10) unsigned DEFAULT NULL COMMENT 'who zapped',
+  PRIMARY KEY (`id`),
+  KEY `userId` (`userId`),
+  KEY `addonId` (`addonId`),
+  KEY `zappedBy` (`zappedBy`),
+  CONSTRAINT `addons_reports_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`),
+  CONSTRAINT `addons_reports_ibfk_2` FOREIGN KEY (`addonId`) REFERENCES `addons` (`id`),
+  CONSTRAINT `addons_reports_ibfk_3` FOREIGN KEY (`zappedBy`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -38,37 +87,27 @@ CREATE TABLE `addons_tags` (
   `tagId` int(10) unsigned NOT NULL,
   PRIMARY KEY (`addonId`,`tagId`),
   KEY `tagid` (`tagId`),
-  CONSTRAINT `addons_tags_ibfk_1` FOREIGN KEY (`addonId`) REFERENCES `addons` (`id`),
-  CONSTRAINT `addons_tags_ibfk_2` FOREIGN KEY (`tagId`) REFERENCES `tags` (`id`)
+  CONSTRAINT `addons_tags_ibfk_3` FOREIGN KEY (`addonId`) REFERENCES `addons` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `addons_tags_ibfk_4` FOREIGN KEY (`tagId`) REFERENCES `tags` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 CREATE TABLE `addons_versions` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `addonId` int(10) unsigned NOT NULL,
-  `version` varchar(20) NOT NULL,
+  `version` varchar(100) NOT NULL,
+  `license` varchar(100) NOT NULL COMMENT 'separed by comma',
+  `distType` enum('zip','tarball') NOT NULL COMMENT 'type of distribution archive',
+  `distUrl` varchar(500) NOT NULL COMMENT 'link to distribution archive',
+  `downloadsCount` int(11) NOT NULL DEFAULT '0' COMMENT 'number of downloads',
+  `installsCount` int(11) NOT NULL DEFAULT '0' COMMENT 'number of installs using composer',
+  `sourceType` enum('git','hg','svn') DEFAULT NULL COMMENT 'VCS type',
+  `sourceUrl` varchar(500) DEFAULT NULL COMMENT 'repository URL, usually the same as addon.repository',
+  `sourceReference` varchar(100) DEFAULT NULL COMMENT 'Git, Mercurial or SVN reference (usually branch or tag name)',
+  `composerJson` text NOT NULL COMMENT 'composer.json (with source & dist) cache',
   PRIMARY KEY (`id`),
-  KEY `addonId` (`addonId`),
-  CONSTRAINT `addons_versions_ibfk_1` FOREIGN KEY (`addonId`) REFERENCES `addons` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-CREATE TABLE `tags` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) NOT NULL COMMENT 'user friendly form',
-  `slug` varchar(50) NOT NULL,
-  `level` smallint(5) unsigned NOT NULL COMMENT '1 = category, 2 = subcategory, 9 = others',
-  `visible` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT 'visible on homepage',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-CREATE TABLE `users` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL,
-  `password` char(40) NOT NULL,
-  `email` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`)
+  UNIQUE KEY `addonId_version` (`addonId`,`version`),
+  CONSTRAINT `addons_versions_ibfk_2` FOREIGN KEY (`addonId`) REFERENCES `addons` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -77,289 +116,35 @@ CREATE TABLE `addons_votes` (
   `userId` int(10) unsigned NOT NULL,
   `vote` tinyint(4) NOT NULL COMMENT '+1 / -1',
   `comment` varchar(1000) DEFAULT NULL,
+  `datetime` datetime NOT NULL,
   PRIMARY KEY (`addonId`,`userId`),
   KEY `userId` (`userId`),
-  CONSTRAINT `addons_votes_ibfk_1` FOREIGN KEY (`addonId`) REFERENCES `addons` (`id`),
-  CONSTRAINT `addons_votes_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `users` (`id`)
+  CONSTRAINT `addons_votes_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `users` (`id`),
+  CONSTRAINT `addons_votes_ibfk_3` FOREIGN KEY (`addonId`) REFERENCES `addons` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- 2012-04-14 17:32:34
-
--- added addon.shortDescription
-ALTER TABLE `addons`
-ADD `shortDescription` varchar(250) COLLATE 'utf8_general_ci' NOT NULL COMMENT 'short description' AFTER `repository`;
-
--- added composer.json to version
-ALTER TABLE `addons_versions`
-ADD `composerJson` text COLLATE 'utf8_general_ci' NULL AFTER `version`;
-
--- added vendor name to addon
-ALTER TABLE `addons`
-ADD `vendor_name` varchar(100) COLLATE 'utf8_general_ci' NOT NULL AFTER `name`;
-
--- versions for addon must be unique
-ALTER TABLE `addons_versions`
-ADD UNIQUE `addonId_version` (`addonId`, `version`);
-
--- dependecies of versions are unique
-ALTER TABLE `addons_dependencies`
-ADD UNIQUE `addonId_dependencyId_packageName_version` (`addonId`, `dependencyId`, `packageName`, `version`);
-
-
-ALTER TABLE `addons`
-CHANGE `name` `name` varchar(100) COLLATE 'utf8_general_ci' NOT NULL COMMENT 'user friendly form' AFTER `id`,
-CHANGE `vendor_name` `composerName` varchar(100) COLLATE 'utf8_general_ci' NOT NULL COMMENT 'vendor / package' AFTER `name`;
-
-ALTER TABLE `addons_versions`
-ADD `license` varchar(100) COLLATE 'utf8_general_ci' NOT NULL COMMENT 'separed by comma' AFTER `version`;
-
-ALTER TABLE `addons`
-ADD `demo` varchar(500) COLLATE 'utf8_general_ci' NULL COMMENT 'url to demo' AFTER `description`;
-
-ALTER TABLE `addons`
-ADD UNIQUE (`composerName`);
-
--- nullable repository
-ALTER TABLE `addons`
-	ALTER `repository` DROP DEFAULT;
-ALTER TABLE `addons`
-	CHANGE COLUMN `repository` `repository` VARCHAR(250) NULL COMMENT 'repository url (git or svn)' AFTER `userId`;
-
-
--- added filename for version
-ALTER TABLE `addons_versions`
-	ADD COLUMN `filename` VARCHAR(250) NULL COMMENT 'filename on local filesystem' AFTER `composerJson`;
-
--- addons_versions.composerJson can no longer be NULL
-ALTER TABLE `addons_versions`
-CHANGE `composerJson` `composerJson` text COLLATE 'utf8_general_ci' NOT NULL AFTER `license`;
-
--- addons_versions.filename replaced by link
-ALTER TABLE `addons_versions`
-CHANGE `filename` `link` varchar(250) COLLATE 'utf8_general_ci' NOT NULL COMMENT 'download link' AFTER `composerJson`;
-
--- added default license for addon
-ALTER TABLE `addons`
-ADD `defaultLicense` varchar(100) NOT NULL COMMENT 'used as default for new versions' AFTER `updatedAt`;
-
--- packageID if required for each dependency
-ALTER TABLE `addons_dependencies`
-CHANGE `packageName` `packageName` varchar(100) COLLATE 'utf8_general_ci' NOT NULL AFTER `dependencyId`;
-
--- updated unique key for dependencies and removed useless addonId key
-ALTER TABLE `addons_dependencies`
-ADD UNIQUE `addonId_packageName_version` (`addonId`, `packageName`, `version`),
-DROP INDEX `addonId_dependencyId_packageName_version`,
-DROP INDEX `addonId`;
-
--- tags.slug must be unique
-ALTER TABLE `tags`
-ADD UNIQUE (`slug`);
-
--- added "source fields" to addons_versions
-ALTER TABLE `addons_versions`
-ADD `sourceType` enum('git','hg','svn') COLLATE 'utf8_general_ci' NULL COMMENT 'VCS type' AFTER `link`,
-ADD `sourceUrl` varchar(500) COLLATE 'utf8_general_ci' NULL COMMENT 'repository URL, usually the same as addon.repository' AFTER `sourceType`,
-ADD `sourceReference` varchar(100) COLLATE 'utf8_general_ci' NULL COMMENT 'Git, Mercurial or SVN reference (usually branch or tag name)' AFTER `sourceUrl`;
-
--- changed columns order (composerJson moved to end)
-ALTER TABLE `addons_versions`
-CHANGE `link` `link` varchar(250) COLLATE 'utf8_general_ci' NOT NULL COMMENT 'download link' AFTER `license`,
-CHANGE `sourceType` `sourceType` enum('git','hg','svn') COLLATE 'utf8_general_ci' NULL COMMENT 'VCS type' AFTER `link`,
-CHANGE `sourceUrl` `sourceUrl` varchar(500) COLLATE 'utf8_general_ci' NULL COMMENT 'repository URL, usually the same as addon.repository' AFTER `sourceType`,
-CHANGE `sourceReference` `sourceReference` varchar(100) COLLATE 'utf8_general_ci' NULL COMMENT 'Git, Mercurial or SVN reference (usually branch or tag name)' AFTER `sourceUrl`,
-CHANGE `composerJson` `composerJson` text COLLATE 'utf8_general_ci' NOT NULL COMMENT 'composer.json (with source & dist) cache' AFTER `sourceReference`;
-
--- addons_versions.link replaced by distType & distUrl
-ALTER TABLE `addons_versions`
-ADD `distType` enum('zip','tarball') COLLATE 'utf8_general_ci' NOT NULL COMMENT 'type of distribution archive' AFTER `license`,
-ADD `distUrl` varchar(500) COLLATE 'utf8_general_ci' NOT NULL COMMENT 'link to distribution archive' AFTER `distType`,
-DROP `link`;
-
--- addons_dependencies.addonId renamed to versionId and changed the unique key
-ALTER TABLE `addons_dependencies`
-DROP FOREIGN KEY `addons_dependencies_ibfk_1`;
-ALTER TABLE `addons_dependencies`
-CHANGE `addonId` `versionId` int(10) unsigned NOT NULL AFTER `id`,
-DROP INDEX `addonId_packageName_version`,
-ADD UNIQUE `versionId_type_packageName` (`versionId`, `type`, `packageName`),
-ADD FOREIGN KEY (`versionId`) REFERENCES `addons_versions` (`id`);
-
--- increased addons_versions.version length from 20 to 100 chars, because of versions such as "dev-jm-nette-extension"
-ALTER TABLE `addons_versions`
-CHANGE `version` `version` varchar(100) COLLATE 'utf8_general_ci' NOT NULL AFTER `addonId`;
-
--- added users.role
-ALTER TABLE `users`
-ADD `role` enum('admin','moderator') COLLATE 'utf8_general_ci' NULL;
-
--- foreign keys in addons_tags are now "cascade"
-ALTER TABLE `addons_tags`
-DROP FOREIGN KEY `addons_tags_ibfk_1`,
-DROP FOREIGN KEY `addons_tags_ibfk_2`,
-ADD FOREIGN KEY (`addonId`) REFERENCES `addons` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-ADD FOREIGN KEY (`tagId`) REFERENCES `tags` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
--- addons_dependencies.versionId key is now "cascade"
-ALTER TABLE `addons_dependencies`
-DROP FOREIGN KEY `addons_dependencies_ibfk_3`,
-ADD FOREIGN KEY (`versionId`) REFERENCES `addons_versions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
--- addons_votes.addonId key is now "cascade"
-ALTER TABLE `addons_votes`
-DROP FOREIGN KEY `addons_votes_ibfk_1`,
-ADD FOREIGN KEY (`addonId`) REFERENCES `addons` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
--- removed useless index in addons.versions
-ALTER TABLE `addons_versions`
-DROP INDEX `addonId`;
-
--- added column addons.repositoryHosting
-ALTER TABLE `addons`
-ADD `repositoryHosting` enum('github') COLLATE 'utf8_general_ci' NULL COMMENT 'repository hosting' AFTER `repository`;
-
--- addons.repository length increased to 500
-ALTER TABLE `addons`
-CHANGE `repository` `repository` varchar(500) COLLATE 'utf8_general_ci' NULL COMMENT 'repository url (git or svn)' AFTER `userId`;
-
--- addon support for markdown
-ALTER TABLE `addons`
-ADD `descriptionFormat` enum('texy','markdown') COLLATE 'utf8_general_ci' NOT NULL COMMENT 'texy' AFTER `description`,
-COMMENT=''
-REMOVE PARTITIONING;
-
--- added downloads count
-ALTER TABLE `addons`
-ADD `totalDownloadsCount` int NOT NULL DEFAULT '0' COMMENT 'total times this addon was downloaded',
-COMMENT='';
-ALTER TABLE `addons_versions`
-ADD `downloadsCount` int NOT NULL DEFAULT '0' COMMENT 'number of downloads' AFTER `distUrl`,
-COMMENT='';
-
--- api token not only for github
-ALTER TABLE `users`
-ADD `apiToken` varchar(100) COLLATE 'utf8_general_ci' NULL;
-
--- subcategories
-ALTER TABLE `tags`
-ADD `parent_id` int(10) unsigned NOT NULL DEFAULT '0' AFTER `level`,
-COMMENT='';
-
--- different column for installations count
-ALTER TABLE `addons`
-ADD `totalInstallsCount` int(11) NOT NULL DEFAULT '0' COMMENT 'total times this addon was installed using composer',
-COMMENT='';
-ALTER TABLE `addons_versions`
-ADD `installsCount` int(11) NOT NULL DEFAULT '0' COMMENT 'number of installs using composer' AFTER `downloadsCount`,
-COMMENT='';
-
--- added addons_votes.datetime
-ALTER TABLE `addons_votes`
-ADD `datetime` datetime NOT NULL;
-
--- split composerName to composerVendor and composerName
-ALTER TABLE `addons`
-ADD `composerVendor` varchar(50) COLLATE 'utf8_general_ci' NOT NULL COMMENT 'composer valid package vendor name' AFTER `name`,
-CHANGE `composerName` `composerName` varchar(50) COLLATE 'utf8_general_ci' NOT NULL COMMENT 'composer valid package name' AFTER `composerVendor`,
-COMMENT='';
-ALTER TABLE `addons`
-ADD UNIQUE `composerFullName` (`composerVendor`, `composerName`),
-DROP INDEX `composerName`;
-
--- addon downloads statistics
-CREATE TABLE `addons_downloads` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `versionId` int(10) unsigned NOT NULL,
-  `userId` int(10) unsigned DEFAULT NULL,
-  `ipAddress` varchar(39) NOT NULL COMMENT 'ipv6 has <=39 characters',
-  `userAgent` varchar(255) NOT NULL,
-  `time` datetime NOT NULL,
-  `type` enum('download','install') NOT NULL COMMENT 'download via web / install via composer',
-  `fake` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
-  KEY `versionId` (`versionId`),
-  KEY `userId` (`userId`),
-  CONSTRAINT `addons_downloads_ibfk_2` FOREIGN KEY (`versionId`) REFERENCES `addons_versions` (`id`),
-  CONSTRAINT `addons_downloads_ibfk_3` FOREIGN KEY (`userId`) REFERENCES `users` (`id`)
+CREATE TABLE `groups` (
+  `g_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `g_title` varchar(50) NOT NULL DEFAULT '',
+  `g_user_title` varchar(50) DEFAULT NULL,
+  `g_read_board` tinyint(1) NOT NULL DEFAULT '1',
+  `g_post_replies` tinyint(1) NOT NULL DEFAULT '1',
+  `g_post_topics` tinyint(1) NOT NULL DEFAULT '1',
+  `g_post_polls` tinyint(1) NOT NULL DEFAULT '1',
+  `g_edit_posts` tinyint(1) NOT NULL DEFAULT '1',
+  `g_delete_posts` tinyint(1) NOT NULL DEFAULT '1',
+  `g_delete_topics` tinyint(1) NOT NULL DEFAULT '1',
+  `g_set_title` tinyint(1) NOT NULL DEFAULT '1',
+  `g_search` tinyint(1) NOT NULL DEFAULT '1',
+  `g_search_users` tinyint(1) NOT NULL DEFAULT '1',
+  `g_edit_subjects_interval` smallint(6) NOT NULL DEFAULT '300',
+  `g_post_flood` smallint(6) NOT NULL DEFAULT '30',
+  `g_search_flood` smallint(6) NOT NULL DEFAULT '30',
+  PRIMARY KEY (`g_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- use trigger for updating download statistics counters
-DELIMITER ;;
 
-CREATE TRIGGER `addons_downloads_bi` BEFORE INSERT ON `addons_downloads` FOR EACH ROW
-BEGIN
-
-	SET NEW.fake = (
-		SELECT LEAST(COUNT(*), 1)
-		FROM `addons_downloads`
-		WHERE
-			`versionId` = NEW.versionId AND
-			`ipAddress` = NEW.ipAddress AND
-			`fake` = 0 AND
-			TIMESTAMPDIFF(HOUR, `time`, NEW.`time`) = 0
-	);
-
-	IF NEW.fake = 0 THEN
-		IF NEW.type = 'download' THEN
-			UPDATE `addons_versions`
-			SET `downloadsCount` = `downloadsCount` + 1
-			WHERE `id` = NEW.versionId;
-
-			UPDATE `addons`
-			SET `totalDownloadsCount` = `totalDownloadsCount` + 1
-			WHERE `id` = (SELECT `addonId` FROM `addons_versions` WHERE `id` = NEW.versionId);
-
-		ELSEIF NEW.type = 'install' THEN
-			UPDATE `addons_versions`
-			SET `installsCount` = `installsCount` + 1
-			WHERE `id` = NEW.versionId;
-
-			UPDATE `addons`
-			SET `totalInstallsCount` = `totalInstallsCount` + 1
-			WHERE `id` = (SELECT `addonId` FROM `addons_versions` WHERE `id` = NEW.versionId);
-		END IF;
-	END IF;
-
-END;;
-
-DELIMITER ;
-
--- add delete support
-ALTER TABLE `addons`
-ADD `deletedAt` datetime NULL COMMENT 'time when is marked as deleted',
-ADD `deletedBy` int(10) unsigned NULL COMMENT 'user who marked as deleted' AFTER `deletedAt`,
-ADD FOREIGN KEY (`deletedBy`) REFERENCES `users` (`id`) ON DELETE SET NULL,
-ADD UNIQUE `composerVendor_composerName_deletedAt` (`composerVendor`, `composerName`, `deletedAt`),
-DROP INDEX `composerFullName`,
-COMMENT='';
-ALTER TABLE `addons_versions`
-DROP FOREIGN KEY `addons_versions_ibfk_1`,
-ADD FOREIGN KEY (`addonId`) REFERENCES `addons` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT;
-ALTER TABLE `addons_downloads`
-DROP FOREIGN KEY `addons_downloads_ibfk_2`,
-ADD FOREIGN KEY (`versionId`) REFERENCES `addons_versions` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT;
-ALTER TABLE `addons_dependencies`
-DROP FOREIGN KEY `addons_dependencies_ibfk_2`,
-ADD FOREIGN KEY (`dependencyId`) REFERENCES `addons` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT;
-
-
--- add reports
-CREATE TABLE `addons_reports` (
-  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `userId` int(10) unsigned NOT NULL COMMENT 'who reported',
-  `addonId` int(10) unsigned NOT NULL COMMENT 'concerned addon',
-  `reportedAt` datetime NOT NULL COMMENT 'repored at this datetime',
-  `message` text NOT NULL COMMENT 'why is reported',
-  `reason` text NULL COMMENT 'solution description',
-  `zappedBy` int(10) unsigned NULL COMMENT 'who zapped',
-  FOREIGN KEY (`userId`) REFERENCES `users` (`id`),
-  FOREIGN KEY (`addonId`) REFERENCES `addons` (`id`),
-  FOREIGN KEY (`zappedBy`) REFERENCES `users` (`id`)
-) COMMENT='';
-
-
--- add pages
 CREATE TABLE `pages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL COMMENT 'page title',
@@ -372,96 +157,71 @@ CREATE TABLE `pages` (
   UNIQUE KEY `slug_revision` (`slug`,`revision`),
   KEY `authorId` (`authorId`),
   CONSTRAINT `pages_ibfk_1` FOREIGN KEY (`authorId`) REFERENCES `users` (`id`)
-) COMMENT='';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- updated addons_downloads_bi trigger
-DROP TRIGGER `addons_downloads_bi`;
-DELIMITER ;;
-CREATE TRIGGER `addons_downloads_bi` BEFORE INSERT ON `addons_downloads` FOR EACH ROW
-BEGIN
-
-	SET NEW.fake = (
-		SELECT LEAST(COUNT(*), 1)
-		FROM `addons_downloads`
-		WHERE
-			`type` = NEW.type AND
-			`versionId` = NEW.versionId AND
-			`ipAddress` = NEW.ipAddress AND
-			`fake` = 0 AND
-			TIMESTAMPDIFF(HOUR, `time`, NEW.`time`) = 0
-	);
-
-	IF NEW.fake = 0 THEN
-		IF NEW.type = 'download' THEN
-			UPDATE `addons_versions`
-			SET `downloadsCount` = `downloadsCount` + 1
-			WHERE `id` = NEW.versionId;
-
-			UPDATE `addons`
-			SET `totalDownloadsCount` = `totalDownloadsCount` + 1
-			WHERE `id` = (SELECT `addonId` FROM `addons_versions` WHERE `id` = NEW.versionId);
-
-		ELSEIF NEW.type = 'install' THEN
-			UPDATE `addons_versions`
-			SET `installsCount` = `installsCount` + 1
-			WHERE `id` = NEW.versionId;
-
-			UPDATE `addons`
-			SET `totalInstallsCount` = `totalInstallsCount` + 1
-			WHERE `id` = (SELECT `addonId` FROM `addons_versions` WHERE `id` = NEW.versionId);
-		END IF;
-	END IF;
-
-END;;
-DELIMITER ;
+CREATE TABLE `tags` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL COMMENT 'user friendly form',
+  `slug` varchar(50) NOT NULL,
+  `level` smallint(5) unsigned NOT NULL COMMENT '1 = category, 2 = subcategory, 9 = others',
+  `parent_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `visible` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT 'visible on homepage',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `slug` (`slug`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- addons_downloads.userAgent can be null because Composer does not send user-agent
-ALTER TABLE `addons_downloads`
-CHANGE `userAgent` `userAgent` varchar(255) COLLATE 'utf8_general_ci' NULL AFTER `ipAddress`;
+CREATE TABLE `users` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `group_id` int(10) unsigned NOT NULL DEFAULT '4',
+  `username` varchar(200) NOT NULL DEFAULT '',
+  `password` varchar(40) NOT NULL DEFAULT '',
+  `email` varchar(50) NOT NULL DEFAULT '',
+  `title` varchar(50) DEFAULT NULL,
+  `realname` varchar(40) DEFAULT NULL,
+  `url` varchar(100) DEFAULT NULL,
+  `jabber` varchar(75) DEFAULT NULL,
+  `icq` varchar(12) DEFAULT NULL,
+  `msn` varchar(50) DEFAULT NULL,
+  `aim` varchar(30) DEFAULT NULL,
+  `yahoo` varchar(30) DEFAULT NULL,
+  `location` varchar(30) DEFAULT NULL,
+  `use_avatar` tinyint(1) NOT NULL DEFAULT '0',
+  `signature` text,
+  `disp_topics` tinyint(3) unsigned DEFAULT NULL,
+  `disp_posts` tinyint(3) unsigned DEFAULT NULL,
+  `email_setting` tinyint(1) NOT NULL DEFAULT '1',
+  `save_pass` tinyint(1) NOT NULL DEFAULT '1',
+  `notify_with_post` tinyint(1) NOT NULL DEFAULT '0',
+  `show_smilies` tinyint(1) NOT NULL DEFAULT '1',
+  `show_img` tinyint(1) NOT NULL DEFAULT '1',
+  `show_img_sig` tinyint(1) NOT NULL DEFAULT '1',
+  `show_avatars` tinyint(1) NOT NULL DEFAULT '1',
+  `show_sig` tinyint(1) NOT NULL DEFAULT '1',
+  `timezone` float NOT NULL DEFAULT '0',
+  `language` varchar(25) NOT NULL DEFAULT 'English',
+  `style` varchar(25) NOT NULL DEFAULT 'Oxygen',
+  `num_posts` int(10) unsigned NOT NULL DEFAULT '0',
+  `last_post` int(10) unsigned DEFAULT NULL,
+  `registered` int(10) unsigned NOT NULL DEFAULT '0',
+  `registration_ip` varchar(15) NOT NULL DEFAULT '0.0.0.0',
+  `last_visit` int(10) unsigned NOT NULL DEFAULT '0',
+  `admin_note` varchar(30) DEFAULT NULL,
+  `activate_string` varchar(50) DEFAULT NULL,
+  `activate_key` varchar(8) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `users_registered_idx` (`registered`),
+  KEY `users_username_idx` (`username`(8))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- synchronization with current-schema.sql
-ALTER TABLE `addons_dependencies`
-MODIFY `type` enum('require','require-dev','suggest','provide','replace','conflict','recommend') COLLATE utf8_general_ci DEFAULT 'require' NOT NULL AFTER `version`;
+CREATE TABLE `users_details` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `apiToken` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-ALTER TABLE `users`
-ADD `group_id` int(10) unsigned DEFAULT '4' NOT NULL AFTER `id`,
-ADD `username` varchar(200) COLLATE utf8_general_ci DEFAULT '' NOT NULL AFTER `group_id`,
-MODIFY `password` varchar(40) COLLATE utf8_general_ci DEFAULT '' NOT NULL AFTER `username`,
-MODIFY `email` varchar(50) COLLATE utf8_general_ci DEFAULT '' NOT NULL AFTER `password`,
-ADD `title` varchar(50) COLLATE utf8_general_ci AFTER `email`,
-ADD `realname` varchar(40) COLLATE utf8_general_ci AFTER `title`,
-ADD `url` varchar(100) COLLATE utf8_general_ci AFTER `realname`,
-ADD `jabber` varchar(75) COLLATE utf8_general_ci AFTER `url`,
-ADD `icq` varchar(12) COLLATE utf8_general_ci AFTER `jabber`,
-ADD `msn` varchar(50) COLLATE utf8_general_ci AFTER `icq`,
-ADD `aim` varchar(30) COLLATE utf8_general_ci AFTER `msn`,
-ADD `yahoo` varchar(30) COLLATE utf8_general_ci AFTER `aim`,
-ADD `location` varchar(30) COLLATE utf8_general_ci AFTER `yahoo`,
-ADD `use_avatar` tinyint(1) DEFAULT '0' NOT NULL AFTER `location`,
-ADD `signature` text COLLATE utf8_general_ci AFTER `use_avatar`,
-ADD `disp_topics` tinyint(3) unsigned AFTER `signature`,
-ADD `disp_posts` tinyint(3) unsigned AFTER `disp_topics`,
-ADD `email_setting` tinyint(1) DEFAULT '1' NOT NULL AFTER `disp_posts`,
-ADD `save_pass` tinyint(1) DEFAULT '1' NOT NULL AFTER `email_setting`,
-ADD `notify_with_post` tinyint(1) DEFAULT '0' NOT NULL AFTER `save_pass`,
-ADD `show_smilies` tinyint(1) DEFAULT '1' NOT NULL AFTER `notify_with_post`,
-ADD `show_img` tinyint(1) DEFAULT '1' NOT NULL AFTER `show_smilies`,
-ADD `show_img_sig` tinyint(1) DEFAULT '1' NOT NULL AFTER `show_img`,
-ADD `show_avatars` tinyint(1) DEFAULT '1' NOT NULL AFTER `show_img_sig`,
-ADD `show_sig` tinyint(1) DEFAULT '1' NOT NULL AFTER `show_avatars`,
-ADD `timezone` float DEFAULT '0' NOT NULL AFTER `show_sig`,
-ADD `language` varchar(25) COLLATE utf8_general_ci DEFAULT 'English' NOT NULL AFTER `timezone`,
-ADD `style` varchar(25) COLLATE utf8_general_ci DEFAULT 'Oxygen' NOT NULL AFTER `language`,
-ADD `num_posts` int(10) unsigned DEFAULT '0' NOT NULL AFTER `style`,
-ADD `last_post` int(10) unsigned AFTER `num_posts`,
-ADD `registered` int(10) unsigned DEFAULT '0' NOT NULL AFTER `last_post`,
-ADD `registration_ip` varchar(15) COLLATE utf8_general_ci DEFAULT '0.0.0.0' NOT NULL AFTER `registered`,
-ADD `last_visit` int(10) unsigned DEFAULT '0' NOT NULL AFTER `registration_ip`,
-ADD `admin_note` varchar(30) COLLATE utf8_general_ci AFTER `last_visit`,
-ADD `activate_string` varchar(50) COLLATE utf8_general_ci AFTER `admin_note`,
-ADD `activate_key` varchar(8) COLLATE utf8_general_ci AFTER `activate_string`,
-DROP name,
-DROP role, DROP apiToken;
+
+-- 2012-10-24 01:34:59
