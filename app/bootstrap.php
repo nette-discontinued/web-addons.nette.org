@@ -52,22 +52,13 @@ $container->router[] = new Route('<id>[/<action>]', array(
 		Route::FILTER_OUT => $composerPackageRouteHelper->filterOut,
 	)
 ));
+$composerVendorRouteHelper = $container->vendorRouteHelper;
 $container->router[] = new Route('<vendor>', array(
 	'presenter' => 'List',
 	'action' => 'byVendor',
 	'vendor' => array(
-		Route::FILTER_IN => function ($vendor) use ($container) {
-			$row = $container->addons->findByComposerVendor($vendor)->limit(1)->fetch();
-			if (!$row) return NULL;
-			$addon = Addon::fromActiveRow($row);
-			return $addon->composerVendor;
-		},
-		Route::FILTER_OUT => function ($vendor) use ($container) {
-			$row = $container->addons->findByComposerVendor($vendor)->limit(1)->fetch();
-			if (!$row) return NULL;
-			$addon = Addon::fromActiveRow($row);
-			return $addon->composerVendor;
-		},
+		Route::FILTER_IN => $composerVendorRouteHelper->filterIn,
+		Route::FILTER_OUT => $composerVendorRouteHelper->filterOut,
 	),
 ));
 $container->router[] = new Route('<presenter>[/<action>]', 'Homepage:default');

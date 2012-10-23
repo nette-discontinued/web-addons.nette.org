@@ -41,6 +41,7 @@ nette:
 
 services:
 	packageRouterHelper: NetteAddons\Model\PackageRouteHelperCached
+	vendorRouteHelper: NetteAddons\Model\VendorRouteHelper
 
 	# security
 	authenticator: NetteAddons\Model\Authenticator
