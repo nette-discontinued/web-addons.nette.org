@@ -7,7 +7,8 @@ use NetteAddons\Model\Facade\AddonManageFacade,
 	NetteAddons\Model\Tags,
 	NetteAddons\Model\Utils\FormValidators,
 	NetteAddons\Model\Utils\Licenses,
-	NetteAddons\Model\Addons;
+	NetteAddons\Model\Addons,
+	NetteAddons\Model\Addon;
 
 
 /**
@@ -18,7 +19,7 @@ use NetteAddons\Model\Facade\AddonManageFacade,
  *
  * @property string $token
  */
-class EditAddonForm extends AddonForm
+class EditAddonFormFactory extends AddonFormFactory
 {
 	/** @var \NetteAddons\Model\Addons */
 	private $model;
@@ -40,26 +41,30 @@ class EditAddonForm extends AddonForm
 	}
 
 
-
-	protected function buildForm()
+	
+	/**
+	 * @param Addon
+	 * @return AddonForm
+	 */
+	public function create(Addon $addon)
 	{
-		parent::buildForm();
+		$form = $this->createForm();
 
-		$this->addSubmit('sub', 'Save');
+		$form->addSubmit('sub', 'Save');
 
-		$this->onSuccess[] = $this->process;
-	}
+		$manager = $this->manager;
+		$model = $this->model;
+		$form->onSuccess[] = function(AddonForm $form) use($manager, $model) {
+			$addon = $form->getAddon();
+			$values = $form->getValues(TRUE);
 
+			$this->manager->fillAddonWithValues($addon, $values);
+			$this->model->update($addon);
+		};
 
+		$form->setAddon($addon);
 
-	public function process()
-	{
-		$values = $this->getValues(TRUE);
-
-		$addon = $this->getAddon();
-
-		$this->manager->fillAddonWithValues($addon, $values);
-		$this->model->update($addon);
+		return $form;
 	}
 
 }

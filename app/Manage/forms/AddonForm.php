@@ -17,10 +17,10 @@ use NetteAddons\Model,
  *
  * @property \NetteAddons\Model\Addon $addon
  */
-abstract class AddonForm extends \NetteAddons\Forms\BaseForm
+class AddonForm extends \NetteAddons\Forms\BaseForm
 {
 	/** @var \NetteAddons\Model\Facade\AddonManageFacade */
-	protected $manager;
+	private $manager;
 
 	/** @var \NetteAddons\Model\Importers\RepositoryImporterManager */
 	private $importerManager;
@@ -47,29 +47,17 @@ abstract class AddonForm extends \NetteAddons\Forms\BaseForm
 	 * @param \NetteAddons\Model\Tags
 	 * @param \NetteAddons\Model\Utils\FormValidators
 	 * @param \NetteAddons\Model\Utils\Licenses
+	 * @param array
 	 */
-	public function __construct(AddonManageFacade $manager, RepositoryImporterManager $importerManager, Tags $tags, FormValidators $validators, Licenses $licenses)
+	public function __construct(AddonManageFacade $manager, RepositoryImporterManager $importerManager, Tags $tags, FormValidators $validators, Licenses $licenses, array $descriptionFormats = array())
 	{
 		$this->manager = $manager;
 		$this->importerManager = $importerManager;
 		$this->tags = $tags;
 		$this->validators = $validators;
 		$this->licenses = $licenses;
+		$this->descriptionFormats = $descriptionFormats;
 		parent::__construct();
-	}
-
-
-
-	/**
-	 * @param string
-	 * @param string
-	 * @return AddonForm
-	 */
-	public function addDescriptionFormat($id, $name)
-	{
-		$this->descriptionFormats[$id] = $name;
-		$this['descriptionFormat']->setItems($this->descriptionFormats);
-		return $this;
 	}
 
 
@@ -97,8 +85,8 @@ abstract class AddonForm extends \NetteAddons\Forms\BaseForm
 			->setRequired();
 		$this->addTextArea('description', 'Description')
 			->setRequired();
-		$this->addSelect('descriptionFormat', 'Description format')
-			->setDefaultValue('texy')
+		$this->addSelect('descriptionFormat', 'Description format', $this->descriptionFormats)
+			->setDefaultValue(reset($this->descriptionFormats))
 			->setRequired();
 	}
 

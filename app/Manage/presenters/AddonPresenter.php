@@ -10,10 +10,10 @@ use NetteAddons\Model\Utils\Validators;
  */
 final class AddonPresenter extends BasePresenter
 {
-	/** @var Forms\AddAddonForm */
+	/** @var Forms\AddAddonFormFactory */
 	private $addAddonForm;
 
-	/** @var Forms\EditAddonForm */
+	/** @var Forms\EditAddonFormFactory */
 	private $editAddonForm;
 
 	/** @var Forms\ImportAddonForm */
@@ -25,9 +25,9 @@ final class AddonPresenter extends BasePresenter
 
 
 	/**
-	 * @param Forms\AddAddonForm
+	 * @param Forms\AddAddonFormFactory
 	 */
-	public function injectAddForm(Forms\AddAddonForm $addAddonForm)
+	public function injectAddForm(Forms\AddAddonFormFactory $addAddonForm)
 	{
 		$this->addAddonForm = $addAddonForm;
 	}
@@ -35,9 +35,9 @@ final class AddonPresenter extends BasePresenter
 
 
 	/**
-	 * @param Forms\EditAddonForm
+	 * @param Forms\EditAddonFormFactory
 	 */
-	public function injectEditForm(Forms\EditAddonForm $editAddonForm)
+	public function injectEditForm(Forms\EditAddonFormFactory $editAddonForm)
 	{
 		$this->editAddonForm = $editAddonForm;
 	}
@@ -67,17 +67,15 @@ final class AddonPresenter extends BasePresenter
 	/**
 	 * Creates a new form for addon information.
 	 *
-	 * @return Forms\AddAddonForm
+	 * @return Forms\AddonForm
 	 */
-	protected function createComponentAddAddonForm($name)
+	protected function createComponentAddAddonForm()
 	{
-		$form = $this->addAddonForm;
+		$form = $this->addAddonForm->create($this->getUser()->getIdentity(), $this->token);
 
 		if ($this->addon) {
 			$form->setAddon($this->addon);
 		}
-		$form->setUser($this->getUser()->getIdentity());
-		$form->setToken($this->token);
 
 		$form->onSuccess[] = $this->addAddonFormSubmitted;
 
@@ -89,13 +87,14 @@ final class AddonPresenter extends BasePresenter
 	/**
 	 * Handles the new addon form submission.
 	 *
-	 * @param Forms\AddAddonForm
+	 * @param Forms\AddonForm
 	 */
-	public function addAddonFormSubmitted(Forms\AddAddonForm $form)
+	public function addAddonFormSubmitted(Forms\AddonForm $form)
 	{
 		if ($form->valid) {
-			$this->addon = $form->addon;
-			$this->token = $form->token;
+			$values = $form->getValues();
+			$this->addon = $form->getAddon();
+			$this->token = $values->token;
 
 			$imported = (bool) $this->addon->repositoryHosting; // TODO: remove
 
@@ -176,7 +175,7 @@ final class AddonPresenter extends BasePresenter
 
 
 	/**
-	 * @return Forms\EditAddonForm
+	 * @return Forms\AddonForm
 	 */
 	protected function createComponentEditAddonForm()
 	{
@@ -184,9 +183,7 @@ final class AddonPresenter extends BasePresenter
 			$this->error('Addon not found.');
 		}
 
-		$form = $this->editAddonForm;
-
-		$form->setAddon($this->addon);
+		$form = $this->editAddonForm->create($this->addon);
 
 		$form->onSuccess[] = $this->editAddonFormSubmitted;
 
@@ -196,9 +193,9 @@ final class AddonPresenter extends BasePresenter
 
 
 	/**
-	 * @param Forms\EditAddonForm
+	 * @param Forms\AddonForm
 	 */
-	public function editAddonFormSubmitted(Forms\EditAddonForm $form)
+	public function editAddonFormSubmitted(Forms\AddonForm $form)
 	{
 		if ($form->valid) {
 			$this->addon = $form->addon;
