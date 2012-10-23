@@ -420,3 +420,48 @@ DELIMITER ;
 -- addons_downloads.userAgent can be null because Composer does not send user-agent
 ALTER TABLE `addons_downloads`
 CHANGE `userAgent` `userAgent` varchar(255) COLLATE 'utf8_general_ci' NULL AFTER `ipAddress`;
+
+
+-- synchronization with current-schema.sql
+ALTER TABLE `addons_dependencies`
+MODIFY `type` enum('require','require-dev','suggest','provide','replace','conflict','recommend') COLLATE utf8_general_ci DEFAULT 'require' NOT NULL AFTER `version`;
+
+ALTER TABLE `users`
+ADD `group_id` int(10) unsigned DEFAULT '4' NOT NULL AFTER `id`,
+ADD `username` varchar(200) COLLATE utf8_general_ci DEFAULT '' NOT NULL AFTER `group_id`,
+MODIFY `password` varchar(40) COLLATE utf8_general_ci DEFAULT '' NOT NULL AFTER `username`,
+MODIFY `email` varchar(50) COLLATE utf8_general_ci DEFAULT '' NOT NULL AFTER `password`,
+ADD `title` varchar(50) COLLATE utf8_general_ci AFTER `email`,
+ADD `realname` varchar(40) COLLATE utf8_general_ci AFTER `title`,
+ADD `url` varchar(100) COLLATE utf8_general_ci AFTER `realname`,
+ADD `jabber` varchar(75) COLLATE utf8_general_ci AFTER `url`,
+ADD `icq` varchar(12) COLLATE utf8_general_ci AFTER `jabber`,
+ADD `msn` varchar(50) COLLATE utf8_general_ci AFTER `icq`,
+ADD `aim` varchar(30) COLLATE utf8_general_ci AFTER `msn`,
+ADD `yahoo` varchar(30) COLLATE utf8_general_ci AFTER `aim`,
+ADD `location` varchar(30) COLLATE utf8_general_ci AFTER `yahoo`,
+ADD `use_avatar` tinyint(1) DEFAULT '0' NOT NULL AFTER `location`,
+ADD `signature` text COLLATE utf8_general_ci AFTER `use_avatar`,
+ADD `disp_topics` tinyint(3) unsigned AFTER `signature`,
+ADD `disp_posts` tinyint(3) unsigned AFTER `disp_topics`,
+ADD `email_setting` tinyint(1) DEFAULT '1' NOT NULL AFTER `disp_posts`,
+ADD `save_pass` tinyint(1) DEFAULT '1' NOT NULL AFTER `email_setting`,
+ADD `notify_with_post` tinyint(1) DEFAULT '0' NOT NULL AFTER `save_pass`,
+ADD `show_smilies` tinyint(1) DEFAULT '1' NOT NULL AFTER `notify_with_post`,
+ADD `show_img` tinyint(1) DEFAULT '1' NOT NULL AFTER `show_smilies`,
+ADD `show_img_sig` tinyint(1) DEFAULT '1' NOT NULL AFTER `show_img`,
+ADD `show_avatars` tinyint(1) DEFAULT '1' NOT NULL AFTER `show_img_sig`,
+ADD `show_sig` tinyint(1) DEFAULT '1' NOT NULL AFTER `show_avatars`,
+ADD `timezone` float DEFAULT '0' NOT NULL AFTER `show_sig`,
+ADD `language` varchar(25) COLLATE utf8_general_ci DEFAULT 'English' NOT NULL AFTER `timezone`,
+ADD `style` varchar(25) COLLATE utf8_general_ci DEFAULT 'Oxygen' NOT NULL AFTER `language`,
+ADD `num_posts` int(10) unsigned DEFAULT '0' NOT NULL AFTER `style`,
+ADD `last_post` int(10) unsigned AFTER `num_posts`,
+ADD `registered` int(10) unsigned DEFAULT '0' NOT NULL AFTER `last_post`,
+ADD `registration_ip` varchar(15) COLLATE utf8_general_ci DEFAULT '0.0.0.0' NOT NULL AFTER `registered`,
+ADD `last_visit` int(10) unsigned DEFAULT '0' NOT NULL AFTER `registration_ip`,
+ADD `admin_note` varchar(30) COLLATE utf8_general_ci AFTER `last_visit`,
+ADD `activate_string` varchar(50) COLLATE utf8_general_ci AFTER `admin_note`,
+ADD `activate_key` varchar(8) COLLATE utf8_general_ci AFTER `activate_string`,
+DROP name,
+DROP role, DROP apiToken;
