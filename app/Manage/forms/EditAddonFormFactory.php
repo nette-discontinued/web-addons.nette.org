@@ -12,7 +12,7 @@ use NetteAddons\Model\Facade\AddonManageFacade,
 
 
 /**
- * Form for new addon registration. When importing from GitHub, most of the field should be prefilled.
+ * Form for new addon registration. When importing from GitHub, most of the fields should be prefilled.
  * The license input won't be visible when composer.json is available.
  *
  * @author Patrik Votoček

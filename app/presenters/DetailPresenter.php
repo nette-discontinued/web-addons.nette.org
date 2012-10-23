@@ -17,6 +17,7 @@ use Nette\Http,
  * @author Jan Marek
  * @author Jan Tvrdík
  * @author Patrik Votoček
+ * @author Michael Moravec
  */
 class DetailPresenter extends BasePresenter
 {
@@ -165,20 +166,20 @@ class DetailPresenter extends BasePresenter
 		);
 
 		if (!isset($trans[$vote])) {
-			$this->error('invalid vote');
+			$this->error('Invalid vote.');
 		} else {
 			$vote = $trans[$vote];
 		}
 
 		if (!$this->user->loggedIn) {
-			$this->error('not logged in', 403); // TODO: better
+			$this->error('Not logged in.', 403); // TODO: better
 		}
 
 		$this->addonVotes->vote($this->id, $this->user->id, $vote);
 		if ($this->isAjax()) {
 			$this->invalidateControl('rating');
 		} else {
-			$this->flashMessage('Voting was successfull!');
+			$this->flashMessage('Voting was successful!');
 			$this->redirect('this');
 		}
 	}
@@ -186,7 +187,7 @@ class DetailPresenter extends BasePresenter
 
 
 	/**
-	 * @return Forms\ReportForm
+	 * @return \Nette\Application\UI\Form
 	 */
 	protected function createComponentReportForm()
 	{

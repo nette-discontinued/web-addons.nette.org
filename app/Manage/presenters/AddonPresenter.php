@@ -167,7 +167,7 @@ final class AddonPresenter extends BasePresenter
 			$this->redirect(':Detail:', $this->addon->id);
 
 		} catch (\NetteAddons\DuplicateEntryException $e) {
-			$this->flashMessage("Adding new addon failed.", 'danger');
+			$this->flashMessage('Adding new addon failed.', 'danger');
 			$this->redirect(':Manage:Addon:add');
 		}
 	}
@@ -242,12 +242,12 @@ final class AddonPresenter extends BasePresenter
 		}
 		if ($real) {
 			$this->addons->delete($this->addon);
-			$this->flashMessage("Addon '{$this->addon->name}' deleted");
+			$this->flashMessage("Addon '{$this->addon->name}' deleted.");
 			$this->redirect(':List:');
 		}
 
 		$this->addons->markAsDeleted($this->addon, $this->getUser()->identity);
-		$this->flashMessage("Addon '{$this->addon->name}' marked as deleted");
+		$this->flashMessage("Addon '{$this->addon->name}' marked as deleted.");
 		$this->redirect(':Detail:', array($this->addon->id));
 	}
 

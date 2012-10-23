@@ -83,7 +83,7 @@ class AddVersionForm extends VersionForm
 			try {
 				$this->model->add($version);
 			} catch (\NetteAddons\DuplicateEntryException $e) {
-				$this['version']->addError(sprintf('Version %s already exists.', $version->version));
+				$this['version']->addError(sprintf("Version '%s' already exists.", $version->version));
 			}
 
 		} else {

@@ -33,13 +33,13 @@ class RepositoryImporterManager extends Nette\Object
 	public function addImporter($id, $factory, $class)
 	{
 		if (isset($this->factories[$id])) {
-			throw new \NetteAddons\InvalidStateException("Importer '$id' already registered");
+			throw new \NetteAddons\InvalidStateException("Importer '$id' is already registered");
 		}
 		if (!is_callable($factory)) {
-			throw new \NetteAddons\InvalidArgumentException('Factory is not callable');
+			throw new \NetteAddons\InvalidArgumentException('Factory is not callable.');
 		}
 		if (!is_subclass_of($class, 'NetteAddons\Model\IAddonImporter')) {
-			throw new \NetteAddons\InvalidArgumentException("Class '$class' does not implement IAddonImporter");
+			throw new \NetteAddons\InvalidArgumentException("Class '$class' does not implement IAddonImporter.");
 		}
 		$this->factories[$id] = $factory;
 		$this->classes[$id] = $class;

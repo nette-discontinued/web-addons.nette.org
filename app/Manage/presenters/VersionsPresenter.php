@@ -144,7 +144,7 @@ final class VersionsPresenter extends BasePresenter
 		}
 
 		if (count($result['conflicted']) === 0 && count($result['new']) === 0) {
-			$this->flashMessage('Nothing new...');
+			$this->flashMessage('Nothing new…');
 		} else {
 			try {
 				foreach ($result['new'] as $version) {

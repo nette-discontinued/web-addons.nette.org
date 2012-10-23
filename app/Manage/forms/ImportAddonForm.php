@@ -96,9 +96,9 @@ class ImportAddonForm extends \NetteAddons\Forms\BaseForm
 
 		$this['url']->addRule(
 			$this->validateRepositoryUrlSupported,
-			'Sorry we are supported only ' . $this->importerManager->getNames() . ' repositories');
+			'Sorry, we currently support only repositories from ' . $this->importerManager->getNames() . '.');
 
-		$this['url']->addRule($this->validateRepositoryUrl, 'It is not valid repository URL');
+		$this['url']->addRule($this->validateRepositoryUrl, 'Repository URL is not valid.');
 
 		$this->addSubmit('sub', 'Load');
 
@@ -138,7 +138,7 @@ class ImportAddonForm extends \NetteAddons\Forms\BaseForm
 
 		} catch (\NetteAddons\NotSupportedException $e) {
 			$this['url']->addError(
-				'Sorry we are supported only ' . $this->importerManager->getNames() . ' repositories'
+				'Sorry, we currently support only repositories from ' . $this->importerManager->getNames() . '.'
 			);
 			return;
 		}
@@ -147,7 +147,7 @@ class ImportAddonForm extends \NetteAddons\Forms\BaseForm
 			$this->addon = $this->manager->import($importer, $this->user);
 
 			if ($this->addon->composerFullName && !$this->validators->isComposerFullNameUnique($this->addon->composerFullName)) {
-				$this->addError("Addon with composer name '{$this->addon->composerFullName}' already exist.");
+				$this->addError("Addon with composer name '{$this->addon->composerFullName}' already exists.");
 				return;
 			}
 
@@ -158,7 +158,7 @@ class ImportAddonForm extends \NetteAddons\Forms\BaseForm
 				$this['url']->addError("Repository with URL '{$values->url}' does not exist.");
 			} else {
 				$importerName = $importer::getName();
-				$this['url']->addError("Importing failed because '$importerName' returned #" . $e->getCode() . " error.");
+				$this['url']->addError("Importing failed because '$importerName' returned error #" . $e->getCode() . '.');
 			}
 
 		} catch (\NetteAddons\IOException $e) {

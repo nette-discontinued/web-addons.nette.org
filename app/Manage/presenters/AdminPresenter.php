@@ -133,7 +133,7 @@ final class AdminPresenter extends \NetteAddons\BasePresenter
 	{
 		$report = $this->reports->find($id);
 		if (!$report) {
-			$this->error('Missing report.');
+			$this->error('Report not found.');
 		}
 
 		$this['reportForm']->setReport($report->id);
