@@ -2,7 +2,8 @@
 
 namespace NetteAddons\Manage;
 
-use NetteAddons\Model\Utils\Validators;
+use NetteAddons\Forms\Form,
+	NetteAddons\Model\Utils\Validators;
 
 
 /**
@@ -16,7 +17,7 @@ final class AddonPresenter extends BasePresenter
 	/** @var Forms\EditAddonFormFactory */
 	private $editAddonForm;
 
-	/** @var Forms\ImportAddonForm */
+	/** @var Forms\ImportAddonFormFactory */
 	private $importAddonForm;
 
 	/** @var \NetteAddons\Model\Utils\Validators */
@@ -45,9 +46,9 @@ final class AddonPresenter extends BasePresenter
 
 
 	/**
-	 * @param Forms\ImportAddonForm
+	 * @param Forms\ImportAddonFormFactory
 	 */
-	public function injectImportForm(Forms\ImportAddonForm $importAddonForm)
+	public function injectImportForm(Forms\ImportAddonFormFactory $importAddonForm)
 	{
 		$this->importAddonForm = $importAddonForm;
 	}
@@ -111,13 +112,11 @@ final class AddonPresenter extends BasePresenter
 
 
 	/**
-	 * @return Forms\ImportAddonForm
+	 * @return Form
 	 */
 	protected function createComponentImportAddonForm()
 	{
-		$form = $this->importAddonForm;
-
-		$form->setUser($this->getUser()->getIdentity());
+		$form = $this->importAddonForm->create($this->getUser()->getIdentity());
 
 		$form->onSuccess[] = $this->importAddonFormSubmitted;
 
@@ -127,12 +126,13 @@ final class AddonPresenter extends BasePresenter
 
 
 	/**
-	 * @param Forms\ImportAddonForm
+	 * @param Form
 	 */
-	public function importAddonFormSubmitted(Forms\ImportAddonForm $form)
+	public function importAddonFormSubmitted(Form $form)
 	{
 		if ($form->valid) {
-			$this->token = $form->token;
+			$values = $form->getValues();
+			$this->token = $values->token;
 
 			$this->flashMessage('Addon has been successfully loaded.');
 			$this->redirect('this');
