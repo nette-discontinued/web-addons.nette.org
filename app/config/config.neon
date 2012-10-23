@@ -87,9 +87,6 @@ services:
 	reinstall: NetteAddons\Model\Reinstall
 	versionParser: NetteAddons\Model\Utils\VersionParser
 
-	# forms
-	addAddonVersionForm: NetteAddons\Manage\Forms\AddVersionForm
-
 	# form factories
 	addAddonForm:
 		class: NetteAddons\Manage\Forms\AddAddonFormFactory
@@ -102,6 +99,7 @@ services:
 			- addDescriptionFormat('texy', 'Texy!')
 			- addDescriptionFormat('markdown', 'Markdown')
 	importAddonForm: NetteAddons\Manage\Forms\ImportAddonFormFactory
+	addAddonVersionForm: NetteAddons\Manage\Forms\AddVersionFormFactory
 	reportForm: NetteAddons\Forms\ReportFormFactory
 	manageReportForm: NetteAddons\Manage\Forms\ReportFormFactory
 	editPageForm: NetteAddons\Forms\EditPageFormFactory

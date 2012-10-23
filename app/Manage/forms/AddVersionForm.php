@@ -2,92 +2,99 @@
 
 namespace NetteAddons\Manage\Forms;
 
-use Nette\Security\IIdentity;
+use Nette\Security\IIdentity,
+	NetteAddons\Model\Addon,
+	NetteAddons\Model\AddonVersions,
+	NetteAddons\Model\Utils\VersionParser,
+	NetteAddons\Model\Utils\Licenses,
+	NetteAddons\Model\Utils\FormValidators,
+	NetteAddons\Model\Facade\AddonManageFacade;
 
 
 /**
  * Form for addon version creation.
  *
  * @author Patrik Votoček
- *
- * @property-write \Nette\Security\IIdentity $user
- * @property string $token
  */
-class AddVersionForm extends VersionForm
+class AddVersionFormFactory extends \Nette\Object
 {
-	/** @var \Nette\Security\IIdentity */
-	private $user;
+	/** @var \NetteAddons\Model\Facade\AddonManageFacade */
+	private $manager;
 
-	/** @var string */
-	private $token;
+	/** @var \NetteAddons\Model\Utils\VersionParser */
+	private $versionParser;
+
+	/** @var \NetteAddons\Model\Utils\FormValidators */
+	private $validators;
+
+	/** @var \NetteAddons\Model\Utils\Licenses */
+	private $licenses;
+
+	/** @var \NetteAddons\Model\AddonVersions */
+	private $model;
+
+	/** @var \NetteAddons\Model\Addon */
+	protected $addon;
 
 
 
 	/**
-	 * @param \Nette\Security\IIdentity
-	 * @return AddVersionForm
+	 * @param \NetteAddons\Model\Facade\AddonManageFacade
+	 * @param \NetteAddons\Model\Utils\VersionParser
+	 * @param \NetteAddons\Model\Utils\FormValidators
+	 * @param \NetteAddons\Model\Utils\Licenses
+	 * @param \NetteAddons\Model\AddonVersions
 	 */
-	public function setUser(IIdentity $user)
+	public function __construct(AddonManageFacade $manager, VersionParser $versionParser, FormValidators $validators, Licenses $licenses, AddonVersions $model)
 	{
-		$this->user = $user;
-		return $this;
+		$this->model = $model;
+		$this->manager = $manager;
+		$this->versionParser = $versionParser;
+		$this->validators = $validators;
+		$this->licenses = $licenses;
 	}
 
 
 
 	/**
-	 * @return string
-	 */
-	public function getToken()
-	{
-		return $this->token;
-	}
-
-
-
-	/**
+	 * @param Addon
+	 * @param IIdentity
 	 * @param string
-	 * @return AddVersionForm
+	 * @return VersionForm
 	 */
-	public function setToken($token)
+	public function create(Addon $addon, IIdentity $user, $token)
 	{
-		$this->token = $token;
-		return $this;
-	}
+		$form = new VersionForm($this->validators, $this->licenses, $addon);
 
+		$form->addHidden('token', $token);
+		$form->addSubmit('sub', 'Save');
 
+		$model = $this->model;
+		$manager = $this->manager;
+		$versionParser = $this->versionParser;
+		$form->onSuccess[] = function(VersionForm $form) use($model, $manager, $addon, $versionParser, $user) {
+			$values = $form->getValues();
 
-	protected function buildForm()
-	{
-		parent::buildForm();
-
-		$this->addSubmit('sub', 'Save');
-
-		$this->onSuccess[] = $this->process;
-	}
-
-
-	public function process()
-	{
-		$values = $this->getValues();
-
-		try {
-			$version = $this->manager->addVersionFromValues($this->addon, $values, $this->user, $this->versionParser);
-
-		} catch (\NetteAddons\IOException $e) {
-			$this['archive']->addError('Uploading file failed.');
-			return;
-		}
-
-		if ($this->addon->id) {
 			try {
-				$this->model->add($version);
-			} catch (\NetteAddons\DuplicateEntryException $e) {
-				$this['version']->addError(sprintf("Version '%s' already exists.", $version->version));
+				$version = $manager->addVersionFromValues($addon, $values, $user, $versionParser);
+
+			} catch (\NetteAddons\IOException $e) {
+				$form['archive']->addError('Uploading file failed.');
+				return;
 			}
 
-		} else {
-			$this->manager->storeAddon($this->token, $this->addon);
-		}
+			if ($addon->id) {
+				try {
+					$model->add($version);
+				} catch (\NetteAddons\DuplicateEntryException $e) {
+					$form['version']->addError(sprintf("Version '%s' already exists.", $version->version));
+				}
+
+			} else {
+				$manager->storeAddon($values->token, $addon);
+			}
+		};
+
+		return $form;
 	}
 }

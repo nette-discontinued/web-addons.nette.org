@@ -5,77 +5,37 @@ namespace NetteAddons\Manage\Forms;
 use Nette\Utils\Strings,
 	Nette\Forms\Controls\UploadControl,
 	NetteAddons\Model\Addon,
-	NetteAddons\Model\AddonVersions,
-	NetteAddons\Model\Utils\VersionParser,
 	NetteAddons\Model\Utils\Licenses,
-	NetteAddons\Model\Utils\FormValidators,
-	NetteAddons\Model\Facade\AddonManageFacade;
+	NetteAddons\Model\Utils\FormValidators;
 
 
 
 /**
  * @author Patrik Votoček
- *
- * @property-write \NetteAddons\Model\Addon $addon
  */
-abstract class VersionForm extends \NetteAddons\Forms\BaseForm
+class VersionForm extends \NetteAddons\Forms\BaseForm
 {
-	/** @var \NetteAddons\Model\Facade\AddonManageFacade */
-	protected $manager;
-
-	/** @var \NetteAddons\Model\Utils\VersionParser */
-	protected $versionParser;
-
-	/** @var \NetteAddons\Model\Utils\FormValidators */
+	/** @var FormValidators */
 	private $validators;
 
-	/** @var \NetteAddons\Model\Utils\Licenses */
+	/** @var Licenses */
 	private $licenses;
 
-	/** @var \NetteAddons\Model\AddonVersions */
-	protected $model;
-
-	/** @var \NetteAddons\Model\Addon */
-	protected $addon;
-
+	/** @var Addon */
+	private $addon;
 
 
 	/**
-	 * @param \NetteAddons\Model\Facade\AddonManageFacade
-	 * @param \NetteAddons\Model\Utils\VersionParser
-	 * @param \NetteAddons\Model\Utils\FormValidators
-	 * @param \NetteAddons\Model\Utils\Licenses
-	 * @param \NetteAddons\Model\AddonVersions
+	 * @param FormValidators
+	 * @param Licenses
+	 * @param Addon
 	 */
-	public function __construct(AddonManageFacade $manager, VersionParser $versionParser, FormValidators $validators, Licenses $licenses, AddonVersions $model)
+	public function __construct(FormValidators $validators, Licenses $licenses, Addon $addon)
 	{
-		$this->manager = $manager;
-		$this->versionParser = $versionParser;
 		$this->validators = $validators;
 		$this->licenses = $licenses;
-		$this->model = $model;
-		parent::__construct();
-	}
-
-
-
-	/**
-	 * @param \NetteAddons\Model\Addon
-	 * @return VersionForm
-	 */
-	public function setAddon(Addon $addon)
-	{
 		$this->addon = $addon;
-
-		$license = $this->addon->defaultLicense;
-		if (is_string($license)) {
-			$license = array_map('trim', explode(',', $license));
-		}
-		$this->setDefaults(array(
-			'license' => $license,
-		));
-
-		return $this;
+		parent::__construct();
 	}
 
 
@@ -111,6 +71,14 @@ abstract class VersionForm extends \NetteAddons\Forms\BaseForm
 			->addConditionOn($this['how'], self::EQUAL, 'upload')
 			->addRule(self::FILLED)
 			->addRule($this->isArchiveValid, 'Only ZIP files are allowed.');
+
+		$license = $this->addon->defaultLicense;
+		if (is_string($license)) {
+			$license = array_map('trim', explode(',', $license));
+		}
+		$this->setDefaults(array(
+			'license' => $license,
+		));
 	}
 
 

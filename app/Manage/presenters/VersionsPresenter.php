@@ -11,7 +11,7 @@ use NetteAddons\Model\Users,
  */
 final class VersionsPresenter extends BasePresenter
 {
-	/** @var Forms\AddVersionForm */
+	/** @var Forms\AddVersionFormFactory */
 	private $addVersionForm;
 
 	/** @var \NetteAddons\Model\AddonVersions */
@@ -23,9 +23,9 @@ final class VersionsPresenter extends BasePresenter
 
 
 	/**
-	 * @param Forms\AddVersionForm
+	 * @param Forms\AddVersionFormFactory
 	 */
-	public function injectAddForm(Forms\AddVersionForm $addVersionForm)
+	public function injectAddForm(Forms\AddVersionFormFactory $addVersionForm)
 	{
 		$this->addVersionForm = $addVersionForm;
 	}
@@ -45,15 +45,11 @@ final class VersionsPresenter extends BasePresenter
 
 
 	/**
-	 * @return Forms\AddVersionForm
+	 * @return Forms\VersionForm
 	 */
 	protected function createComponentAddVersionForm()
 	{
-		$form = $this->addVersionForm;
-
-		$form->setAddon($this->addon);
-		$form->setToken($this->token);
-		$form->setUser($this->getUser()->identity);
+		$form = $this->addVersionForm->create($this->addon, $this->getUser()->getIdentity(), $this->token);
 
 		$form->onSuccess[] = $this->addVersionFormSubmitted;
 
@@ -63,12 +59,13 @@ final class VersionsPresenter extends BasePresenter
 
 
 	/**
-	 * @param Forms\AddVersionForm
+	 * @param Forms\VersionForm
 	 */
-	public function addVersionFormSubmitted(Forms\AddVersionForm $form)
+	public function addVersionFormSubmitted(Forms\VersionForm $form)
 	{
 		if ($form->valid) {
-			$this->token = $form->token;
+			$values = $form->getValues();
+			$this->token = $values->token;
 
 			if ($this->addon->id) {
 				$this->flashMessage('Version created.');
