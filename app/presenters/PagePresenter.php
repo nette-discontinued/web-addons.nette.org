@@ -59,7 +59,7 @@ class PagePresenter extends BasePresenter
 
 
 	/**
-	 * @return Forms\EditPageFormFactory
+	 * @return Forms\Form
 	 */
 	protected function createComponentEditPageForm()
 	{

@@ -29,7 +29,7 @@ class EditPageFormFactory extends \Nette\Object
 	/**
 	 * @param ActiveRow
 	 * @param IIdentity
-	 * @return EditPageFormFactory
+	 * @return Form
 	 */
 	public function create(ActiveRow $page, IIdentity $user)
 	{
