@@ -86,7 +86,7 @@ class AddonForm extends \NetteAddons\Forms\BaseForm
 		$this->addTextArea('description', 'Description')
 			->setRequired();
 		$this->addRadioList('descriptionFormat', 'Description format', $this->descriptionFormats)
-			->setDefaultValue(reset($this->descriptionFormats))
+			->setDefaultValue(key($this->descriptionFormats))
 			->setRequired();
 	}
 
