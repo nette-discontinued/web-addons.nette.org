@@ -99,10 +99,10 @@ services:
 			- addDescriptionFormat('markdown', 'Markdown')
 	importAddonForm: NetteAddons\Manage\Forms\ImportAddonForm
 	addAddonVersionForm: NetteAddons\Manage\Forms\AddVersionForm
-	reportForm: NetteAddons\Forms\ReportForm
 	manageReportForm: NetteAddons\Manage\Forms\ReportForm
 
 	# form factories
+	reportForm: NetteAddons\Forms\ReportFormFactory
 	editPageForm: NetteAddons\Forms\EditPageFormFactory
 
 

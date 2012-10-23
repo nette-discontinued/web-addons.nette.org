@@ -39,7 +39,7 @@ class DetailPresenter extends BasePresenter
 	/** @var AddonVotes */
 	private $addonVotes;
 
-	/** @var Forms\ReportForm */
+	/** @var Forms\ReportFormFactory */
 	private $reportForm;
 
 
@@ -61,9 +61,9 @@ class DetailPresenter extends BasePresenter
 
 
 	/**
-	 * @param Forms\ReportForm
+	 * @param Forms\ReportFormFactory
 	 */
-	public function injectForms(Forms\ReportForm $reportForm)
+	public function injectForms(Forms\ReportFormFactory $reportForm)
 	{
 		$this->reportForm = $reportForm;
 	}
@@ -176,10 +176,7 @@ class DetailPresenter extends BasePresenter
 	 */
 	protected function createComponentReportForm()
 	{
-		$form = $this->reportForm;
-
-		$form->setAddon($this->addon);
-		$form->setUser($this->getUser()->identity);
+		$form = $this->reportForm->create($this->addon, $this->getUser()->getIdentity());
 
 		$form->onSuccess[] = $this->reportFormSubmitted;
 
@@ -189,9 +186,9 @@ class DetailPresenter extends BasePresenter
 
 
 	/**
-	 * @param Forms\ReportForm
+	 * @param Forms\Form
 	 */
-	public function reportFormSubmitted(Forms\ReportForm $form)
+	public function reportFormSubmitted(Forms\Form $form)
 	{
 		if ($form->valid) {
 			$this->flashMessage('Report sent.');
