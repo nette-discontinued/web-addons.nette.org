@@ -74,8 +74,8 @@ class TextPreprocessor extends Nette\Object
 
 
 	/**
-	 * @param string|array
-	 * @return string
+	 * @param  string|array
+	 * @return \Nette\Utils\Html
 	 */
 	public function processLicenses($licenses)
 	{
@@ -83,22 +83,22 @@ class TextPreprocessor extends Nette\Object
 			$licenses = array_map('trim', explode(',', $licenses));
 		}
 
+		$container = \Nette\Utils\Html::el();
 		foreach ($licenses as $license) {
-			$el = $license;
-			if ($this->licenses->isValid($license)) {
-				$el = \Nette\Utils\Html::el('a');
-				$el->href = $this->licenses->getUrl($license);
-				$el->title = $this->licenses->getFullName($license);
-				$el->add($license);
+			if (count($container->getChildren()) > 0) {
+				$container->add(', ');
 			}
 
-			if (empty($s)) {
-				$s = (string) $el;
+			if ($this->licenses->isValid($license)) {
+				$container->create('a', array(
+					'href' => $this->licenses->getUrl($license),
+					'title' => $this->licenses->getFullName($license),
+				))->setText($license);
 			} else {
-				$s .= ', ' . $el;
+				$container->add($license);
 			}
 		}
-		return $s;
+		return $container;
 	}
 
 
