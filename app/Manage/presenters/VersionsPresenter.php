@@ -135,6 +135,9 @@ final class VersionsPresenter extends BasePresenter
 			$importer = $this->importerManager->createFromUrl($this->addon->repository);
 			$result = $this->manager->updateVersions($this->addon, $importer, $owner);
 
+		} catch (\NetteAddons\NotSupportedException $e) {
+			$this->error();
+
 		} catch (\NetteAddons\IOException $e) {
 			$this->flashMessage('Version importing failed. Try again later.', 'error');
 			$this->redirect(':Detail:', $this->addon->id);
