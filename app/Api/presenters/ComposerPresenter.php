@@ -2,7 +2,9 @@
 
 namespace NetteAddons\Api;
 
-use NetteAddons\Model\Addons,
+use NetteAddons\Model\Addon,
+	NetteAddons\Model\AddonVersion,
+	NetteAddons\Model\Addons,
 	NetteAddons\Model\AddonDownloads,
 	NetteAddons\Model\AddonVersions,
 	NetteAddons\Model\Utils\Composer;
