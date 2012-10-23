@@ -168,8 +168,10 @@ class AddonForm extends \NetteAddons\Forms\BaseForm
 	public function getValues($asArray = FALSE)
 	{
 		$values = parent::getValues($asArray);
-		if (!empty($values['repository'])) {
+		if (isset($this['repository'])) {
 			$values['repositoryHosting'] = NULL;
+		}
+		if (!empty($values['repository'])) {
 			$values['repository'] = $this->importerManager->normalizeUrl($values['repository']);
 			if ($this->importerManager->isValid($values['repository'])) {
 				$values['repositoryHosting'] = $this->importerManager->getIdByUrl($values['repository']);
