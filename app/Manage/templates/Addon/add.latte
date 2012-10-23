@@ -43,17 +43,18 @@
 				{foreach $_form->errors as $error}<p class="caution">{$error}</p>{/foreach}
 				<div n:class="controls, $_form['name']->required ? required">
 					{label name /}<br>
-					{input name class => 'input-half input-third text'}
+					{input name class => 'input-third text'}
 					<small>user-friendly addon name, may contain spaces and other special characters</small>
 				</div>
 				<div n:ifset="$_form['composerFullName']" n:class="controls, $_form['composerFullName']->required ? required">
 					{label composerFullName /}<br>
 					{input composerFullName class => 'input-third text'}
-					<small>&lt;vendor&gt;/&lt;project-name&gt;, only lowercase letters and dash separation is allowed</small>
+					<small>&lt;vendor&gt;/&lt;project-name&gt;, only lowercase alphanumeric characters and dash separation is allowed</small>
 				</div>
 				<div n:ifset="$_form['defaultLicense']" n:class="controls, $_form['defaultLicense']->required ? required">
 					{label defaultLicense /}<br>
 					{input defaultLicense class => 'text chzn-select'}
+					<small>used as default for new versions</small>
 				</div>
 				<div n:ifset="$_form['tags']" n:class="controls, $_form['tags']->required ? required">
 					{label tags /}<br>

@@ -77,11 +77,11 @@ abstract class AddonForm extends \NetteAddons\Forms\BaseForm
 	protected function buildForm()
 	{
 		$this->addText('name', 'Name', NULL, 100)
-			->setRequired();
+			->setRequired('Addon must have a name. Really!');
 		$this->addText('composerFullName', 'Composer name', NULL, 100)
 			->setRequired()
 			->addRule(self::PATTERN, 'Invalid composer name', FormValidators::COMPOSER_NAME_RE)
-			->addRule($this->validators->isComposerFullNameUnique, 'This composer name has been already taken.');
+			->addRule($this->validators->isComposerFullNameUnique, 'This composer name has already been taken.');
 		$this->addMultiSelect('defaultLicense', 'Default license', $this->licenses->getLicenses(TRUE))
 			->setRequired()
 			->addRule($this->validators->isLicenseValid, 'Invalid license identifier.');
