@@ -76,6 +76,7 @@ BEGIN
 		SELECT LEAST(COUNT(*), 1)
 		FROM `addons_downloads`
 		WHERE
+			`type` = NEW.type AND
 			`versionId` = NEW.versionId AND
 			`ipAddress` = NEW.ipAddress AND
 			`fake` = 0 AND
