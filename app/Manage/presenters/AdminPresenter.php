@@ -2,7 +2,8 @@
 
 namespace NetteAddons\Manage;
 
-use NetteAddons\Model\Addons,
+use NetteAddons\Forms\Form,
+	NetteAddons\Model\Addons,
 	NetteAddons\Model\AddonVotes,
 	NetteAddons\Model\AddonReports;
 
@@ -21,7 +22,7 @@ final class AdminPresenter extends \NetteAddons\BasePresenter
 	/** @var \NetteAddons\Model\AddonReports */
 	private $reports;
 
-	/** @var Forms\ReportForm */
+	/** @var Forms\ReportFormFactory */
 	private $reportForm;
 
 
@@ -41,9 +42,9 @@ final class AdminPresenter extends \NetteAddons\BasePresenter
 
 
 	/**
-	 * @param Forms\ReportForm
+	 * @param Forms\ReportFormFactory
 	 */
-	public function injectForms(Forms\ReportForm $reportForm)
+	public function injectForms(Forms\ReportFormFactory $reportForm)
 	{
 		$this->reportForm = $reportForm;
 	}
@@ -98,13 +99,11 @@ final class AdminPresenter extends \NetteAddons\BasePresenter
 
 
 	/**
-	 * @return Forms\ReportForm
+	 * @return Form
 	 */
 	protected function createComponentReportForm()
 	{
-		$form = $this->reportForm;
-
-		$form->setUser($this->getUser()->identity);
+		$form = $this->reportForm->create($this->getUser()->getIdentity());
 
 		$form->onSuccess[] = $this->reportFormSubmitted;
 
@@ -114,9 +113,9 @@ final class AdminPresenter extends \NetteAddons\BasePresenter
 
 
 	/**
-	 * @param Forms\ReportForm
+	 * @param Form
 	 */
-	public function reportFormSubmitted(Forms\ReportForm $form)
+	public function reportFormSubmitted(Form $form)
 	{
 		if ($form->valid) {
 			$this->flashMessage('Report zapped.');
@@ -136,7 +135,7 @@ final class AdminPresenter extends \NetteAddons\BasePresenter
 			$this->error('Report not found.');
 		}
 
-		$this['reportForm']->setReport($report->id);
+		$this['reportForm-report']->setValue($report->id);
 	}
 
 

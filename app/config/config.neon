@@ -90,7 +90,6 @@ services:
 	# forms
 	importAddonForm: NetteAddons\Manage\Forms\ImportAddonForm
 	addAddonVersionForm: NetteAddons\Manage\Forms\AddVersionForm
-	manageReportForm: NetteAddons\Manage\Forms\ReportForm
 
 	# form factories
 	addAddonForm:
@@ -104,6 +103,7 @@ services:
 			- addDescriptionFormat('texy', 'Texy!')
 			- addDescriptionFormat('markdown', 'Markdown')
 	reportForm: NetteAddons\Forms\ReportFormFactory
+	manageReportForm: NetteAddons\Manage\Forms\ReportFormFactory
 	editPageForm: NetteAddons\Forms\EditPageFormFactory
 
 
