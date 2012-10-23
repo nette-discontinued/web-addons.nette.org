@@ -179,8 +179,8 @@ abstract class AddonForm extends \NetteAddons\Forms\BaseForm
 	 */
 	protected function preProcess(array $values = array())
 	{
-		$values['repositoryHosting'] = NULL;
 		if (!empty($values['repository'])) {
+			$values['repositoryHosting'] = NULL;
 			$values['repository'] = $this->importerManager->normalizeUrl($values['repository']);
 			if ($this->importerManager->isValid($values['repository'])) {
 				$values['repositoryHosting'] = $this->importerManager->getIdByUrl($values['repository']);
