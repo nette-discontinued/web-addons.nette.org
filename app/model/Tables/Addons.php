@@ -364,6 +364,7 @@ class Addons extends Table
 		$this->find($addon->id)->update(array(
 			'name'                => $addon->name,
 			'repository'          => $addon->repository,
+			'repositoryHosting'   => $addon->repositoryHosting,
 			'shortDescription'    => $addon->shortDescription,
 			'description'         => $addon->description,
 			'descriptionFormat'   => $addon->descriptionFormat,
