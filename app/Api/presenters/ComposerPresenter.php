@@ -50,7 +50,7 @@ class ComposerPresenter extends \NetteAddons\BasePresenter
 		$packagesJson = Composer::createPackagesJson($addons);
 		$packagesJson->notify = str_replace(
 			'placeholder', '%package%',
-			$this->link('downloadNotify', array('package' => 'placeholder'))
+			$this->link('//downloadNotify', array('package' => 'placeholder'))
 		);
 		$this->sendJson($packagesJson);
 	}
