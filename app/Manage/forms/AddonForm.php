@@ -174,11 +174,12 @@ abstract class AddonForm extends \NetteAddons\Forms\BaseForm
 
 
 	/**
-	 * @param array
-	 * @return array
+	 * @param bool
+	 * @return \Nette\ArrayHash|array
 	 */
-	protected function preProcess(array $values = array())
+	public function getValues($asArray = FALSE)
 	{
+		$values = parent::getValues($asArray);
 		if (!empty($values['repository'])) {
 			$values['repositoryHosting'] = NULL;
 			$values['repository'] = $this->importerManager->normalizeUrl($values['repository']);

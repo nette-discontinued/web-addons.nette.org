@@ -75,7 +75,7 @@ class AddAddonForm extends AddonForm
 
 	public function process()
 	{
-		$values = $this->preProcess($this->getValues(TRUE));
+		$values = $this->getValues(TRUE);
 
 		$addon = $this->getAddon();
 		$this->manager->fillAddonWithValues($addon, $values, $this->user);
