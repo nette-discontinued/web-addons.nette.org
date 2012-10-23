@@ -16,15 +16,15 @@ class PagePresenter extends BasePresenter
 	/** @var \Nette\Database\Table\ActiveRow|string */
 	private $page;
 
-	/** @var Forms\EditPageForm */
+	/** @var Forms\EditPageFormFactory */
 	private $editPageForm;
 
 
 
 	/**
-	 * @param Forms\EditPageForm
+	 * @param Forms\EditPageFormFactory
 	 */
-	public function injectForms(Forms\EditPageForm $editPageForm)
+	public function injectForms(Forms\EditPageFormFactory $editPageForm)
 	{
 		$this->editPageForm = $editPageForm;
 	}
@@ -59,14 +59,11 @@ class PagePresenter extends BasePresenter
 
 
 	/**
-	 * @return Forms\EditPageForm
+	 * @return Forms\EditPageFormFactory
 	 */
 	protected function createComponentEditPageForm()
 	{
-		$form = $this->editPageForm;
-
-		$form->setUser($this->getUser()->identity);
-		$form->setPage($this->page);
+		$form = $this->editPageForm->create($this->page, $this->getUser()->getIdentity());
 
 		$form->onSuccess[] = $this->editPageFormSubmitted;
 
@@ -76,9 +73,9 @@ class PagePresenter extends BasePresenter
 
 
 	/**
-	 * @param Forms\EditPageForm
+	 * @param Forms\Form
 	 */
-	public function editPageFormSubmitted(Forms\EditPageForm $form)
+	public function editPageFormSubmitted(Forms\Form $form)
 	{
 		if ($form->valid) {
 			$this->flashMessage('Page saved.');

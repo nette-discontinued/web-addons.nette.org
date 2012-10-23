@@ -101,7 +101,9 @@ services:
 	addAddonVersionForm: NetteAddons\Manage\Forms\AddVersionForm
 	reportForm: NetteAddons\Forms\ReportForm
 	manageReportForm: NetteAddons\Manage\Forms\ReportForm
-	editPageForm: NetteAddons\Forms\EditPageForm
+
+	# form factories
+	editPageForm: NetteAddons\Forms\EditPageFormFactory
 
 
 factories:
