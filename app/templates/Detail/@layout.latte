@@ -12,7 +12,7 @@
 	{capture $requirements}
 	<p n:if="$version->otherRequirements" id="addon-requirements">
 		{foreach $version->otherRequirements as $package => $v}
-			<code>{$package} {$v}</code>
+			<code><a n:tag-ifset="$version->relatedAddons[$package]" n:href="Detail: $version->relatedAddons[$package]">{$package}</a> ({$v})</code>
 			{sep}<br>{/sep}
 		{/foreach}
 	</p>

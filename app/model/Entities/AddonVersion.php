@@ -67,6 +67,9 @@ class AddonVersion extends Nette\Object
 	/** @var Addon|NULL */
 	public $addon;
 
+	/** @var array */
+	public $relatedAddons = array();
+
 
 
 	/**
@@ -100,6 +103,9 @@ class AddonVersion extends Nette\Object
 			$type = $dependencyRow->type;
 			$type = $linkTypes[$type];
 			$version->{$type}[$dependencyRow->packageName] = $dependencyRow->version;
+			if ($dependencyRow->dependencyId) {
+				$version->relatedAddons[$dependencyRow->packageName] = $dependencyRow->dependencyId;
+			}
 		}
 
 		return $version;
