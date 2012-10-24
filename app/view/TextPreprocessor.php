@@ -120,7 +120,7 @@ class TextPreprocessor extends Nette\Object
 			);
 			$description = Strings::replace(
 				$description,
-				'/```(js|php)?(.[^`]*)```/s',
+				'/```(php|neon|javascript|js|css|html|htmlcb|latte|sql)?(.[^`]*)```/s',
 				function ($matches) {
 					$fshl = new Highlighter(new Html, Highlighter::OPTION_TAB_INDENT);
 
