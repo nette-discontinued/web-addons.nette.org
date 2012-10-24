@@ -9,8 +9,8 @@
 	{*<div class="addon-composer-use">Use Composer or</div>*}
 	<a class="bigbutton" n:href="download!, version => $version->version" title="{$addon->totalDownloadsCount}× total downloads, {$version->downloadsCount}× this version"><i class="icon-download"></i>Download</a>
 
-	<div class="addon-nette-version" n:if="$version->netteVersion && $version->hasNetteVersion()">
-		Nette: {$version->netteVersion}
+	<div class="sidebar-box" n:if="$version->netteVersion && $version->hasNetteVersion()">
+		<h3>For <strong>Nette {$version->netteVersion}</strong></h3>
 	</div>
 
 	<div class="sidebar-box">
