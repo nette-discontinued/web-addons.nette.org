@@ -140,12 +140,6 @@ a {
 	right: 10px;
 }
 
-.addon-nette-version {
-	font-size: 140%;
-	margin-bottom: 1em;
-	text-align: center;
-}
-
 div.addon-composer {
 	margin-left: 0;
 	margin-bottom: -15px;
@@ -199,6 +193,13 @@ div.addon-composer {
 }
 #addon-cvs-details-link.addon-github {
 	background-image: url('../images/github.png') !important;
+}
+
+h3 [data-addons-toggle] {
+	font-size: 13px;
+}
+.addon-nette-version #addon-requirements {
+	display: none;
 }
 
 li.gravatars {

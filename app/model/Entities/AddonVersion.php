@@ -154,4 +154,18 @@ class AddonVersion extends Nette\Object
 			return $this->require['nette/nette'];
 		}
 	}
+
+
+
+	/**
+	 * Returns all requirements beside Nette
+	 *
+	 * @return array
+	 */
+	public function getOtherRequirements()
+	{
+		$requirements = $this->require;
+		unset($requirements['nette/nette']);
+		return $requirements;
+	}
 }

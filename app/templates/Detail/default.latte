@@ -39,15 +39,6 @@
 						</a>
 					</td>
 				</tr>
-				<tr n:ifset="$composer, $composer->require">
-					<th>Requirements</th>
-					<td>
-						{foreach $composer->require as $package => $v}
-							{$package} ({$v})
-							{sep}<br>{/sep}
-						{/foreach}
-					</td>
-				</tr>
 			</table>
 		</div>
 
