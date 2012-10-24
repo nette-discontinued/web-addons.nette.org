@@ -13,6 +13,11 @@
 		<h3>For <strong>Nette {$version->netteVersion}</strong></h3>
 	</div>
 
+	<div class="sidebar-box" n:if="$addon->demo">
+		<h3>Try demo</h3>
+		<a href="{$addon->demo}" rel="nofollow">{$addon->demo|truncate:25}</a>
+	</div>
+
 	<div class="sidebar-box">
 		<h3>Authors</h3>
 		<ul>
