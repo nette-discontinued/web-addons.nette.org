@@ -79,6 +79,7 @@ class ListPresenter extends BasePresenter
 		}
 
 		$this->template->addons = $addons;
+		$this->template->activeCategory = $this['filterForm']->getCategory();
 	}
 
 

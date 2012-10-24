@@ -15,6 +15,9 @@ class FilterForm extends BaseForm
 	/** @var \NetteAddons\Model\Tags */
 	private $tags;
 
+	/** @var array */
+	private $tagsPairs;
+
 
 
 	/**
@@ -32,10 +35,10 @@ class FilterForm extends BaseForm
 	 */
 	protected function buildForm()
 	{
-		$tags = $this->tags->findMainTags()->fetchPairs('slug', 'name');
+		$this->tagsPairs = $this->tags->findMainTags()->fetchPairs('slug', 'name');
 
 		$this->addText('search', 'Search', NULL, 100);
-		$this->addSelect('category', 'Category', $tags)
+		$this->addSelect('category', 'Category', $this->tagsPairs)
 			->setPrompt('Choose category');
 
 		$this->addSubmit('sub', 'Filter');
@@ -63,6 +66,17 @@ class FilterForm extends BaseForm
 	{
 		$this['category']->setDefaultValue($category);
 		return $this;
+	}
+
+
+
+	/**
+	 * @return string
+	 */
+	public function getCategory()
+	{
+		$value = $this['category']->getValue();
+		return $value ? $this->tagsPairs[$value] : NULL;
 	}
 
 }
