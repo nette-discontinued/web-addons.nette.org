@@ -58,8 +58,8 @@ class EditAddonFormFactory extends AddonFormFactory
 			$addon = $form->getAddon();
 			$values = $form->getValues(TRUE);
 
-			$this->manager->fillAddonWithValues($addon, $values);
-			$this->model->update($addon);
+			$manager->fillAddonWithValues($addon, $values);
+			$model->update($addon);
 		};
 
 		$form->setAddon($addon);
