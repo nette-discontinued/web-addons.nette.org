@@ -32,6 +32,7 @@ class CategoriesControl extends Nette\Application\UI\Control
 	public function render()
 	{
 		$this->template->categories = $this->tags->findMainTags();
+		$this->template->active = $this->presenter->getParameter('category');
 
 		$this->template->setFile(__DIR__ . '/Categories.latte');
 		$this->template->render();
