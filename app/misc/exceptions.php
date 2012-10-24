@@ -29,9 +29,9 @@ namespace NetteAddons;
 // === Runtime exceptions ======================================================
 
 /**
- * Výjimka vyhazovaná v případě, že volání metody je vzhledem k stavu objektu
- * neplatné (např. některé parametry ještě nejsou nastaveny) nebo je proběhlo
- * ve špatný nebo nevhodný čas.
+ * Výjimka vyhazovaná v případě, že volání metody je vzhledem ke stavu objektu
+ * neplatné (např. některé parametry ještě nejsou nastaveny) nebo proběhlo ve
+ * špatný či nevhodný čas.
  */
 class InvalidStateException extends \RuntimeException
 {
@@ -41,7 +41,7 @@ class InvalidStateException extends \RuntimeException
 
 
 /**
- * Výjimky vyhazovaná v případě, že se nepodaří zapsat záznam (obvykle) do DB
+ * Výjimka vyhazovaná v případě, že se nepodaří zapsat záznam (obvykle) do DB
  * kvůli unikátnímu indexu.
  */
 class DuplicateEntryException extends \RuntimeException
@@ -52,7 +52,7 @@ class DuplicateEntryException extends \RuntimeException
 
 
 /**
- * Výjimky vyhazovaná v případě, že se dojdek IO chybě.
+ * Výjimka vyhazovaná v případě, že dojde k IO chybě.
  */
 class IOException extends \RuntimeException
 {
