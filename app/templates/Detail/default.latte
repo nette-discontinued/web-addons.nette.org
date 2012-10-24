@@ -42,7 +42,7 @@
 			</table>
 		</div>
 
-		<a id="addon-cvs-details-link" n:class="$addon->repositoryHosting == 'github' ? addon-github" href="#" data-addons-toggle rel="#addon-cvs-details" title="Show more info">&nbsp;</a>
+		<a n:if="$addon->repository || isset($composer->source)" id="addon-cvs-details-link" n:class="$addon->repositoryHosting == 'github' ? addon-github" href="#" data-addons-toggle rel="#addon-cvs-details" title="Show more info">&nbsp;</a>
 	</div>
 
 	{!$content}
