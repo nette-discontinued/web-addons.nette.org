@@ -13,6 +13,12 @@ use Nette\Application\UI\Form,
 class ListPresenter extends BasePresenter
 {
 
+	/**
+	 * @var string
+	 * @persistent
+	 */
+	public $search;
+
 	/** @var Model\Addons */
 	private $addons;
 
@@ -79,6 +85,7 @@ class ListPresenter extends BasePresenter
 		}
 
 		$this->template->addons = $addons;
+		$this->template->search = $this->search;
 		$this->template->activeCategory = $this['filterForm']->getCategory();
 	}
 

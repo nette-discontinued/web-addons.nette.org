@@ -15,9 +15,10 @@
 
 {form filterForm}
 	{label search /}
-	{input search, style => 'width:360px'}
-	{input category, style => 'width:135px'}
+	{input search, style => 'width:495px'}
+	{* {input category, style => 'width:135px'} *}
 	{input sub}
+	<a n:if="$search" n:href="this search => NULL">&times;</a>
 {/form}
 
 {include ../@addonsList.latte addons => $addons, addonVotes => $addonVotes}
