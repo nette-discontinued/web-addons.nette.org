@@ -109,14 +109,52 @@ class TextPreprocessor extends Nette\Object
 	public function createMarkdown()
 	{
 		$markdown = new \MarkdownExtra_Parser();
+
 		return new Nette\Callback(function ($description) use ($markdown) {
-			return $markdown->transform(Strings::replace(
+			$description = Strings::replace(
 				$description,
 				'/([^#]*)(#{1,6})(.*)/',
 				function ($matches) {
 					return $matches[1] . (strlen($matches[2]) < 6 ? '#' : '') . $matches[2] . $matches[3];
 				}
-			));
+			);
+			$description = Strings::replace(
+				$description,
+				'/```(js|php)?(.[^`]*)```/s',
+				function ($matches) {
+					$fshl = new Highlighter(new Html, Highlighter::OPTION_TAB_INDENT);
+
+					switch(strtolower($matches[1])) {
+						case 'php':
+							$fshl->setLexer(new Lexer\Php);
+							break;
+						case 'neon':
+							$fshl->setLexer(new Lexer\Neon);
+							break;
+						case 'javascript':
+						case 'js':
+							$fshl->setLexer(new Lexer\Javascript);
+							break;
+						case 'css':
+							$fshl->setLexer(new Lexer\Css);
+							break;
+						case 'html':
+						case 'htmlcb':
+						case 'latte':
+							$fshl->setLexer(new Lexer\Html);
+							break;
+						case 'sql':
+							$fshl->setLexer(new Lexer\Sql);
+							break;
+						default:
+							$fshl->setLexer(new Lexer\Minimal);
+							break;
+					}
+
+					return '<pre' . ($matches[1] ? ' class="src-' . strtolower($matches[1]) . '"' : '') . '><code>' . $fshl->highlight(ltrim($matches[2])) . '</code></pre>';
+				}
+			);
+			return $markdown->transform($description);
 		});
 	}
 
