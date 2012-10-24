@@ -13,7 +13,7 @@
 		Nette: {$version->netteVersion}
 	</div>
 
-	<div style="margin-bottom:2em">
+	<div class="sidebar-box">
 		<h3>Authors</h3>
 		<ul>
 			<li class="gravatars" n:foreach="$composer->authors as $author">
@@ -32,12 +32,12 @@
 			<img src="{$addon->user->email|gravatar}" class="gravatar">
 		*}
 	</div>
-	<div style="margin-bottom:2em">
+	<div class="sidebar-box">
 		<h3>License</h3>
 		<p>{$version->license|licenses}</p>
 	</div>
 
-	{snippet rating}
+	<div n:snippet="rating" class="sidebar-box">
 		<h3>Rating</h3>
 		<table class="table-vote">
 			<tr>
@@ -64,9 +64,9 @@
 				</td>
 			</tr>
 		</table>
-	{/snippet}
+	</div>
 
-	<div style="margin-top: 20px">
+	<div class="sidebar-box">
 		<h3>Downloads</h3>
 
 		{* TODO: separate this to a component later *}

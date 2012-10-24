@@ -93,6 +93,10 @@ a {
 	margin: .2em 0 .2em 1.70em;
 }
 
+.sidebar-box {
+	margin-bottom: 2em;
+}
+
 .chzn-select {
 	width: 500px;
 }
