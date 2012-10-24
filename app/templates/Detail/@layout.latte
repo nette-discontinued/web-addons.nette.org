@@ -75,47 +75,13 @@
 		<h3>Downloads</h3>
 
 		{* TODO: separate this to a component later *}
-		<script type="text/javascript" src="//www.google.com/jsapi"></script>
-		<script type="text/javascript">
-			google.load('visualization', '1.0', { 'packages' : ['corechart'] });
-
-			google.setOnLoadCallback(function () {
-				var data = google.visualization.arrayToDataTable([
-					['Den', 'Downloads + Installs'],
-					{foreach $usageStatistics as $row}
-						[{$row->day|date:'d.m.Y'}, {$row->count}]{sep},{/sep}
-					{/foreach}
-				]);
-
-				var options = {
-					height : 60,
-					backgroundColor : { fill : 'transparent' },
-					fontSize : 10,
-					chartArea : {
-						width : '100%',
-						height : '80%'
-					},
-					hAxis : { textPosition : 'none' },
-					vAxis : {
-						format : '#',
-						baselineColor: '#ddd',
-						textPosition : 'in',
-						textStyle : { fontSize: 8 },
-						gridlines : {
-							color : 'transparent',
-							count : 2
-						}
-					},
-					legend : { position : 'none' },
-					series : { 0 : { color : '#26374e' } }
-				};
-
-				var chart = new google.visualization.LineChart(document.getElementById('downloads-graph'));
-				chart.draw(data, options);
-			});
-		</script>
-
-		<div id="downloads-graph"></div>
+		{var $stats = []}
+		{foreach $usageStatistics as $row}
+			{? $stats[] = [date => $row->day->format('d.m.Y'), count => $row->count]}
+		{/foreach}
+		<div id="downloads-graph" data-netteaddons-downloads="{json_encode($stats)}">
+			loading&hellip;
+		</div>
 	</div>
 
 	{if !empty($toc)}
