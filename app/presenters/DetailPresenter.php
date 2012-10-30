@@ -267,5 +267,8 @@ class DetailPresenter extends BasePresenter
 		$this->template->percents = $popularity->percent;
 		$this->template->myVote = $myVote;
 		$this->template->usageStatistics = $usageStatistics;
+		$this->template->showUsageStatistics = array_sum(array_map(function ($item) {
+			return $item->count;
+		}, $usageStatistics)) > 0;
 	}
 }
