@@ -88,6 +88,10 @@ $(document).ready(function() {
 				$('#'+id).hide();
 			}
 		});
+
+		$('#categories-list a').click(function () {
+			$("input.addons-search").val('').keyup();
+		});
 	}
 
 
