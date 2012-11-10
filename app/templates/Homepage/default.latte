@@ -45,10 +45,8 @@
 	{/if}
 
 	{foreach $categories as $category}
-		{if count($addons[$category->id])}
-			<h2 id="toc-{$category->slug}">{$category->name}</h2>
-			{include #list addons => $addons[$category->id]}
-		{/if}
+		<h2 id="toc-{$category->slug}">{$category->name}</h2>
+		{include #list addons => $addons[$category->id], category => $category}
 	{/foreach}
 {/block}
 

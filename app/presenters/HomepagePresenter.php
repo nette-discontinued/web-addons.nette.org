@@ -44,7 +44,7 @@ class HomepagePresenter extends BasePresenter
 		$this->template->favoritedAddons = $this->addons->findMostFavorited(self::ADDONS_LIMIT);
 		$this->template->usedAddons = $this->addons->findMostUsed(self::ADDONS_LIMIT);
 
-		$this->template->categories = $categories = $this->tags->findMainTags();
+		$this->template->categories = $categories = $this->tags->findMainTagsWithAddons();
 		$this->template->addons = $this->addons->findGroupedByCategories($categories);
 	}
 
