@@ -15,34 +15,7 @@
 
 	<div class="emphasis addon-composer">
 		<h2><span>Composer:</span>{$addon->composerFullName}</h2>
-		<p>Please add Nette Addons repository to your <code>composer.json</code> <a href="#" data-addons-toggle rel="#addon-composer-help" title="Give me code">►</a></p>
-		<div id="addon-composer-help" style="display:none">
-			<pre>"repositories": [
-	{
-		"type": "composer",
-		"url": "{$netteRepositoryUrl}"
-	}
-]</pre>
-		</div>
-
-		<div id="addon-cvs-details" class="hide">
-			<table class="table-full">
-				<tr n:if="$addon->repository">
-					<th>Repository</th>
-					<td><a href="{$addon->repository}">{$addon->repository}</a></td>
-				</tr>
-				<tr n:ifset="$composer->source">
-					<th>{$composer->source->type|firstUpper} reference</th>
-					<td>
-						<a n:tag-if="$addon->repositoryHosting == github" href="{$addon->repository}/tree/{$composer->source->reference}">
-							{$composer->source->reference}
-						</a>
-					</td>
-				</tr>
-			</table>
-		</div>
-
-		<a n:if="$addon->repository || isset($composer->source)" id="addon-cvs-details-link" n:class="$addon->repositoryHosting == 'github' ? addon-github" href="#" data-addons-toggle rel="#addon-cvs-details" title="Show more info">&nbsp;</a>
+		<p><a n:href=":Page:default composer">Please add Nette Addons repository to your <code>composer.json</code></a></p>
 	</div>
 
 	{!$content}
