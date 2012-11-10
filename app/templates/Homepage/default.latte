@@ -13,6 +13,14 @@
 	</table>
 {/define}
 
+{define sidebarList}
+	<ul class="nostyle">
+		<li n:foreach="$addons as $addon">
+			<a title="{$addon->name}" n:href=":Detail: id => $addon->id">{$addon->name}</a>
+		</li>
+	</ul>
+{/define}
+
 {block content}
 	<div id="breadcrumbs">
 		<a href="http://nette.org/en/">Nette Framework</a> »
@@ -47,13 +55,31 @@
 {block sidebar}
 	{include #parent}
 
-	{control categories}
+	<div class="sidebar-box">
+		<ul class="nostyle">
+			{foreach $pages as $page}
+				<li><a n:href=":Page:default $page->slug">{$page->name}</a></li>
+			{/foreach}
+		</ul>
+	</div>
 
-	<h3>Resources</h3>
+	<div class="sidebar-box">
+		{control categories}
+	</div>
 
-	<ul class="nostyle">
-		{foreach $pages as $page}
-			<li><a n:href=":Page:default $page->slug">{$page->name}</a></li>
-		{/foreach}
-	</ul>
+	<div class="sidebar-box">
+		<h3>Recently updated</h3>
+		{include #sidebarList addons => $updatedAddons}
+	</div>
+
+	<div class="sidebar-box">
+		<h3>Most favorited</h3>
+		{include #sidebarList addons => $favoritedAddons}
+	</div>
+
+	<div class="sidebar-box">
+		<h3>Most used</h3>
+		{include #sidebarList addons => $usedAddons}
+	</div>
+
 {/block}
