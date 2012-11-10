@@ -105,6 +105,7 @@ CREATE TABLE `addons_versions` (
   `sourceUrl` varchar(500) DEFAULT NULL COMMENT 'repository URL, usually the same as addon.repository',
   `sourceReference` varchar(100) DEFAULT NULL COMMENT 'Git, Mercurial or SVN reference (usually branch or tag name)',
   `composerJson` text NOT NULL COMMENT 'composer.json (with source & dist) cache',
+  `updatedAt` datetime DEFAULT NULL COMMENT 'time when version was created',
   PRIMARY KEY (`id`),
   UNIQUE KEY `addonId_version` (`addonId`,`version`),
   CONSTRAINT `addons_versions_ibfk_2` FOREIGN KEY (`addonId`) REFERENCES `addons` (`id`) ON DELETE CASCADE
