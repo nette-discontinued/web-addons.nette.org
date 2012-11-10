@@ -1,10 +1,10 @@
 {block title}Addons, plugins and components | Nette Framework{/block}
 
 {define list}
-	<table class="table-full">
+	<table class="table-full" id="addons-{$category->slug}">
 		<tbody>
 			{foreach $addons as $addon}
-			<tr n:class="$iterator->odd ? alt">
+			<tr n:class="$iterator->odd ? alt, addon" id="{$category->slug}-{$addon->composerVendor}-{$addon->composerName}" data-addon-name="{$addon->name}" data-addon-id="{$addon->id}">
 				<td style="width: 30%"><a title="{$addon->name}" n:href=":Detail: id => $addon->id">{$addon->name}</a></td>
 				<td>{$addon->shortDescription}</td>
 			</tr>
@@ -44,10 +44,15 @@
 		</p>
 	{/if}
 
-	{foreach $categories as $category}
-		<h2 id="toc-{$category->slug}">{$category->name}</h2>
-		{include #list addons => $addons[$category->id], category => $category}
-	{/foreach}
+	<label for="search-query" class="hide">Search: </label>
+	<input type="search" name="query" id="search-query" class="addons-search input-full input-large" autofocus>
+
+	<div class="addons-categorized-list">
+		{foreach $categories as $category}
+			<h2 id="toc-{$category->slug}">{$category->name}</h2>
+			{include #list addons => $addons[$category->id], category => $category}
+		{/foreach}
+	</div>
 {/block}
 
 {block sidebar}

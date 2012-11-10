@@ -12,15 +12,15 @@ a {
 	font-weight: normal;
 }
 
-.form .input-full, .form chzn-container {
+.input-full, .form chzn-container {
 	width: 100%;
 }
 
-.form .input-half {
+.input-half {
 	width: 50%;
 }
 
-.form .input-third {
+.input-third {
 	width: 33%;
 }
 
@@ -28,7 +28,7 @@ a {
 	height: 30px;
 }
 
-.form .input-large {
+.input-large {
 	font-size: 1.4em;
 }
 
@@ -138,6 +138,12 @@ a {
 }
 .addon-warning .addon-archive-link {
 	right: 10px;
+}
+
+input.addons-search {
+	width: 100%;
+	border: 1px black solid;
+	background-color: white;
 }
 
 div.addon-composer {
