@@ -23075,8 +23075,8 @@ INSERT INTO `tags` (`id`, `name`, `slug`, `level`, `parent_id`, `visible`) VALUE
 (4,	'Localization',	'localization',	1,	0,	1),
 (5,	'AJAX',	'ajax',	1,	0,	1),
 (6,	'Helpers and template utilities',	'helpers-and-template-utilities',	1,	0,	1),
-(7,	'Extensions and tools',	'extensions-and-tools',	1,	0,	1),
-(8,	'DebugBar panels',	'debug-bar-panels',	1,	0,	1),
+(7,	'DebugBar panels',	'debug-bar-panels',	1,	0,	1),
+(8,	'Others',	'others',	1,	0,	1),
 (9,	'Datagrids',	'datagrids',	2,	1,	1);
 
 INSERT INTO `users` (`id`, `group_id`, `username`, `password`, `email`, `title`, `realname`, `url`, `jabber`, `icq`, `msn`, `aim`, `yahoo`, `location`, `use_avatar`, `signature`, `disp_topics`, `disp_posts`, `email_setting`, `save_pass`, `notify_with_post`, `show_smilies`, `show_img`, `show_img_sig`, `show_avatars`, `show_sig`, `timezone`, `language`, `style`, `num_posts`, `last_post`, `registered`, `registration_ip`, `last_visit`, `admin_note`, `activate_string`, `activate_key`) VALUES
