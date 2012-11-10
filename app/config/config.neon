@@ -78,6 +78,8 @@ services:
 
 	# importing from GitHub
 	curlFactory: NetteAddons\Utils\CurlRequestFactory(%curlTimeout%)
+	ghRepositoryFactory: NetteAddons\Model\Importers\GitHub\Repository(%ghApiVersion%, @curlFactory, %ghClientId%, %ghClientSecret%)
+	ghImporterFactory: NetteAddons\Model\Importers\GitHubImporter(@ghRepositoryFactory, @validators)
 	repositoryImporterManager:
 		class: NetteAddons\Model\Importers\RepositoryImporterManager
 		setup:
@@ -103,13 +105,3 @@ services:
 	reportForm: NetteAddons\Forms\ReportFormFactory
 	manageReportForm: NetteAddons\Manage\Forms\ReportFormFactory
 	editPageForm: NetteAddons\Forms\EditPageFormFactory
-
-
-factories:
-	ghRepository:
-		parameters: [url]
-		class: NetteAddons\Model\Importers\GitHub\Repository(%ghApiVersion%, @curlFactory, %url%, %ghClientId%, %ghClientSecret%)
-
-	ghImporter:
-		parameters: [url]
-		class: NetteAddons\Model\Importers\GitHubImporter(@ghRepository(%url%))
