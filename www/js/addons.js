@@ -52,9 +52,9 @@ $(document).ready(function() {
 		$("tr.addon").each(function(i, el) {
 			if (typeof addons[el.id] == "undefined") {
 				var $el = $(el);
-				var id = $el.attr('data-addon-id')
-				addons['addon-'+id] = $el.attr('data-addon-name');
-				$table.append($el.clone().attr('id', 'addon-'+id));
+				var id = Number($el.attr('data-addon-id'));
+				addons[id] = $el.attr('data-addon-name');
+				$table.append($el.clone().attr('id', 'addon-' + id));
 			}
 		});
 
@@ -69,7 +69,7 @@ $(document).ready(function() {
 				$list.hide();
 				$result.show();
 			}
-			var show = addons;
+			var show = addons.slice(0);
 			var hide = [];
 			var parts = queryString.split(' ');
 			for (var i in parts) {
@@ -82,10 +82,10 @@ $(document).ready(function() {
 				}
 			}
 			for (var id in show) {
-				$('#'+id).show();
+				$('#addon-'+id).show();
 			}
 			for (var id in hide) {
-				$('#'+id).hide();
+				$('#addon-'+id).hide();
 			}
 		});
 
