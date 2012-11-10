@@ -6,29 +6,18 @@
 {block sidebar}
 	{include #parent}
 
-	{*<div class="addon-composer-use">Use Composer or</div>*}
 	<a class="bigbutton" n:href="download!, version => $version->version" title="{$addon->totalDownloadsCount}× total downloads, {$version->downloadsCount}× this version"><i class="icon-download"></i>Download</a>
 
-	{capture $requirements}
-	<p n:if="$version->otherRequirements" id="addon-requirements">
-		{foreach $version->otherRequirements as $package => $v}
-			<code><a n:tag-ifset="$version->relatedAddons[$package]" n:href="Detail: $version->relatedAddons[$package]">{$package}</a> ({$v})</code>
-			{sep}<br>{/sep}
-		{/foreach}
-	</p>
-	{/capture}
+	<div class="sidebar-box" n:if="count($version->otherRequirements) || $version->hasNetteVersion()">
+		<h3>Requirements</h3>
 
-	{if $version->netteVersion && $version->hasNetteVersion()}
-		<div class="sidebar-box addon-nette-version">
-			<h3>For <strong>Nette {$version->netteVersion}</strong> <a n:if="$version->otherRequirements" href="#" data-addons-toggle rel="#addon-requirements" title="Show all requirements">►</a></h3>
-			{if $requirements}{!$requirements}{/if}
-		</div>
-	{elseif $requirements}
-		<div class="sidebar-box">
-			<h3>Requirements</h3>
-			{!$requirements}
-		</div>
-	{/if}
+		<ul>
+			<li n:if="$version->hasNetteVersion()"><b>Nette {$version->netteVersion}</b></li>
+			{foreach $version->otherRequirements as $package => $v}
+			<li><a n:tag-ifset="$version->relatedAddons[$package]" n:href="Detail: $version->relatedAddons[$package]">{$package}</a> ({$v})</li>
+			{/foreach}
+		</ul>
+	</div>
 
 	<div class="sidebar-box" n:if="$addon->demo">
 		<h3>Try demo</h3>

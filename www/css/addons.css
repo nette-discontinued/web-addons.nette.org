@@ -195,13 +195,6 @@ div.addon-composer {
 	background-image: url('../images/github.png') !important;
 }
 
-h3 [data-addons-toggle] {
-	font-size: 13px;
-}
-.addon-nette-version #addon-requirements {
-	display: none;
-}
-
 li.gravatars {
 	list-style-type: none;
 	margin: 0 0 5px;
