@@ -13,12 +13,6 @@ use Nette\Application\UI\Form,
 class ListPresenter extends BasePresenter
 {
 
-	/**
-	 * @var string
-	 * @persistent
-	 */
-	public $search;
-
 	/** @var Model\Addons */
 	private $addons;
 
@@ -48,75 +42,26 @@ class ListPresenter extends BasePresenter
 	}
 
 
+
 	/**
-	 * @param string
-	 * @param string
-	 * @param string
-	 * @param id
+	 * @param string|NULL
 	 */
-	public function renderDefault($category = NULL, $search = NULL, $tag = NULL, $author = NULL)
+	public function actionDefault($vendor = NULL)
 	{
-		$addons = $this->addons->findAll();
-
-		if ($category) {
-			$categoryId = $this->tags->findOneBySlug($category);
-			if (!$categoryId) {
-				$this->flashMessage('Invalid category');
-				$this->redirect('this', array('category' => NULL));
-			}
-			$this->addons->filterByTag($addons, $categoryId);
+		if ($vendor == NULL) {
+			$this->redirect(':Homepage:');
 		}
-
-		if ($tag) {
-			$tagId = $this->tags->findOneBySlug($tag);
-			if (!$tagId) {
-				$this->flashMessage('Invalid tag');
-				$this->redirect('this', array('tag' => NULL));
-			}
-			$this->addons->filterByTag($addons, $tagId);
-		}
-
-		if ($author) {
-			$addons->where('user = ?', $author);
-		}
-
-		if ($search) {
-			$this->addons->filterByString($addons, $search);
-		}
-
-		$this->template->addons = $addons;
-		$this->template->search = $this->search;
-		$this->template->activeCategory = $this['filterForm']->getCategory();
 	}
 
 
 
 	/**
-	 * @return Forms\FilterForm
+	 * @param string
 	 */
-	protected function createComponentFilterForm()
+	public function renderDefault($vendor)
 	{
-		$control = new Forms\FilterForm($this->tags);
-		$control->setSearch($this->getParameter('search'))
-			->setCategory($this->getParameter('category'));
-
-		$control->onSuccess[] = $this->applyFilter;
-
-		return $control;
-	}
-
-
-
-	/**
-	 * @param Forms\FilterForm
-	 */
-	public function applyFilter(Forms\FilterForm $form)
-	{
-		$values = $form->values;
-		$this->redirect('default', array(
-			'search' => $values->search,
-			'category' => $values->category,
-		));
+		$this->template->vendor = $vendor;
+		$this->template->addons = $this->addons->findByComposerVendor($vendor);
 	}
 
 
@@ -134,14 +79,6 @@ class ListPresenter extends BasePresenter
 	public function renderMine()
 	{
 		$this->template->addons = $this->addons->findByUser($this->user->id);
-	}
-
-
-
-	public function renderByVendor($vendor)
-	{
-		$this->template->vendor = $vendor;
-		$this->template->addons = $this->addons->findByComposerVendor($vendor);
 	}
 
 }

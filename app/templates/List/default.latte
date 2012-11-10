@@ -1,24 +1,12 @@
-{var $title = 'List of ' . ($activeCategory ?: 'all addons')}
+{var $title = 'List of addons by ' . $vendor}
 
 {block content}
 <div id="breadcrumbs">
 	<a href="http://nette.org/en/">Nette Framework</a> »
 	<a n:href=":Homepage:">Addons, plugins and components</a> »
-	<span>Addons</span>
+	<span>Addons by {$vendor}</span>
 </div>
 
-{ifset $activeCategory}
-<h1>{$activeCategory}</h1>
-{else}
-<h1>All Addons</h1>
-{/ifset}
-
-{form filterForm}
-	{label search /}
-	{input search, style => 'width:495px'}
-	{* {input category, style => 'width:135px'} *}
-	{input sub}
-	<a n:if="$search" n:href="this search => NULL">&times;</a>
-{/form}
+<h1>Addons by vendor {$vendor}</h1>
 
 {include ../@addonsList.latte addons => $addons, addonVotes => $addonVotes}
