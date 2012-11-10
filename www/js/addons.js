@@ -49,11 +49,20 @@ $(document).ready(function() {
 		var $list = $('.addons-categorized-list');
 		$list.after($result);
 
+		var trimText = function(input) {
+			output = '';
+			data = input.split('\n');
+			for (var i = 0; i < data.length; i++) {
+				output += ' ' + data[i].trim();
+			}
+			return output.trim();
+		};
+
 		$("tr.addon").each(function(i, el) {
 			if (typeof addons[el.id] == "undefined") {
 				var $el = $(el);
 				var id = Number($el.attr('data-addon-id'));
-				addons[id] = $el.attr('data-addon-name');
+				addons[id] = trimText($el.text());
 				$table.append($el.clone().attr('id', 'addon-' + id));
 			}
 		});
