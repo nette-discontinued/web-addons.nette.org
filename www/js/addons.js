@@ -1,4 +1,22 @@
 $(document).ready(function() {
+	var $main = $('#main');
+	var $loading = $('<div class="spinner-container"><h1>Working...</h1><div class="spinner"></div></div>').css({
+		height: $main.height() + 'px',
+		width: $main.width() + 'px'
+	});
+
+	$('a[data-addons-busy]').click(function (e) {
+		if (e.ctrlKey) return;
+
+		$main.append($loading);
+		$(window).on('keyup.addons', function (e) {
+			if (e.keyCode == 27) {
+				$loading.detach();
+				$(window).off('keyup.addons');
+			}
+		});
+	});
+
 	$('[data-addons-toggle]').each(function(i, el) {
 		$(el).click(function(e) {
 			e.preventDefault();

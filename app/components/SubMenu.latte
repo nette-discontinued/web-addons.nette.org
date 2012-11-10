@@ -33,7 +33,7 @@
 			</a>
 		</li>
 		<li n:if="isset($addon->repositoryHosting) && $addon->repositoryHosting != NULL">
-			<a rel="nofollow" href="{plink :Manage:Versions:check $addon->id}" n:class="$presenter->linkCurrent ? active">
+			<a data-addons-busy rel="nofollow" href="{plink :Manage:Versions:check $addon->id}" n:class="$presenter->linkCurrent ? active">
 				<span>Check updates</span>
 			</a>
 		</li>

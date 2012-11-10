@@ -447,3 +447,17 @@ background: url(../images/li-download.gif) no-repeat;
 #sidebar {
 	padding-top: 25px;
 }
+
+.spinner-container {
+	background-color: white;
+	left: 0;
+	position: absolute;
+	text-align: center;
+	top: 0;
+}
+.spinner {
+	background: transparent url('../images/big-spinner.gif') no-repeat center center;
+	display: block;
+	height: 300px;
+	width: 100%;
+}
