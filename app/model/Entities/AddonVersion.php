@@ -70,6 +70,9 @@ class AddonVersion extends Nette\Object
 	/** @var array */
 	public $relatedAddons = array();
 
+	/** @var DateTime|NULL time of version's creation */
+	public $updatedAt;
+
 
 
 	/**
@@ -95,6 +98,7 @@ class AddonVersion extends Nette\Object
 		$version->sourceUrl = $row->sourceUrl;
 		$version->sourceReference = $row->sourceReference;
 		$version->composerJson = Json::decode($row->composerJson); // this may fail
+		$version->updatedAt = $row->updatedAt;
 
 		$linkTypes = self::getLinkTypes();
 		$linkTypes = array_flip($linkTypes);
