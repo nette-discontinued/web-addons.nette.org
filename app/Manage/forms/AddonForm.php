@@ -73,7 +73,8 @@ class AddonForm extends \NetteAddons\Forms\BaseForm
 		$this->addMultiSelect('defaultLicense', 'Default license', $this->licenses->getLicenses(TRUE))
 			->setRequired()
 			->addRule($this->validators->isLicenseValid, 'Invalid license identifier.');
-		$this->addMultiSelect('tags', 'Categories', $this->getCategories());
+		$this->addMultiSelect('tags', 'Categories', $this->getCategories())
+			->setRequired();
 		$this->addText('repository', 'Repository URL', NULL, 500)
 			->addCondition(self::FILLED)
 			->addRule(self::URL);
