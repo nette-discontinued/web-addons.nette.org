@@ -59,9 +59,8 @@ $(document).ready(function() {
 		});
 
 		$("input.addons-search").keyup(function(e) {
-			$el = $(e.target);
-			queryRegex = '';
-			queryString = $el.val();
+			var $el = $(e.target);
+			var queryString = $el.val();
 			if (queryString.length < 1) {
 				$list.show();
 				$result.hide();
@@ -70,21 +69,24 @@ $(document).ready(function() {
 				$list.hide();
 				$result.show();
 			}
-			parts = queryString.split(' ');
-			for (var i=0;i<parts.length;i++) {
-				if (queryRegex.length > 0) {
-					queryRegex += '(.*)';
+			var show = addons;
+			var hide = [];
+			var parts = queryString.split(' ');
+			for (var i in parts) {
+				var partRegexp = new RegExp(parts[i].replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1"), 'i');
+				for (var id in show) {
+					if (!partRegexp.test(show[id])) {
+						hide[id] = show[id];
+						delete show[id];
+					}
 				}
-				queryRegex += parts[i].replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
 			}
-			regexp = new RegExp(queryRegex, 'i');
-			for (var id in addons) {
-				if (regexp.test(addons[id])) {
-					$('#'+id).show();
-				} else {
-					$('#'+id).hide();
-				}
-			};
+			for (var id in show) {
+				$('#'+id).show();
+			}
+			for (var id in hide) {
+				$('#'+id).hide();
+			}
 		});
 	}
 
