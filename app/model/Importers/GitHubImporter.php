@@ -189,6 +189,15 @@ class GitHubImporter extends Nette\Object implements IAddonImporter
 				}
 			}
 
+			// time
+			if ($composer && isset($composer->time)) {
+				$version->updatedAt = new \DateTime($composer->time);
+			} else {
+				$version->updatedAt = new \DateTime(
+					$this->repository->getCommit($hash)->commit->author->date
+				);
+			}
+
 			// dist
 			$version->distType = 'zip';
 			$version->distUrl = $this->repository->getArchiveLink('zip', $hash);

@@ -181,6 +181,21 @@ class Repository extends \Nette\Object
 
 
 	/**
+	 * Returns Git "commit" specified by hash.
+	 *
+	 * @link http://developer.github.com/v3/repos/commits/#get-a-single-commit
+	 * @param  string commit or tree hash, branch or tag
+	 * @return \stdClass
+	 * @throws \NetteAddons\IOException
+	 */
+	public function getCommit($hash)
+	{
+		return $this->exec("/repos/{$this->vendor}/{$this->name}/commits/$hash");
+	}
+
+
+
+	/**
 	 * Gets file content.
 	 *
 	 * @link http://developer.github.com/v3/repos/contents/#get-contents

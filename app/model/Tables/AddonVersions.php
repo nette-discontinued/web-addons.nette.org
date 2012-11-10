@@ -160,6 +160,7 @@ class AddonVersions extends Table
 			'sourceUrl'       => $version->sourceUrl,
 			'sourceReference' => $version->sourceReference,
 			'composerJson'    => Json::encode($version->composerJson),
+			'updatedAt'       => $version->updatedAt,
 		);
 	}
 }
