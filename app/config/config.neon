@@ -78,8 +78,8 @@ services:
 
 	# importing from GitHub
 	curlFactory: NetteAddons\Utils\CurlRequestFactory(%curlTimeout%)
-	ghRepositoryFactory: NetteAddons\Model\Importers\GitHub\Repository(%ghApiVersion%, @curlFactory, %ghClientId%, %ghClientSecret%)
-	ghImporterFactory: NetteAddons\Model\Importers\GitHubImporter(@ghRepositoryFactory, @validators)
+	ghRepositoryFactory: NetteAddons\Model\Importers\GitHub\RepositoryFactory(%ghApiVersion%, @curlFactory, %ghClientId%, %ghClientSecret%)
+	ghImporterFactory: NetteAddons\Model\Importers\GitHubImporterFactory(@ghRepositoryFactory, @validators)
 	repositoryImporterManager:
 		class: NetteAddons\Model\Importers\RepositoryImporterManager
 		setup:
