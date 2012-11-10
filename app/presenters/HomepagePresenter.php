@@ -3,7 +3,8 @@
 namespace NetteAddons;
 
 use NetteAddons\Model\Addons,
-	NetteAddons\Model\Reinstall;
+	NetteAddons\Model\Reinstall,
+	NetteAddons\Model\Tags;
 
 
 
@@ -39,9 +40,12 @@ class HomepagePresenter extends BasePresenter
 
 	public function renderDefault()
 	{
-		$this->template->updatedAddons = $this->addons->findLastUpdated(self::ADDONS_LIMIT);
+		/*$this->template->updatedAddons = $this->addons->findLastUpdated(self::ADDONS_LIMIT);
 		$this->template->favoritedAddons = $this->addons->findMostFavorited(self::ADDONS_LIMIT);
-		$this->template->usedAddons = $this->addons->findMostUsed(self::ADDONS_LIMIT);
+		$this->template->usedAddons = $this->addons->findMostUsed(self::ADDONS_LIMIT);*/
+
+		$this->template->categories = $categories = $this->tags->findMainTags();
+		$this->template->addons = $this->addons->findGroupedByCategories($categories);
 	}
 
 

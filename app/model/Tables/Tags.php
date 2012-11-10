@@ -36,6 +36,18 @@ class Tags extends Table
 
 
 	/**
+	 * Returns tags which represent main catagories (only with at least one addon).
+	 *
+	 * @return TableSelection
+	 */
+	public function findMainTagsWithAddons()
+	{
+		return $this->findMainTags()->group('tags.id', 'COUNT(addons_tags:tagId) > 0');
+	}
+
+
+
+	/**
 	 * @param string
 	 * @return \Nette\Database\Table\ActiveRow|FALSE
 	 */

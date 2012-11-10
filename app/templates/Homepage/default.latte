@@ -36,17 +36,12 @@
 		</p>
 	{/if}
 
-	<h2>Recently updated</h2>
-
-	{include #list addons => $updatedAddons}
-
-	<h2>Most favorited</h2>
-
-	{include #list addons => $favoritedAddons}
-
-	<h2>Most used</h2>
-
-	{include #list addons => $usedAddons}
+	{foreach $categories as $category}
+		{if count($addons[$category->id])}
+			<h2 id="toc-{$category->slug}">{$category->name}</h2>
+			{include #list addons => $addons[$category->id]}
+		{/if}
+	{/foreach}
 {/block}
 
 {block sidebar}

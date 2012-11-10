@@ -84,6 +84,24 @@ class Addons extends Table
 
 
 	/**
+	 * @param  \Nette\Database\Table\Selection
+	 * @return array[]
+	 */
+	public function findGroupedByCategories($tags)
+	{
+		$result = array();
+		foreach ($tags as $tag) {
+			$result[$tag->id] = array();
+			foreach ($tag->related('addons_tags') as $addon_tag) {
+				$result[$tag->id][] = $addon_tag->addon;
+			}
+		}
+		return $result;
+	}
+
+
+
+	/**
 	 * @return \Nette\Database\Table\Selection
 	 */
 	public function findVendors()
