@@ -5,7 +5,7 @@ $(document).ready(function() {
 		width: $main.width() + 'px'
 	});
 
-	$('a[data-addons-busy]').click(function (e) {
+	$('[data-addons-busy]').click(function (e) {
 		if (e.ctrlKey) return;
 
 		$main.append($loading);
