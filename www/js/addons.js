@@ -1,16 +1,22 @@
 $(document).ready(function() {
 	var $main = $('#main');
-	var $loading = $('<div class="spinner-container"><h1>Working...</h1><div class="spinner"></div></div>').css({
-		height: $main.height() + 'px',
-		width: $main.width() + 'px'
-	});
+	var $content = $('#content');
+	var $loading = $('<div class="spinner-container"><h1>Working...</h1></div>');
+	var spinnerOpts = {
+		lines: 15, length: 30, width: 10, radius: 30, corners: 1, rotate: 0, color: '#000', speed: 1,
+		trail: 30, shadow: true, hwaccel: true, className: 'spinner', zIndex: 2e9, top: 'auto', left: 'auto'
+	};
+	var spinner = new Spinner(spinnerOpts).spin();
+	$loading.append(spinner.el);
 
 	$('[data-addons-busy]').click(function (e) {
 		if (e.ctrlKey) return;
 
 		$main.append($loading);
+		$content.hide();
 		$(window).on('keyup.addons', function (e) {
 			if (e.keyCode == 27) {
+				$content.show();
 				$loading.detach();
 				$(window).off('keyup.addons');
 			}
