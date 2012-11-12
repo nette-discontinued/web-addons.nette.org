@@ -42,6 +42,14 @@
 				<th>Release date</th>
 				<td>{$composer->time}</td> {* Format: YYYY-MM-DD or YYYY-MM-DD HH:MM:SS *}
 			</tr>
+			<tr n:if="$version->require">
+				<th>Dependencies</th>
+				<td>
+					{foreach $version->require as $packageId => $version}
+						{$packageId} ({$version}){sep}<br>{/sep}
+					{/foreach}
+				</td>
+			</tr>
 			<tr>
 				<th>Authors</th>
 				<td>
