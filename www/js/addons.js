@@ -50,7 +50,6 @@ $(document).ready(function() {
 
 
 	if ($("input.addons-search").length > 0) {
-		$("input.addons-search").show();
 		var addons = [];
 
 		var $table = $('<table class="table-full"></table>');

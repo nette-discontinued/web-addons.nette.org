@@ -146,6 +146,10 @@ input.addons-search {
 	background-color: white;
 }
 
+body.js input.addons-search {
+	display: block;
+}
+
 div.addon-composer {
 	padding: 15px;
 	margin-bottom: 30px;
