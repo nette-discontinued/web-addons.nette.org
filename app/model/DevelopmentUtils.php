@@ -57,11 +57,11 @@ class DevelopmentUtils extends \Nette\Object
 				}
 			}
 			$limit = mt_rand(0, $maxCount);
-			for ($i=0;$i<$limit;$i++) {
+			for ($i = 0; $i < $limit; $i++) {
 				$this->addDownloadOrInstall('download', $days, $version->id);
 			}
 			$limit = mt_rand(0, $maxCount);
-			for ($i=0;$i<$limit;$i++) {
+			for ($i = 0; $i < $limit; $i++) {
 				$this->addDownloadOrInstall('install', $days, $version->id);
 			}
 		}
