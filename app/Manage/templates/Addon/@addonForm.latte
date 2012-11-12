@@ -1,5 +1,5 @@
 {form $form class => form, data-addons-busy => true}
-	{foreach $_form->errors as $error}<p class="caution">{$error}</p>{/foreach}
+	{foreach $_form->allErrors as $error}<p class="caution">{$error}</p>{/foreach}
 
 	<div n:class="controls, $_form['name']->required ? required">
 		{label name /}<br>
