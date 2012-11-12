@@ -1,7 +1,7 @@
 $(document).ready(function() {
 	var $main = $('#main');
 	var $content = $('#content');
-	var $loading = $('<div class="spinner-container"><h1>Working...</h1></div>');
+	var $loading = $('<div class="spinner-container"><h1>Working&hellip;</h1></div>');
 	var spinnerOpts = {
 		lines: 15, length: 30, width: 10, radius: 30, corners: 1, rotate: 0, color: '#000', speed: 1,
 		trail: 30, shadow: true, hwaccel: true, className: 'spinner', zIndex: 2e9, top: 'auto', left: 'auto'
