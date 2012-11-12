@@ -2,7 +2,7 @@
 
 namespace NetteAddons;
 
-use NetteAddons\Model\Reinstall;
+use NetteAddons\Model\DevelopmentUtils;
 
 
 /**
@@ -13,16 +13,16 @@ final class HomepagePresenter extends BaseListPresenter
 {
 	const ADDONS_LIMIT = 3;
 
-	/** @var Model\Reinstall */
-	private $reinstaller;
+	/** @var Model\DevelopmentUtils */
+	private $developmentUtils;
 
 
 	/**
-	 * @param Model\Reinstall
+	 * @param Model\DevelopmentUtils
 	 */
-	public function injectReinstaller(Reinstall $reinstaller)
+	public function injectDevelopmentUtils(DevelopmentUtils $developmentUtils)
 	{
-		$this->reinstaller = $reinstaller;
+		$this->developmentUtils = $developmentUtils;
 	}
 
 
@@ -48,7 +48,7 @@ final class HomepagePresenter extends BaseListPresenter
 			$this->error();
 		}
 
-		$this->reinstaller->recreateDatabase();
+		$this->developmentUtils->recreateDatabase();
 
 		$this->flashMessage('Fuk yea!');
 		$this->redirect('this');

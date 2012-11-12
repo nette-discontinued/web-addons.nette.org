@@ -7,7 +7,7 @@ namespace NetteAddons\Model;
  *
  * @author Jan Marek
  */
-class Reinstall extends \Nette\Object
+class DevelopmentUtils extends \Nette\Object
 {
 
 	private $db;
