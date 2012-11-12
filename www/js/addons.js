@@ -24,7 +24,7 @@ $(document).ready(function() {
 	}
 
 	$('a[data-addons-busy]').click(busy);
-	$('[data-addons-busy]').submit(busy);
+	$('form[data-addons-busy]').submit(busy);
 
 	$('[data-addons-toggle]').each(function(i, el) {
 		$(el).click(function(e) {
