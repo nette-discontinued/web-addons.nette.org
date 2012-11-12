@@ -53,4 +53,21 @@ final class HomepagePresenter extends BaseListPresenter
 		$this->flashMessage('Fuk yea!');
 		$this->redirect('this');
 	}
+
+
+
+	/**
+	 * @secured
+	 */
+	public function handleRandomDownloadAndInstalls()
+	{
+		if ($this->context->parameters['productionMode']) {
+			$this->error();
+		}
+
+		$this->developmentUtils->generateRandomDownloadsAndInstalls();
+
+		$this->flashMessage('Fuk yea!');
+		$this->redirect('this');
+	}
 }
