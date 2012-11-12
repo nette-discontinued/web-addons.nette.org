@@ -9,7 +9,7 @@ $(document).ready(function() {
 	var spinner = new Spinner(spinnerOpts).spin();
 	$loading.append(spinner.el);
 
-	$('[data-addons-busy]').click(function (e) {
+	function busy(e) {
 		if (e.ctrlKey) return;
 
 		$main.append($loading);
@@ -21,7 +21,10 @@ $(document).ready(function() {
 				$(window).off('keyup.addons');
 			}
 		});
-	});
+	}
+
+	$('a[data-addons-busy]').click(busy);
+	$('[data-addons-busy]').submit(busy);
 
 	$('[data-addons-toggle]').each(function(i, el) {
 		$(el).click(function(e) {

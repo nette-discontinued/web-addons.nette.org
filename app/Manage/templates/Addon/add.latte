@@ -20,7 +20,7 @@
 			<a href="#" rel="#fromGitHub" data-addons-toggle="#manualCreate">Import from GitHub repository</a>
 		</h2>
 		<div id="fromGitHub" n:class="$presenter['addAddonForm']->submitted ? hide">
-			{form importAddonForm class => form}
+			{form importAddonForm class => form, data-addons-busy => true}
 				{foreach $_form->errors as $error}<p class="caution">{$error}</p>{/foreach}
 				<div n:class="controls, $_form['url']->required ? required">
 					{label url /}<br>
@@ -28,7 +28,7 @@
 				</div>
 
 				<div>
-					{input sub class => 'button', data-addons-busy => true}
+					{input sub class => 'button'}
 				</div>
 			{/form}
 		</div>
