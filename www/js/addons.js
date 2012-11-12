@@ -68,9 +68,9 @@ $(document).ready(function() {
 		};
 
 		$("tr.addon").each(function(i, el) {
-			if (typeof addons[el.id] == "undefined") {
-				var $el = $(el);
-				var id = Number($el.attr('data-addon-id'));
+			var $el = $(el);
+			var id = Number($el.attr('data-addon-id'));
+			if (typeof addons[id] == "undefined") {
 				addons[id] = trimText($el.text());
 				$table.append($el.clone().attr('id', 'addon-' + id));
 			}
