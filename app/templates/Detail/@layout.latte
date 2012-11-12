@@ -58,10 +58,10 @@
 		<p>{$version->license|licenses}</p>
 	</div>
 
-	<div class="sidebar-box" n:if="$version->updatedAt">
+	{*<div class="sidebar-box" n:if="$version->updatedAt">
 		<h3>Published at</h3>
 		<p>{$version->updatedAt|date:'Y-m-d'}</p>
-	</div>
+	</div>*}
 
 	<div n:snippet="rating" class="sidebar-box">
 		<h3>Rating</h3>
