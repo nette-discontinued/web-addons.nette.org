@@ -2,7 +2,7 @@
 	<div id="breadcrumbs">
 		<a href="http://nette.org/en/">Nette Framework</a> »
 		<a n:href=":Homepage:">Addons, plugins and components</a> »
-		<a n:href=":List:byVendor vendor => $addon->composerVendor">{$addon->composerVendor}</a> »
+		<a n:href=":List: vendor => $addon->composerVendor">By {$addon->composerVendor}</a> »
 		<a n:href="default">{$addon->name}</a> »
 		<span>Archive</span>
 	</div>
@@ -19,7 +19,7 @@
 
 	{foreach $addon->versions as $version}
 		{var $composer = $version->composerJson}
-		<table>
+		<table style="width: 100%">
 			<h2 id="toc-{$version->version|webalize:'.'}">{$version->version}</h2>
 
 			<tr>
