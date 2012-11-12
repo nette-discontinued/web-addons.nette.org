@@ -458,11 +458,11 @@ background: url(../images/li-download.gif) no-repeat;
 	padding-top: 25px;
 }
 
-#sidebar ul {
+#sidebar .sidebar-box ul {
 	list-style-type: none;
 }
 
-#sidebar li {
+#sidebar .sidebar-box li {
 	margin-left: 1em;
 }
 
