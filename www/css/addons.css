@@ -458,6 +458,14 @@ background: url(../images/li-download.gif) no-repeat;
 	padding-top: 25px;
 }
 
+#sidebar ul {
+	list-style-type: none;
+}
+
+#sidebar li {
+	margin-left: 1em;
+}
+
 .spinner-container {
 	text-align: center;
 }
