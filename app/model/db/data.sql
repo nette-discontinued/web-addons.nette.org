@@ -956,8 +956,9 @@ INSERT INTO `groups` (`g_id`, `g_title`, `g_user_title`, `g_read_board`, `g_post
 (4,	'Members',	NULL,	1,	1,	1,	1,	1,	1,	1,	0,	1,	1,	300,	60,	30);
 
 INSERT INTO `pages` (`id`, `name`, `slug`, `revision`, `authorId`, `content`, `createdAt`) VALUES
-(1,	'How to Add a Plugin',	'how-to-add-plugin',	1,	3,	'@todo',	'2012-10-22 15:34:23'),
-(2,	'Plugin Writing Guidelines',	'plugin-writing-guidelines',	1,	3,	'@todo',	'2012-10-22 15:34:56');
+(1,	'Composer',	'composer',	1,	3,	'Please add Nette Addons repository to your `composer.json`\r\n\r\n/--\r\n\"repositories\": [\r\n	{\r\n		\"type\": \"composer\",\r\n		\"url\": \"http://addons.nette.org/\"\r\n	}\r\n]\r\n\\--',	'2012-11-12 05:54:02'),
+(2,	'How to Add a Plugin',	'how-to-add-plugin',	1,	3,	'@todo',	'2012-10-22 15:34:23'),
+(3,	'Plugin Writing Guidelines',	'plugin-writing-guidelines',	1,	3,	'@todo',	'2012-10-22 15:34:56');
 
 INSERT INTO `tags` (`id`, `name`, `slug`, `level`, `parent_id`, `visible`) VALUES
 (1,	'Visual components',	'visual-components',	1,	0,	1),
@@ -994,4 +995,4 @@ INSERT INTO `users_details` (`id`, `created`, `apiToken`) VALUES
 (9,	'0000-00-00 00:00:00',	NULL),
 (10,	'0000-00-00 00:00:00',	NULL);
 
--- 2012-11-12 05:51:25
+-- 2012-11-12 05:55:33
