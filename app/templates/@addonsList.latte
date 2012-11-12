@@ -5,7 +5,8 @@
 				<tr n:class="$iterator->odd ? alt">
 					<td><a title="{$addon->name}" n:href=":Detail: id => $addon->id">{$addon->name}</a></td>
 					<td>{$addon->shortDescription}</td>
-					<td>{=$addonVotes($addon->id)->percent|number:2}%</td>
+					<td title="Downloads & Installs">{=$addon->totalDownloadsCount+$addon->totalInstallsCount}x</td>
+					<td title="Vote score">{=$addonVotes($addon->id)->percent|number:0}%</td>
 				</tr>
 			{/foreach}
 		</tbody>
