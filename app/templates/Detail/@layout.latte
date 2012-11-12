@@ -22,6 +22,9 @@
 	<div class="sidebar-box" n:if="$addon->repository || isset($composer->source) || $addon->demo">
 		<h3>Extras</h3>
 		<ul>
+			<li>
+				License: {$version->license|licenses}
+			</li>
 			<li n:if="$addon->repository">
 				Source code: <a href="{$addon->repository}">{$addon->repositoryHosting == 'github' ? 'Github' : $addon->repository}</a>
 			</li>
@@ -52,10 +55,6 @@
 			<h3><a n:href=":People:detail id => $addon->user->id" title="$addon->user->realname">{$addon->user->realname}</a></h3>
 			<img src="{$addon->user->email|gravatar}" class="gravatar">
 		*}
-	</div>
-	<div class="sidebar-box">
-		<h3>License</h3>
-		<p>{$version->license|licenses}</p>
 	</div>
 
 	{*<div class="sidebar-box" n:if="$version->updatedAt">
