@@ -460,3 +460,7 @@ background: url(../images/li-download.gif) no-repeat;
 .spinner {
 	margin: 100px auto;
 }
+
+#search-query {
+    padding: 5px;
+}
