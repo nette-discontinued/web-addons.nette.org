@@ -2,46 +2,14 @@
 
 namespace NetteAddons;
 
-use Nette\Application\UI\Form,
-	NetteAddons\Model\Addons,
-	NetteAddons\Model\AddonVotes;
+use Nette\Application\UI\Form;
 
 /**
  * @author Jan Marek
  * @author Patrik Votoček
  */
-class ListPresenter extends BasePresenter
+final class ListPresenter extends BaseListPresenter
 {
-
-	/** @var Model\Addons */
-	private $addons;
-
-	/** @var Model\AddonVotes */
-	private $addonVotes;
-
-
-
-	public function injectAddons(Addons $addons)
-	{
-		$this->addons = $addons;
-	}
-
-
-
-	public function injectAddonsVotes(AddonVotes $addonVotes)
-	{
-		$this->addonVotes = $addonVotes;
-	}
-
-
-
-	protected function beforeRender()
-	{
-		parent::beforeRender();
-		$this->template->addonVotes = callback($this->addonVotes, 'calculatePopularity');
-	}
-
-
 
 	/**
 	 * @param string|NULL

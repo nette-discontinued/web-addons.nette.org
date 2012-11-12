@@ -1,18 +1,5 @@
 {block title}Addons, plugins and components | Nette Framework{/block}
 
-{define list}
-	<table class="table-full" id="addons-{$category->slug}">
-		<tbody>
-			{foreach $addons as $addon}
-			<tr n:class="$iterator->odd ? alt, addon" data-addon-id="{$addon->id}">
-				<td style="width: 30%"><a title="{$addon->name}" n:href=":Detail: id => $addon->id">{$addon->name}</a></td>
-				<td>{$addon->shortDescription}</td>
-			</tr>
-			{/foreach}
-		</tbody>
-	</table>
-{/define}
-
 {define sidebarList}
 	<ul class="nostyle">
 		<li n:foreach="$addons as $addon">
@@ -50,7 +37,7 @@
 	<div class="addons-categorized-list">
 		{foreach $categories as $category}
 			<h2 id="toc-{$category->slug}">{$category->name}</h2>
-			{include #list addons => $addons[$category->id], category => $category}
+			{include ../@addonsList.latte addons => $addons[$category->id], addonVotes => $addonVotes}
 		{/foreach}
 	</div>
 {/block}

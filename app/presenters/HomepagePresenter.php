@@ -2,30 +2,19 @@
 
 namespace NetteAddons;
 
-use NetteAddons\Model\Addons,
-	NetteAddons\Model\Reinstall,
-	NetteAddons\Model\Tags;
+use NetteAddons\Model\Reinstall;
 
 
-
-class HomepagePresenter extends BasePresenter
+/**
+ * @author Patrik Votoček
+ * @author Vojtěch Dobeš
+ */
+final class HomepagePresenter extends BaseListPresenter
 {
 	const ADDONS_LIMIT = 3;
 
-	/** @var Model\Addons */
-	private $addons;
-
 	/** @var Model\Reinstall */
 	private $reinstaller;
-
-
-	/**
-	 * @param Model\Addons
-	 */
-	public function injectAddons(Addons $addons)
-	{
-		$this->addons = $addons;
-	}
 
 
 	/**
