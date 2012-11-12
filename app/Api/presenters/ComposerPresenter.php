@@ -17,7 +17,7 @@ use NetteAddons\Model\Addon,
  * @author Jan Dolecek <juzna.cz@gmail.com>
  * @author Patrik Votoček
  */
-class ComposerPresenter extends \NetteAddons\BasePresenter
+final class ComposerPresenter extends \NetteAddons\BasePresenter
 {
 	/** @var Addons */
 	private $addons;

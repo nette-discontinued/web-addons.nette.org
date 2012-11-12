@@ -9,7 +9,7 @@ use Nette\Diagnostics\Debugger;
 /**
  * Error presenter.
  */
-class ErrorPresenter extends \Nette\Application\UI\Presenter
+final class ErrorPresenter extends \Nette\Application\UI\Presenter
 {
 
 	/**

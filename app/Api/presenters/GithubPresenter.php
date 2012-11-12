@@ -18,7 +18,7 @@ use Nette\Utils\Json,
  * @author Jan Dolecek <juzna.cz@gmail.com>
  * @author Patrik Votoček
  */
-class GithubPresenter extends \NetteAddons\BasePresenter
+final class GithubPresenter extends \NetteAddons\BasePresenter
 {
 	/** @var \NetteAddons\Model\Facade\AddonManageFacade */
 	private $manager;

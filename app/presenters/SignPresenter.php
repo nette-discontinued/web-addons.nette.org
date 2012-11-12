@@ -12,7 +12,7 @@ use Nette\Http\Request,
 /**
  * @author Patrik Votoček
  */
-class SignPresenter extends BasePresenter
+final class SignPresenter extends BasePresenter
 {
 	/** @var \Nette\Application\Routers\RouteList */
 	private $router;

@@ -5,7 +5,7 @@ namespace NetteAddons;
 /**
  * @author Jan Cerny
  */
-class PagePresenter extends BasePresenter
+final class PagePresenter extends BasePresenter
 {
 	/**
 	 * @var string

@@ -19,7 +19,7 @@ use Nette\Http,
  * @author Patrik Votoček
  * @author Michael Moravec
  */
-class DetailPresenter extends BasePresenter
+final class DetailPresenter extends BasePresenter
 {
 	/**
 	 * @var int addon ID
