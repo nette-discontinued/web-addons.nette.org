@@ -36,7 +36,7 @@ class Authorizator extends Nette\Object
 	 */
 	public function isAllowed($resource, $action)
 	{
-		$moderator = $this->user->isInRole('administrators') || $this->user->isInRole('moderators');;
+		$moderator = $this->user->isInRole('administrators') || $this->user->isInRole('moderators');
 
 		if ($resource instanceof Addon) {
 			$ownerId = $resource->userId;
