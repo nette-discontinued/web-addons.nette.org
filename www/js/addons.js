@@ -14,7 +14,7 @@ $(document).ready(function() {
 
 		$main.append($loading);
 		$content.hide();
-		$(window).on('keyup.addons', function (e) {
+		$(window).on('keyup.addons', function(e) {
 			if (e.keyCode == 27) {
 				$content.show();
 				$loading.detach();
@@ -42,76 +42,66 @@ $(document).ready(function() {
 
 	$.nette.init();
 
-	$("#content h2[id|=toc], #content h3[id|=toc]").each(function () {
-		$(this).append($('<a class="anchor">#</a>').attr("href", "#" + $(this).attr("id")));
+	$('#content h2[id|=toc], #content h3[id|=toc]').each(function() {
+		$(this).append($('<a class="anchor">#</a>').attr('href', '#' + $(this).attr('id')));
 	});
 
-	$(".chzn-select").chosen();
+	$('.chzn-select').chosen();
 
 
-	if ($("input.addons-search").length > 0) {
-		var addons = [];
-
+	var $searchInput = $('input.addons-search');
+	if ($searchInput.length > 0) {
 		var $table = $('<table class="table-full"></table>');
 		var $result = $('<div class="addons-search-result"></div>');
 		$result.append($('<h2>Results</h2>')).append($table).hide();
 		var $list = $('.addons-categorized-list');
 		$list.after($result);
 
-		var trimText = function(input) {
-			output = '';
-			data = input.split('\n');
-			for (var i = 0; i < data.length; i++) {
-				output += ' ' + data[i].trim();
-			}
-			return output.trim();
-		};
-
-		$list.find("tr.addon").sort(function (a, b) {
+		var addons = {};
+		$list.find('tr.addon').sort(function(a, b) {
 			return $(b).data('addonScore') - $(a).data('addonScore');
 
 		}).each(function(i, el) {
 			var $el = $(el);
-			var id = Number($el.attr('data-addon-id'));
-			if (typeof addons[id] == "undefined") {
-				addons[id] = trimText($el.text());
-				$table.append($el.clone().attr('id', 'addon-' + id));
+			var id = parseInt($el.data('addonId'), 10);
+
+			if (typeof addons[id] === 'undefined') {
+				var text = $el.find('.name').text() + ' ' + $el.find('.description').text();
+				addons[id] = {
+					'$el': $el.clone(),
+					'text': $.trim(text).toLowerCase()
+				};
+				$table.append(addons[id].$el);
 			}
 		});
 
-		$("input.addons-search").keyup(function(e) {
-			var $el = $(e.target);
-			var queryString = $el.val();
-			if (queryString.length < 1) {
+		$searchInput.keyup(function(e) {
+			var query = $.trim(e.target.value).toLowerCase();
+			if (query.length === 0) {
 				$list.show();
 				$result.hide();
-				return;
+
 			} else {
 				$list.hide();
 				$result.show();
-			}
-			var show = addons.slice(0);
-			var hide = [];
-			var parts = queryString.split(' ');
-			for (var i in parts) {
-				var partRegexp = new RegExp(parts[i].replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1"), 'i');
-				for (var id in show) {
-					if (!partRegexp.test(show[id])) {
-						hide[id] = show[id];
-						delete show[id];
+
+				var words = query.split(/\s+/);
+				var odd = true;
+				$.each(addons, function(id, addon) {
+					for (var i = 0; i < words.length; i++) {
+						if (addon.text.indexOf(words[i]) === -1) {
+							addon.$el.hide();
+							return;
+						}
 					}
-				}
-			}
-			for (var id in show) {
-				$('#addon-'+id).show();
-			}
-			for (var id in hide) {
-				$('#addon-'+id).hide();
+					addon.$el.toggleClass('alt', odd).show();
+					odd = !odd;
+				});
 			}
 		});
 
-		$('#categories-list a').click(function () {
-			$("input.addons-search").val('').keyup();
+		$('#categories-list').find('a').click(function() {
+			$searchInput.val('').keyup();
 		});
 	}
 
@@ -119,11 +109,11 @@ $(document).ready(function() {
 
 	var $downloadsGraph = $('#downloads-graph');
 	if ($downloadsGraph.length) {
-		google.load('visualization', '1.0', { 'packages' : ['corechart'], 'callback' : function () {
+		google.load('visualization', '1.0', { 'packages' : ['corechart'], 'callback' : function() {
 			var input = [
 				['Den', 'Downloads + Installs']
 			];
-			$.each($downloadsGraph.data('netteaddonsDownloads'), function () {
+			$.each($downloadsGraph.data('netteaddonsDownloads'), function() {
 				input.push([this.date, this.count]);
 			});
 			var data = google.visualization.arrayToDataTable(input);
