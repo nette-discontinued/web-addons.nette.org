@@ -20,13 +20,13 @@
 	</div>
 
 	<div class="sidebar-box">
-		<h3>Extras</h3>
+		<h3>Details</h3>
 		<ul>
 			<li>
 				License: {$version->license|licenses}
 			</li>
 			<li n:if="$addon->repository">
-				Source code: <a href="{$addon->repository}">{$addon->repositoryHosting == 'github' ? 'Github' : $addon->repository}</a>
+				Source code: <a href="{$addon->repository}">{$addon->repositoryHosting == 'github' ? 'GitHub' : $addon->repository}</a>
 			</li>
 			<li n:ifset="$composer->source">
 				{$composer->source->type|firstUpper} reference: <a n:tag-if="$addon->repositoryHosting == 'github'" href="{$addon->repository}/tree/{$composer->source->reference}">{$composer->source->reference}</a>

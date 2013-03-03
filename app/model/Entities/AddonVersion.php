@@ -126,10 +126,10 @@ class AddonVersion extends Nette\Object
 	public static function getLinkTypes()
 	{
 		return array(
-			'require' => 'require', 
-			'replace' => 'replace', 
-			'conflict' => 'conflict', 
-			'provide' => 'provide', 
+			'require' => 'require',
+			'replace' => 'replace',
+			'conflict' => 'conflict',
+			'provide' => 'provide',
 			'requireDev' => 'require-dev',
 		);
 	}
