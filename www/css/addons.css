@@ -164,14 +164,14 @@ div.addon-composer {
 	font-size: 70%;
 }
 .addon-composer p {
-	color: #CCCCCC;
+	color: #aaa;
 	font-size: 90%;
 	font-style: italic;
 	margin: 0 0 -5px;
 	text-indent: 0;
 }
 .addon-composer p a {
-	color: #CCCCCC;
+	color: #999;
 }
 .addon-composer p a:hover, .addon-composer p a:focus {
 	color: white;

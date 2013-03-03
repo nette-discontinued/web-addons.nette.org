@@ -956,7 +956,7 @@ INSERT INTO `groups` (`g_id`, `g_title`, `g_user_title`, `g_read_board`, `g_post
 (4,	'Members',	NULL,	1,	1,	1,	1,	1,	1,	1,	0,	1,	1,	300,	60,	30);
 
 INSERT INTO `pages` (`id`, `name`, `slug`, `revision`, `authorId`, `content`, `createdAt`) VALUES
-(1,	'Composer',	'composer',	1,	3,	'Please add Nette Addons repository to your `composer.json`\r\n\r\n/--\r\n\"repositories\": [\r\n	{\r\n		\"type\": \"composer\",\r\n		\"url\": \"http://addons.nette.org/\"\r\n	}\r\n]\r\n\\--',	'2012-11-12 05:54:02'),
+(1,	'Using as a Composer Repository',	'composer',	18,	1,	'.[perex]\r\nBesides downloading addons manually with your browser, you can also install & update all of them using Composer.\r\n\r\nRegistration\r\n============\r\n\r\nYou can use Nette Addons as a **Composer repository**. To do so, register the repository in your `composer.json`.\r\n\r\n/--\r\n{\r\n	\"require\": {\r\n		\"nette/nette\": \"2.0.*\",\r\n		...\r\n	},\r\n	\"repositories\": [\r\n		{\r\n			\"type\": \"composer\",\r\n			\"url\": \"http://addons.nette.org/\"\r\n		}\r\n	]\r\n}\r\n\\--\r\n\r\n\r\nInstalling & Updating Addons\r\n============================\r\n\r\nAfter registering the repository, you can install & update all here published Nette addons via Composer (the same way as if they were published on Packagist).',	'2013-03-03 16:52:27'),
 (2,	'How to Add a Plugin',	'how-to-add-plugin',	1,	3,	'@todo',	'2012-10-22 15:34:23'),
 (3,	'Plugin Writing Guidelines',	'plugin-writing-guidelines',	1,	3,	'@todo',	'2012-10-22 15:34:56');
 
