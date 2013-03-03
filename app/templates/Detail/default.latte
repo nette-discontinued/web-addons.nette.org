@@ -8,10 +8,12 @@
 
 	<p class="warning" n:if="!empty($addon->deletedAt)">This addon marked as deleted at {$addon->deletedAt|date:'H:i:s Y-m-d'}{if !empty($addon->deletedBy)} by {$addon->deletedBy->realname}{/if}</p>
 
-	<div n:class="addon-heading, !$version->hasNetteVersion() ? addon-warning">
-		<h1 n:attr="title => !$version->hasNetteVersion() ? 'version of Nette dependency not specified'" n:class="!$version->hasNetteVersion() ? warning">{$addon->name} <span class="addon-version">{$version->version}</span></h1>
+	<div n:class="addon-heading">
+		<h1>{$addon->name}<span class="addon-version">{$version->version}</span></h1>
 		<a class="addon-archive-link" n:href="versions">other versions</a>
 	</div>
+
+	{* <div n:if="!$version->netteVersion" class="warning">Addon does not specify required Nette version.</div> *}
 
 	<div class="emphasis addon-composer">
 		<h2><span>Composer:</span>{$addon->composerFullName}</h2>
