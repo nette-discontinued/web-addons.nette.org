@@ -67,7 +67,10 @@ $(document).ready(function() {
 			return output.trim();
 		};
 
-		$("tr.addon").each(function(i, el) {
+		$list.find("tr.addon").sort(function (a, b) {
+			return $(b).data('addonScore') - $(a).data('addonScore');
+
+		}).each(function(i, el) {
 			var $el = $(el);
 			var id = Number($el.attr('data-addon-id'));
 			if (typeof addons[id] == "undefined") {

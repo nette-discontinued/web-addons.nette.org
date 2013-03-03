@@ -2,10 +2,11 @@
 	<table style="width: 100%">
 		<tbody>
 			{foreach $addons as $addon}
-				<tr n:class="$iterator->odd ? alt, addon" data-addon-id="{$addon->id}">
+				{var score = $addon->totalDownloadsCount+$addon->totalInstallsCount}
+				<tr n:class="$iterator->odd ? alt, addon" data-addon-id="{$addon->id}" data-addon-score="{$score}">
 					<td><a title="{$addon->name}" n:href=":Detail: id => $addon->id">{$addon->name}</a></td>
 					<td>{$addon->shortDescription}</td>
-					<td title="Downloads & Installs">{=$addon->totalDownloadsCount+$addon->totalInstallsCount}x</td>
+					<td title="Downloads & Installs">{$score}×</td>
 					<td title="Vote score">{=$addonVotes($addon->id)->percent|number:0}%</td>
 				</tr>
 			{/foreach}
