@@ -63,8 +63,11 @@ final class PagePresenter extends BasePresenter
 	 */
 	protected function createComponentEditPageForm()
 	{
-		$form = $this->editPageForm->create($this->page, $this->getUser()->getIdentity());
+		if (!$this->getUser()->isLoggedIn()) {
+			$this->redirect(':Sign:in', $this->storeRequest());
+		}
 
+		$form = $this->editPageForm->create($this->page, $this->getUser()->getIdentity());
 		$form->onSuccess[] = $this->editPageFormSubmitted;
 
 		return $form;
@@ -90,6 +93,10 @@ final class PagePresenter extends BasePresenter
 	 */
 	public function renderEdit($slug)
 	{
+		if (!$this->getUser()->isLoggedIn()) {
+			$this->redirect(':Sign:in', $this->storeRequest());
+		}
+
 		$this->template->page = $this->page;
 	}
 
