@@ -166,7 +166,7 @@ class Tags extends Table
 		}
 
 		return $this->getTable()
-			->find($tag->parent_id)
+			->wherePrimary($tag->parent_id)
 			->fetch();
 	}
 

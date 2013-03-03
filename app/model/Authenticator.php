@@ -93,7 +93,7 @@ class Authenticator extends Nette\Object implements NS\IAuthenticator
 			'apiToken' => Strings::random(),
 		);
 		$table = $user->getTable()->getConnection()->table('users_details');
-		if ($detail = $table->find($user->id)) {
+		if ($detail = $table->wherePrimary($user->id)) {
 			$detail->update($data);
 		} else {
 			$data['id'] = $user->id;

@@ -82,7 +82,7 @@ abstract class Table extends Nette\Object
 	 */
 	public function find($id)
 	{
-		return $this->getTable()->find($id)->fetch();
+		return $this->getTable()->wherePrimary($id)->fetch();
 	}
 
 

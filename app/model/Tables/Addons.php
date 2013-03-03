@@ -68,7 +68,7 @@ class Addons extends Table
 	 */
 	public function find($id, $ignoreDeleted = FALSE)
 	{
-		return $this->getTable($ignoreDeleted)->find($id)->fetch();
+		return $this->getTable($ignoreDeleted)->wherePrimary($id)->fetch();
 	}
 
 
