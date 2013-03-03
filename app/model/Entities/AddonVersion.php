@@ -145,10 +145,7 @@ class AddonVersion extends Nette\Object
 	public function hasNetteVersion()
 	{
 		$version = $this->getNetteVersion();
-		if (!$version) {
-			return TRUE;
-		}
-		return strpos($version, 'dev') === FALSE;
+		return ($version && strpos($version, 'dev') === FALSE);
 	}
 
 
