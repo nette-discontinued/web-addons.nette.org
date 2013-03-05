@@ -44,7 +44,7 @@ final class HomepagePresenter extends BaseListPresenter
 	 */
 	public function handleReinstall()
 	{
-		if ($this->context->parameters['productionMode']) {
+		if ($this->context->parameters['productionMode'] !== FALSE) {
 			$this->error();
 		}
 
@@ -61,7 +61,7 @@ final class HomepagePresenter extends BaseListPresenter
 	 */
 	public function handleRandomDownloadAndInstalls()
 	{
-		if ($this->context->parameters['productionMode']) {
+		if ($this->context->parameters['productionMode'] !== FALSE) {
 			$this->error();
 		}
 
