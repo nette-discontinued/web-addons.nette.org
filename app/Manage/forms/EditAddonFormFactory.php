@@ -41,7 +41,7 @@ class EditAddonFormFactory extends AddonFormFactory
 	}
 
 
-	
+
 	/**
 	 * @param Addon
 	 * @return AddonForm

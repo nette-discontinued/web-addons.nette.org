@@ -39,7 +39,7 @@ class DevelopmentUtils extends \Nette\Object
 		$this->cacheStorage->clean(array(\Nette\Caching\Cache::ALL => TRUE));
 	}
 
-	
+
 
 	/**
 	 * @param int
