@@ -177,7 +177,7 @@ CREATE TABLE `users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `group_id` int(10) unsigned NOT NULL DEFAULT '4',
   `username` varchar(200) NOT NULL DEFAULT '',
-  `password` varchar(40) NOT NULL DEFAULT '',
+  `password` varchar(60) NOT NULL DEFAULT '',
   `email` varchar(50) NOT NULL DEFAULT '',
   `title` varchar(50) DEFAULT NULL,
   `realname` varchar(40) DEFAULT NULL,
@@ -209,20 +209,13 @@ CREATE TABLE `users` (
   `registration_ip` varchar(15) NOT NULL DEFAULT '0.0.0.0',
   `last_visit` int(10) unsigned NOT NULL DEFAULT '0',
   `admin_note` varchar(30) DEFAULT NULL,
-  `activate_string` varchar(50) DEFAULT NULL,
-  `activate_key` varchar(8) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `users_registered_idx` (`registered`),
-  KEY `users_username_idx` (`username`(8))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-CREATE TABLE `users_details` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `activate_string` varchar(60) DEFAULT NULL,
+  `activate_key` varchar(10) DEFAULT NULL,
   `apiToken` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`),
+  UNIQUE KEY `forum_users_username_idx` (`username`),
+  KEY `forum_users_registered_idx` (`registered`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 
 -- 2012-10-24 01:34:59

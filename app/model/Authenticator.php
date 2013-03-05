@@ -60,8 +60,10 @@ class Authenticator extends Nette\Object implements NS\IAuthenticator
 			throw new NS\AuthenticationException("Invalid password.", self::INVALID_CREDENTIAL);
 		}
 
-		if (empty($user->created)) {
-			$this->onFirstLogin($user);
+		if (empty($user->apiToken)) {
+			$user->update(array(
+				'apiToken' => Strings::random(),
+			));
 		}
 
 		return $this->users->createIdentity($user);
@@ -78,27 +80,6 @@ class Authenticator extends Nette\Object implements NS\IAuthenticator
 	public function calculateHash($password)
 	{
 		return sha1($password);
-	}
-
-
-
-	/**
-	 * Called when user logs in to the portal for the first time, so that we can initialize some columns
-	 * @param  ActiveRow
-	 */
-	private function onFirstLogin(ActiveRow $user)
-	{
-		$data = array(
-			'created' => new SqlLiteral('NOW()'),
-			'apiToken' => Strings::random(),
-		);
-		$table = $user->getTable()->getConnection()->table('users_details');
-		if ($detail = $table->wherePrimary($user->id)) {
-			$detail->update($data);
-		} else {
-			$data['id'] = $user->id;
-			$table->insert($data);
-		}
 	}
 
 

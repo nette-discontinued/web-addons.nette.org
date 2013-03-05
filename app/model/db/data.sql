@@ -965,29 +965,17 @@ INSERT INTO `tags` (`id`, `name`, `slug`, `level`, `parent_id`, `visible`) VALUE
 (8,	'Others',	'others',	1,	0,	1),
 (9,	'Datagrids',	'datagrids',	2,	1,	1);
 
-INSERT INTO `users` (`id`, `group_id`, `username`, `password`, `email`, `title`, `realname`, `url`, `jabber`, `icq`, `msn`, `aim`, `yahoo`, `location`, `use_avatar`, `signature`, `disp_topics`, `disp_posts`, `email_setting`, `save_pass`, `notify_with_post`, `show_smilies`, `show_img`, `show_img_sig`, `show_avatars`, `show_sig`, `timezone`, `language`, `style`, `num_posts`, `last_post`, `registered`, `registration_ip`, `last_visit`, `admin_note`, `activate_string`, `activate_key`) VALUES
-(1,	1,	'Merxes',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'me@example.com',	NULL,	'Jan Tvrdík',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	0,	NULL,	NULL,	NULL,	1,	1,	0,	1,	1,	1,	1,	1,	0,	'English',	'Oxygen',	0,	NULL,	0,	'0.0.0.0',	0,	NULL,	NULL,	NULL),
-(2,	1,	'HosipLan',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'hosiplan@example.com',	NULL,	'Filip Procházka',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	0,	NULL,	NULL,	NULL,	1,	1,	0,	1,	1,	1,	1,	1,	0,	'English',	'Oxygen',	0,	NULL,	0,	'0.0.0.0',	0,	NULL,	NULL,	NULL),
-(3,	1,	'Vrtak-CZ',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'vrtak@example.com',	NULL,	'Patrik Votoček',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	0,	NULL,	NULL,	NULL,	1,	1,	0,	1,	1,	1,	1,	1,	0,	'English',	'Oxygen',	0,	NULL,	0,	'0.0.0.0',	0,	NULL,	NULL,	NULL),
-(4,	1,	'Honza Marek',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'mail@example.net',	NULL,	'Jan Marek',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	0,	NULL,	NULL,	NULL,	1,	1,	0,	1,	1,	1,	1,	1,	0,	'English',	'Oxygen',	0,	NULL,	0,	'0.0.0.0',	0,	NULL,	NULL,	NULL),
-(5,	1,	'Panda',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'panda@example.com',	NULL,	'Jan Smitka',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	0,	NULL,	NULL,	NULL,	1,	1,	0,	1,	1,	1,	1,	1,	0,	'English',	'Oxygen',	0,	NULL,	0,	'0.0.0.0',	0,	NULL,	NULL,	NULL),
-(6,	1,	'chemiX',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'iamchemix@example.com',	NULL,	'chemiX',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	0,	NULL,	NULL,	NULL,	1,	1,	0,	1,	1,	1,	1,	1,	0,	'English',	'Oxygen',	0,	NULL,	0,	'0.0.0.0',	0,	NULL,	NULL,	NULL),
-(7,	1,	'dgx',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'dgx@example.com',	NULL,	'David Grudl',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	0,	NULL,	NULL,	NULL,	1,	1,	0,	1,	1,	1,	1,	1,	0,	'English',	'Oxygen',	0,	NULL,	0,	'0.0.0.0',	0,	NULL,	NULL,	NULL),
-(8,	4,	'demo',	'40bd001563085fc35165329ea1ff5c5ecbdbbeef',	'demo@example.com',	NULL,	'demo',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	0,	NULL,	NULL,	NULL,	1,	1,	0,	1,	1,	1,	1,	1,	0,	'English',	'Oxygen',	0,	NULL,	0,	'0.0.0.0',	0,	NULL,	NULL,	NULL),
-(9,	1,	'Schmutzka',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'schmutzka@example.com',	NULL,	'Schmutzka',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	0,	NULL,	NULL,	NULL,	1,	1,	0,	1,	1,	1,	1,	1,	0,	'English',	'Oxygen',	0,	NULL,	0,	'0.0.0.0',	0,	NULL,	NULL,	NULL),
-(10,	1,	'juzna',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'juzna.cz@gmail.com',	NULL,	'Jan Doleček',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	0,	NULL,	NULL,	NULL,	1,	1,	0,	1,	1,	1,	1,	1,	0,	'English',	'Oxygen',	1,	1348963054,	1348963054,	'127.0.0.1',	1348963054,	NULL,	NULL,	NULL);
-
-INSERT INTO `users_details` (`id`, `created`, `apiToken`) VALUES
-(1,	'2012-10-24 01:16:24',	'ecv4bgc8aj'),
-(2,	'0000-00-00 00:00:00',	NULL),
-(3,	'0000-00-00 00:00:00',	NULL),
-(4,	'0000-00-00 00:00:00',	NULL),
-(5,	'0000-00-00 00:00:00',	NULL),
-(6,	'0000-00-00 00:00:00',	NULL),
-(7,	'0000-00-00 00:00:00',	NULL),
-(8,	'2012-10-24 01:15:27',	'wwavtmfgt2'),
-(9,	'0000-00-00 00:00:00',	NULL),
-(10,	'0000-00-00 00:00:00',	NULL);
+INSERT INTO `users` (`id`, `group_id`, `username`, `password`, `email`, `title`, `realname`, `url`, `jabber`, `icq`, `msn`, `aim`, `yahoo`, `location`, `use_avatar`, `signature`, `disp_topics`, `disp_posts`, `email_setting`, `save_pass`, `notify_with_post`, `show_smilies`, `show_img`, `show_img_sig`, `show_avatars`, `show_sig`, `timezone`, `language`, `style`, `num_posts`, `last_post`, `registered`, `registration_ip`, `last_visit`, `admin_note`, `activate_string`, `activate_key`, `apiToken`) VALUES
+(1,	1,	'Merxes',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'me@example.com',	NULL,	'Jan Tvrdík',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	0,	NULL,	NULL,	NULL,	1,	1,	0,	1,	1,	1,	1,	1,	0,	'English',	'Oxygen',	0,	NULL,	0,	'0.0.0.0',	0,	NULL,	NULL,	NULL,	'ecv4bgc8aj'),
+(2,	1,	'HosipLan',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'hosiplan@example.com',	NULL,	'Filip Procházka',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	0,	NULL,	NULL,	NULL,	1,	1,	0,	1,	1,	1,	1,	1,	0,	'English',	'Oxygen',	0,	NULL,	0,	'0.0.0.0',	0,	NULL,	NULL,	NULL,	NULL),
+(3,	1,	'Vrtak-CZ',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'vrtak@example.com',	NULL,	'Patrik Votoček',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	0,	NULL,	NULL,	NULL,	1,	1,	0,	1,	1,	1,	1,	1,	0,	'English',	'Oxygen',	0,	NULL,	0,	'0.0.0.0',	0,	NULL,	NULL,	NULL,	NULL),
+(4,	1,	'Honza Marek',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'mail@example.net',	NULL,	'Jan Marek',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	0,	NULL,	NULL,	NULL,	1,	1,	0,	1,	1,	1,	1,	1,	0,	'English',	'Oxygen',	0,	NULL,	0,	'0.0.0.0',	0,	NULL,	NULL,	NULL,	NULL),
+(5,	1,	'Panda',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'panda@example.com',	NULL,	'Jan Smitka',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	0,	NULL,	NULL,	NULL,	1,	1,	0,	1,	1,	1,	1,	1,	0,	'English',	'Oxygen',	0,	NULL,	0,	'0.0.0.0',	0,	NULL,	NULL,	NULL,	NULL),
+(6,	1,	'chemiX',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'iamchemix@example.com',	NULL,	'chemiX',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	0,	NULL,	NULL,	NULL,	1,	1,	0,	1,	1,	1,	1,	1,	0,	'English',	'Oxygen',	0,	NULL,	0,	'0.0.0.0',	0,	NULL,	NULL,	NULL,	NULL),
+(7,	1,	'dgx',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'dgx@example.com',	NULL,	'David Grudl',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	0,	NULL,	NULL,	NULL,	1,	1,	0,	1,	1,	1,	1,	1,	0,	'English',	'Oxygen',	0,	NULL,	0,	'0.0.0.0',	0,	NULL,	NULL,	NULL,	NULL),
+(8,	4,	'demo',	'40bd001563085fc35165329ea1ff5c5ecbdbbeef',	'demo@example.com',	NULL,	'demo',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	0,	NULL,	NULL,	NULL,	1,	1,	0,	1,	1,	1,	1,	1,	0,	'English',	'Oxygen',	0,	NULL,	0,	'0.0.0.0',	0,	NULL,	NULL,	NULL,	'wwavtmfgt2'),
+(9,	1,	'Schmutzka',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'schmutzka@example.com',	NULL,	'Schmutzka',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	0,	NULL,	NULL,	NULL,	1,	1,	0,	1,	1,	1,	1,	1,	0,	'English',	'Oxygen',	0,	NULL,	0,	'0.0.0.0',	0,	NULL,	NULL,	NULL,	NULL),
+(10,	1,	'juzna',	'6e017b5464f820a6c1bb5e9f6d711a667a80d8ea',	'juzna.cz@gmail.com',	NULL,	'Jan Doleček',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	0,	NULL,	NULL,	NULL,	1,	1,	0,	1,	1,	1,	1,	1,	0,	'English',	'Oxygen',	1,	1348963054,	1348963054,	'127.0.0.1',	1348963054,	NULL,	NULL,	NULL,	NULL);
 
 INSERT INTO `users_groups` (`g_id`, `g_title`, `g_user_title`, `g_read_board`, `g_post_replies`, `g_post_topics`, `g_post_polls`, `g_edit_posts`, `g_delete_posts`, `g_delete_topics`, `g_set_title`, `g_search`, `g_search_users`, `g_edit_subjects_interval`, `g_post_flood`, `g_search_flood`) VALUES
 (1,	'Administrators',	'Administrator',	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	0,	0,	0),

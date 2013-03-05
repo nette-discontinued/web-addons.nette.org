@@ -57,10 +57,6 @@ class Users extends Table
 
 		$role = strtolower($user->ref('users_groups', 'group_id')->g_title);
 
-		if ($details = $user->ref('users_details', 'id')) {
-			$data += $details->toArray();
-		}
-
 		return new Identity($user->id, $role, $data);
 	}
 
