@@ -4,8 +4,6 @@ namespace NetteAddons\Model;
 
 use Nette,
 	Nette\Utils\Strings,
-	Nette\Database\SqlLiteral,
-	Nette\Database\Table\ActiveRow,
 	Nette\Security as NS,
 	NetteAddons\Utils\CurlRequestFactory;
 

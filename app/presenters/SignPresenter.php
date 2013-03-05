@@ -87,6 +87,7 @@ final class SignPresenter extends BasePresenter
 			} else {
 				$user->setExpiration('+ 20 minutes', TRUE);
 			}
+
 			$user->login($values->username, $values->password);
 			if (($backlink = $this->getParameter('backlink')) === NULL) {
 				$this->redirect(':Homepage:');
@@ -97,8 +98,10 @@ final class SignPresenter extends BasePresenter
 		} catch (AuthenticationException $e) {
 			if ($e->getCode() == IAuthenticator::IDENTITY_NOT_FOUND) {
 				$form['username']->addError("User '$values->username' not found.");
+
 			} elseif ($e->getCode() == IAuthenticator::INVALID_CREDENTIAL) {
 				$form['password']->addError('Invalid password.');
+
 			} else {
 				$form->addError('Invalid credentials.');
 			}
