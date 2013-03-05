@@ -79,7 +79,10 @@ class Authenticator extends Nette\Object implements NS\IAuthenticator
 	 */
 	public function calculateHash($password)
 	{
-		return sha1($password);
+		if ($password === Strings::upper($password)) { // perhaps caps lock is on
+			$password = Strings::lower($password);
+		}
+		return crypt($password, $salt ?: '$2a$07$' . Strings::random(22));
 	}
 
 
