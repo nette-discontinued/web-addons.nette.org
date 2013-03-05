@@ -949,12 +949,6 @@ INSERT INTO `addons_votes` (`addonId`, `userId`, `vote`, `comment`, `datetime`) 
 (8,	9,	1,	NULL,	'2011-04-13 19:35:09'),
 (8,	10,	1,	NULL,	'2011-08-29 21:32:09');
 
-INSERT INTO `groups` (`g_id`, `g_title`, `g_user_title`, `g_read_board`, `g_post_replies`, `g_post_topics`, `g_post_polls`, `g_edit_posts`, `g_delete_posts`, `g_delete_topics`, `g_set_title`, `g_search`, `g_search_users`, `g_edit_subjects_interval`, `g_post_flood`, `g_search_flood`) VALUES
-(1,	'Administrators',	'Administrator',	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	0,	0,	0),
-(2,	'Moderators',	'Moderator',	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	0,	0,	0),
-(3,	'Guest',	NULL,	1,	0,	0,	0,	0,	0,	0,	0,	1,	1,	0,	0,	0),
-(4,	'Members',	NULL,	1,	1,	1,	1,	1,	1,	1,	0,	1,	1,	300,	60,	30);
-
 INSERT INTO `pages` (`id`, `name`, `slug`, `revision`, `authorId`, `content`, `createdAt`) VALUES
 (1,	'Using as a Composer Repository',	'composer',	18,	1,	'.[perex]\r\nBesides downloading addons manually with your browser, you can also install & update all of them using Composer.\r\n\r\nRegistration\r\n============\r\n\r\nYou can use Nette Addons as a **Composer repository**. To do so, register the repository in your `composer.json`.\r\n\r\n/--\r\n{\r\n	\"require\": {\r\n		\"nette/nette\": \"2.0.*\",\r\n		...\r\n	},\r\n	\"repositories\": [\r\n		{\r\n			\"type\": \"composer\",\r\n			\"url\": \"http://addons.nette.org/\"\r\n		}\r\n	]\r\n}\r\n\\--\r\n\r\n\r\nInstalling & Updating Addons\r\n============================\r\n\r\nAfter registering the repository, you can install & update all here published Nette addons via Composer (the same way as if they were published on Packagist).',	'2013-03-03 16:52:27'),
 (2,	'How to Add a Plugin',	'how-to-add-plugin',	1,	3,	'@todo',	'2012-10-22 15:34:23'),
@@ -994,5 +988,11 @@ INSERT INTO `users_details` (`id`, `created`, `apiToken`) VALUES
 (8,	'2012-10-24 01:15:27',	'wwavtmfgt2'),
 (9,	'0000-00-00 00:00:00',	NULL),
 (10,	'0000-00-00 00:00:00',	NULL);
+
+INSERT INTO `users_groups` (`g_id`, `g_title`, `g_user_title`, `g_read_board`, `g_post_replies`, `g_post_topics`, `g_post_polls`, `g_edit_posts`, `g_delete_posts`, `g_delete_topics`, `g_set_title`, `g_search`, `g_search_users`, `g_edit_subjects_interval`, `g_post_flood`, `g_search_flood`) VALUES
+(1,	'Administrators',	'Administrator',	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	0,	0,	0),
+(2,	'Moderators',	'Moderator',	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	0,	0,	0),
+(3,	'Guest',	NULL,	1,	0,	0,	0,	0,	0,	0,	0,	1,	1,	0,	0,	0),
+(4,	'Members',	NULL,	1,	1,	1,	1,	1,	1,	1,	0,	1,	1,	300,	60,	30);
 
 -- 2012-11-12 05:55:33

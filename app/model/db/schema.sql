@@ -125,7 +125,7 @@ CREATE TABLE `addons_votes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-CREATE TABLE `groups` (
+CREATE TABLE `users_groups` (
   `g_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `g_title` varchar(50) NOT NULL DEFAULT '',
   `g_user_title` varchar(50) DEFAULT NULL,

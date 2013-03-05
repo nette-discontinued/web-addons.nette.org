@@ -55,7 +55,7 @@ class Users extends Table
 		$data = $user->toArray();
 		unset($data['password']);
 
-		$role = strtolower($user->ref('groups', 'group_id')->g_title);
+		$role = strtolower($user->ref('users_groups', 'group_id')->g_title);
 
 		if ($details = $user->ref('users_details', 'id')) {
 			$data += $details->toArray();
