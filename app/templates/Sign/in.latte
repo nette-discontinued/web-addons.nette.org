@@ -12,6 +12,12 @@
 
 			<p>Use the same login information as you have in the forum.</p>
 
+			{foreach $form->allErrors as $error}
+				{first}<ul>{/first}
+				<li class="error">{$error}</li>
+				{last}</ul>{/last}
+			{/foreach}
+
 			<hr>
 
 			<div>
