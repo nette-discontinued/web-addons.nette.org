@@ -54,6 +54,12 @@ class Authenticator extends Nette\Object implements NS\IAuthenticator
 			}
 		}
 
+		// password migration
+		if (strlen($user->password) === 40 && $user->password === sha1($password)) {
+			$user->password = $this->calculateHash($password);
+			$user->update();
+		}
+
 		if ($user->password !== $this->calculateHash($password, $user->password)) {
 			throw new NS\AuthenticationException("Invalid password.", self::INVALID_CREDENTIAL);
 		}
@@ -76,7 +82,7 @@ class Authenticator extends Nette\Object implements NS\IAuthenticator
 	 * @param  string|NULL
 	 * @return string
 	 */
-	public function calculateHash($password, $salt = NULL)
+	public static function calculateHash($password, $salt = NULL)
 	{
 		if ($password === Strings::upper($password)) { // perhaps caps lock is on
 			$password = Strings::lower($password);

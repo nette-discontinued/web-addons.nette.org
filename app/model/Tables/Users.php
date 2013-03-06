@@ -87,7 +87,7 @@ class Users extends Table
 			'id' => $id,
 			'username' => $username,
 			'realname' => $username,
-			'password' => sha1($password),
+			'password' => Authenticator::calculateHash($password),
 			'group_id' => 4,
 		));
 	}
