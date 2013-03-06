@@ -2,7 +2,8 @@
 
 namespace NetteAddons\Manage\Forms;
 
-use Nette\Utils\Strings,
+use Nette,
+	Nette\Utils\Strings,
 	Nette\Forms\IControl,
 	Nette\Security\IIdentity,
 	NetteAddons\Forms\Form,
@@ -87,6 +88,7 @@ class ImportAddonFormFactory extends \Nette\Object
 			} catch (\NetteAddons\Utils\HttpException $e) {
 				if ($e->getCode() === 404) {
 					$form['url']->addError("Repository with URL '{$values->url}' does not exist.");
+
 				} else {
 					$importerName = $importer::getName();
 					$form['url']->addError("Importing failed because '$importerName' returned error #" . $e->getCode() . '.');
@@ -95,8 +97,10 @@ class ImportAddonFormFactory extends \Nette\Object
 			} catch (\NetteAddons\IOException $e) {
 				if ($e->getCode() === 404) {
 					$form['url']->addError("Repository with URL '{$values->url}' does not exist.");
+
 				} else {
 					$form['url']->addError('Importing failed. Try again later.');
+					Nette\Diagnostics\Debugger::log($e, Nette\Diagnostics\Debugger::WARNING);
 				}
 			}
 		};
