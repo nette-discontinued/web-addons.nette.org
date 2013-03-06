@@ -57,21 +57,23 @@ $(document).ready(function() {
 		var $list = $('.addons-categorized-list');
 		$list.after($result);
 
-		var addons = {};
+		var addons = [];
+		var usedIds = [];
 		$list.find('tr.addon').sort(function(a, b) {
 			return $(b).data('addonScore') - $(a).data('addonScore');
 
 		}).each(function(i, el) {
 			var $el = $(el);
 			var id = parseInt($el.data('addonId'), 10);
-
-			if (typeof addons[id] === 'undefined') {
+			if ($.inArray(id, usedIds) == -1) {
 				var text = $el.find('.name').text() + ' ' + $el.find('.description').text();
-				addons[id] = {
-					'$el': $el.clone(),
+				var row =  $el.clone();
+				$table.append(row);
+				usedIds.push(id);
+				addons.push({
+					'$el': row,
 					'text': $.trim(text).toLowerCase()
-				};
-				$table.append(addons[id].$el);
+				});
 			}
 		});
 
@@ -87,7 +89,7 @@ $(document).ready(function() {
 
 				var words = query.split(/\s+/);
 				var odd = true;
-				$.each(addons, function(id, addon) {
+				$.each(addons, function(idx, addon) {
 					for (var i = 0; i < words.length; i++) {
 						if (addon.text.indexOf(words[i]) === -1) {
 							addon.$el.hide();
