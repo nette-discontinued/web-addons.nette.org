@@ -2,7 +2,7 @@
 
 namespace NetteAddons\Model\Importers\GitHub;
 
-use NetteAddons\Utils\CurlRequestFactory;
+use NetteAddons\Utils\HttpStreamRequestFactory;
 
 /**
  * GitHub repository factory
@@ -11,8 +11,8 @@ use NetteAddons\Utils\CurlRequestFactory;
  */
 class RepositoryFactory extends \Nette\Object
 {
-	/** @var \NetteAddons\Utils\CurlRequestFactory */
-	private $curlFactory;
+	/** @var \NetteAddons\Utils\HttpStreamRequestFactory */
+	private $requestFactory;
 
 	/** @var string */
 	private $apiVersion;
@@ -27,14 +27,14 @@ class RepositoryFactory extends \Nette\Object
 
 	/**
 	 * @param string
-	 * @param \NetteAddons\Utils\CurlRequestFactory
+	 * @param \NetteAddons\Utils\HttpStreamRequestFactory
 	 * @param string|NULL
 	 * @param string|NULL
 	 */
-	public function __construct($apiVersion, CurlRequestFactory $curlFactory, $clientId = NULL, $clientSecret = NULL)
+	public function __construct($apiVersion, HttpStreamRequestFactory $requestFactory, $clientId = NULL, $clientSecret = NULL)
 	{
 		$this->apiVersion = $apiVersion;
-		$this->curlFactory = $curlFactory;
+		$this->requestFactory = $requestFactory;
 		$this->clientId = $clientId;
 		$this->clientSecret = $clientSecret;
 	}
@@ -47,6 +47,6 @@ class RepositoryFactory extends \Nette\Object
 	 */
 	public function create($url)
 	{
-		return new Repository($this->apiVersion, $this->curlFactory, $url, $this->clientId, $this->clientSecret);
+		return new Repository($this->apiVersion, $this->requestFactory, $url, $this->clientId, $this->clientSecret);
 	}
 }

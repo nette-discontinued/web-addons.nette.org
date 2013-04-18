@@ -2,7 +2,7 @@
 
 namespace NetteAddons\Test\Utils;
 
-use NetteAddons\Utils\CurlRequestFactory;
+use NetteAddons\Utils\HttpStreamRequestFactory;
 
 
 
@@ -10,24 +10,24 @@ use NetteAddons\Utils\CurlRequestFactory;
  * Note: http://httpstat.us/ can be replaced by http://httpbin.org/.
  * @author Jan Tvrdík
  */
-class CurlTest extends \NetteAddons\Test\TestCase
+class HttpStreamRequestTest extends \NetteAddons\Test\TestCase
 {
-	/** @var \NetteAddons\Utils\CurlRequestFactory */
-	private $curl;
+	/** @var \NetteAddons\Utils\HttpStreamRequestFactory */
+	private $requestFactory;
 
 
 
 	protected function setUp()
 	{
 		parent::setUp();
-		$this->curl = new CurlRequestFactory(10000);
+		$this->requestFactory = new HttpStreamRequestFactory(10000);
 	}
 
 
 
 	public function testOK()
 	{
-		$s = $this->curl->create('http://httpstat.us/200')->execute();
+		$s = $this->requestFactory->create('http://httpstat.us/200')->execute();
 		$this->assertInternalType('string', $s);
 	}
 
@@ -35,8 +35,8 @@ class CurlTest extends \NetteAddons\Test\TestCase
 
 	public function testCurlError()
 	{
-		$this->setExpectedException('NetteAddons\Utils\CurlException', NULL, CURLE_UNSUPPORTED_PROTOCOL);
-		$s = $this->curl->create('foobar://example.com')->execute();
+		$this->setExpectedException('NetteAddons\Utils\StreamException');
+		$s = $this->requestFactory->create('foobar://example.com')->execute();
 	}
 
 
@@ -47,7 +47,7 @@ class CurlTest extends \NetteAddons\Test\TestCase
 	public function testHttpError($code)
 	{
 		$this->setExpectedException('NetteAddons\Utils\HttpException', NULL, $code);
-		$this->curl->create('http://httpstat.us/' . $code)->execute();
+		$this->requestFactory->create('http://httpstat.us/' . $code)->execute();
 	}
 
 

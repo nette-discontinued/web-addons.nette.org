@@ -4,7 +4,7 @@ namespace NetteAddons\Model\Importers\GitHub;
 
 use Nette\Http\Url,
 	Nette\Utils\Strings,
-	NetteAddons\Utils\CurlRequestFactory;
+	NetteAddons\Utils\HttpStreamRequestFactory;
 
 
 
@@ -23,8 +23,8 @@ class Repository extends \Nette\Object
 	const URL_PATTERN_PUBLIC = '~^(?:(?:https?|git)://)?github\.com/(?<vendor>[a-z0-9][a-z0-9_-]*)/(?<name>[a-z0-9_.-]+?)(?:\.git)?(/.*)?$~i',
 		URL_PATTERN_PRIVATE = '~^(?:ssh://)?git@github.com(?:/|:)(?<vendor>[a-z0-9][a-z0-9_-]*)/(?<name>[a-z0-9_.-]+?)(?:\.git)?$~i';
 
-	/** @var \NetteAddons\Utils\CurlRequestFactory */
-	private $curl;
+	/** @var \NetteAddons\Utils\HttpStreamRequestFactory */
+	private $requestFactory;
 
 	/** @var string */
 	private $vendor;
@@ -48,15 +48,15 @@ class Repository extends \Nette\Object
 
 	/**
 	 * @param string
-	 * @param \NetteAddons\Utils\CurlRequestFactory
+	 * @param \NetteAddons\Utils\HttpStreamRequestFactory
 	 * @param string
 	 * @param string|NULL
 	 * @param string|NULL
 	 */
-	public function __construct($apiVersion, CurlRequestFactory $curl, $url, $clientId = NULL, $clientSecret = NULL)
+	public function __construct($apiVersion, HttpStreamRequestFactory $requestFactory, $url, $clientId = NULL, $clientSecret = NULL)
 	{
 		$this->apiVersion;
-		$this->curl = $curl;
+		$this->requestFactory = $requestFactory;
 
 		$data = static::getVendorAndName($url);
 		if (!is_array($data)) {
@@ -101,15 +101,14 @@ class Repository extends \Nette\Object
 			if ($this->clientId && $this->clientSecret) {
 				$url->appendQuery(array('client_id' => $this->clientId, 'client_secret' => $this->clientSecret));
 			}
-			$request = $this->curl->create($url);
-			$request->setOption(CURLOPT_HTTPHEADER, array(
-				"Accept: application/vnd.github.{$this->apiVersion}+json",
-			));
+
+			$request = $this->requestFactory->create($url);
+			$request->addHeader('Accept', "application/vnd.github.{$this->apiVersion}+json");
 
 			return \Nette\Utils\Json::decode($request->execute());
 
-		} catch (\NetteAddons\Utils\CurlException $e) {
-			throw new \NetteAddons\IOException('cURL execution failed.', NULL, $e);
+		} catch (\NetteAddons\Utils\StreamException $e) {
+			throw new \NetteAddons\IOException('Request execution failed.', NULL, $e);
 
 		} catch (\Nette\Utils\JsonException $e) {
 			throw new \NetteAddons\IOException('GitHub API returned invalid JSON.', NULL, $e);

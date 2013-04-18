@@ -19,15 +19,15 @@ class RepositoryTest extends TestCase
 	private $repo;
 
 	/** @var \PHPUnit_Framework_MockObject_MockObject */
-	private $curl;
+	private $requestFactory;
 
 
 
 	protected function setUp()
 	{
 		parent::setUp();
-		$this->curl = $this->getMockBuilder('NetteAddons\Utils\CurlRequestFactory')->disableOriginalConstructor()->getMock();
-		$this->repo = new Repository('beta', $this->curl, 'http://github.com/smith/browser');
+		$this->requestFactory = $this->getMockBuilder('NetteAddons\Utils\HttpStreamRequestFactory')->disableOriginalConstructor()->getMock();
+		$this->repo = new Repository('beta', $this->requestFactory, 'http://github.com/smith/browser');
 	}
 
 
@@ -52,11 +52,11 @@ class RepositoryTest extends TestCase
 
 	/**
 	 * @param string $url
-	 * @return \PHPUnit_Framework_MockObject_MockObject|\NetteAddons\Utils\CurlRequest
+	 * @return \PHPUnit_Framework_MockObject_MockObject|\NetteAddons\Utils\HttpStreamRequest
 	 */
 	private function mockRequest($url = NULL)
 	{
-		$request = $this->getMockBuilder('NetteAddons\Utils\CurlRequest')
+		$request = $this->getMockBuilder('NetteAddons\Utils\HttpStreamRequest')
 			->disableOriginalConstructor()->getMock();
 		$request->expects($this->any())->method('setOption');
 
@@ -64,7 +64,7 @@ class RepositoryTest extends TestCase
 			? $this->equalTo(new Url($url))
 			: $this->isInstanceOf('Nette\Http\Url'); // https://api.github.com/repos/smith/browser
 
-		$this->curl->expects($this->once())->method('create')
+		$this->requestFactory->expects($this->once())->method('create')
 			->with($urlConstraint)
 			->will($this->returnValue($request));
 
@@ -88,9 +88,9 @@ class RepositoryTest extends TestCase
 
 
 
-	public function testCurlError()
+	public function testRequestError()
 	{
-		$ex = new NetteAddons\Utils\CurlException(NULL, CURLE_COULDNT_RESOLVE_HOST);
+		$ex = new NetteAddons\Utils\StreamException();
 		$this->mockRequest()
 			->expects($this->once())
 			->method('execute')
@@ -147,7 +147,7 @@ class RepositoryTest extends TestCase
 	public function testGetTree()
 	{
 		$this->markTestIncomplete('Not sure whether getTree() method will be used at all.');
-		/*$this->curl->shouldReceive('get')->once()
+		/*$this->requestFactory->shouldReceive('get')->once()
 			->with('https://api.github.com/repos/smith/git/trees/cb3a02f')
 			->andReturn(json_encode(array(
 

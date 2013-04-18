@@ -5,7 +5,7 @@ namespace NetteAddons\Model;
 use Nette,
 	Nette\Utils\Strings,
 	Nette\Security as NS,
-	NetteAddons\Utils\CurlRequestFactory;
+	NetteAddons\Utils\HttpStreamRequestFactory;
 
 
 
@@ -19,19 +19,19 @@ class Authenticator extends Nette\Object implements NS\IAuthenticator
 	/** @var Users */
 	private $users;
 
-	/** @var \NetteAddons\Utils\CurlRequestFactory */
-	private $curlFactory;
+	/** @var \NetteAddons\Utils\HttpStreamRequestFactory */
+	private $requestFactory;
 
 
 
 	/**
 	 * @param  Users
-	 * @param  \NetteAddons\Utils\CurlRequestFactory
+	 * @param  \NetteAddons\Utils\HttpStreamRequestFactory
 	 */
-	public function __construct(Users $users, CurlRequestFactory $curlFactory)
+	public function __construct(Users $users, HttpStreamRequestFactory $requestFactory)
 	{
 		$this->users = $users;
-		$this->curlFactory = $curlFactory;
+		$this->requestFactory = $requestFactory;
 	}
 
 
@@ -100,15 +100,14 @@ class Authenticator extends Nette\Object implements NS\IAuthenticator
 	 */
 	private function authenticateExternal($username, $password)
 	{
-		$req = $this->curlFactory->create(self::EXTERNAL_URL);
-		$req->setOption(CURLOPT_POST, TRUE);
-		$req->setOption(CURLOPT_POSTFIELDS, http_build_query(array(
+		$req = $this->requestFactory->create(self::EXTERNAL_URL);
+		$req->setMethod('POST');
+		$req->setOption('content', http_build_query(array(
 			'form_sent' => 1,
 			'req_name' => $username,
 			'req_password' => $password,
 			'redirect_url' => 'index.php',
 		)));
-		$req->setOption(CURLOPT_COOKIEFILE, ''); // needs to be here to store cookies between redirects
 
 		try {
 			$html = $req->execute();
