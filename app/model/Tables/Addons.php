@@ -132,7 +132,7 @@ class Addons extends Table
 	 */
 	public function findMostFavorited($count = NULL)
 	{
-		$selection = $this->getTable()->group('id')->order('SUM(addons_vote:vote) DESC');
+		$selection = $this->getTable()->group('id')->order('SUM(:addons_vote.vote) DESC');
 		if (!is_null($count)) {
 			$selection->limit($count);
 		}

@@ -42,7 +42,7 @@ class Tags extends Table
 	 */
 	public function findMainTagsWithAddons()
 	{
-		return $this->findMainTags()->group('tags.id', 'COUNT(addons_tags:tagId) > 0');
+		return $this->findMainTags()->group('tags.id')->having('COUNT(:addons_tags.tagId) > 0');
 	}
 
 

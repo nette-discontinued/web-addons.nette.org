@@ -27,6 +27,7 @@ class AddonVersionTest extends TestCase
 			'sourceUrl' => NULL,
 			'sourceReference' => NULL,
 			'composerJson' => '{"a": "b"}',
+			'updatedAt' => NULL,
 		));
 
 		$row->shouldReceive('related')
@@ -41,6 +42,7 @@ class AddonVersionTest extends TestCase
 					'type' => 'require',
 				)),
 			));
+
 
 		$version = AddonVersion::fromActiveRow($row);
 		$this->assertInstanceOf('NetteAddons\Model\AddonVersion', $version);
@@ -67,12 +69,18 @@ class AddonVersionTest extends TestCase
 
 	private function createRow($data)
 	{
+		// ugly, ugly!
+		$table = Mockery::mock()->shouldIgnoreMissing();
+		$table->shouldReceive('getDatabaseReflection->getBelongsToReference')->andReturn(array('a', 'b'));
 		$row = Mockery::mock('Nette\Database\Table\ActiveRow');
-		$row->shouldReceive('access');
 
 		Access('Nette\Database\Table\ActiveRow', '$data')
 			->asInstance($row)
 			->set($data);
+
+		Access('Nette\Database\Table\ActiveRow', '$table')
+			->asInstance($row)
+			->set($table);
 
 		return $row;
 	}
