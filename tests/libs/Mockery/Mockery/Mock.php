@@ -44,7 +44,17 @@ class Mock implements MockInterface
      * @var bool
      */
     protected $_mockery_ignoreMissing = false;
+
+    protected $_mockery_ignoreMissingAsUndefined = false;
     
+    /**
+     * Flag to indicate whether we can defer method calls missing from our
+     * expectations
+     *
+     * @var bool
+     */
+    protected $_mockery_deferMissing = false;
+
     /**
      * Flag to indicate whether this mock was verified
      *
@@ -168,7 +178,37 @@ class Mock implements MockInterface
         $this->_mockery_ignoreMissing = true;
         return $this;
     }
+
+    public function asUndefined()
+    {
+        $this->_mockery_ignoreMissingAsUndefined = true;
+        return $this;
+    }
     
+    /**
+     * Set mock to defer unexpected methods to it's parent
+     *
+     * This is particularly useless for this class, as it doesn't have a parent, 
+     * but included for completeness
+     *
+     * @return Mock
+     */
+    public function shouldDeferMissing()
+    {
+        $this->_mockery_deferMissing = true;
+        return $this;
+    }
+
+    /**
+     * Create an obviously worded alias to shouldDeferMissing()
+     *
+     * @return Mock
+     */
+    public function makePartial()
+    {
+        return $this->shouldDeferMissing();
+    }
+
     /**
      * Accepts a closure which is executed with an object recorder which proxies
      * to the partial source object. The intent being to record the
@@ -178,7 +218,7 @@ class Mock implements MockInterface
      *
      * @param Closure $closure
      */
-    public function shouldExpect(Closure $closure)
+    public function shouldExpect(\Closure $closure)
     {
         $recorder = new \Mockery\Recorder($this, $this->_mockery_partial);
         $this->_mockery_disableExpectationMatching = true;
@@ -204,7 +244,7 @@ class Mock implements MockInterface
         }
         return $this;
     }
-    
+
     /**
      * Capture calls to this mock
      */
@@ -216,13 +256,27 @@ class Mock implements MockInterface
             return $handler->call($args);
         } elseif (!is_null($this->_mockery_partial) && method_exists($this->_mockery_partial, $method)) {
             return call_user_func_array(array($this->_mockery_partial, $method), $args);
+        } elseif ($this->_mockery_deferMissing && is_callable("parent::$method")) {
+            return call_user_func_array("parent::$method", $args);
         } elseif ($this->_mockery_ignoreMissing) {
-            $return = new \Mockery\Undefined;
-            return $return;
+            if ($this->_mockery_ignoreMissingAsUndefined === true) {
+                $undef = new \Mockery\Undefined;
+                return call_user_func_array(array($undef, $method), $args);
+            } else {
+                return null;
+            }
         }
         throw new \BadMethodCallException(
             'Method ' . $this->_mockery_name . '::' . $method . '() does not exist on this mock object'
         );
+    }
+    
+    /**
+     * Forward calls to this magic method to the __call method
+     */
+    public function __toString()
+    {
+        return $this->__call('__toString', array());
     }
     
     /**public function __set($name, $value)
@@ -332,11 +386,16 @@ class Mock implements MockInterface
     public function mockery_validateOrder($method, $order)
     {
         if ($order < $this->_mockery_currentOrder) {
-            throw new \Mockery\Exception(
+            $exception = new \Mockery\Exception\InvalidOrderException(
                 'Method ' . $this->_mockery_name . '::' . $method . '()'
                 . ' called out of order: expected order '
                 . $order . ', was ' . $this->_mockery_currentOrder
             );
+            $exception->setMock($this)
+                ->setMethodName($method)
+                ->setExpectedOrder($order)
+                ->setActualOrder($this->_mockery_currentOrder);
+            throw $exception;
         }
         $this->mockery_setCurrentOrder($order);
     }
@@ -418,6 +477,20 @@ class Mock implements MockInterface
     public function mockery_getMockableProperties()
     {
         return $this->_mockery_mockableProperties;
+    }
+
+    /**
+     * Calls a parent class method and returns the result. Used in a passthru
+     * expectation where a real return value is required while still taking
+     * advantage of expectation matching and call count verification.
+     *
+     * @param string $name
+     * @param array $args
+     * @return mixed
+     */
+    public function mockery_callSubjectMethod($name, array $args)
+    {
+        return call_user_func_array('parent::' . $name, $args);
     }
 
 }

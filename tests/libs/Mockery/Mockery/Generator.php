@@ -22,6 +22,21 @@ namespace Mockery;
 
 class Generator
 {
+    protected static $reservedWords = array(
+        "__halt_compiler", "abstract", "and", "array", "as",
+        "break", "callable", "case", "catch", "class",
+        "clone", "const", "continue", "declare", "default",
+        "die", "do", "echo", "else", "elseif",
+        "empty", "enddeclare", "endfor", "endforeach", "endif",
+        "endswitch", "endwhile", "eval", "exit", "extends",
+        "final", "for", "foreach", "function", "global",
+        "goto", "if", "implements", "include", "include_once",
+        "instanceof", "insteadof", "interface", "isset", "list",
+        "namespace", "new", "or", "print", "private",
+        "protected", "public", "require", "require_once", "return",
+        "static", "switch", "throw", "trait", "try",
+        "unset", "use", "var", "while", "xor"
+    );
 
    /**
     * Generates a Mock Object class with all Mockery methods whose
@@ -56,10 +71,18 @@ class Generator
             $class = new \ReflectionClass($className);
             $classData[] = self::_analyseClass($class, $className, $allowFinal);
         }
-        foreach ($classData as $data) {
-            if ($data['class']->isInterface()) {
+        foreach ($classData as $i=>$data) {
+            if ($data['class']->isInterface() && preg_match("/^Traversable$/i", $data['class']->getName())) {
+                $classData[] = $iterator = self::_analyseClass(
+                    new \ReflectionClass('Iterator'), // can't use Traversable directly so substitute
+                    '\Iterator',
+                    $allowFinal
+                );
+                array_unshift($interfaceInheritance, $iterator['className']);
+                unset($classData[$i]); // throw away Traversable or we'll get fatal error
+            } elseif ($data['class']->isInterface()) {
                 $interfaceInheritance[] = $data['className'];
-            } elseif ($data['class']->isFinal() || $data['hasFinalMethods']) {
+            } elseif ($data['class']->isFinal()) {
                 $inheritance = ' extends ' . $data['className'];
                 $classNameInherited = $data['className'];
                 $classIsFinal = true;
@@ -69,14 +92,30 @@ class Generator
             }
         }
         if (count($interfaceInheritance) > 0) {
+            foreach ($classData as $i => $data) {
+                if ($data['class']->isInterface()) {
+                    $extendedInterfaces = $data['class']->getInterfaces();
+                    $traversables = preg_grep("/^Traversable$/i", array_keys($extendedInterfaces));
+                    if (!empty($traversables) && !in_array('\Iterator', $interfaceInheritance)
+                    && !array_key_exists('IteratorAggregate', $extendedInterfaces)
+                    && !preg_match("/^Iterator|IteratorAggregate$/i", $data['class']->getName())) {
+                        array_unshift($interfaceInheritance, '\Iterator'); // must declare prior to Traversable
+                        $classData[] = $iterator = self::_analyseClass(
+                            new \ReflectionClass('Iterator'),
+                            '\Iterator',
+                            $allowFinal
+                        );
+                    }
+                }
+            }
             if (!$classIsFinal) $interfaceInheritance[] = '\Mockery\MockInterface';
             if (strlen($classNameInherited) > 0) $inheritance = ' extends ' . $classNameInherited;
             $inheritance .= ' implements ' . implode(', ', $interfaceInheritance);
-        } 
-        
+        }
+
         $definition .= 'class ' . $mockName . $inheritance . PHP_EOL . '{' . PHP_EOL;
         foreach ($classData as $data) {
-            if (!$data['class']->isFinal() && !$data['hasFinalMethods']) {
+            if (!$data['class']->isFinal()) {
                 $result = self::applyMockeryTo($data['class'], $data['publicMethods'], $block, $partialMethods);
                 if ($result['callTypehinting']) $callTypehinting = true;
                 $definition .= $result['definition'];
@@ -90,7 +129,7 @@ class Generator
         eval($definition);
         return $mockName;
     }
-    
+
     protected static function _analyseClass($class, $className, $allowFinal = false)
     {
         if ($class->isFinal() && !$allowFinal) {
@@ -108,16 +147,7 @@ class Generator
         $methods = $class->getMethods(\ReflectionMethod::IS_PUBLIC);
         $protected = $class->getMethods(\ReflectionMethod::IS_PROTECTED);
         foreach ($methods as $method) {
-            if ($method->isFinal()  && !$allowFinal) {
-                throw new \Mockery\Exception(
-                    'The method ' . $method->getName()
-                    . ' is marked final and it is not possible to generate a '
-                    . 'mock object with such a method defined. You should instead '
-                    . 'pass an instance of this object to Mockery to create a '
-                    . 'partial mock.'
-                );
-            } elseif ($method->isFinal()) {
-                $className = '\\Mockery\\Mock';
+            if ($method->isFinal()) {
                 $hasFinalMethods = true;
             }
         }
@@ -148,14 +178,20 @@ class Generator
             if (count($partialMethods) > 0 && !in_array(strtolower($method->getName()), $partialMethods)) {
                 continue;
             }
+            // Skip final methods, i.e. we end up with a partial with final methods untouched
+            if ($method->isFinal()) {
+                continue;
+            }
             if (!$method->isDestructor()
-            && !$method->isStatic()
+            //&& !$method->isStatic()
             && $method->getName() !== '__call'
             && $method->getName() !== '__clone'
             && $method->getName() !== '__wakeup'
             && $method->getName() !== '__set'
             && $method->getName() !== '__get'
-            && $method->getName() !== '__isset') {
+            && $method->getName() !== '__toString'
+            && $method->getName() !== '__isset'
+            && $method->getName() !== '__callStatic') {
                 $definition .= self::_replacePublicMethod($method);
             }
             if ($method->getName() == '__call') {
@@ -187,8 +223,13 @@ class Generator
      */
     protected static function _replacePublicMethod(\ReflectionMethod $method)
     {
-        $body = '';
         $name = $method->getName();
+
+        if (static::_isReservedWord($name)) {
+            return " /* Could not replace $name() as it is a reserved word */ ";
+        }
+
+        $body = '';
         if ($name !== '__construct' && $method->isPublic()) {
             /**
              * Purpose of this block is to create an argument array where
@@ -203,7 +244,8 @@ if (isset(\$stack[0]['args'])) {
         \$args[\$i] =& \$stack[0]['args'][\$i];
     }
 }
-return \$this->__call('$name', \$args);
+\$ret = \$this->__call('$name', \$args);
+return \$ret;
 BODY;
         }
         $methodParams = self::_renderPublicMethodParameters($method);
@@ -218,10 +260,11 @@ BODY;
         if ($method->isStatic()) {
             $access .= ' static';
         }
-        return $access . ' function ' . $name . '(' . $paramDef . ')'
-                          . '{' . $body . '}';
+        $returnByRef = $method->returnsReference() ? ' & ' : '';
+        return $access . ' function ' . $returnByRef . $name . '(' . $paramDef . ')'
+                      . '{' . $body . '}';
     }
-    
+
     protected static function _renderPublicMethodParameters(\ReflectionMethod $method)
     {
         $class = $method->getDeclaringClass();
@@ -232,22 +275,30 @@ BODY;
         }
         $methodParams = array();
         $params = $method->getParameters();
-        foreach ($params as $param) {
+		$typehintMatch = array();
+        foreach ($params as $i => $param) {
             $paramDef = '';
             if ($param->isArray()) {
                 $paramDef .= 'array ';
             } elseif ($param->getClass()) {
                 $paramDef .= $param->getClass()->getName() . ' ';
+            }  elseif (preg_match('/^Parameter #[0-9]+ \[ \<(required|optional)\> (?<typehint>\S+ )?.*\$' . $param->getName() . ' .*\]$/', $param->__toString(), $typehintMatch)) {
+                if (!empty($typehintMatch['typehint'])) {
+                    $paramDef .= $typehintMatch['typehint'] . ' ';
+                }
             }
-            $paramDef .= ($param->isPassedByReference() ? '&' : '') . '$' . $param->getName();
-            if ($param->isDefaultValueAvailable()) {
-                $default = var_export($param->getDefaultValue(), true);
-                if ($default == '') {
-                  $default = 'null';
+            $paramName = $param->getName();
+            if (empty($paramName) || $paramName === '...') {
+                $paramName = 'arg' . $i;
+            }
+            $paramDef .= ($param->isPassedByReference() ? '&' : '') . '$' . $paramName;
+            if ($param->isOptional()) {
+                if ($param->isDefaultValueAvailable()) {
+                    $default = var_export($param->getDefaultValue(), true);
+                } else {
+                    $default = 'null';
                 }
                 $paramDef .= ' = ' . $default;
-            } else if ($param->isOptional()) {
-                $paramDef .= ' = null';
             }
 
             $methodParams[] = $paramDef;
@@ -261,8 +312,13 @@ BODY;
      */
     protected static function _replaceProtectedAbstractMethod(\ReflectionMethod $method)
     {
-        $body = '';
         $name = $method->getName();
+
+        if (static::_isReservedWord($name)) {
+            return " /* Could not replace $name() as it is a reserved word */ ";
+        }
+
+        $body = '';
         $methodParams = array();
         $params = $method->getParameters();
         foreach ($params as $param) {
@@ -286,8 +342,20 @@ BODY;
         }
         $paramDef = implode(',', $methodParams);
         $access = 'protected';
-        return $access . ' function ' . $name . '(' . $paramDef . ')'
-                          . '{' . $body . '}';
+        $returnByRef = $method->returnsReference() ? ' & ' : '';
+        return $access . ' function ' . $returnByRef . $name . '(' . $paramDef . ')'
+                      . '{' . $body . '}';
+    }
+
+    public static function _isReservedWord($word)
+    {
+        static $flippedReservedWords;
+
+        if (null === $flippedReservedWords) {
+            $flippedReservedWords = array_fill_keys(static::$reservedWords, true);
+        }
+
+        return isset($flippedReservedWords[$word]);
     }
 
     /**
@@ -304,12 +372,16 @@ BODY;
         $typehint = $callTypehint ? 'array' : '';
         $std = <<<MOCK
     protected static \$_mockery_staticClassName = '';
-    
+
     protected \$_mockery_expectations = array();
 
     protected \$_mockery_lastExpectation = null;
 
     protected \$_mockery_ignoreMissing = false;
+
+    protected \$_mockery_ignoreMissingAsUndefined = false;
+
+    protected \$_mockery_deferMissing = false;
 
     protected \$_mockery_verified = false;
 
@@ -328,7 +400,7 @@ BODY;
     protected \$_mockery_disableExpectationMatching = false;
 
     protected \$_mockery_mockableMethods = array();
-    
+
     protected \$_mockery_mockableProperties = array();
 
     public function mockery_init(\$name, \Mockery\Container \$container = null, \$partialObject = null)
@@ -372,9 +444,26 @@ BODY;
         return \$lastExpectation;
     }
 
+    public function shouldDeferMissing()
+    {
+        \$this->_mockery_deferMissing = true;
+        return \$this;
+    }
+
+    public function makePartial()
+    {
+        return \$this->shouldDeferMissing();
+    }
+
     public function shouldIgnoreMissing()
     {
         \$this->_mockery_ignoreMissing = true;
+        return \$this;
+    }
+
+    public function asUndefined()
+    {
+        \$this->_mockery_ignoreMissingAsUndefined = true;
         return \$this;
     }
 
@@ -406,13 +495,27 @@ BODY;
             return \$handler->call(\$args);
         } elseif (!is_null(\$this->_mockery_partial) && method_exists(\$this->_mockery_partial, \$method)) {
             return call_user_func_array(array(\$this->_mockery_partial, \$method), \$args);
+        } elseif (\$this->_mockery_deferMissing && is_callable("parent::\$method")) {
+            return call_user_func_array("parent::\$method", \$args);
         } elseif (\$this->_mockery_ignoreMissing) {
-            \$return = new \Mockery\Undefined;
-            return \$return;
+            if (\$this->_mockery_ignoreMissingAsUndefined === true) {
+                \$undef = new \Mockery\Undefined;
+                return call_user_func_array(array(\$undef, \$method), \$args);
+            } else {
+                return null;
+            }
         }
         throw new \BadMethodCallException(
             'Method ' . \$this->_mockery_name . '::' . \$method . '() does not exist on this mock object'
         );
+    }
+
+    /**
+     * Forward calls to this magic method to the __call method
+     */
+    public function __toString()
+    {
+        return \$this->__call('__toString', array());
     }
 
     public function mockery_verify()
@@ -467,15 +570,20 @@ BODY;
             return;
         }
         if (\$order < \$this->_mockery_currentOrder) {
-            throw new \Mockery\Exception(
+            \$exception = new \Mockery\Exception\InvalidOrderException(
                 'Method ' . \$this->_mockery_name . '::' . \$method . '()'
                 . ' called out of order: expected order '
                 . \$order . ', was ' . \$this->_mockery_currentOrder
             );
+            \$exception->setMock(\$this)
+                ->setMethodName(\$method)
+                ->setExpectedOrder(\$order)
+                ->setActualOrder(\$this->_mockery_currentOrder);
+            throw \$exception;
         }
         \$this->mockery_setCurrentOrder(\$order);
     }
-    
+
     public function mockery_getExpectationCount()
     {
         \$count = 0;
@@ -520,14 +628,19 @@ BODY;
     {
         return \$this->_mockery_mockableMethods;
     }
-    
+
     public function mockery_getMockableProperties()
     {
         return \$this->_mockery_mockableProperties;
     }
-    
+
+    public function mockery_callSubjectMethod(\$name, array \$args)
+    {
+        return call_user_func_array('parent::' . \$name, \$args);
+    }
+
     //** Everything below this line is not copied from/needed for Mockery/Mock **//
-    
+
     public function __wakeup()
     {
         /**
@@ -537,7 +650,7 @@ BODY;
          * mocking
          */
     }
-    
+
     public static function __callStatic(\$method, $typehint \$args)
     {
         try {
@@ -550,12 +663,19 @@ BODY;
             );
         }
     }
-    
+
     public function mockery_getExpectations()
     {
         return \$this->_mockery_expectations;
     }
-    
+
+    public function __isset(\$name)
+    {
+        if (false === stripos(\$name, '_mockery_') && method_exists(get_parent_class(\$this), '__isset')) {
+            return parent::__isset(\$name);
+        }
+    }
+
 MOCK;
         /**
          * Note: An instance mock allows the declaration of an instantiable class
@@ -564,9 +684,9 @@ MOCK;
          */
         if ($makeInstanceMock) {
             $mim = <<<MOCK
-    
-    protected \$_mockery_ignoreVerification = true;        
-    
+
+    protected \$_mockery_ignoreVerification = true;
+
     public function __construct()
     {
         \$this->_mockery_ignoreVerification = false;
@@ -586,7 +706,7 @@ MOCK;
             }
         }
         \Mockery::getContainer()->rememberMock(\$this);
-    }     
+    }
 MOCK;
             $std .= $mim;
         }

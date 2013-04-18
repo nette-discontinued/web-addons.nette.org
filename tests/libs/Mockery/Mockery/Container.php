@@ -69,6 +69,7 @@ class Container
         $partial = null;
         $expectationClosure = null;
         $quickdefs = array();
+        $constructorArgs = null;
         $blocks = array();
         $makeInstanceMock = false;
         $args = func_get_args();
@@ -76,7 +77,7 @@ class Container
         if (count($args) > 1) {
             $finalArg = end($args);
             reset($args);
-            if (is_callable($finalArg)) {
+            if (is_callable($finalArg) && !is_array($finalArg)) {
                 $expectationClosure = array_pop($args);
             }
         }
@@ -91,7 +92,7 @@ class Container
                             'Class name follows the format for defining multiple'
                             . ' interfaces, however one or more of the interfaces'
                             . ' do not exist or are not included, or the base class'
-                            . ' (optional) does not exist'
+                            . ' (which you may omit from the mock definition) does not exist'
                         );
                     }
                 }
@@ -119,12 +120,17 @@ class Container
             } elseif (is_string($arg) && (class_exists($arg, true) || interface_exists($arg, true))) {
                 $class = array_shift($args);
             } elseif (is_string($arg)) {
-                $name = array_shift($args);
+                $class = array_shift($args);
+                $this->declareClass($class);
             } elseif (is_object($arg)) {
                 $partial = array_shift($args);
-            } elseif (is_array($arg)) {
+            } elseif (is_array($arg) && array_keys($arg) !== range(0, count($arg) - 1)) {
+                // if associative array
                 if(array_key_exists(self::BLOCKS, $arg)) $blocks = $arg[self::BLOCKS]; unset($arg[self::BLOCKS]);
                 $quickdefs = array_shift($args);
+            } elseif (is_array($arg)) {
+                $constructorArgs = array_shift($args);
+                $blocks[] = "__construct"; // Assume they want to use the actual constructor regardless of other requirements
             } else {
                 throw new \Mockery\Exception(
                     'Unable to parse arguments sent to '
@@ -134,23 +140,23 @@ class Container
         }
         if (!is_null($name) && !is_null($class)) {
             if (!$makeInstanceMock) {
-                $mockName = \Mockery\Generator::createClassMock($class);
+                $mockName = \Mockery\Generator::createClassMock($class, null, null, $blocks);
             } else {
-                $mockName = \Mockery\Generator::createClassMock($class, null, null, array(), true);
+                $mockName = \Mockery\Generator::createClassMock($class, null, null, $blocks, true);
             }
             $result = class_alias($mockName, $name);
-            $mock = $this->_getInstance($name);
+            $mock = $this->_getInstance($name, $constructorArgs);
             $mock->mockery_init($class, $this);
         } elseif (!is_null($name)) {
             $mock = new \Mockery\Mock();
             $mock->mockery_init($name, $this);
         } elseif(!is_null($class)) {
-            $mockName = \Mockery\Generator::createClassMock($class, null, null, array(), false, $partialMethods);
-            $mock = $this->_getInstance($mockName);
+            $mockName = \Mockery\Generator::createClassMock($class, null, null, $blocks, false, $partialMethods);
+            $mock = $this->_getInstance($mockName, $constructorArgs);
             $mock->mockery_init($class, $this);
         } elseif(!is_null($partial)) {
             $mockName = \Mockery\Generator::createClassMock(get_class($partial), null, true, $blocks);
-            $mock = $this->_getInstance($mockName);
+            $mock = $this->_getInstance($mockName, $constructorArgs);
             $mock->mockery_init(get_class($partial), $this, $partial);
         } else {
             $mock = new \Mockery\Mock();
@@ -273,13 +279,18 @@ class Container
      * @throws \Mockery\Exception
      * @return void
      */
-    public function mockery_validateOrder($method, $order)
+    public function mockery_validateOrder($method, $order, \Mockery\MockInterface $mock)
     {
         if ($order < $this->_currentOrder) {
-            throw new \Mockery\Exception(
+            $exception = new \Mockery\Exception\InvalidOrderException(
                 'Method ' . $method . ' called out of order: expected order '
                 . $order . ', was ' . $this->_currentOrder
             );
+            $exception->setMock($mock)
+                ->setMethodName($method)
+                ->setExpectedOrder($order)
+                ->setActualOrder($this->_currentOrder);
+            throw $exception;
         }
         $this->mockery_setCurrentOrder($order);
     }
@@ -344,14 +355,45 @@ class Container
         if (isset($this->_mocks[$reference])) return $this->_mocks[$reference];
     }
     
-    protected function _getInstance($mockName)
+    protected function _getInstance($mockName, $constructorArgs = null)
     {
         if (!method_exists($mockName, '__construct')) {
             $return = new $mockName;
             return $return;
         }
+
+        if ($constructorArgs !== null) {
+            $r = new \ReflectionClass($mockName);
+            return $r->newInstanceArgs($constructorArgs);
+        }
+
         $return = unserialize(sprintf('O:%d:"%s":0:{}', strlen($mockName), $mockName));
         return $return;
+    }
+
+    /**
+     * Takes a class name and declares it
+     *
+     * @param string $fqcn
+     */
+    public function declareClass($fqcn)
+    {
+        if (false !== strpos($fqcn, '/')) {
+            throw new \Mockery\Exception(
+                'Class name contains a forward slash instead of backslash needed '
+                . 'when employing namespaces'
+            );
+        }
+        if (false !== strpos($fqcn, "\\")) {
+            $parts = array_filter(explode("\\", $fqcn), function($part) {
+                return $part !== "";
+            });
+            $cl = array_pop($parts);
+            $ns = implode("\\", $parts);
+            eval(" namespace $ns { class $cl {} }");
+        } else {
+            eval(" class $fqcn {} ");
+        }
     }
 
 }

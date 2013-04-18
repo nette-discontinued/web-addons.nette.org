@@ -122,6 +122,14 @@ class Expectation
      * @var bool
      */
     protected $_noArgsExpectation = false;
+
+    /**
+     * Flag indicating if the return value should be obtained from the original
+     * class method instead of returning predefined values from the return queue
+     *
+     * @var bool
+     */
+    protected $_passthru = false;
     
     /**
      * Constructor
@@ -158,6 +166,9 @@ class Expectation
     {
         $this->validateOrder();
         $this->_actualCount++;
+        if (true === $this->_passthru) {
+            return $this->_mock->mockery_callSubjectMethod($this->_name, $args);
+        }
         $return = $this->_getReturnValue($args);
         if ($return instanceof \Exception && $this->_throw === true) {
             throw $return;
@@ -217,11 +228,11 @@ class Expectation
     public function validateOrder()
     {
         if ($this->_orderNumber) {
-            $this->_mock->mockery_validateOrder((string) $this, $this->_orderNumber);
+            $this->_mock->mockery_validateOrder((string) $this, $this->_orderNumber, $this->_mock);
         }
         if ($this->_globalOrderNumber) {
             $this->_mock->mockery_getContainer()
-                ->mockery_validateOrder((string) $this, $this->_globalOrderNumber);
+                ->mockery_validateOrder((string) $this, $this->_globalOrderNumber, $this->_mock);
         }
     }
     
@@ -339,6 +350,17 @@ class Expectation
         $this->_returnQueue = func_get_args();
         return $this;
     }
+
+    /**
+     * Set a sequential queue of return values with an array
+     *
+     * @return self
+     */
+    public function andReturnValues(array $values)
+    {
+        call_user_func_array(array($this, 'andReturn'), $values);
+        return $this;
+    }
     
     /**
      * Set a closure or sequence of closures with which to generate return
@@ -361,6 +383,16 @@ class Expectation
     public function andReturnUndefined()
     {
         $this->andReturn(new \Mockery\Undefined);
+        return $this;
+    }
+
+    /**
+     * Return null. This is merely a language construct for Mock describing.
+     *
+     * @return self
+     */
+    public function andReturnNull()
+    {
         return $this;
     }
     
@@ -577,6 +609,24 @@ class Expectation
     public function getMock()
     {
         return $this->_mock;
+    }
+
+    /**
+     * Flag this expectation as calling the original class method with the
+     * any provided arguments instead of using a return value queue.
+     *
+     * @return self
+     */
+    public function passthru()
+    {
+        if ($this->_mock instanceof Mock) {
+            throw new Exception(
+                'Mock Objects not created from a loaded/existing class are '
+                . 'incapable of passing method calls through to a parent class'
+            );
+        }
+        $this->_passthru = true;
+        return $this;
     }
     
     /**
