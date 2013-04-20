@@ -28,8 +28,8 @@ class DevelopmentUtils extends \Nette\Object
 		$connection = $this->db;
 		$tables = $connection->getSupplementalDriver()->getTables();
 		foreach ($tables as $table) {
-			$connection->exec('SET foreign_key_checks = 0');
-			$connection->exec("DROP TABLE `{$table['name']}`");
+			$connection->query('SET foreign_key_checks = 0');
+			$connection->query("DROP TABLE `{$table['name']}`");
 		}
 
 		$this->executeFile(__DIR__ . '/db/schema.sql');
@@ -123,7 +123,7 @@ class DevelopmentUtils extends \Nette\Object
 				if (!$found || $found == $delimiter) { // end of a query
 					$q = substr($query, 0, $match[0][1]);
 
-					$this->db->exec($q);
+					$this->db->query($q);
 
 					$query = substr($query, $offset);
 					$offset = 0;
