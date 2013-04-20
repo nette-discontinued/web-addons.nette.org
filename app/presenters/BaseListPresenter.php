@@ -12,27 +12,17 @@ use NetteAddons\Model\Addons,
  */
 abstract class BaseListPresenter extends BasePresenter
 {
-	/** @var Model\Addons */
-	protected $addons;
-
-	/** @var Model\AddonVotes */
-	protected $addonVotes;
-
+	/**
+	 * @var Model\Addons
+	 * @inject
+	 */
+	public $addons;
 
 	/**
-	 * @param Model\Addons
+	 * @var Model\AddonVotes
+	 * @inject
 	 */
-	public function injectAddons(Addons $addons)
-	{
-		$this->addons = $addons;
-	}
-
-
-
-	public function injectAddonsVotes(AddonVotes $addonVotes)
-	{
-		$this->addonVotes = $addonVotes;
-	}
+	public $addonVotes;
 
 
 

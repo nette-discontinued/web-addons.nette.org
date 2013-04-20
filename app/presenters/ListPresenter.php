@@ -10,7 +10,6 @@ use Nette\Application\UI\Form;
  */
 final class ListPresenter extends BaseListPresenter
 {
-
 	/**
 	 * @param string|NULL
 	 */

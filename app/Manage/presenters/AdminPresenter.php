@@ -13,41 +13,29 @@ use NetteAddons\Forms\Form,
  */
 final class AdminPresenter extends \NetteAddons\BasePresenter
 {
-	/** @var \NetteAddons\Model\Addons */
-	private $addons;
-
-	/** @var \NetteAddons\Model\AddonVotes */
-	private $addonVotes;
-
-	/** @var \NetteAddons\Model\AddonReports */
-	private $reports;
-
-	/** @var Forms\ReportFormFactory */
-	private $reportForm;
-
-
+	/**
+	 * @var \NetteAddons\Model\Addons
+	 * @inject
+	 */
+	public $addons;
 
 	/**
-	 * @param \NetteAddons\Model\Addons
-	 * @param \NetteAddons\Model\AddonVotes
-	 * @param \NetteAddons\Model\AddonReports
+	 * @var \NetteAddons\Model\AddonVotes
+	 * @inject
 	 */
-	public function injectModel(Addons $addons, AddonVotes $addonVotes, AddonReports $report)
-	{
-		$this->addons = $addons;
-		$this->addonVotes = $addonVotes;
-		$this->reports = $report;
-	}
-
-
+	public $addonVotes;
 
 	/**
-	 * @param Forms\ReportFormFactory
+	 * @var \NetteAddons\Model\AddonReports
+	 * @inject
 	 */
-	public function injectForms(Forms\ReportFormFactory $reportForm)
-	{
-		$this->reportForm = $reportForm;
-	}
+	public $reports;
+
+	/**
+	 * @var Forms\ReportFormFactory
+	 * @inject
+	 */
+	public $reportForm;
 
 
 

@@ -20,41 +20,29 @@ use Nette\Utils\Json,
  */
 final class GithubPresenter extends \NetteAddons\BasePresenter
 {
-	/** @var \NetteAddons\Model\Facade\AddonManageFacade */
-	private $manager;
-
-	/** @var \NetteAddons\Model\Importers\RepositoryImporterManager */
-	private $importerManager;
-
-	/** @var \NetteAddons\Model\Users */
-	private $users;
-
-	/** @var \NetteAddons\Model\Addons */
-	private $addons;
-
-
+	/**
+	 * @var \NetteAddons\Model\Facade\AddonManageFacade
+	 * @inject
+	 */
+	public $manager;
 
 	/**
-	 * @param \NetteAddons\Model\Facade\AddonManageFacade
-	 * @param \NetteAddons\Model\Importers\RepositoryImporterManager
+	 * @var \NetteAddons\Model\Importers\RepositoryImporterManager
+	 * @inject
 	 */
-	public function injectManagers(AddonManageFacade $manager, RepositoryImporterManager $importerManager)
-	{
-		$this->manager = $manager;
-		$this->importerManager = $importerManager;
-	}
-
-
+	public $importerManager;
 
 	/**
-	 * @param \NetteAddons\Model\Users
-	 * @param \NetteAddons\Model\Addons
+	 * @var \NetteAddons\Model\Users
+	 * @inject
 	 */
-	public function injectServices(Users $users, Addons $addons)
-	{
-		$this->users = $users;
-		$this->addons = $addons;
-	}
+	public $users;
+
+	/**
+	 * @var \NetteAddons\Model\Addons
+	 * @inject
+	 */
+	public $addons;
 
 
 

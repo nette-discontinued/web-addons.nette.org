@@ -15,6 +15,24 @@ use Nette\Utils\Strings,
 abstract class BasePresenter extends \NetteAddons\BasePresenter
 {
 	/**
+	 * @var \NetteAddons\Model\Facade\AddonManageFacade
+	 * @inject
+	 */
+	public $manager;
+
+	/**
+	 * @var \NetteAddons\Model\Importers\RepositoryImporterManager
+	 * @inject
+	 */
+	public $importerManager;
+
+	/**
+	 * @var \NetteAddons\Model\Addons
+	 * @inject
+	 */
+	public $addons;
+
+	/**
 	 * @var string token used for storing addon in session
 	 * @persistent
 	 */
@@ -26,47 +44,8 @@ abstract class BasePresenter extends \NetteAddons\BasePresenter
 	 */
 	public $addonId;
 
-	/** @var \NetteAddons\Model\Facade\AddonManageFacade */
-	protected $manager;
-
-	/** @var \NetteAddons\Model\Importers\RepositoryImporterManager */
-	protected $importerManager;
-
-	/** @var \NetteAddons\Model\Addons */
-	protected $addons;
-
 	/** @var \NetteAddons\Model\Addon|NULL from the session. */
 	protected $addon;
-
-
-
-	/**
-	 * @param \NetteAddons\Model\Facade\AddonManageFacade
-	 */
-	public function injectManager(AddonManageFacade $manager)
-	{
-		$this->manager = $manager;
-	}
-
-
-
-	/**
-	 * @param \NetteAddons\Model\Importers\RepositoryImporterManager $manager
-	 */
-	public function injectImporterManager(RepositoryImporterManager $manager)
-	{
-		$this->importerManager = $manager;
-	}
-
-
-
-	/**
-	 * @param \NetteAddons\Model\Addons $addons
-	 */
-	public function injectAddonsTable(Addons $addons)
-	{
-		$this->addons = $addons;
-	}
 
 
 

@@ -19,28 +19,23 @@ use NetteAddons\Model\Addon,
  */
 final class ComposerPresenter extends \NetteAddons\BasePresenter
 {
-	/** @var Addons */
-	private $addons;
-
-	/** @var AddonDownloads */
-	private $addonDownloads;
-
-	/** @var AddonVersions */
-	private $addonVersions;
-
-
+	/**
+	 * @var \NetteAddons\Model\Addons
+	 * @inject
+	 */
+	public $addons;
 
 	/**
-	 * @param Addons
-	 * @param AddonDownloads
-	 * @param AddonVersions
+	 * @var \NetteAddons\Model\AddonDownloads
+	 * @inject
 	 */
-	public function injectAddons(Addons $addons, AddonDownloads $downloads, AddonVersions $versions)
-	{
-		$this->addons = $addons;
-		$this->addonDownloads = $downloads;
-		$this->addonVersions = $versions;
-	}
+	public $addonDownloads;
+
+	/**
+	 * @var \NetteAddons\Model\AddonVersions
+	 * @inject
+	 */
+	public $addonVersions;
 
 
 

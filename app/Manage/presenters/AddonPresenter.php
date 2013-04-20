@@ -11,57 +11,29 @@ use NetteAddons\Forms\Form,
  */
 final class AddonPresenter extends BasePresenter
 {
-	/** @var Forms\AddAddonFormFactory */
-	private $addAddonForm;
-
-	/** @var Forms\EditAddonFormFactory */
-	private $editAddonForm;
-
-	/** @var Forms\ImportAddonFormFactory */
-	private $importAddonForm;
-
-	/** @var \NetteAddons\Model\Utils\Validators */
-	private $validators;
-
-
+	/**
+	 * @var Forms\AddAddonFormFactory
+	 * @inject
+	 */
+	public $addAddonForm;
 
 	/**
-	 * @param Forms\AddAddonFormFactory
+	 * @var Forms\EditAddonFormFactory
+	 * @inject
 	 */
-	public function injectAddForm(Forms\AddAddonFormFactory $addAddonForm)
-	{
-		$this->addAddonForm = $addAddonForm;
-	}
-
-
+	public $editAddonForm;
 
 	/**
-	 * @param Forms\EditAddonFormFactory
+	 * @var Forms\ImportAddonFormFactory
+	 * @inject
 	 */
-	public function injectEditForm(Forms\EditAddonFormFactory $editAddonForm)
-	{
-		$this->editAddonForm = $editAddonForm;
-	}
-
-
+	public $importAddonForm;
 
 	/**
-	 * @param Forms\ImportAddonFormFactory
+	 * @var \NetteAddons\Model\Utils\Validators
+	 * @inject
 	 */
-	public function injectImportForm(Forms\ImportAddonFormFactory $importAddonForm)
-	{
-		$this->importAddonForm = $importAddonForm;
-	}
-
-
-
-	/**
-	 * @param \NetteAddons\Model\Utils\Validators
-	 */
-	public function injectValidators(Validators $validators)
-	{
-		$this->validators = $validators;
-	}
+	public $validators;
 
 
 

@@ -30,58 +30,41 @@ final class DetailPresenter extends BasePresenter
 	/** @var Addon */
 	private $addon;
 
-	/** @var Addons */
-	private $addons;
-
-	/** @var AddonDownloads */
-	private $addonDownloads;
-
-	/** @var AddonVersions */
-	private $addonVersions;
-
-	/** @var AddonVotes */
-	private $addonVotes;
-
-	/** @var Forms\ReportFormFactory */
-	private $reportForm;
-
-	/** @var IStorage */
-	private $cacheStorage;
-
+	/**
+	 * @var Addons
+	 * @inject
+	 */
+	public $addons;
 
 	/**
-	 * @param Addons
-	 * @param AddonDownloads
-	 * @param AddonVersions
-	 * @param AddonVotes
+	 * @var AddonDownloads
+	 * @inject
 	 */
-	public function injectAddons(Addons $addons, AddonDownloads $downloads, AddonVersions $versions, AddonVotes $votes)
-	{
-		$this->addons = $addons;
-		$this->addonDownloads = $downloads;
-		$this->addonVersions = $versions;
-		$this->addonVotes = $votes;
-	}
-
-
+	public $addonDownloads;
 
 	/**
-	 * @param Forms\ReportFormFactory
+	 * @var AddonVersions
+	 * @inject
 	 */
-	public function injectForms(Forms\ReportFormFactory $reportForm)
-	{
-		$this->reportForm = $reportForm;
-	}
-
-
+	public $addonVersions;
 
 	/**
-	 * @param IStorage
+	 * @var AddonVotes
+	 * @inject
 	 */
-	public function injectCacheStorage(IStorage $storage)
-	{
-		$this->cacheStorage = $storage;
-	}
+	public $addonVotes;
+
+	/**
+	 * @var Forms\ReportFormFactory
+	 * @inject
+	 */
+	public $reportForm;
+
+	/**
+	 * @var IStorage
+	 * @inject
+	 */
+	public $cacheStorage;
 
 
 

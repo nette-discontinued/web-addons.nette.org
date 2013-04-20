@@ -16,18 +16,11 @@ final class PagePresenter extends BasePresenter
 	/** @var \Nette\Database\Table\ActiveRow|string */
 	private $page;
 
-	/** @var Forms\EditPageFormFactory */
-	private $editPageForm;
-
-
-
 	/**
-	 * @param Forms\EditPageFormFactory
+	 * @var Forms\EditPageFormFactory
+	 * @inject
 	 */
-	public function injectForms(Forms\EditPageFormFactory $editPageForm)
-	{
-		$this->editPageForm = $editPageForm;
-	}
+	public $editPageForm;
 
 
 

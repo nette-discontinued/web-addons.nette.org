@@ -3,72 +3,47 @@
 namespace NetteAddons;
 
 use NetteAddons\Model,
-	NetteAddons\Model\Authorizator,
 	Nette\Application\UI;
 
 
 
 abstract class BasePresenter extends \Nette\Application\UI\Presenter
 {
-	/** @var Authorizator */
-	protected $auth;
-
-	/** @var HelperLoader */
-	private $helperLoader;
-
-	/** @var Model\Tags */
-	protected $tags;
-
-	/** @var Model\Pages */
-	protected $pages;
-
-	/** @var Model\Utils\Licenses */
-	protected $licenses;
-
-	/** @var TextPreprocessor */
-	protected $textPreprocessor;
-
-
-
-	public function injectAuthorizator(Authorizator $auth)
-	{
-		$this->auth = $auth;
-	}
-
+	/**
+	 * @var Model\Authorizator
+	 * @inject
+	 */
+	public $auth;
 
 	/**
-	 * @param HelperLoader
+	 * @var HelperLoader
+	 * @inject
 	 */
-	public function injectHelperLoader(HelperLoader $loader)
-	{
-		$this->helperLoader = $loader;
-	}
-
-
+	public $helperLoader;
 
 	/**
-	 * @param Model\Tags
-	 * @param Model\Pages
+	 * @var Model\Tags
+	 * @inject
 	 */
-	public function injectPrimaryModels(Model\Tags $tags, Model\Pages $pages)
-	{
-		$this->tags = $tags;
-		$this->pages = $pages;
-	}
+	public $tags;
 
+	/**
+	 * @var Model\Pages
+	 * @inject
+	 */
+	public $pages;
 
+	/**
+	 * @var Model\Utils\Licenses
+	 * @inject
+	 */
+	public $licenses;
 
-	public function injectLicenses(Model\Utils\Licenses $licenses)
-	{
-		$this->licenses = $licenses;
-	}
-
-
-
-	public function injectTextPreprocessor(TextPreprocessor $factory)
-	{
-		$this->textPreprocessor = $factory;
-	}
+	/**
+	 * @var TextPreprocessor
+	 * @inject
+	 */
+	public $textPreprocessor;
 
 
 	/**

@@ -13,17 +13,11 @@ final class HomepagePresenter extends BaseListPresenter
 {
 	const ADDONS_LIMIT = 3;
 
-	/** @var Model\DevelopmentUtils */
-	private $developmentUtils;
-
-
 	/**
-	 * @param Model\DevelopmentUtils
+	 * @var Model\DevelopmentUtils
+	 * @inject
 	 */
-	public function injectDevelopmentUtils(DevelopmentUtils $developmentUtils)
-	{
-		$this->developmentUtils = $developmentUtils;
-	}
+	public $developmentUtils;
 
 
 

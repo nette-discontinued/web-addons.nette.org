@@ -11,36 +11,23 @@ use NetteAddons\Model\Users,
  */
 final class VersionsPresenter extends BasePresenter
 {
-	/** @var Forms\AddVersionFormFactory */
-	private $addVersionForm;
-
-	/** @var \NetteAddons\Model\AddonVersions */
-	private $versions;
-
-	/** @var \NetteAddons\Model\Users */
-	private $users;
-
-
+	/**
+	 * @var Forms\AddVersionFormFactory
+	 * @inject
+	 */
+	public $addVersionForm;
 
 	/**
-	 * @param Forms\AddVersionFormFactory
+	 * @var \NetteAddons\Model\AddonVersions
+	 * @inject
 	 */
-	public function injectAddForm(Forms\AddVersionFormFactory $addVersionForm)
-	{
-		$this->addVersionForm = $addVersionForm;
-	}
-
-
+	public $versions;
 
 	/**
-	 * @param \NetteAddons\Model\AddonVersions
-	 * @param \NetteAddons\Model\Users
+	 * @var \NetteAddons\Model\Users
+	 * @inject
 	 */
-	public function injectTables(AddonVersions $versions, Users $users)
-	{
-		$this->versions = $versions;
-		$this->users = $users;
-	}
+	public $users;
 
 
 

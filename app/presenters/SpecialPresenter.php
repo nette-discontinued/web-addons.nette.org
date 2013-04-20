@@ -7,18 +7,11 @@ namespace NetteAddons;
  */
 final class SpecialPresenter extends BasePresenter
 {
-	/** @var Model\Addons */
-	private $addons;
-
-
-
 	/**
-	 * @param Model\Addons
+	 * @var Model\Addons
+	 * @inject
 	 */
-	public function injectModel(Model\Addons $addons)
-	{
-		$this->addons = $addons;
-	}
+	public $addons;
 
 
 

@@ -14,18 +14,11 @@ use Nette\Http\Request,
  */
 final class SignPresenter extends BasePresenter
 {
-	/** @var \Nette\Application\Routers\RouteList */
-	private $router;
-
-
-
 	/**
-	 * @param \Nette\Application\Routers\RouteList
+	 * @var \Nette\Application\Routers\RouteList
+	 * @inject
 	 */
-	public function injectRouter(RouteList $router)
-	{
-		$this->router = $router;
-	}
+	public $router;
 
 
 
