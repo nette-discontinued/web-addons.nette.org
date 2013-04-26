@@ -77,7 +77,7 @@ $(document).ready(function() {
 			}
 		});
 
-		$searchInput.keyup(function(e) {
+		var searchCallback = function(e) {
 			var query = $.trim(e.target.value).toLowerCase();
 			if (query.length === 0) {
 				$list.show();
@@ -100,7 +100,9 @@ $(document).ready(function() {
 					odd = !odd;
 				});
 			}
-		});
+		};
+		$searchInput.keyup(searchCallback);		
+		$searchInput.bind('search', searchCallback);
 
 		$('#categories-list').find('a').click(function() {
 			$searchInput.val('').keyup();
