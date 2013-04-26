@@ -8,7 +8,6 @@ use Nette\Http,
 	NetteAddons\Model\AddonDownloads,
 	NetteAddons\Model\AddonVersions,
 	NetteAddons\Model\AddonVotes,
-	Nette\Caching\IStorage,
 	Nette\Caching\Cache;
 
 
@@ -27,29 +26,29 @@ final class DetailPresenter extends BasePresenter
 	 */
 	public $id;
 
-	/** @var Addon */
+	/** @var Model\Addon */
 	private $addon;
 
 	/**
-	 * @var Addons
+	 * @var Model\Addons
 	 * @inject
 	 */
 	public $addons;
 
 	/**
-	 * @var AddonDownloads
+	 * @var Model\AddonDownloads
 	 * @inject
 	 */
 	public $addonDownloads;
 
 	/**
-	 * @var AddonVersions
+	 * @var Model\AddonVersions
 	 * @inject
 	 */
 	public $addonVersions;
 
 	/**
-	 * @var AddonVotes
+	 * @var Model\AddonVotes
 	 * @inject
 	 */
 	public $addonVotes;
@@ -61,7 +60,7 @@ final class DetailPresenter extends BasePresenter
 	public $reportForm;
 
 	/**
-	 * @var IStorage
+	 * @var \Nette\Caching\IStorage
 	 * @inject
 	 */
 	public $cacheStorage;
