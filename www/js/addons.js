@@ -77,7 +77,7 @@ $(document).ready(function() {
 			}
 		});
 
-		$searchInput.keyup(function(e) {
+		$searchInput.on('search keyup', function(e) {
 			var query = $.trim(e.target.value).toLowerCase();
 			if (query.length === 0) {
 				$list.show();
