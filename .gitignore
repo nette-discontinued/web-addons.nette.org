@@ -1,5 +1,4 @@
 /libs
-/composer.lock
 /app/config/config.local.neon
 *.sublime*
 .DS_Store
