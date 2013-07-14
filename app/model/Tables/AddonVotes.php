@@ -10,6 +10,7 @@ use Nette;
  * Repository for addon votes.
  *
  * @author Jan Tvrdík
+ * @author Jan Skrasek
  */
 class AddonVotes extends Table
 {
@@ -49,20 +50,12 @@ class AddonVotes extends Table
 	/**
 	 * Calculates addon popularity.
 	 *
-	 * @param  int addon id
 	 * @return \stdClass
 	 */
-	public function calculatePopularity($addonId)
+	public function calculatePopularity(Nette\Database\Table\IRow $addon)
 	{
-		$minus = $this->findAll()->select('COUNT(*) AS c')
-			->where('addonId', $addonId)
-			->where('vote', -1)
-			->fetch()->c;
-
-		$plus = $this->findAll()->select('COUNT(*) AS c')
-			->where('addonId', $addonId)
-			->where('vote', 1)
-			->fetch()->c;
+		$plus = $addon->related($this->tableName)->where('vote', 1)->count('*');
+		$minus = $addon->related($this->tableName)->where('vote', -1)->count('*');
 
 		$total = $minus + $plus;
 		$percent = ($total > 0 ? ($plus / $total) : 0.5) * 100;

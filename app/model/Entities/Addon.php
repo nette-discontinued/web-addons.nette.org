@@ -11,6 +11,7 @@ use Nette,
 /**
  * @author Filip Procházka <filip.prochazka@kdyby.org>
  * @author Patrik Votoček
+ * @author Jan Skrasek
  *
  * @property string $composerFullName
  */
@@ -60,6 +61,9 @@ class Addon extends Nette\Object
 	/** @var AddonVersion[] (versionNumber => AddonVersion) */
 	public $versions = array();
 
+	/** @var \stdClass */
+	public $votes;
+
 	/** @var Tag[]|string[]|int[] (tagId => Tag (from db) or # => tagName (new user-created tags) or # => tagId */
 	public $tags = array();
 
@@ -82,9 +86,10 @@ class Addon extends Nette\Object
 	 * @todo   Consider lazy loading for versions and tags.
 	 *
 	 * @param  Nette\Database\Table\ActiveRow
+	 * @param  AddonVotes
 	 * @return Addon
 	 */
-	public static function fromActiveRow(Nette\Database\Table\ActiveRow $row)
+	public static function fromActiveRow(Nette\Database\Table\ActiveRow $row, AddonVotes $addonVotes = NULL)
 	{
 		$addon = new static;
 		$addon->id = (int) $row->id;
@@ -113,6 +118,10 @@ class Addon extends Nette\Object
 
 		foreach ($row->related('tags') as $tagRow) {
 			$addon->tags[$tagRow->tag->id] = Tag::fromActiveRow($tagRow->tag);
+		}
+
+		if ($addonVotes) {
+			$addon->votes = $addonVotes->calculatePopularity($row);
 		}
 
 		return $addon;

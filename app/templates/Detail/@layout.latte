@@ -67,7 +67,7 @@
 		<table class="table-vote">
 			<tr>
 				<td class="thumb">
-					<span class="num">{$minus}×</span>
+					<span class="num">{$addon->votes->minus}×</span>
 					{if $auth->isAllowed($addon, 'vote')}
 						<a n:href="vote! vote => ($myVote < 0) ? cancel : down" class="ajax"><i class="icon-thumb_down" title="{if $myVote < 0}remove my vote{else}vote down{/if}"></i></a>
 					{else}
@@ -75,12 +75,12 @@
 					{/if}
 				</td>
 				<td class="wrap-progress">
-					<div n:class="progress, progress-yesno, progress-success, $plus == 0 && $minus == 0 ? progress-disabled">
-						<div class="bar" title="{$percents|number:2 } %" style="width: {!=100-$percents}%;"></div>
+					<div n:class="progress, progress-yesno, progress-success, $addon->votes->plus == 0 && $addon->votes->minus == 0 ? progress-disabled">
+						<div class="bar" title="{$addon->votes->percent|number:2 } %" style="width: {!=100-$addon->votes->percent}%;"></div>
 					</div>
 				</td>
 				<td class="thumb">
-					<span class="num">{$plus}×</span>
+					<span class="num">{$addon->votes->plus}×</span>
 					{if $auth->isAllowed($addon, 'vote')}
 						<a n:href="vote! vote => ($myVote > 0) ? cancel : up" class="ajax"><i class="icon-thumb_up" title="{if $myVote > 0}remove my vote{else}vote up{/if}"></i></a>
 					{else}

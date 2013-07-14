@@ -7,7 +7,7 @@
 					<td class="name"><a title="{$addon->name}" n:href=":Detail: id => $addon->id">{$addon->name}</a></td>
 					<td class="description">{$addon->shortDescription}</td>
 					<td title="Downloads & Installs" style="text-align: right;">{$score}×</td>
-					<td title="Vote score">{=$addonVotes($addon->id)->percent|number:0}&nbsp;%</td>
+					<td title="Vote score">{=$addonVotes($addon)->percent|number:0}&nbsp;%</td>
 				</tr>
 			{/foreach}
 		</tbody>

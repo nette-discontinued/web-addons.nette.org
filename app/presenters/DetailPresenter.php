@@ -75,7 +75,7 @@ final class DetailPresenter extends BasePresenter
 			$this->error('Addon not found!');
 		}
 
-		$this->addon = Addon::fromActiveRow($row);
+		$this->addon = Addon::fromActiveRow($row, $this->addonVotes);
 		$this->addonVersions->rsort($this->addon->versions);
 	}
 
@@ -209,7 +209,6 @@ final class DetailPresenter extends BasePresenter
 		parent::beforeRender();
 
 		$currentVersion = $this->addonVersions->getCurrent($this->addon->versions);
-		$popularity = $this->addonVotes->calculatePopularity($this->addon->id);
 
 		if ($this->getUser()->isLoggedIn()) {
 			$row = $this->addonVotes->findOneBy(array(
@@ -244,9 +243,6 @@ final class DetailPresenter extends BasePresenter
 		$this->template->version = $currentVersion;
 		$this->template->composer = $currentVersion->composerJson;
 
-		$this->template->plus = $popularity->plus;
-		$this->template->minus = $popularity->minus;
-		$this->template->percents = $popularity->percent;
 		$this->template->myVote = $myVote;
 		$this->template->usageStatistics = $usageStatistics;
 		$this->template->showUsageStatistics = array_sum(array_map(function ($item) {
