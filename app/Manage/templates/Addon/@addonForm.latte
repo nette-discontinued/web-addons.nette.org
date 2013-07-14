@@ -37,7 +37,14 @@
 		{input shortDescription class => 'input-full text'}
 	</div>
 	<div n:class="controls, $_form['description']->required ? required">
-		{label description /}{ifset $_form['descriptionFormat']}&nbsp;{label descriptionFormat class => 'hide' /}{foreach array_keys($_form['descriptionFormat']->items) as $item}{$_form['descriptionFormat']->getControl($item)}{sep}&nbsp;{/sep}{/foreach}{/ifset}<br>
+		{label description /}
+		{foreach $form[descriptionFormat]->items as $key => $label}
+			{input descriptionFormat:$key}
+			{label descriptionFormat:$key /}
+			{sep}&nbsp;{/sep}
+		{/foreach}
+		<br>
+
 		{input description class => 'input-full fullscreenable'}
 	</div>
 
