@@ -57,8 +57,8 @@ class VersionForm extends \NetteAddons\Forms\BaseForm
 		);
 		$this->addSelect('how', 'How would you like to provide source codes?', $providers)
 			->setRequired()
-			->addCondition(self::EQUAL, 'link')->toggle('xlink')
-			->addCondition(self::EQUAL, 'upload')->toggle('xupload');
+			->addCondition(self::EQUAL, 'link')->toggle('xlink')->endCondition()
+			->addCondition(self::EQUAL, 'upload')->toggle('xupload')->endCondition();
 
 		$this->addText('archiveLink', 'Link to ZIP archive')
 			->setOption('id', 'xlink')
