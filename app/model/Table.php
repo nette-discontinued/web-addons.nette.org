@@ -16,13 +16,15 @@ abstract class Table extends Nette\Object
 	/** @var Nette\Database\Connection */
 	protected $connection;
 
-
+	/** @var Nette\Database\SelectionFactory */
+	protected $selectionFactory;
 
 	/**
 	 * @param  Nette\Database\Connection
-	 * @throws \NetteAddons\InvalidStateException
+	 * @param  Nette\Database\SelectionFactory
+	 * @throws NetteAddons\InvalidStateException
 	 */
-	public function __construct(Nette\Database\Connection $db)
+	public function __construct(Nette\Database\Connection $db, Nette\Database\SelectionFactory $selectionFactory)
 	{
 		if (!isset($this->tableName)) {
 			$class = get_called_class();
@@ -30,6 +32,7 @@ abstract class Table extends Nette\Object
 		}
 
 		$this->connection = $db;
+		$this->selectionFactory = $selectionFactory;
 	}
 
 
@@ -39,7 +42,7 @@ abstract class Table extends Nette\Object
 	 */
 	protected function getTable()
 	{
-		return $this->connection->table($this->tableName);
+		return $this->selectionFactory->table($this->tableName);
 	}
 
 

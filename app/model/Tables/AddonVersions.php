@@ -32,9 +32,9 @@ class AddonVersions extends Table
 	 * @param  Nette\Database\Connection
 	 * @param  Utils\VersionParser
 	 */
-	public function __construct(Nette\Database\Connection $dbConn, VersionDependencies $dependencies, Utils\VersionParser $parser)
+	public function __construct(Nette\Database\Connection $dbConn, Nette\Database\SelectionFactory $selectionFactory, VersionDependencies $dependencies, Utils\VersionParser $parser)
 	{
-		parent::__construct($dbConn);
+		parent::__construct($dbConn, $selectionFactory);
 		$this->dependencies = $dependencies;
 		$this->parser = $parser;
 	}

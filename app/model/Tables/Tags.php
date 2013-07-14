@@ -122,7 +122,7 @@ class Tags extends Table
 	 */
 	protected function getAddonTags()
 	{
-		return $this->connection->table('addons_tags');
+		return $this->selectionFactory->table('addons_tags');
 	}
 
 

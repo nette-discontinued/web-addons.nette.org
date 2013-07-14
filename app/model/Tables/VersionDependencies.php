@@ -60,7 +60,7 @@ class VersionDependencies extends Table
 			$composerVendor = $data['vendor'];
 			$composerName = $data['name'];
 		}
-		return $this->connection->table('addons')
+		return $this->selectionFactory->table('addons')
 			->where(array('composerVendor' => $composerVendor, 'composerName' => $composerName))
 			->limit(1)->fetch();
 	}

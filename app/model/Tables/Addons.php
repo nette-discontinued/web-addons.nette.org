@@ -34,9 +34,9 @@ class Addons extends Table
 
 
 
-	public function __construct(Nette\Database\Connection $dbConn, AddonVersions $versions, Tags $tags)
+	public function __construct(Nette\Database\Connection $dbConn, Nette\Database\SelectionFactory $selectionFactory, AddonVersions $versions, Tags $tags)
 	{
-		parent::__construct($dbConn);
+		parent::__construct($dbConn, $selectionFactory);
 		$this->versions = $versions;
 		$this->tags = $tags;
 	}
@@ -215,7 +215,7 @@ class Addons extends Table
 	 */
 	public function filterByTag(Selection $addons, $tagId)
 	{
-		$addonIds = $this->connection->table('addons_tags')
+		$addonIds = $this->selectionFactory->table('addons_tags')
 			->where('tagId = ?', $tagId)->select('addonId');
 
 		return $addons->where('id', $addonIds);

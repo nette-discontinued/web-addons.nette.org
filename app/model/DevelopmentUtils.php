@@ -12,13 +12,17 @@ class DevelopmentUtils extends \Nette\Object
 
 	private $db;
 
+	/** @var \Nette\Database\SelectionFactory */
+	private $sf;
+
 	private $cacheStorage;
 
 
-	public function __construct(\Nette\Database\Connection $db, \Nette\Caching\IStorage $cacheStorage)
+	public function __construct(\Nette\Database\Connection $db, \Nette\Database\SelectionFactory $sf,  \Nette\Caching\IStorage $cacheStorage)
 	{
 		$this->db = $db;
 		$this->cacheStorage = $cacheStorage;
+		$this->sf = $sf;
 	}
 
 
@@ -49,8 +53,8 @@ class DevelopmentUtils extends \Nette\Object
 	{
 		$this->db->beginTransaction();
 
-		foreach ($this->db->table('addons_versions') as $version) {
-			foreach ($this->db->table('users') as $user) {
+		foreach ($this->sf->table('addons_versions') as $version) {
+			foreach ($this->sf->table('users') as $user) {
 				$limit = mt_rand(0, $maxCount);
 				for ($i=0;$i<$limit;$i++) {
 					$this->addDownloadOrInstall('download', $days, $version->id, $user->id);
@@ -82,7 +86,7 @@ class DevelopmentUtils extends \Nette\Object
 		$datetime = \DateTime::createFromFormat('U', time() - ((int)(mt_rand(0, $days*24*60*60))));
 		$ip = mt_rand(0, 254).'.'.mt_rand(0, 254).'.'.mt_rand(0, 254).'.'.mt_rand(0, 254);
 
-		$this->db->table('addons_downloads')->insert(array(
+		$this->sf->table('addons_downloads')->insert(array(
 			'versionId' => $versionId,
 			'userId' => $userId,
 			'ipAddress' => $ip,
