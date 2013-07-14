@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "3e592f0be7106d83681aab26dd7959e7",
+    "hash": "8e20b92aade8e33f1525659b985efcd4",
     "packages": [
         {
             "name": "composer/composer",
@@ -280,21 +280,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/nette.git",
-                "reference": "0c87249e07a2f7a33acdb382442c012840df9415"
+                "reference": "22ab32d0f837364463a8e13cec9c3bfe96ba6bc3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/nette/zipball/0c87249e07a2f7a33acdb382442c012840df9415",
-                "reference": "0c87249e07a2f7a33acdb382442c012840df9415",
+                "url": "https://api.github.com/repos/nette/nette/zipball/22ab32d0f837364463a8e13cec9c3bfe96ba6bc3",
+                "reference": "22ab32d0f837364463a8e13cec9c3bfe96ba6bc3",
                 "shasum": ""
             },
             "require": {
                 "ext-iconv": "*",
                 "ext-tokenizer": "*",
                 "php": ">=5.3.0"
-            },
-            "replace": {
-                "nette/nette-minified": "self.version"
             },
             "require-dev": {
                 "nette/tester": "@dev"
@@ -349,7 +346,7 @@
                 "neon",
                 "templating"
             ],
-            "time": "2013-07-12 15:14:33"
+            "time": "2013-07-13 18:05:23"
         },
         {
             "name": "seld/jsonlint",
