@@ -22,7 +22,7 @@
 	"require": {
 		"php": ">=5.3.0",
 		"nette/nette": "dev-master",
-		"dg/texy": "2.2.*",
+		"texy/texy": "~2.2.0",
 		"composer/composer": "dev-master",
 		"kukulich/fshl": "dev-develop",
 		"michelf/php-markdown": "1.2.5",

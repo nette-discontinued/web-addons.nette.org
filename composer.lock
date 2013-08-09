@@ -75,29 +75,36 @@
             "time": "2013-07-10 12:20:08"
         },
         {
-            "name": "dg/texy",
-            "version": "v2.2.0",
+            "name": "texy/texy",
+            "version": "v2.3",
             "source": {
                 "type": "git",
-                "url": "https://github.com/dg/texy",
-                "reference": "v2.2.0"
+                "url": "https://github.com/dg/texy.git",
+                "reference": "v2.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/dg/texy/zipball/v2.2.0",
-                "reference": "v2.2.0",
+                "url": "https://api.github.com/repos/dg/texy/zipball/v2.3",
+                "reference": "v2.3",
                 "shasum": ""
+            },
+            "require": {
+                "php": ">=5.0.0"
+            },
+            "require-dev": {
+                "nette/tester": "0.9.*"
             },
             "type": "library",
             "autoload": {
-                "classmap": [
-                    "Texy/"
+                "files": [
+                    "src/texy.php"
                 ]
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "BSD-3",
-                "GPLv2",
-                "GPLv3"
+                "BSD-3-Clause",
+                "GPL-2.0",
+                "GPL-3.0"
             ],
             "authors": [
                 {
@@ -118,7 +125,7 @@
                 "wiki",
                 "xhtml"
             ],
-            "time": "2012-03-30 21:57:36"
+            "time": "2013-07-19 22:05:37"
         },
         {
             "name": "emberlabs/gravatarlib",
