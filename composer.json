@@ -5,32 +5,18 @@
 	"config": {
 		"vendor-dir": "libs"
 	},
-	"repositories": {
-		"michelf/php-markdown":{
-			"type":"package",
-			"package":{
-				"name":"michelf/php-markdown",
-				"version":"1.2.5",
-				"source":{
-					"url":"git://github.com/michelf/php-markdown.git",
-					"type":"git",
-					"reference":"x1.2.5"
-				}
-			}
-		}
-	},
 	"require": {
 		"php": ">=5.3.0",
 		"nette/nette": "dev-master",
-		"texy/texy": "~2.2.0",
+		"texy/texy": "~2.3.0",
 		"composer/composer": "dev-master",
 		"kukulich/fshl": "dev-develop",
-		"michelf/php-markdown": "1.2.5",
+		"michelf/php-markdown": "~1.3.0",
 		"emberlabs/gravatarlib": "@dev"
 	},
 	"minimum-stability":"dev",
 	"autoload": {
 		"files": ["app/misc/functions.php"],
-		"classmap": ["libs/michelf/php-markdown/markdown.php", "libs/emberlabs/gravatarlib/emberlabs/gravatarlib/Gravatar.php"]
+		"classmap": ["libs/emberlabs/gravatarlib/emberlabs/gravatarlib/Gravatar.php"]
 	}
 }

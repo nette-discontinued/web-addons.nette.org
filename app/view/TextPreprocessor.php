@@ -108,7 +108,7 @@ class TextPreprocessor extends Nette\Object
 	 */
 	public function createMarkdown()
 	{
-		$markdown = new \MarkdownExtra_Parser();
+		$markdown = new \Michelf\MarkdownExtra;
 
 		return new Nette\Callback(function ($description) use ($markdown) {
 			$description = Strings::replace(
