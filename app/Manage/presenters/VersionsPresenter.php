@@ -98,7 +98,7 @@ final class VersionsPresenter extends BasePresenter
 			$this->redirect(':Manage:Addon:finish');
 
 		} catch (\NetteAddons\NotSupportedException $e) {
-			$this->error(); // @todo message
+			$this->error();
 		}
 	}
 
