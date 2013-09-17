@@ -92,7 +92,7 @@ class Addons extends Table
 		$result = array();
 		foreach ($tags as $tag) {
 			$result[$tag->id] = array();
-			foreach ($tag->related('addons_tags') as $addon_tag) {
+			foreach ($tag->related('addons_tags')->order('addon.name') as $addon_tag) {
 				$result[$tag->id][] = $addon_tag->addon;
 			}
 		}
