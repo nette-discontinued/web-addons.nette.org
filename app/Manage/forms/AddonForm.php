@@ -144,8 +144,13 @@ class AddonForm extends \NetteAddons\Forms\BaseForm
 
 		$license = $addon->defaultLicense;
 		if (is_string($license)) {
-			$license = array_map('trim', explode(',', $license));
+			if ($license === 'NOLICENSE') {
+				$license = array();
+			} else {
+				$license = array_map('trim', explode(',', $license));
+			}
 		}
+
 		$this->setDefaults(array(
 			'name' => $addon->name,
 			'shortDescription' => $addon->shortDescription,
