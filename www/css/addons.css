@@ -40,6 +40,10 @@ a {
 	width: 100%;
 }
 
+.addon .name {
+	width: 30%;
+}
+
 #content table th a {
 	color: white;
 }

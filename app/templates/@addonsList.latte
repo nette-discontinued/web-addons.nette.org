@@ -1,13 +1,17 @@
 {if count($addons)}
 	<table style="width: 100%">
 		<tbody>
+
 			{foreach $addons as $addon}
 				{var score = $addon->totalDownloadsCount+$addon->totalInstallsCount}
 				<tr n:class="$iterator->odd ? alt, addon" data-addon-id="{$addon->id}" data-addon-score="{$score}">
 					<td class="name"><a title="{$addon->name}" n:href=":Detail: id => $addon->id">{$addon->name}</a></td>
 					<td class="description">{$addon->shortDescription}</td>
-					<td title="Downloads & Installs" style="text-align: right;">{$score}×</td>
-					<td title="Vote score">{=$addonVotes($addon)->percent|number:0}&nbsp;%</td>
+					{*
+						Temporary hidden
+						<td title="Downloads & Installs" style="text-align: right;">{$score}×</td>
+						<td title="Vote score">{=$addonVotes($addon)->percent|number:0}&nbsp;%</td>
+					*}
 				</tr>
 			{/foreach}
 		</tbody>
