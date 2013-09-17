@@ -49,15 +49,15 @@ class Authenticator extends Nette\Object implements NS\IAuthenticator
 		$user = $this->users->findOneByName($username);
 
 		if (!$user) {
-			if (!$user = $this->authenticateExternal($username, $password)) {
+			if (!$user = $this->authenticateExternal($username, $password, TRUE)) {
 				throw new NS\AuthenticationException("User '$username' not found.", self::IDENTITY_NOT_FOUND);
 			}
 		}
 
-		// password migration
-		if (strlen($user->password) === 40 && $user->password === sha1($password)) {
-			$user->password = $this->calculateHash($password);
-			$user->update();
+		if (strlen($user->password) === 0 && $this->authenticateExternal($username, $password, FALSE)) {
+			$user->update(array(
+				'password' => $this->calculateHash($password),
+			));
 		}
 
 		if ($user->password !== $this->calculateHash($password, $user->password)) {
@@ -96,31 +96,37 @@ class Authenticator extends Nette\Object implements NS\IAuthenticator
 	 * Authenticate again external site (hack ;)
 	 * @param  string
 	 * @param  string
-	 * @return bool
+	 * @param  bool
+	 * @return \Nette\Database\Table\ActiveRow|bool
 	 */
-	private function authenticateExternal($username, $password)
+	private function authenticateExternal($username, $password, $create = FALSE)
 	{
-		$req = $this->requestFactory->create(self::EXTERNAL_URL);
-		$req->setMethod('POST');
-		$req->setOption('content', http_build_query(array(
-			'form_sent' => 1,
-			'req_name' => $username,
-			'req_password' => $password,
-			'redirect_url' => 'index.php',
-		)));
+		$curl = curl_init(self::EXTERNAL_URL);
+		curl_setopt_array($curl, [
+			CURLOPT_POST => true,
+			CURLOPT_POSTFIELDS => array(
+				'form_sent' => 1,
+				'req_name' => $username,
+				'req_password' => $password,
+				'redirect_url' => 'index.php',
+			),
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_COOKIEFILE => '',
+			CURLOPT_FOLLOWLOCATION => true,
+		]);
 
-		try {
-			$html = $req->execute();
-		} catch(\NetteAddons\Utils\HttpException $e) { // auth failure
-			return FALSE;
-		}
+		$html = curl_exec($curl);
 
 		if (!$match = Strings::match($html, '~<a href="profile\.php\?id=(\d+)" title=~')) {
 			return FALSE;
 		}
-		$id = $match[1];
 
-		return $this->users->createUser($id, $username, $password);
+		if ($create) {
+			$id = $match[1];
+			return $this->users->createUser($id, $username, $password);
+		} else {
+			return TRUE;
+		}
 	}
 
 }
