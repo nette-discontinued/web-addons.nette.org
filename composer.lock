@@ -11,20 +11,20 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "029341e114cc03f24cb0a80b97e82d4e78eac852"
+                "reference": "5b96caf8ce5d667ca6a80a446a8192ebd4aa2b6b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/029341e114cc03f24cb0a80b97e82d4e78eac852",
-                "reference": "029341e114cc03f24cb0a80b97e82d4e78eac852",
+                "url": "https://api.github.com/repos/composer/composer/zipball/5b96caf8ce5d667ca6a80a446a8192ebd4aa2b6b",
+                "reference": "5b96caf8ce5d667ca6a80a446a8192ebd4aa2b6b",
                 "shasum": ""
             },
             "require": {
                 "justinrainbow/json-schema": "1.1.*",
                 "php": ">=5.3.2",
                 "seld/jsonlint": "1.*",
-                "symfony/console": "~2.3@dev",
-                "symfony/finder": "~2.1",
+                "symfony/console": "~2.3",
+                "symfony/finder": "~2.2",
                 "symfony/process": "~2.1@dev"
             },
             "require-dev": {
@@ -72,7 +72,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2013-08-08 10:38:40"
+            "time": "2013-09-16 12:08:43"
         },
         {
             "name": "emberlabs/gravatarlib",
@@ -275,12 +275,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/nette.git",
-                "reference": "5d5c6205103de6e042e08fe47867bd3a83a6ff77"
+                "reference": "283eaac69b3dc9336c723ee63d446876e102b1bf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/nette/zipball/5d5c6205103de6e042e08fe47867bd3a83a6ff77",
-                "reference": "5d5c6205103de6e042e08fe47867bd3a83a6ff77",
+                "url": "https://api.github.com/repos/nette/nette/zipball/283eaac69b3dc9336c723ee63d446876e102b1bf",
+                "reference": "283eaac69b3dc9336c723ee63d446876e102b1bf",
                 "shasum": ""
             },
             "require": {
@@ -341,7 +341,7 @@
                 "neon",
                 "templating"
             ],
-            "time": "2013-08-05 21:11:56"
+            "time": "2013-09-16 16:36:09"
         },
         {
             "name": "seld/jsonlint",
@@ -397,12 +397,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console.git",
-                "reference": "bf382b256067b3b6c6c6950f6ff3158854388584"
+                "reference": "8b3d2627cc923f07bac5bb9fdc0622363ce1369b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/bf382b256067b3b6c6c6950f6ff3158854388584",
-                "reference": "bf382b256067b3b6c6c6950f6ff3158854388584",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/8b3d2627cc923f07bac5bb9fdc0622363ce1369b",
+                "reference": "8b3d2627cc923f07bac5bb9fdc0622363ce1369b",
                 "shasum": ""
             },
             "require": {
@@ -441,7 +441,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "http://symfony.com",
-            "time": "2013-08-09 06:03:04"
+            "time": "2013-09-13 12:20:47"
         },
         {
             "name": "symfony/finder",
@@ -450,12 +450,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Finder.git",
-                "reference": "6b6564a27b23daa5fa3dc12db7a4b0eeabf13f1f"
+                "reference": "ad276bcd7378de41257550c42c4bc0c059783ef3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Finder/zipball/6b6564a27b23daa5fa3dc12db7a4b0eeabf13f1f",
-                "reference": "6b6564a27b23daa5fa3dc12db7a4b0eeabf13f1f",
+                "url": "https://api.github.com/repos/symfony/Finder/zipball/ad276bcd7378de41257550c42c4bc0c059783ef3",
+                "reference": "ad276bcd7378de41257550c42c4bc0c059783ef3",
                 "shasum": ""
             },
             "require": {
@@ -488,7 +488,7 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "http://symfony.com",
-            "time": "2013-07-21 20:19:01"
+            "time": "2013-08-24 06:54:37"
         },
         {
             "name": "symfony/process",
@@ -497,12 +497,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Process.git",
-                "reference": "723fe405fcc878ae75469babcb9507d292797ece"
+                "reference": "ba3568aae3622076b26f35f97aa3033a4cab7798"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Process/zipball/723fe405fcc878ae75469babcb9507d292797ece",
-                "reference": "723fe405fcc878ae75469babcb9507d292797ece",
+                "url": "https://api.github.com/repos/symfony/Process/zipball/ba3568aae3622076b26f35f97aa3033a4cab7798",
+                "reference": "ba3568aae3622076b26f35f97aa3033a4cab7798",
                 "shasum": ""
             },
             "require": {
@@ -535,7 +535,7 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "http://symfony.com",
-            "time": "2013-08-09 07:03:52"
+            "time": "2013-09-12 12:59:51"
         },
         {
             "name": "texy/texy",
@@ -543,12 +543,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dg/texy.git",
-                "reference": "v2.3"
+                "reference": "11c34e6df7846ff1e02e6ef7c0ef4a1e3af40847"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dg/texy/zipball/v2.3",
-                "reference": "v2.3",
+                "url": "https://api.github.com/repos/dg/texy/zipball/11c34e6df7846ff1e02e6ef7c0ef4a1e3af40847",
+                "reference": "11c34e6df7846ff1e02e6ef7c0ef4a1e3af40847",
                 "shasum": ""
             },
             "require": {
