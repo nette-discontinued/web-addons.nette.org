@@ -473,7 +473,11 @@ background: url(../images/li-download.gif) no-repeat;
 .spinner-container {
 	text-align: center;
 }
+.spinner-container h1 {
+	padding-top: 59px;
+}
 .spinner {
+	display: inline-block;
 	margin: 100px auto;
 }
 

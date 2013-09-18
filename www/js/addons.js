@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	var $main = $('#main');
+	var $sidebar = $('#sidebar');
 	var $content = $('#content');
 	var $loading = $('<div class="spinner-container"><h1>Working&hellip;</h1></div>');
 	var spinnerOpts = {
@@ -12,7 +12,7 @@ $(document).ready(function() {
 	function busy(e) {
 		if (e.ctrlKey) return;
 
-		$main.append($loading);
+		$loading.insertAfter($sidebar);
 		$content.hide();
 		$(window).on('keyup.addons', function(e) {
 			if (e.keyCode == 27) {
