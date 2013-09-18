@@ -138,7 +138,7 @@ final class VersionsPresenter extends BasePresenter
 					$conflict['b']->id = $conflict['a']->id;
 					$this->versions->update($conflict['b']);
 				}
-				$this->flashMessage('Versions has been updated.');
+				$this->flashMessage('Versions have been updated.');
 			} catch (\PDOException $e) {
 				$this->flashMessage('Version importing failed. Try again later.', 'error');
 			}
