@@ -145,7 +145,7 @@ a {
 }
 
 input.addons-search {
-	width: 100%;
+	width: 608px;
 	border: 1px black solid;
 	background-color: white;
 }
@@ -482,5 +482,5 @@ background: url(../images/li-download.gif) no-repeat;
 }
 
 #search-query {
-    padding: 5px;
+    padding: 5px 10px;
 }
