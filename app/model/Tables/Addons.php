@@ -49,10 +49,11 @@ class Addons extends Table
 	 */
 	protected function getTable($ignoreDeleted = FALSE)
 	{
-		if ($ignoreDeleted) {
-			return parent::getTable();
+		$table = parent::getTable();
+		if (!$ignoreDeleted) {
+			$this->filterOutDeleted($table);
 		}
-		return parent::getTable()->where('deletedAt IS NULL');
+		return $table;
 	}
 
 
@@ -85,14 +86,19 @@ class Addons extends Table
 
 	/**
 	 * @param  \Nette\Database\Table\Selection
+	 * @param  bool
 	 * @return array[]
 	 */
-	public function findGroupedByCategories($tags)
+	public function findGroupedByCategories($tags, $ignoreDeleted = FALSE)
 	{
 		$result = array();
 		foreach ($tags as $tag) {
 			$result[$tag->id] = array();
-			foreach ($tag->related('addons_tags')->order('addon.name') as $addon_tag) {
+			$addons = $tag->related('addons_tags')->order('addon.name');
+			if (!$ignoreDeleted) {
+				$this->filterOutDeleted($addons);
+			}
+			foreach ($addons as $addon_tag) {
 				$result[$tag->id][] = $addon_tag->addon;
 			}
 		}
@@ -112,12 +118,13 @@ class Addons extends Table
 
 
 	/**
-	 * @param int|NULL
+	 * @param  int|NULL
+	 * @param  bool
 	 * @return \Nette\Database\Table\Selection
 	 */
-	public function findLastUpdated($count = NULL)
+	public function findLastUpdated($count = NULL, $ignoreDeleted = FALSE)
 	{
-		$selection = $this->getTable()->order('updatedAt DESC');
+		$selection = $this->getTable($ignoreDeleted)->order('updatedAt DESC');
 		if (!is_null($count)) {
 			$selection->limit($count);
 		}
@@ -127,12 +134,13 @@ class Addons extends Table
 
 
 	/**
-	 * @param int|NULL
+	 * @param  int|NULL
+	 * @param  bool
 	 * @return \Nette\Database\Table\Selection
 	 */
-	public function findMostFavorited($count = NULL)
+	public function findMostFavorited($count = NULL, $ignoreDeleted = FALSE)
 	{
-		$selection = $this->getTable()->group('id')->order('SUM(:addons_vote.vote) DESC');
+		$selection = $this->getTable($ignoreDeleted)->group('id')->order('SUM(:addons_vote.vote) DESC');
 		if (!is_null($count)) {
 			$selection->limit($count);
 		}
@@ -142,12 +150,13 @@ class Addons extends Table
 
 
 	/**
-	 * @param int|NULL
+	 * @param  int|NULL
+	 * @param  bool
 	 * @return \Nette\Database\Table\Selection
 	 */
-	public function findMostUsed($count = NULL)
+	public function findMostUsed($count = NULL, $ignoreDeleted = FALSE)
 	{
-		$selection = $this->getTable()->group('id')->order('SUM(totalDownloadsCount + totalInstallsCount) DESC');
+		$selection = $this->getTable($ignoreDeleted)->group('id')->order('SUM(totalDownloadsCount + totalInstallsCount) DESC');
 		if (!is_null($count)) {
 			$selection->limit($count);
 		}
@@ -416,6 +425,16 @@ class Addons extends Table
 		$row->delete();
 
 		$this->onAddonChange($addon);
+	}
+
+
+
+	/**
+	 * @param  \Nette\Database\Table\Selection
+	 */
+	private function filterOutDeleted(Selection $selection)
+	{
+		$selection->where('deletedAt IS NULL');
 	}
 
 }
