@@ -27,7 +27,7 @@ class TemplateFactory extends Object
 	public static function getBasePath()
 	{
 		$httpReqFaq = new \Nette\Http\RequestFactory();
-		$httpReq = $httpReqFaq->setEncoding('utf-8')->createHttpRequest();
+		$httpReq = $httpReqFaq->createHttpRequest();
 		return rtrim($httpReq->url->basePath, '/') . '/libs/HttpPHPUnit';
 	}
 
