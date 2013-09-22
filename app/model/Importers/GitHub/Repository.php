@@ -298,7 +298,7 @@ class Repository extends \Nette\Object
 
 		$branches = array();
 		foreach ($data as $branch) {
-			if (strpos($branch, '/') === FALSE) {
+			if (strpos($branch->name, '/') === FALSE) {
 				$branches[$branch->name] = $branch->commit->sha;
 			}
 		}
