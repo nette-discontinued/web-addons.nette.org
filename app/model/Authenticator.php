@@ -102,7 +102,7 @@ class Authenticator extends Nette\Object implements NS\IAuthenticator
 	private function authenticateExternal($username, $password, $create = FALSE)
 	{
 		$curl = curl_init(self::EXTERNAL_URL);
-		curl_setopt_array($curl, [
+		curl_setopt_array($curl, array(
 			CURLOPT_POST => true,
 			CURLOPT_POSTFIELDS => array(
 				'form_sent' => 1,
@@ -113,7 +113,7 @@ class Authenticator extends Nette\Object implements NS\IAuthenticator
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_COOKIEFILE => '',
 			CURLOPT_FOLLOWLOCATION => true,
-		]);
+		));
 
 		$html = curl_exec($curl);
 
