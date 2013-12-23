@@ -1,12 +1,16 @@
 language: php
 
 php:
-  - 5.3
+  - 5.3.3
   - 5.4
+  - 5.5
+
+matrix:
+  allow_failures:
+    - php: 5.3.3
 
 before_script:
-  - "sh -c 'curl -s http://getcomposer.org/installer | php'"
-  - "sh -c 'php composer.phar install --quiet'"
+  - composer install --no-interaction --dev --prefer-source
 
 script: php tests/lint -R app && php tests/lint -R tests/cases && phpunit --configuration tests/phpunit.xml
 
