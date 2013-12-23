@@ -9,31 +9,28 @@ namespace NetteAddons\Model;
  */
 class DevelopmentUtils extends \Nette\Object
 {
-
+	/** @var \Nette\Database\Context */
 	private $db;
 
-	/** @var \Nette\Database\SelectionFactory */
-	private $sf;
-
+	/** @var \Nette\Caching\IStorage */
 	private $cacheStorage;
 
 
-	public function __construct(\Nette\Database\Connection $db, \Nette\Database\SelectionFactory $sf,  \Nette\Caching\IStorage $cacheStorage)
+
+	public function __construct(\Nette\Database\Context $db,  \Nette\Caching\IStorage $cacheStorage)
 	{
 		$this->db = $db;
 		$this->cacheStorage = $cacheStorage;
-		$this->sf = $sf;
 	}
 
 
 
 	public function recreateDatabase()
 	{
-		$connection = $this->db;
-		$tables = $connection->getSupplementalDriver()->getTables();
+		$tables = $this->db->getConnection()->getSupplementalDriver()->getTables();
 		foreach ($tables as $table) {
-			$connection->query('SET foreign_key_checks = 0');
-			$connection->query("DROP TABLE `{$table['name']}`");
+			$this->db->query('SET foreign_key_checks = 0');
+			$this->db->query("DROP TABLE `{$table['name']}`");
 		}
 
 		$this->executeFile(__DIR__ . '/db/schema.sql');
@@ -53,8 +50,8 @@ class DevelopmentUtils extends \Nette\Object
 	{
 		$this->db->beginTransaction();
 
-		foreach ($this->sf->table('addons_versions') as $version) {
-			foreach ($this->sf->table('users') as $user) {
+		foreach ($this->db->table('addons_versions') as $version) {
+			foreach ($this->db->table('users') as $user) {
 				$limit = mt_rand(0, $maxCount);
 				for ($i=0;$i<$limit;$i++) {
 					$this->addDownloadOrInstall('download', $days, $version->id, $user->id);
@@ -86,7 +83,7 @@ class DevelopmentUtils extends \Nette\Object
 		$datetime = \DateTime::createFromFormat('U', time() - ((int)(mt_rand(0, $days*24*60*60))));
 		$ip = mt_rand(0, 254).'.'.mt_rand(0, 254).'.'.mt_rand(0, 254).'.'.mt_rand(0, 254);
 
-		$this->sf->table('addons_downloads')->insert(array(
+		$this->db->table('addons_downloads')->insert(array(
 			'versionId' => $versionId,
 			'userId' => $userId,
 			'ipAddress' => $ip,

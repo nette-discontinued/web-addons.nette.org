@@ -68,7 +68,7 @@ class Users extends Table
 	 */
 	public function findAuthors()
 	{
-		$users = $this->selectionFactory->table('addons')->select('DISTINCT(userId)');
+		$users = $this->db->table('addons')->select('DISTINCT(userId)');
 		return $this->findAll()->where('id', $users);
 	}
 
@@ -83,7 +83,7 @@ class Users extends Table
 	 */
 	public function createUser($id, $username, $password)
 	{
-		return $this->selectionFactory->table('users')->insert(array(
+		return $this->db->table('users')->insert(array(
 			'id' => $id,
 			'username' => $username,
 			'realname' => $username,

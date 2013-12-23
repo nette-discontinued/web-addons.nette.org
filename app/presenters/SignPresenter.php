@@ -5,7 +5,6 @@ namespace NetteAddons;
 use Nette\Http\Request,
 	Nette\Http\UrlScript,
 	Nette\Utils\Strings,
-	Nette\Application\Routers\RouteList,
 	Nette\Security\AuthenticationException,
 	Nette\Security\IAuthenticator;
 
@@ -15,7 +14,7 @@ use Nette\Http\Request,
 final class SignPresenter extends BasePresenter
 {
 	/**
-	 * @var \Nette\Application\Routers\RouteList
+	 * @var \Nette\Application\IRouter
 	 * @inject
 	 */
 	public $router;

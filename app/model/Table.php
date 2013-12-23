@@ -14,25 +14,20 @@ use Nette,
 abstract class Table extends Nette\Object
 {
 	/** @var Nette\Database\Connection */
-	protected $connection;
-
-	/** @var Nette\Database\SelectionFactory */
-	protected $selectionFactory;
+	protected $db;
 
 	/**
-	 * @param  Nette\Database\Connection
-	 * @param  Nette\Database\SelectionFactory
-	 * @throws NetteAddons\InvalidStateException
+	 * @param  \Nette\Database\Context
+	 * @throws \NetteAddons\InvalidStateException
 	 */
-	public function __construct(Nette\Database\Connection $db, Nette\Database\SelectionFactory $selectionFactory)
+	public function __construct(Nette\Database\Context $db)
 	{
 		if (!isset($this->tableName)) {
 			$class = get_called_class();
 			throw new \NetteAddons\InvalidStateException("Property \$tableName must be defined in $class.");
 		}
 
-		$this->connection = $db;
-		$this->selectionFactory = $selectionFactory;
+		$this->db = $db;
 	}
 
 
@@ -42,7 +37,7 @@ abstract class Table extends Nette\Object
 	 */
 	protected function getTable()
 	{
-		return $this->selectionFactory->table($this->tableName);
+		return $this->db->table($this->tableName);
 	}
 
 
@@ -130,7 +125,7 @@ abstract class Table extends Nette\Object
 		$pairs = implode(', ', $pairs);
 		$values = array_values($values);
 
-		$this->connection->queryArgs(
+		$this->db->queryArgs(
 			'INSERT INTO `' . $this->tableName . '` SET ' . $pairs .
 			' ON DUPLICATE KEY UPDATE ' . $pairs, array_merge($values, $values)
 		);

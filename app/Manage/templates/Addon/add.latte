@@ -21,7 +21,7 @@
 		</h2>
 		<div id="fromGitHub" n:class="$presenter['addAddonForm']->submitted ? hide">
 			{form importAddonForm class => form, data-addons-busy => true}
-				{foreach $_form->allErrors as $error}<p class="caution">{$error}</p>{/foreach}
+				{foreach $_form->errors as $error}<p class="caution">{$error}</p>{/foreach}
 				<div n:class="controls, $_form['url']->required ? required">
 					{label url /}<br>
 					{input url class => 'input-full input-large text'}

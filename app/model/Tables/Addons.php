@@ -34,9 +34,9 @@ class Addons extends Table
 
 
 
-	public function __construct(Nette\Database\Connection $dbConn, Nette\Database\SelectionFactory $selectionFactory, AddonVersions $versions, Tags $tags)
+	public function __construct(Nette\Database\Context $db, AddonVersions $versions, Tags $tags)
 	{
-		parent::__construct($dbConn, $selectionFactory);
+		parent::__construct($db);
 		$this->versions = $versions;
 		$this->tags = $tags;
 	}
@@ -224,7 +224,7 @@ class Addons extends Table
 	 */
 	public function filterByTag(Selection $addons, $tagId)
 	{
-		$addonIds = $this->selectionFactory->table('addons_tags')
+		$addonIds = $this->db->table('addons_tags')
 			->where('tagId = ?', $tagId)->select('addonId');
 
 		return $addons->where('id', $addonIds);
@@ -342,7 +342,7 @@ class Addons extends Table
 			throw new \NetteAddons\InvalidArgumentException('Addon must have at least one version.');
 		}
 
-		$this->connection->beginTransaction();
+		$this->db->beginTransaction();
 		try {
 			$row = $this->createRow(array(
 				'name'                => $addon->name,
@@ -370,14 +370,14 @@ class Addons extends Table
 
 			$this->tags->saveAddonTags($addon);
 
-			$this->connection->commit();
+			$this->db->commit();
 
 			$this->onAddonChange($addon);
 
 			return $row;
 
 		} catch (\Exception $e) {
-			$this->connection->rollBack();
+			$this->db->rollBack();
 			$addon->id = NULL;
 			throw $e;
 		}

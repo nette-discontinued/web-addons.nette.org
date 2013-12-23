@@ -43,6 +43,9 @@ services:
 	packageRouterHelper: NetteAddons\Model\PackageRouteHelperCached
 	vendorRouteHelper: NetteAddons\Model\VendorRouteHelper
 
+	- NetteAddons\RouterFactory
+	router: @NetteAddons\RouterFactory::createRouter
+
 	# security
 	authenticator: NetteAddons\Model\Authenticator
 	authorizator: NetteAddons\Model\Authorizator
