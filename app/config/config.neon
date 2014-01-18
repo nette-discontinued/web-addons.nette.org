@@ -51,7 +51,11 @@ services:
 	authorizator: NetteAddons\Model\Authorizator
 
 	# view
-	textPreprocessor: NetteAddons\TextPreprocessor
+	- NetteAddons\TextProcessors\TexyProcessor
+	textPreprocessor:
+		class: NetteAddons\TextPreprocessor
+		setup:
+			- addProcessor(@NetteAddons\TextProcessors\TexyProcessor, NetteAddons\TextPreprocessor::FORMAT_TEXY)
 	gravatar:
 		class: emberlabs\GravatarLib\Gravatar
 		setup:

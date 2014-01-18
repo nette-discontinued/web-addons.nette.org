@@ -4,8 +4,6 @@ namespace NetteAddons;
 
 use Nette,
 	Nette\Utils\Strings,
-	Texy,
-	TexyHtml,
 	FSHL\Highlighter,
 	FSHL\Output\Html,
 	FSHL\Lexer,
@@ -21,18 +19,30 @@ use Nette,
  */
 class TextPreprocessor extends Nette\Object
 {
+	const FORMAT_TEXY = 'texy';
 	const FORMAT_MARKDOWN = 'markdown';
+
+	/** @var ITextProcessor[]|array */
+	private $processors = array();
 
 	/** @var Model\Utils\Licenses */
 	private $licenses;
 
 
-	/**
-	 * @param Model\Utils\Licenses
-	 */
 	public function __construct(Model\Utils\Licenses $licenses)
 	{
 		$this->licenses = $licenses;
+	}
+
+
+
+	/**
+	 * @return TextPreprocessor
+	 */
+	public function addProcessor(ITextProcessor $processor, $format = self::FORMAT_TEXY)
+	{
+		$this->processors[$format] = $processor;
+		return $this;
 	}
 
 
@@ -51,24 +61,12 @@ class TextPreprocessor extends Nette\Object
 				'toc' => array()
 			);
 
-		} else {
+		} elseif (isset($this->processors[$addon->descriptionFormat])) {
+			return $this->processors[$addon->descriptionFormat]->process($addon->description);
 			return $this->processTexyContent($addon->description);
+		} else {
+			throw new \NetteAddons\NotImplementedException('Format "' . $addon->descriptionFormat . '" is not supported');
 		}
-	}
-
-
-
-	/**
-	 * @param string
-	 * @return array (content, toc)
-	 */
-	public function processTexyContent($content)
-	{
-		$texy = $this->createTexy();
-		return array(
-			'content' => $texy->process($content),
-			'toc' => $texy->headingModule->TOC
-		);
 	}
 
 
@@ -157,98 +155,4 @@ class TextPreprocessor extends Nette\Object
 			return $markdown->transform($description);
 		});
 	}
-
-
-
-	/**
-	 * @return \Texy
-	 */
-	public function createTexy()
-	{
-		$texy = new Texy;
-		$texy->setOutputMode(Texy::HTML5);
-		$texy->linkModule->root = '';
-		$texy->alignClasses['left'] = 'left';
-		$texy->alignClasses['right'] = 'right';
-		$texy->emoticonModule->class = 'smiley';
-		$texy->headingModule->top = 2;
-		$texy->headingModule->generateID = TRUE;
-		$texy->tabWidth = 4;
-		$texy->tableModule->evenClass = 'alt';
-		$texy->dtd['body'][1]['style'] = TRUE;
-		$texy->allowed['longwords'] = FALSE;
-		$texy->allowed['block/html'] = FALSE;
-		$texy->phraseModule->tags['phrase/strong'] = 'b';
-		$texy->phraseModule->tags['phrase/em'] = 'i';
-		$texy->phraseModule->tags['phrase/em-alt'] = 'i';
-
-		$texy->addHandler('block', array($this, 'blockHandler'));
-
-		return $texy;
-	}
-
-
-
-	/**
-	 * User handler for code block.
-	 *
-	 * @param  TexyHandlerInvocation  handler invocation
-	 * @param  string  block type
-	 * @param  string  text to highlight
-	 * @param  string  language
-	 * @param  TexyModifier modifier
-	 * @return TexyHtml
-	 */
-	public function blockHandler($invocation, $blockType, $content, $lang, $modifier)
-	{
-		if ($blockType === 'block/php' || $blockType === 'block/neon' || $blockType === 'block/javascript' || $blockType === 'block/js' || $blockType === 'block/css' || $blockType === 'block/html' || $blockType === 'block/htmlcb' || $blockType === 'block/latte') {
-			list(, $lang) = explode('/', $blockType);
-
-		} elseif ($blockType !== 'block/code') {
-			return $invocation->proceed($blockType, $content, $lang, $modifier);
-		}
-
-		$fshl = new Highlighter(new Html, Highlighter::OPTION_TAB_INDENT);
-
-		switch(strtolower($lang)) {
-			case 'php':
-				$fshl->setLexer(new Lexer\Php);
-				break;
-			case 'neon':
-				$fshl->setLexer(new Lexer\Neon);
-				break;
-			case 'javascript':
-			case 'js':
-				$fshl->setLexer(new Lexer\Javascript);
-				break;
-			case 'css':
-				$fshl->setLexer(new Lexer\Css);
-				break;
-			case 'html':
-			case 'htmlcb':
-			case 'latte':
-				$fshl->setLexer(new Lexer\Html);
-				break;
-			case 'sql':
-				$fshl->setLexer(new Lexer\Sql);
-				break;
-			default:
-				return $invocation->proceed();
-				break;
-		}
-
-		$texy = $invocation->getTexy();
-		$content = Texy::outdent($content);
-		$content = $fshl->highlight($content);
-		$content = $texy->protect($content, Texy::CONTENT_BLOCK);
-
-		$elPre = TexyHtml::el('pre');
-		if ($modifier) $modifier->decorate($texy, $elPre);
-		$elPre->attrs['class'] = 'src-' . strtolower($lang);
-
-		$elCode = $elPre->create('code', $content);
-
-		return $elPre;
-	}
-
 }

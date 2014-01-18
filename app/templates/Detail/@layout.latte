@@ -110,14 +110,14 @@
 			{var $level = 2}
 			<ul>
 			{foreach $toc as $heading}
-				{if $heading['level'] === $level + 1}
+				{if $heading->level === $level + 1}
 					{var $level = $level + 1}
 					<ul>
-				{elseif $heading['level'] === $level - 1}
+				{elseif $heading->level === $level - 1}
 					{var $level = $level - 1}
 					</ul>
 				{/if}
-			<li><a href="#{$heading['el']->id}">{$heading['title']}</a>
+			<li><a href="#{$heading->id}">{$heading->title}</a>
 			{/foreach}
 			{while $level-- > 1}</ul>{/while}
 		</div>
