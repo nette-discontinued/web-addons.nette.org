@@ -3,10 +3,6 @@
 namespace NetteAddons;
 
 use Nette,
-	Nette\Utils\Strings,
-	FSHL\Highlighter,
-	FSHL\Output\Html,
-	FSHL\Lexer,
 	NetteAddons\Model\Addon;
 
 
@@ -54,14 +50,7 @@ class TextPreprocessor extends Nette\Object
 	 */
 	public function processDescription(Addon $addon)
 	{
-		if ($addon->descriptionFormat === self::FORMAT_MARKDOWN) {
-			$markdown = $this->createMarkdown();
-			return array(
-				'content' => $markdown->invoke($addon->description),
-				'toc' => array()
-			);
-
-		} elseif (isset($this->processors[$addon->descriptionFormat])) {
+		if (isset($this->processors[$addon->descriptionFormat])) {
 			return $this->processors[$addon->descriptionFormat]->process($addon->description);
 			return $this->processTexyContent($addon->description);
 		} else {
@@ -97,62 +86,5 @@ class TextPreprocessor extends Nette\Object
 			}
 		}
 		return $container;
-	}
-
-
-
-	/**
-	 * @return Nette\Callback
-	 */
-	public function createMarkdown()
-	{
-		$markdown = new \Michelf\MarkdownExtra;
-
-		return new Nette\Callback(function ($description) use ($markdown) {
-			$description = Strings::replace(
-				$description,
-				'/([^#]*)(#{1,6})(.*)/',
-				function ($matches) {
-					return $matches[1] . (strlen($matches[2]) < 6 ? '#' : '') . $matches[2] . $matches[3];
-				}
-			);
-			$description = Strings::replace(
-				$description,
-				'/```(php|neon|javascript|js|css|html|htmlcb|latte|sql)?\h*\v(.+?)\v```/s',
-				function ($matches) {
-					$fshl = new Highlighter(new Html, Highlighter::OPTION_TAB_INDENT);
-
-					switch(strtolower($matches[1])) {
-						case 'php':
-							$fshl->setLexer(new Lexer\Php);
-							break;
-						case 'neon':
-							$fshl->setLexer(new Lexer\Neon);
-							break;
-						case 'javascript':
-						case 'js':
-							$fshl->setLexer(new Lexer\Javascript);
-							break;
-						case 'css':
-							$fshl->setLexer(new Lexer\Css);
-							break;
-						case 'html':
-						case 'htmlcb':
-						case 'latte':
-							$fshl->setLexer(new Lexer\Html);
-							break;
-						case 'sql':
-							$fshl->setLexer(new Lexer\Sql);
-							break;
-						default:
-							$fshl->setLexer(new Lexer\Minimal);
-							break;
-					}
-
-					return '<pre' . ($matches[1] ? ' class="src-' . strtolower($matches[1]) . '"' : '') . '><code>' . $fshl->highlight(ltrim($matches[2])) . '</code></pre>';
-				}
-			);
-			return $markdown->transform($description);
-		});
 	}
 }

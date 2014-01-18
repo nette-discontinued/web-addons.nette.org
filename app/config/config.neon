@@ -52,10 +52,12 @@ services:
 
 	# view
 	- NetteAddons\TextProcessors\TexyProcessor
+	- NetteAddons\TextProcessors\MarkdownProcessor
 	textPreprocessor:
 		class: NetteAddons\TextPreprocessor
 		setup:
 			- addProcessor(@NetteAddons\TextProcessors\TexyProcessor, NetteAddons\TextPreprocessor::FORMAT_TEXY)
+			- addProcessor(@NetteAddons\TextProcessors\MarkdownProcessor, NetteAddons\TextPreprocessor::FORMAT_MARKDOWN)
 	gravatar:
 		class: emberlabs\GravatarLib\Gravatar
 		setup:
