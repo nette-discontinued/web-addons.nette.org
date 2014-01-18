@@ -16,7 +16,10 @@ class MarkdownProcessor extends \Nette\Object implements \NetteAddons\ITextProce
 	{
 		$markdown = new \Michelf\MarkdownExtra;
 
-		$this->converter = function ($description) use ($markdown) {
+		$htmlPurifierConfig = \HTMLPurifier_Config::createDefault();
+		$htmlPurifier = new \HTMLPurifier($htmlPurifierConfig);
+
+		$this->converter = function ($description) use ($markdown, $htmlPurifier) {
 			$description = Strings::replace(
 				$description,
 				'/([^#]*)(#{1,6})(.*)/',
@@ -60,7 +63,7 @@ class MarkdownProcessor extends \Nette\Object implements \NetteAddons\ITextProce
 					return '<pre' . ($matches[1] ? ' class="src-' . strtolower($matches[1]) . '"' : '') . '><code>' . $fshl->highlight(ltrim($matches[2])) . '</code></pre>';
 				}
 			);
-			return $markdown->transform($description);
+			return $htmlPurifier->purify($markdown->transform($description));
 		};
 	}
 

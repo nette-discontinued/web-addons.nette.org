@@ -23,6 +23,7 @@
 		"composer/composer": "~1.0.0-alpha8",
 		"kukulich/fshl": "~2.1.0",
 		"michelf/php-markdown": "~1.4.0",
+		"ezyang/htmlpurifier": "~4.6.0",
 		"emberlabs/gravatarlib": "@dev"
 	},
 	"autoload": {
