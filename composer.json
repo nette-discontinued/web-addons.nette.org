@@ -26,6 +26,10 @@
 		"ezyang/htmlpurifier": "~4.6.0",
 		"emberlabs/gravatarlib": "@dev"
 	},
+	"require-dev": {
+		"nette/tester": "~1.0.0",
+		"mockery/mockery": "~0.9.0"
+	},
 	"autoload": {
 		"files": ["app/misc/functions.php"],
 		"classmap": ["libs/emberlabs/gravatarlib/emberlabs/gravatarlib/Gravatar.php"]
