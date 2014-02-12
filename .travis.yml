@@ -4,15 +4,17 @@ php:
   - 5.3.3
   - 5.4
   - 5.5
+  - 5.6
 
 matrix:
   allow_failures:
-    - php: 5.3.3
+    - php: 5.6
 
 before_script:
-  - composer install --no-interaction --dev --prefer-source
+  - composer self-update
+  - composer install --no-interaction --prefer-source --dev
 
-script: php tests/lint -R app && php tests/lint -R tests/cases && phpunit --configuration tests/phpunit.xml
+script: php newTests/lint -R app && php newTests/lint -R newTests/cases && VERBOSE=true ./newTests/run-tests.sh newTests/cases/
 
 notifications:
   email: false
