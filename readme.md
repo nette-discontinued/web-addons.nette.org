@@ -31,9 +31,6 @@ nano ./app/config/config.local.neon
 
 Tests
 -----
-You can run tests via web browser or via CLI.
-
-* **Browser**: Open `http://localhost/addons.nette.org/tests/` and click on "START".
-* **CLI**: You should already know what to do.
+You can run tests via CLI `./newTests/run-tests.sh newTests/cases`.
 
 [![Build Status](https://secure.travis-ci.org/nette/addons.nette.org.png?branch=master)](http://travis-ci.org/nette/addons.nette.org)

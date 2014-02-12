@@ -1,3 +1,0 @@
-            <div class="coverBarOutline" title="{percent}">
-              <div class="size {color}" style="width:{percent}%" title="{percent}"></div>
-            </div>
