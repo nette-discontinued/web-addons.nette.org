@@ -31,6 +31,6 @@ nano ./app/config/config.local.neon
 
 Tests
 -----
-You can run tests via CLI `./newTests/run-tests.sh newTests/cases`.
+You can run tests via CLI `./tests/run-tests.sh tests/cases`.
 
 [![Build Status](https://secure.travis-ci.org/nette/addons.nette.org.png?branch=master)](http://travis-ci.org/nette/addons.nette.org)
