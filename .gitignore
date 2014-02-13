@@ -1,4 +1,6 @@
 /libs
 /app/config/config.local.neon
+/tests/coverage
+/tests/temp
 *.sublime*
 .DS_Store
