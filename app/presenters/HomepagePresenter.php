@@ -38,23 +38,6 @@ final class HomepagePresenter extends BaseListPresenter
 	/**
 	 * @secured
 	 */
-	public function handleReinstall()
-	{
-		if ($this->context->parameters['productionMode'] !== FALSE) {
-			$this->error();
-		}
-
-		$this->developmentUtils->recreateDatabase();
-
-		$this->flashMessage('Fuk yea!');
-		$this->redirect('this');
-	}
-
-
-
-	/**
-	 * @secured
-	 */
 	public function handleRandomDownloadAndInstalls()
 	{
 		if ($this->context->parameters['productionMode'] !== FALSE) {

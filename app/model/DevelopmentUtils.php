@@ -25,23 +25,6 @@ class DevelopmentUtils extends \Nette\Object
 
 
 
-	public function recreateDatabase()
-	{
-		$tables = $this->db->getConnection()->getSupplementalDriver()->getTables();
-		foreach ($tables as $table) {
-			$this->db->query('SET foreign_key_checks = 0');
-			$this->db->query("DROP TABLE `{$table['name']}`");
-		}
-
-		$this->executeFile(__DIR__ . '/db/schema.sql');
-		$this->executeFile(__DIR__ . '/db/data.sql');
-		$this->executeFile(__DIR__ . '/db/schema-triggers.sql');
-
-		$this->cacheStorage->clean(array(\Nette\Caching\Cache::ALL => TRUE));
-	}
-
-
-
 	/**
 	 * @param int
 	 * @param int
