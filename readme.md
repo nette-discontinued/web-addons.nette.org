@@ -33,4 +33,4 @@ Tests
 -----
 You can run tests via CLI `./tests/run-tests.sh tests/cases`.
 
-[![Build Status](https://secure.travis-ci.org/nette/addons.nette.org.png?branch=master)](http://travis-ci.org/nette/addons.nette.org)
+[![Build Status](https://travis-ci.org/nette/web-addons.nette.org.png?branch=master)](https://travis-ci.org/nette/web-addons.nette.org)
