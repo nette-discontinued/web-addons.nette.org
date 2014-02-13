@@ -27,6 +27,7 @@ final class PagePresenter extends BasePresenter
 	protected function startup()
 	{
 		parent::startup();
+		if (!$this->slug) $this->error();
 		$this->page = $this->pages->findOneBySlug($this->slug);
 		if (!$this->page) {
 			$this['subMenu']->setPage($this->slug);
