@@ -2,25 +2,23 @@
 
 namespace NetteAddons\Model;
 
-use Nette,
-	Nette\Database\Table\ActiveRow,
-	Nette\Database\Table\Selection;
-
+use Nette\Database\Table\ActiveRow;
+use Nette\Database\Table\Selection;
 
 
 /**
  * Represents repository for database table
  */
-abstract class Table extends Nette\Object
+abstract class Table extends \Nette\Object
 {
-	/** @var Nette\Database\Connection */
+	/** @var \Nette\Database\Connection */
 	protected $db;
 
+
 	/**
-	 * @param  \Nette\Database\Context
 	 * @throws \NetteAddons\InvalidStateException
 	 */
-	public function __construct(Nette\Database\Context $db)
+	public function __construct(\Nette\Database\Context $db)
 	{
 		if (!isset($this->tableName)) {
 			$class = get_called_class();
@@ -29,7 +27,6 @@ abstract class Table extends Nette\Object
 
 		$this->db = $db;
 	}
-
 
 
 	/**
@@ -41,7 +38,6 @@ abstract class Table extends Nette\Object
 	}
 
 
-
 	/**
 	 * @return \Nette\Database\Table\Selection
 	 */
@@ -51,9 +47,8 @@ abstract class Table extends Nette\Object
 	}
 
 
-
 	/**
-	 * @param  array
+	 * @param array
 	 * @return \Nette\Database\Table\Selection
 	 */
 	public function findBy(array $by)
@@ -62,9 +57,8 @@ abstract class Table extends Nette\Object
 	}
 
 
-
 	/**
-	 * @param  array
+	 * @param array
 	 * @return \Nette\Database\Table\ActiveRow|FALSE
 	 */
 	public function findOneBy(array $by)
@@ -73,9 +67,8 @@ abstract class Table extends Nette\Object
 	}
 
 
-
 	/**
-	 * @param  int
+	 * @param int
 	 * @return \Nette\Database\Table\ActiveRow|FALSE
 	 */
 	public function find($id)
@@ -84,11 +77,10 @@ abstract class Table extends Nette\Object
 	}
 
 
-
 	/**
 	 * Creates and inserts new row to database.
 	 *
-	 * @param  array row values
+	 * @param array row values
 	 * @return \Nette\Database\Table\ActiveRow created row
 	 * @throws \NetteAddons\DuplicateEntryException
 	 * @throws \PDOException in case of SQL / database error
@@ -97,7 +89,6 @@ abstract class Table extends Nette\Object
 	{
 		try {
 			return $this->getTable()->insert($values);
-
 		} catch (\PDOException $e) {
 			if (is_array($e->errorInfo) && $e->errorInfo[1] == 1062) {
 				throw new \NetteAddons\DuplicateEntryException($e->getMessage(), $e->errorInfo[1], $e);
@@ -106,7 +97,6 @@ abstract class Table extends Nette\Object
 			}
 		}
 	}
-
 
 
 	/**

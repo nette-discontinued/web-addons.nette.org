@@ -2,41 +2,38 @@
 
 namespace NetteAddons\Manage;
 
-use NetteAddons\Forms\Form,
-	NetteAddons\Model\Addons,
-	NetteAddons\Model\AddonVotes,
-	NetteAddons\Model\AddonReports;
+use Nette\Http\IResponse;
+use NetteAddons\Forms\Form;
+use NetteAddons\Model\Addons;
+use NetteAddons\Model\AddonVotes;
+use NetteAddons\Model\AddonReports;
 
 
-/**
- * @author Patrik Votoček
- */
 final class AdminPresenter extends \NetteAddons\BasePresenter
 {
 	/**
-	 * @var \NetteAddons\Model\Addons
 	 * @inject
+	 * @var \NetteAddons\Model\Addons
 	 */
 	public $addons;
 
 	/**
-	 * @var \NetteAddons\Model\AddonVotes
 	 * @inject
+	 * @var \NetteAddons\Model\AddonVotes
 	 */
 	public $addonVotes;
 
 	/**
-	 * @var \NetteAddons\Model\AddonReports
 	 * @inject
+	 * @var \NetteAddons\Model\AddonReports
 	 */
 	public $reports;
 
 	/**
-	 * @var Forms\ReportFormFactory
 	 * @inject
+	 * @var \NetteAddons\Manage\Forms\ReportFormFactory
 	 */
 	public $reportForm;
-
 
 
 	/**
@@ -49,18 +46,16 @@ final class AdminPresenter extends \NetteAddons\BasePresenter
 			$this->flashMessage('Please sign in to continue.');
 			$this->redirect(':Sign:in', $this->storeRequest());
 		} elseif (!$this->user->isInRole('moderators') && !$this->user->isInRole('administrators')) {
-			$this->error('This section is only for admins and moderators.', 403);
+			$this->error('This section is only for admins and moderators.', IResponse::S403_FORBIDDEN);
 		}
 	}
-
 
 
 	protected function beforeRender()
 	{
 		parent::beforeRender();
-		$this->template->addonVotes = callback($this->addonVotes, 'calculatePopularity');
+		$this->template->addonVotes = array($this->addonVotes, 'calculatePopularity');
 	}
-
 
 
 	public function actionDeleted()
@@ -71,12 +66,10 @@ final class AdminPresenter extends \NetteAddons\BasePresenter
 	}
 
 
-
 	public function renderDeleted()
 	{
 		$this->template->addons = $this->addons->findDeleted();
 	}
-
 
 
 	public function renderReports()
@@ -85,23 +78,20 @@ final class AdminPresenter extends \NetteAddons\BasePresenter
 	}
 
 
-
 	/**
-	 * @return Form
+	 * @return \NetteAddons\Forms\Form
 	 */
 	protected function createComponentReportForm()
 	{
 		$form = $this->reportForm->create($this->getUser()->getIdentity());
 
-		$form->onSuccess[] = $this->reportFormSubmitted;
+		$form->onSuccess[] = array($this, 'reportFormSubmitted');
 
 		return $form;
 	}
 
-
-
 	/**
-	 * @param Form
+	 * @param \NetteAddons\Forms\Form
 	 */
 	public function reportFormSubmitted(Form $form)
 	{
@@ -110,7 +100,6 @@ final class AdminPresenter extends \NetteAddons\BasePresenter
 			$this->redirect('reports');
 		}
 	}
-
 
 
 	/**
@@ -127,7 +116,6 @@ final class AdminPresenter extends \NetteAddons\BasePresenter
 	}
 
 
-
 	/**
 	 * @param int
 	 */
@@ -135,5 +123,4 @@ final class AdminPresenter extends \NetteAddons\BasePresenter
 	{
 		$this->template->report = $this->reports->find($id);
 	}
-
 }

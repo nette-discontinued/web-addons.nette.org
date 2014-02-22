@@ -2,26 +2,16 @@
 
 namespace NetteAddons\Model\Importers;
 
-use stdClass,
-	Nette,
-	Nette\Utils\Json,
-	Nette\Utils\Strings,
-	Nette\Http\Url,
-	Nette\Diagnostics\Debugger,
-	NetteAddons\Model,
-	NetteAddons\Model\Addon,
-	NetteAddons\Model\AddonVersion,
-	NetteAddons\Model\IAddonImporter,
-	NetteAddons\Model\Utils;
+use stdClass;
+use Nette\Utils\Json;
+use Nette\Utils\Strings;
+use NetteAddons\Model\Addon;
+use NetteAddons\Model\AddonVersion;
+use NetteAddons\Model\IAddonImporter;
+use NetteAddons\Model\Utils;
 
 
-
-/**
- * @author Patrik Votoček
- * @author Jan Tvrdík
- * @author Michael Moravec
- */
-class GitHubImporter extends Nette\Object implements IAddonImporter
+class GitHubImporter extends \Nette\Object implements IAddonImporter
 {
 	/** @var GitHub\Repository */
 	private $repository;
@@ -29,6 +19,12 @@ class GitHubImporter extends Nette\Object implements IAddonImporter
 	/** @var Utils\Validators */
 	private $validators;
 
+
+	public function __construct(GitHub\Repository $repo, Utils\Validators $validators)
+	{
+		$this->repository = $repo;
+		$this->validators = $validators;
+	}
 
 
 	/**
@@ -38,7 +34,6 @@ class GitHubImporter extends Nette\Object implements IAddonImporter
 	{
 		return 'GitHub';
 	}
-
 
 
 	/**
@@ -51,7 +46,6 @@ class GitHubImporter extends Nette\Object implements IAddonImporter
 	}
 
 
-
 	/**
 	 * @param string
 	 * @return bool
@@ -60,7 +54,6 @@ class GitHubImporter extends Nette\Object implements IAddonImporter
 	{
 		return is_array(GitHub\Repository::getVendorAndName($url));
 	}
-
 
 
 	/**
@@ -77,23 +70,10 @@ class GitHubImporter extends Nette\Object implements IAddonImporter
 	}
 
 
-
-	/**
-	 * @param GitHub\Repository
-	 * @param Utils\Validators
-	 */
-	public function __construct(GitHub\Repository $repo, Utils\Validators $validators)
-	{
-		$this->repository = $repo;
-		$this->validators = $validators;
-	}
-
-
-
 	/**
 	 * Imports addon from GitHub repository.
 	 *
-	 * @return Addon
+	 * @return \NetteAddons\Model\Addon
 	 * @throws \NetteAddons\IOException
 	 */
 	public function import()
@@ -148,12 +128,11 @@ class GitHubImporter extends Nette\Object implements IAddonImporter
 	}
 
 
-
 	/**
 	 * Imports versions from GitHub repository.
 	 *
-	 * @param  Addon
-	 * @return AddonVersion[]
+	 * @param \NetteAddons\Model\Addon
+	 * @return \NetteAddons\Model\AddonVersion[]
 	 * @throws \NetteAddons\IOException
 	 */
 	public function importVersions(Addon $addon)
@@ -217,7 +196,6 @@ class GitHubImporter extends Nette\Object implements IAddonImporter
 	}
 
 
-
 	/**
 	 * Returns list of version in repository.
 	 *
@@ -245,11 +223,10 @@ class GitHubImporter extends Nette\Object implements IAddonImporter
 	}
 
 
-
 	/**
 	 * Returns composer.json or NULL if composer.json does not exist or is invalid.
 	 *
-	 * @param  string commit hash, brach or tag name
+	 * @param string commit hash, brach or tag name
 	 * @return stdClass|NULL
 	 * @throws \NetteAddons\IOException
 	 */
@@ -258,17 +235,17 @@ class GitHubImporter extends Nette\Object implements IAddonImporter
 		try {
 			$content = $this->repository->getFileContent($hash, Utils\Composer::FILENAME);
 			$composer = Json::decode($content);
+
 			if (!Utils\Composer::isValid($composer)) {
 				return NULL; // invalid composer.json
 			}
 			return $composer;
-
 		} catch (\NetteAddons\Utils\HttpException $e) {
 			if ($e->getCode() === 404) {
 				return NULL;
 			}
-			throw $e;
 
+			throw $e;
 		} catch (\Nette\Utils\JsonException $e) {
 			return NULL;
 		}

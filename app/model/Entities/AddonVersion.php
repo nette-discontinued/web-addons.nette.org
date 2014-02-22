@@ -2,16 +2,12 @@
 
 namespace NetteAddons\Model;
 
-use Nette,
-	Nette\Utils\Json,
-	Nette\Utils\Strings,
-	Nette\Database\Table\ActiveRow;
+use Nette\Utils\Json;
+use Nette\Utils\Strings;
+use Nette\Database\Table\ActiveRow;
 
 
-/**
- * @author Filip Procházka <filip.prochazka@kdyby.org>
- */
-class AddonVersion extends Nette\Object
+class AddonVersion extends \Nette\Object
 {
 	/** @var int */
 	public $id;
@@ -74,16 +70,6 @@ class AddonVersion extends Nette\Object
 	public $updatedAt;
 
 
-
-	/**
-	 * Creates AddonVersion entity from Nette\Database row.
-	 *
-	 * @author Filip Procházka
-	 * @author Jan Tvrdík
-	 * @param  ActiveRow
-	 * @return AddonVersion
-	 * @throws \Nette\Utils\JsonException if $row->composerJson contains invalid JSON
-	 */
 	public static function fromActiveRow(ActiveRow $row)
 	{
 		$version = new static;
@@ -116,7 +102,6 @@ class AddonVersion extends Nette\Object
 	}
 
 
-
 	/**
 	 * Returns known types of package links.
 	 *
@@ -135,7 +120,6 @@ class AddonVersion extends Nette\Object
 	}
 
 
-
 	/**
 	 * If version depends on Nette and Nette version is not specified,
 	 * returns FALSE
@@ -149,7 +133,6 @@ class AddonVersion extends Nette\Object
 	}
 
 
-
 	/**
 	 * Returns version of Nette this addon depends on
 	 *
@@ -161,7 +144,6 @@ class AddonVersion extends Nette\Object
 			return $this->require['nette/nette'];
 		}
 	}
-
 
 
 	/**

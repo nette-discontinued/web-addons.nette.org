@@ -41,7 +41,6 @@ class ReportFormFactory extends \Nette\Object
 
 		$form->addSubmit('sub', 'Zap');
 
-
 		$model = $this->reports;
 		$form->onSuccess[] = function(Form $form) use($model, $user) {
 			$values = $form->getValues();

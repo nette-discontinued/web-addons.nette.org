@@ -2,18 +2,11 @@
 
 namespace NetteAddons;
 
-use Nette,
-	NetteAddons\Model\Addon;
+use Nette\Utils\Html;
+use NetteAddons\Model\Addon;
 
 
-
-/**
- * @author David Grudl
- * @author Jan Marek
- * @author Patrik Votoček
- * @author Jan Tvrdík
- */
-class TextPreprocessor extends Nette\Object
+class TextPreprocessor extends \Nette\Object
 {
 	const FORMAT_TEXY = 'texy';
 	const FORMAT_MARKDOWN = 'markdown';
@@ -21,7 +14,7 @@ class TextPreprocessor extends Nette\Object
 	/** @var ITextProcessor[]|array */
 	private $processors = array();
 
-	/** @var Model\Utils\Licenses */
+	/** @var \NetteAddons\Model\Utils\Licenses */
 	private $licenses;
 
 
@@ -29,7 +22,6 @@ class TextPreprocessor extends Nette\Object
 	{
 		$this->licenses = $licenses;
 	}
-
 
 
 	/**
@@ -42,22 +34,19 @@ class TextPreprocessor extends Nette\Object
 	}
 
 
-
 	/**
-	 * @param Model\Addon
+	 * @param \NetteAddons\Model\Addon
 	 * @return array
-	 * @throws NotImplementedException
+	 * @throws \NetteAddons\NotImplementedException
 	 */
 	public function processDescription(Addon $addon)
 	{
 		if (isset($this->processors[$addon->descriptionFormat])) {
 			return $this->processors[$addon->descriptionFormat]->process($addon->description);
-			return $this->processTexyContent($addon->description);
 		} else {
 			throw new \NetteAddons\NotImplementedException('Format "' . $addon->descriptionFormat . '" is not supported');
 		}
 	}
-
 
 
 	/**
@@ -70,7 +59,7 @@ class TextPreprocessor extends Nette\Object
 			$licenses = array_map('trim', explode(',', $licenses));
 		}
 
-		$container = \Nette\Utils\Html::el();
+		$container = Html::el();
 		foreach ($licenses as $license) {
 			if (count($container->getChildren()) > 0) {
 				$container->add(', ');

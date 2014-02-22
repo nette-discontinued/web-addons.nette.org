@@ -2,27 +2,19 @@
 
 namespace NetteAddons\Model\Importers;
 
-use Nette,
-	Nette\Http\Url,
-	Nette\Utils\Strings,
-	NetteAddons\Model\IAddonImporter;
+use Nette\Utils\Strings;
+use Nette\Utils\Callback;
+use Nette\Reflection\ClassType;
+use NetteAddons\Model\IAddonImporter;
 
 
-
-/**
- * Factory for repository importers.
- *
- * @author Jan Tvrdík
- * @author Patrik Votoček
- * @author Michael Moravec
- */
-class RepositoryImporterManager extends Nette\Object
+class RepositoryImporterManager extends \Nette\Object
 {
 	/** @var callable[]|array (id => callback) */
 	private $factories = array();
+
 	/** @var string[]|array (id => class) */
 	private $classes = array();
-
 
 
 	/**
@@ -35,12 +27,16 @@ class RepositoryImporterManager extends Nette\Object
 		if (isset($this->factories[$id])) {
 			throw new \NetteAddons\InvalidStateException("Importer '$id' is already registered");
 		}
+
 		if (!is_callable($factory)) {
 			throw new \NetteAddons\InvalidArgumentException('Factory is not callable.');
 		}
-		if (!is_subclass_of($class, 'NetteAddons\Model\IAddonImporter')) {
+
+		$classRef = new ClassType($class);
+		if (!$classRef->implementsInterface('NetteAddons\Model\IAddonImporter')) {
 			throw new \NetteAddons\InvalidArgumentException("Class '$class' does not implement IAddonImporter.");
 		}
+
 		$this->factories[$id] = $factory;
 		$this->classes[$id] = $class;
 	}
@@ -54,14 +50,13 @@ class RepositoryImporterManager extends Nette\Object
 	public function getIdByUrl($url)
 	{
 		foreach ($this->classes as $name => $class) {
-			if (callback($class, 'isSupported')->invoke($url)) {
+			if (Callback::invoke(array($class, 'isSupported'), $url)) {
 				return $name;
 			}
 		}
 
 		return NULL;
 	}
-
 
 
 	/**
@@ -74,7 +69,6 @@ class RepositoryImporterManager extends Nette\Object
 	}
 
 
-
 	/**
 	 * @param string
 	 * @return bool
@@ -82,12 +76,13 @@ class RepositoryImporterManager extends Nette\Object
 	public function isValid($url)
 	{
 		$name = $this->getIdByUrl($url);
+
 		if (is_null($name)) {
 			return FALSE;
 		}
-		return callback($this->classes[$name], 'isValid')->invoke($url);
-	}
 
+		return Callback::invoke(array($this->classes[$name], 'isValid'), $url);
+	}
 
 
 	/**
@@ -98,7 +93,7 @@ class RepositoryImporterManager extends Nette\Object
 	{
 		$name = $this->getIdByUrl($url);
 		if ($name !== NULL) {
-			$data = callback($this->classes[$name], 'normalizeUrl')->invoke($url);
+			$data = Callback::invoke(array($this->classes[$name], 'normalizeUrl'), $url);
 			if ($data !== NULL) {
 				return $data;
 			}
@@ -106,7 +101,6 @@ class RepositoryImporterManager extends Nette\Object
 
 		return Strings::match($url, '~^[a-z+]+://~i') ? $url : 'http://' . $url;
 	}
-
 
 
 	/**
@@ -117,12 +111,11 @@ class RepositoryImporterManager extends Nette\Object
 	{
 		$names = array();
 		foreach ($this->classes as $class) {
-			$names[] = callback($class, 'getName')->invoke();
+			$names[] = Callback::invoke(array($class, 'getName'));
 		}
 
 		return $asArray ? $names : implode(', ', $names);
 	}
-
 
 
 	/**
@@ -136,7 +129,7 @@ class RepositoryImporterManager extends Nette\Object
 	{
 		$url = (string) $url;
 		if (($name = static::getIdByUrl($url)) != NULL) {
-			return callback($this->factories[$name])->invoke($url);
+			return Callback::invoke($this->factories[$name], $url);
 		} else {
 			throw new \NetteAddons\NotSupportedException('We support only ' . $this->getNames() . '.');
 		}

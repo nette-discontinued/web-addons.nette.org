@@ -2,6 +2,7 @@
 
 namespace NetteAddons\TextProcessors\Texy;
 
+
 /**
  * Texy parser for addons.
  */

@@ -3,9 +3,7 @@
 namespace NetteAddons\Model\Utils;
 
 
-
 /**
- * @author Patrik Votoček
  * @see http://spdx.org/licenses/
  */
 class Licenses extends \Nette\Object
@@ -233,12 +231,13 @@ class Licenses extends \Nette\Object
 	);
 
 
-
+	/**
+	 * @param string
+	 */
 	public function __construct($urlMask = 'http://www.spdx.org/licenses/%key%#licenseText')
 	{
 		$this->urlMask = $urlMask;
 	}
-
 
 
 	/**
@@ -266,15 +265,13 @@ class Licenses extends \Nette\Object
 	}
 
 
-
 	/**
-	 * @return string[]
+	 * @return string[]|array
 	 */
 	public function getMostCommon()
 	{
 		return array('MIT', 'BSD-3-Clause', 'Apache-2.0', 'LGPL-3.0', 'GPL-2.0+', 'GPL-2.0', 'GPL-3.0');
 	}
-
 
 
 	/**
@@ -290,7 +287,6 @@ class Licenses extends \Nette\Object
 	}
 
 
-
 	/**
 	 * @param  string license key
 	 * @return string|NULL
@@ -302,7 +298,6 @@ class Licenses extends \Nette\Object
 		}
 		return str_replace('%key%', $key, $this->urlMask);
 	}
-
 
 
 	/**

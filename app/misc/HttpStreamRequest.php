@@ -2,19 +2,13 @@
 
 namespace NetteAddons\Utils;
 
-use Nette,
-	Nette\Utils\Strings;
-
+use Nette\Utils\Strings;
 
 
 /**
- * @author Michael Moravec
- * @author Patrik Votoček
- * @author Jan Tvrdík
- *
  * @property-read array $headers
  */
-class HttpStreamRequest extends Nette\FreezableObject
+class HttpStreamRequest extends \Nette\FreezableObject
 {
 	/** regexp's for parsing */
 	const HEADER_REGEXP = '~(?P<header>.*?)\:\s(?P<value>.*)~',
@@ -43,10 +37,9 @@ class HttpStreamRequest extends Nette\FreezableObject
 	}
 
 
-
 	/**
-	 * @param  string
-	 * @param  mixed
+	 * @param string
+	 * @param mixed
 	 * @return HttpStreamRequest
 	 */
 	public function setOption($name, $value)
@@ -57,9 +50,8 @@ class HttpStreamRequest extends Nette\FreezableObject
 	}
 
 
-
 	/**
-	 * @param  int
+	 * @param int
 	 * @return HttpStreamRequest
 	 */
 	public function removeOption($name)
@@ -71,8 +63,8 @@ class HttpStreamRequest extends Nette\FreezableObject
 
 
 	/**
-	 * @param  string
-	 * @param  string
+	 * @param string
+	 * @param string
 	 * @return HttpStreamRequest
 	 */
 	public function addHeader($name, $value)
@@ -83,11 +75,10 @@ class HttpStreamRequest extends Nette\FreezableObject
 	}
 
 
-
 	/**
-	 * @param string[]
+	 * @param string[]|array
 	 */
-	private function parseHeaders($headers)
+	private function parseHeaders(array $headers)
 	{
 		$headers = array_reverse($headers);
 		foreach ($headers as $header) {
@@ -104,11 +95,10 @@ class HttpStreamRequest extends Nette\FreezableObject
 	}
 
 
-
 	/**
 	 * @return string page content
-	 * @throws HttpException if server returns HTTP code other than 200 OK
-	 * @throws StreamException if something else fails
+	 * @throws \NetteAddons\Utils\HttpException if server returns HTTP code other than 200 OK
+	 * @throws \NetteAddons\Utils\StreamException if something else fails
 	 */
 	public function execute()
 	{
@@ -141,13 +131,11 @@ class HttpStreamRequest extends Nette\FreezableObject
 	}
 
 
-
 	/******* shortcuts ********/
 
 
-
 	/**
-	 * @param int $timeout timeout in milliseconds
+	 * @param int timeout in milliseconds
 	 * @return HttpStreamRequest
 	 */
 	public function setTimeout($timeout)
@@ -157,9 +145,8 @@ class HttpStreamRequest extends Nette\FreezableObject
 	}
 
 
-
 	/**
-	 * @param string $method valid HTTP 1.0 method
+	 * @param string valid HTTP 1.0 method
 	 * @return HttpStreamRequest
 	 */
 	public function setMethod($method)
@@ -169,7 +156,6 @@ class HttpStreamRequest extends Nette\FreezableObject
 	}
 
 
-
 	/**
 	 * @return array
 	 */
@@ -177,10 +163,7 @@ class HttpStreamRequest extends Nette\FreezableObject
 	{
 		return $this->headers;
 	}
-
 }
-
-
 
 class StreamException extends \RuntimeException
 {

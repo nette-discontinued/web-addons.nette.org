@@ -3,10 +3,8 @@
 namespace NetteAddons\Forms;
 
 
-
 class SignInForm extends BaseForm
 {
-
 	protected function buildForm()
 	{
 		$this->addText('username', 'Username:')
@@ -19,5 +17,4 @@ class SignInForm extends BaseForm
 
 		$this->addSubmit('login', 'Login');
 	}
-
 }

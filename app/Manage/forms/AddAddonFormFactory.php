@@ -2,21 +2,18 @@
 
 namespace NetteAddons\Manage\Forms;
 
-use Nette\Utils\Strings,
-	Nette\Security\IIdentity;
+use Nette\Utils\Strings;
+use Nette\Security\IIdentity;
 
 
 /**
  * Form for new addon registration. When importing from GitHub, most of the fields should be prefilled.
  * The license input won't be visible when composer.json is available.
- *
- * @author Patrik Votoček
  */
 class AddAddonFormFactory extends AddonFormFactory
 {
-
 	/**
-	 * @param IIdentity
+	 * @param \Nette\Security\IIdentity
 	 * @param string
 	 * @return AddonForm
 	 */
@@ -38,5 +35,4 @@ class AddAddonFormFactory extends AddonFormFactory
 
 		return $form;
 	}
-
 }

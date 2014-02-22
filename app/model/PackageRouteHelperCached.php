@@ -2,32 +2,23 @@
 
 namespace NetteAddons\Model;
 
-use Nette\Caching\Cache,
-	Nette\Caching\IStorage;
+use Nette\Caching\Cache;
+use Nette\Caching\IStorage;
 
 
-
-/**
- * @author Pavel Kučera
- */
 class PackageRouteHelperCached extends PackageRouteHelper
 {
-	/** @var string */
-	const EXPIRE_TIME = '+1 week',
-		CACHE_NAMESPACE = 'Route';
+	const EXPIRE_TIME = '+1 week';
+	const CACHE_NAMESPACE = 'Route';
 
 	/** @var Cache */
 	private $cache;
 
 
-
-	/**
-	 * @param Addons
-	 * @param \Nette\Caching\IStorage
-	 */
 	public function __construct(Addons $addons, IStorage $cacheStorage)
 	{
 		parent::__construct($addons);
+
 		$this->cache = new Cache($cacheStorage, static::CACHE_NAMESPACE);
 
 		$route = $this;
@@ -35,7 +26,6 @@ class PackageRouteHelperCached extends PackageRouteHelper
 			$route->cleanAddonCache($addon);
 		};
 	}
-
 
 
 	/**
@@ -59,7 +49,6 @@ class PackageRouteHelperCached extends PackageRouteHelper
 	}
 
 
-
 	/**
 	 * @param int
 	 * @return string|NULL
@@ -79,7 +68,6 @@ class PackageRouteHelperCached extends PackageRouteHelper
 		}
 		return $composerName;
 	}
-
 
 	/**
 	 * @param Addon

@@ -2,24 +2,17 @@
 
 namespace NetteAddons\Model;
 
-use Nette,
-	Nette\Utils\Strings,
-	Nette\Database\Table\ActiveRow;
+use Nette\Utils\Strings;
 
 
-
-/**
- * Version dependencies repository
- */
 class VersionDependencies extends Table
 {
 	/** @var string */
 	protected $tableName = 'addons_dependencies';
 
 
-
 	/**
-	 * @param  AddonVersion
+	 * @param AddonVersion
 	 * @return void
 	 * @throws \NetteAddons\DuplicateEntryException
 	 * @throws \PDOException
@@ -46,12 +39,11 @@ class VersionDependencies extends Table
 	}
 
 
-
 	/**
 	 * Finds addon by composer name.
 	 *
-	 * @param  string
-	 * @return ActiveRow|FALSE
+	 * @param string
+	 * @return \Nette\Database\Table\ActiveRow|FALSE
 	 */
 	private function findAddon($composerFullName)
 	{

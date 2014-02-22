@@ -2,12 +2,7 @@
 
 namespace NetteAddons;
 
-use Nette\Application\UI\Form;
 
-/**
- * @author Jan Marek
- * @author Patrik Votoček
- */
 final class ListPresenter extends BaseListPresenter
 {
 	/**
@@ -21,7 +16,6 @@ final class ListPresenter extends BaseListPresenter
 	}
 
 
-
 	/**
 	 * @param string
 	 */
@@ -30,7 +24,6 @@ final class ListPresenter extends BaseListPresenter
 		$this->template->vendor = $vendor;
 		$this->template->addons = $this->addons->findByComposerVendor($vendor);
 	}
-
 
 
 	public function actionMine()
@@ -42,10 +35,8 @@ final class ListPresenter extends BaseListPresenter
 	}
 
 
-
 	public function renderMine()
 	{
 		$this->template->addons = $this->addons->findByUser($this->user->id);
 	}
-
 }

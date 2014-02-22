@@ -2,18 +2,14 @@
 
 namespace NetteAddons\Model\Utils;
 
-use stdClass,
-	JsonSchema,
-	Nette\Utils\Json,
-	NetteAddons\Model\AddonVersion;
-
+use stdClass;
+use JsonSchema;
+use Nette\Utils\Json;
+use NetteAddons\Model\AddonVersion;
 
 
 /**
  * Generating JSON for Composer API
- *
- * @author Jan Marek
- * @author Jan Tvrdík
  */
 class Composer
 {
@@ -21,15 +17,13 @@ class Composer
 	const FILENAME = 'composer.json';
 
 
-
 	/**
-	 * Static class - cannot be instantiated.
+	 * @throws \NetteAddons\StaticClassException
 	 */
 	final public function __construct()
 	{
-		throw new \NetteAddons\StaticClassException();
+		throw new \NetteAddons\StaticClassException;
 	}
-
 
 
 	/**
@@ -52,7 +46,6 @@ class Composer
 		try {
 			$schema = file_get_contents(__DIR__ . '/composer-schema.json');
 			$schema = Json::decode($schema);
-
 		} catch (\Nette\Utils\JsonException $e) {
 			throw new \NetteAddons\InvalidStateException('composer-schema.json is not valid JSON file.', NULL, $e);
 		}
@@ -118,7 +111,7 @@ class Composer
 	/**
 	 * Generates packages.json.
 	 *
-	 * @param  Addon[]
+	 * @param Addon[]|array
 	 * @return stdClass
 	 */
 	public static function createPackagesJson(array $addons)

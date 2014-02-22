@@ -2,26 +2,21 @@
 
 namespace NetteAddons\Model;
 
-use Nette\Security\Identity,
-	Nette\Database\Table\ActiveRow,
-	Nette\Database\Table\Selection as TableSelection;
+use Nette\Security\Identity;
+use Nette\Database\Table\ActiveRow;
 
 
-/**
- * Users repository
- */
 class Users extends Table
 {
 	/** @var string */
 	protected $tableName = 'users';
 
 
-
 	/**
 	 * Finds one user by name or by e-mail.
 	 *
-	 * @param  string user name or e-mail
-	 * @return ActiveRow
+	 * @param string user name or e-mail
+	 * @return \Nette\Database\Table\ActiveRow|FALSE
 	 */
 	public function findOneByName($name)
 	{
@@ -31,24 +26,21 @@ class Users extends Table
 	}
 
 
-
 	/**
 	 * Creates new user. When email or username is taken, returns false.
 	 *
-	 * @param  array
-	 * @return ActiveRow|FALSE
+	 * @parama array
+	 * @return \Nette\Database\Table\ActiveRow|FALSE
 	 */
 	public function register(array $values)
 	{
 		throw new \NetteAddons\DeprecatedException('This should not be used at all.');
-		return $this->createRow($values);
+		//return $this->createRow($values);
 	}
 
-
-
 	/**
-	 * @param  ActiveRow
-	 * @return Identity
+	 * @param \Nette\Database\Table\ActiveRow
+	 * @return \Nette\Security\Identity
 	 */
 	public function createIdentity(ActiveRow $user)
 	{
@@ -64,14 +56,13 @@ class Users extends Table
 	/**
 	 * Returns selection of all addons authors.
 	 *
-	 * @return TableSelection
+	 * @return \Nette\Database\Table\Selection
 	 */
 	public function findAuthors()
 	{
 		$users = $this->db->table('addons')->select('DISTINCT(userId)');
 		return $this->findAll()->where('id', $users);
 	}
-
 
 
 	/**
@@ -91,5 +82,4 @@ class Users extends Table
 			'group_id' => 4,
 		));
 	}
-
 }

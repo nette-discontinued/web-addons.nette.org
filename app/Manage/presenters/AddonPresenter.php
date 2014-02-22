@@ -2,44 +2,37 @@
 
 namespace NetteAddons\Manage;
 
-use NetteAddons\Forms\Form,
-	NetteAddons\Model\Utils\Validators;
+use NetteAddons\Forms\Form;
 
 
-/**
- * @author Patrik Votoček
- */
 final class AddonPresenter extends BasePresenter
 {
 	/**
-	 * @var Forms\AddAddonFormFactory
 	 * @inject
+	 * @var Forms\AddAddonFormFactory
 	 */
 	public $addAddonForm;
 
 	/**
-	 * @var Forms\EditAddonFormFactory
 	 * @inject
+	 * @var Forms\EditAddonFormFactory
 	 */
 	public $editAddonForm;
 
 	/**
-	 * @var Forms\ImportAddonFormFactory
 	 * @inject
+	 * @var Forms\ImportAddonFormFactory
 	 */
 	public $importAddonForm;
 
 	/**
-	 * @var \NetteAddons\Model\Utils\Validators
 	 * @inject
+	 * @var \NetteAddons\Model\Utils\Validators
 	 */
 	public $validators;
 
 
-
 	/**
-	 * Creates a new form for addon information.
-	 *
 	 * @return Forms\AddonForm
 	 */
 	protected function createComponentAddAddonForm()
@@ -50,16 +43,13 @@ final class AddonPresenter extends BasePresenter
 			$form->setAddon($this->addon);
 		}
 
-		$form->onSuccess[] = $this->addAddonFormSubmitted;
+		$form->onSuccess[] = array($this, 'addAddonFormSubmitted');
 
 		return $form;
 	}
 
 
-
 	/**
-	 * Handles the new addon form submission.
-	 *
 	 * @param Forms\AddonForm
 	 */
 	public function addAddonFormSubmitted(Forms\AddonForm $form)
@@ -73,7 +63,6 @@ final class AddonPresenter extends BasePresenter
 
 			if ($imported) {
 				$this->redirect(':Manage:Versions:import');
-
 			} else {
 				$this->flashMessage('Addon created. Now it\'s time to add the first version.');
 				$this->redirect(':Manage:Versions:add');
@@ -82,23 +71,21 @@ final class AddonPresenter extends BasePresenter
 	}
 
 
-
 	/**
-	 * @return Form
+	 * @return \NetteAddons\Forms\Form
 	 */
 	protected function createComponentImportAddonForm()
 	{
 		$form = $this->importAddonForm->create($this->getUser()->getIdentity());
 
-		$form->onSuccess[] = $this->importAddonFormSubmitted;
+		$form->onSuccess[] = array($this, 'importAddonFormSubmitted');
 
 		return $form;
 	}
 
 
-
 	/**
-	 * @param Form
+	 * @param \NetteAddons\Forms\Form
 	 */
 	public function importAddonFormSubmitted(Form $form)
 	{
@@ -112,17 +99,12 @@ final class AddonPresenter extends BasePresenter
 	}
 
 
-
 	public function renderAdd()
 	{
 		$this->template->full = empty($this->token);
 	}
 
 
-
-	/**
-	 * Finish the addon creation
-	 */
 	public function actionFinish()
 	{
 		if (!$this->addon) {
@@ -145,7 +127,6 @@ final class AddonPresenter extends BasePresenter
 	}
 
 
-
 	/**
 	 * @return Forms\AddonForm
 	 */
@@ -157,11 +138,10 @@ final class AddonPresenter extends BasePresenter
 
 		$form = $this->editAddonForm->create($this->addon);
 
-		$form->onSuccess[] = $this->editAddonFormSubmitted;
+		$form->onSuccess[] = array($this, 'editAddonFormSubmitted');
 
 		return $form;
 	}
-
 
 
 	/**
@@ -178,7 +158,6 @@ final class AddonPresenter extends BasePresenter
 	}
 
 
-
 	/**
 	 * @param int
 	 */
@@ -191,7 +170,6 @@ final class AddonPresenter extends BasePresenter
 	}
 
 
-
 	/**
 	 * @param int
 	 */
@@ -199,7 +177,6 @@ final class AddonPresenter extends BasePresenter
 	{
 		$this->template->addon = $this->addon;
 	}
-
 
 
 	/**
@@ -224,7 +201,6 @@ final class AddonPresenter extends BasePresenter
 	}
 
 
-
 	/**
 	 * @secured
 	 * @param int
@@ -244,7 +220,6 @@ final class AddonPresenter extends BasePresenter
 	}
 
 
-
 	/**
 	 * @param int
 	 */
@@ -257,7 +232,6 @@ final class AddonPresenter extends BasePresenter
 	}
 
 
-
 	/**
 	 * @param int
 	 */
@@ -266,5 +240,4 @@ final class AddonPresenter extends BasePresenter
 		$this->template->addon = $this->addon;
 		$this->template->newest = !$this->validators->isComposerFullNameUnique($this->addon->composerFullName);
 	}
-
 }

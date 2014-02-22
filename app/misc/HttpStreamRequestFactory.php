@@ -5,17 +5,12 @@ namespace NetteAddons\Utils;
 use NetteAddons\Portal;
 
 
-/**
- * @author Patrik Votoček
- * @author Michael Moravec
- */
 class HttpStreamRequestFactory extends \Nette\Object
 {
 	const UA = 'Nette Addons';
 
 	/** @var int */
 	private $timeout;
-
 
 
 	/**
@@ -25,7 +20,6 @@ class HttpStreamRequestFactory extends \Nette\Object
 	{
 		$this->timeout = $timeout;
 	}
-
 
 
 	/**
@@ -45,9 +39,8 @@ class HttpStreamRequestFactory extends \Nette\Object
 	}
 
 
-
 	/**
-	 * @param  string|NULL
+	 * @param string|NULL
 	 * @return HttpStreamRequest
 	 */
 	public function create($url = NULL)

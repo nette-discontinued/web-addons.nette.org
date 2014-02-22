@@ -2,16 +2,10 @@
 
 namespace NetteAddons\Model;
 
-use Nette;
 use Nette\Database\Table\ActiveRow;
-use Nette\Database\Table\Selection as TableSelection;
 use Nette\Utils\Strings;
 
 
-
-/**
- * Tags repository
- */
 class Tags extends Table
 {
 	const LEVEL_CATEGORY = 1;
@@ -22,11 +16,10 @@ class Tags extends Table
 	protected $tableName = 'tags';
 
 
-
 	/**
 	 * Returns tags which represent main catagories.
 	 *
-	 * @return TableSelection
+	 * @return \Nette\Database\Table\Selection
 	 */
 	public function findMainTags()
 	{
@@ -34,17 +27,15 @@ class Tags extends Table
 	}
 
 
-
 	/**
 	 * Returns tags which represent main catagories (only with at least one addon).
 	 *
-	 * @return TableSelection
+	 * @return \Nette\Database\Table\Selection
 	 */
 	public function findMainTagsWithAddons()
 	{
 		return $this->findMainTags()->group('tags.id')->having('COUNT(:addons_tags.tagId) > 0');
 	}
-
 
 
 	/**
@@ -55,7 +46,6 @@ class Tags extends Table
 	{
 		return $this->findOneBy(array('slug' => $slug));
 	}
-
 
 
 	public function saveAddonTags(Addon $addon)
@@ -90,9 +80,8 @@ class Tags extends Table
 	}
 
 
-
 	/**
-	 * @param  string tag name
+	 * @param string tag name
 	 * @return int tag id
 	 */
 	public function ensureExistence($tagName)
@@ -105,8 +94,7 @@ class Tags extends Table
 				'level' => self::LEVEL_ORDINARY_TAG,
 				'visible' => TRUE,
 			));
-
-		} catch (\NetteAddon\DuplicateEntryException $e) {
+		} catch (\NetteAddons\DuplicateEntryException $e) {
 			$row = $this->findOneBy(array(
 				'slug' => $slug,
 			));
@@ -116,9 +104,8 @@ class Tags extends Table
 	}
 
 
-
 	/**
-	 * @return TableSelection
+	 * @return \Nette\Database\Table\Selection
 	 */
 	protected function getAddonTags()
 	{
@@ -126,11 +113,10 @@ class Tags extends Table
 	}
 
 
-
 	/**
 	 * Checks whether given tag represents main category.
 	 *
-	 * @param  ActiveRow
+	 * @param  \Nette\Database\Table\ActiveRow
 	 * @return bool
 	 */
 	public function isCategory(ActiveRow $tag)
@@ -139,11 +125,10 @@ class Tags extends Table
 	}
 
 
-
 	/**
 	 * Checks whether given tag represents subcategory.
 	 *
-	 * @param  ActiveRow
+	 * @param  \Nette\Database\Table\ActiveRow
 	 * @return bool
 	 */
 	public function isSubCategory(ActiveRow $tag)
@@ -152,12 +137,11 @@ class Tags extends Table
 	}
 
 
-
 	/**
 	 * Returns parent category for given category.
 	 *
-	 * @param  ActiveRow
-	 * @return ActiveRow|NULL
+	 * @param  \Nette\Database\Table\ActiveRow
+	 * @return \Nette\Database\Table\ActiveRow|NULL
 	 */
 	public function getParentCategory(ActiveRow $tag)
 	{
@@ -171,12 +155,11 @@ class Tags extends Table
 	}
 
 
-
 	/**
 	 * Returns subcategories of given category.
 	 *
-	 * @param  ActiveRow
-	 * @return TableSelection
+	 * @param  \Nette\Database\Table\ActiveRow
+	 * @return \Nette\Database\Table\Selection
 	 */
 	public function getSubCategories(ActiveRow $tag)
 	{

@@ -3,6 +3,7 @@
 namespace NetteAddons\TextProcessors;
 
 use Nette\Utils\Strings;
+use Nette\Utils\Callback;
 use FSHL\Highlighter;
 use	FSHL\Output\Html;
 use	FSHL\Lexer;
@@ -11,6 +12,7 @@ class MarkdownProcessor extends \Nette\Object implements \NetteAddons\ITextProce
 {
 	/** @var callable */
 	private $converter;
+
 
 	public function __construct()
 	{
@@ -67,10 +69,14 @@ class MarkdownProcessor extends \Nette\Object implements \NetteAddons\ITextProce
 		};
 	}
 
+	/**
+	 * @param string
+	 * @return string[]|array (content => string, toc => string[]|array)
+	 */
 	public function process($input)
 	{
 		return array(
-			'content' => \Nette\Utils\Callback::invoke($this->converter, $input),
+			'content' => Callback::invoke($this->converter, $input),
 			'toc' => array(),
 		);
 	}

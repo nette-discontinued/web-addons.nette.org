@@ -2,12 +2,10 @@
 
 namespace NetteAddons\Model\Utils;
 
-use Nette,
-	Nette\Forms;
+use Nette\Forms\IControl;
 
 
-
-class FormValidators extends Nette\Object
+class FormValidators extends \Nette\Object
 {
 	/** composerName regular expression */
 	const COMPOSER_NAME_RE = Validators::COMPOSER_NAME_RE;
@@ -16,36 +14,47 @@ class FormValidators extends Nette\Object
 	private $validators;
 
 
-
 	public function __construct(Validators $validators)
 	{
 		$this->validators = $validators;
 	}
 
 
-
-	public function isComposerFullNameValid(Forms\IControl $control)
+	/**
+	 * @param \Nette\Forms\IControl
+	 * @return bool
+	 */
+	public function isComposerFullNameValid(IControl $control)
 	{
 		return $this->validators->isComposerFullNameValid($control->getValue());
 	}
 
 
-
-	public function isComposerFullNameUnique(Forms\IControl $control)
+	/**
+	 * @param \Nette\Forms\IControl
+	 * @return bool
+	 */
+	public function isComposerFullNameUnique(IControl $control)
 	{
 		return $this->validators->isComposerFullNameUnique($control->getValue());
 	}
 
 
-
-	public function isVersionValid(Forms\IControl $control)
+	/**
+	 * @param \Nette\Forms\IControl
+	 * @return bool
+	 */
+	public function isVersionValid(IControl $control)
 	{
 		return $this->validators->isVersionValid($control->getValue());
 	}
 
 
-
-	public function isLicenseValid(Forms\IControl $control)
+	/**
+	 * @param \Nette\Forms\IControl
+	 * @return bool
+	 */
+	public function isLicenseValid(IControl $control)
 	{
 		$licenses = $control->getValue();
 		if (is_string($licenses)) {

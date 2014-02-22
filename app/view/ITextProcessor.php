@@ -2,6 +2,7 @@
 
 namespace NetteAddons;
 
+
 interface ITextProcessor
 {
 	/**

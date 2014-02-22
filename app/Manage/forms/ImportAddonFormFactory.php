@@ -2,18 +2,16 @@
 
 namespace NetteAddons\Manage\Forms;
 
-use Nette,
-	Nette\Utils\Strings,
-	Nette\Forms\IControl,
-	Nette\Security\IIdentity,
-	NetteAddons\Forms\Form,
-	NetteAddons\Model\Facade\AddonManageFacade,
-	NetteAddons\Model\Importers\RepositoryImporterManager,
-	NetteAddons\Model\Utils\Validators;
+use Nette\Diagnostics\Debugger;
+use Nette\Utils\Strings;
+use Nette\Forms\IControl;
+use Nette\Security\IIdentity;
+use NetteAddons\Forms\Form;
+use NetteAddons\Model\Facade\AddonManageFacade;
+use NetteAddons\Model\Importers\RepositoryImporterManager;
+use NetteAddons\Model\Utils\Validators;
 
-/**
- * @author Patrik Votoček
- */
+
 class ImportAddonFormFactory extends \Nette\Object
 {
 	/** @var \NetteAddons\Model\Facade\AddonManageFacade */
@@ -26,22 +24,21 @@ class ImportAddonFormFactory extends \Nette\Object
 	private $validators;
 
 
-
-	/**
-	 * @param \NetteAddons\Model\Facade\AddonManageFacade
-	 * @param \NetteAddons\Model\Importers\RepositoryImporterManager
-	 * @param \NetteAddons\Model\Utils\Validators
-	 */
-	public function __construct(AddonManageFacade $manager, RepositoryImporterManager $importers, Validators $validators)
-	{
+	public function __construct(
+		AddonManageFacade $manager,
+		RepositoryImporterManager $importers,
+		Validators $validators
+	) {
 		$this->manager = $manager;
 		$this->importerManager = $importers;
 		$this->validators = $validators;
 	}
 
 
-
-
+	/**
+	 * @param \Nette\Security\IIdentity
+	 * @return \NetteAddons\Forms\Form
+	 */
 	public function create(IIdentity $user)
 	{
 		$form = new Form;
@@ -67,7 +64,6 @@ class ImportAddonFormFactory extends \Nette\Object
 
 			try {
 				$importer = $importerManager->createFromUrl($values->url);
-
 			} catch (\NetteAddons\NotSupportedException $e) {
 				$form['url']->addError(
 					'Sorry, we currently support only repositories from ' . $importerManager->getNames() . '.'
@@ -84,30 +80,25 @@ class ImportAddonFormFactory extends \Nette\Object
 				}
 
 				$manager->storeAddon($values->token, $addon);
-
 			} catch (\NetteAddons\Utils\HttpException $e) {
 				if ($e->getCode() === 404) {
 					$form['url']->addError("Repository with URL '{$values->url}' does not exist.");
-
 				} else {
 					$importerName = $importer::getName();
 					$form['url']->addError("Importing failed because '$importerName' returned error #" . $e->getCode() . '.');
 				}
-
 			} catch (\NetteAddons\IOException $e) {
 				if ($e->getCode() === 404) {
 					$form['url']->addError("Repository with URL '{$values->url}' does not exist.");
-
 				} else {
 					$form['url']->addError('Importing failed. Try again later.');
-					Nette\Diagnostics\Debugger::log($e, Nette\Diagnostics\Debugger::WARNING);
+					Debugger::log($e, Debugger::WARNING);
 				}
 			}
 		};
 
 		return $form;
 	}
-
 
 
 	/**
@@ -120,7 +111,6 @@ class ImportAddonFormFactory extends \Nette\Object
 	}
 
 
-
 	/**
 	 * @param \Nette\Forms\IControl
 	 * @return bool
@@ -129,5 +119,4 @@ class ImportAddonFormFactory extends \Nette\Object
 	{
 		return $this->importerManager->isValid($control->getValue());
 	}
-
 }

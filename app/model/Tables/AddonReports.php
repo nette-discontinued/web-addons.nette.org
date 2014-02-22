@@ -2,16 +2,11 @@
 
 namespace NetteAddons\Model;
 
-use Nette;
 
-/**
- * @author Patrik Votoček
- */
 class AddonReports extends Table
 {
 	/** @var string */
 	protected $tableName = 'addons_reports';
-
 
 
 	/**
@@ -26,15 +21,14 @@ class AddonReports extends Table
 	public function saveReport($userId, $addonId, $message, $reason = NULL, $zappedBy = NULL)
 	{
 		return $this->createRow(array(
-			'userId'     => $userId,
-			'addonId'    => $addonId,
+			'userId' => $userId,
+			'addonId' => $addonId,
 			'reportedAt' => new \DateTime,
-			'message'    => $message,
-			'reason'     => $reason,
-			'zappedBy'   => $zappedBy,
+			'message' => $message,
+			'reason' => $reason,
+			'zappedBy' => $zappedBy,
 		));
 	}
-
 
 
 	/**
@@ -53,5 +47,4 @@ class AddonReports extends Table
 
 		return $row->update(array('reason' => $reason, 'zappedBy' => $zappedBy));
 	}
-
 }

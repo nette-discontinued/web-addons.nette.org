@@ -2,33 +2,26 @@
 
 namespace NetteAddons\Manage;
 
-use NetteAddons\Model\Users,
-	NetteAddons\Model\AddonVersions;
 
-
-/**
- * @author Patrik Votoček
- */
 final class VersionsPresenter extends BasePresenter
 {
 	/**
-	 * @var Forms\AddVersionFormFactory
 	 * @inject
+	 * @var \NetteAddons\Manage\Forms\AddVersionFormFactory
 	 */
 	public $addVersionForm;
 
 	/**
-	 * @var \NetteAddons\Model\AddonVersions
 	 * @inject
+	 * @var \NetteAddons\Model\AddonVersions
 	 */
 	public $versions;
 
 	/**
-	 * @var \NetteAddons\Model\Users
 	 * @inject
+	 * @var \NetteAddons\Model\Users
 	 */
 	public $users;
-
 
 
 	/**
@@ -38,15 +31,14 @@ final class VersionsPresenter extends BasePresenter
 	{
 		$form = $this->addVersionForm->create($this->addon, $this->getUser()->getIdentity(), $this->token);
 
-		$form->onSuccess[] = $this->addVersionFormSubmitted;
+		$form->onSuccess[] = array($this, 'addVersionFormSubmitted');
 
 		return $form;
 	}
 
 
-
 	/**
-	 * @param Forms\VersionForm
+	 * @param \NetteAddons\Manage\Forms\VersionForm
 	 */
 	public function addVersionFormSubmitted(Forms\VersionForm $form)
 	{
@@ -65,7 +57,6 @@ final class VersionsPresenter extends BasePresenter
 	}
 
 
-
 	public function actionAdd()
 	{
 		if (!$this->addon) {
@@ -74,12 +65,10 @@ final class VersionsPresenter extends BasePresenter
 	}
 
 
-
 	public function renderAdd()
 	{
 		$this->template->addon = $this->addon;
 	}
-
 
 
 	public function actionImport()
@@ -96,12 +85,10 @@ final class VersionsPresenter extends BasePresenter
 			$this->manager->importVersions($this->addon, $importer, $this->getUser()->identity);
 			$this->manager->storeAddon($this->token, $this->addon);
 			$this->redirect(':Manage:Addon:finish');
-
 		} catch (\NetteAddons\NotSupportedException $e) {
 			$this->error();
 		}
 	}
-
 
 
 	/**
@@ -118,10 +105,8 @@ final class VersionsPresenter extends BasePresenter
 		try {
 			$importer = $this->importerManager->createFromUrl($this->addon->repository);
 			$result = $this->manager->updateVersions($this->addon, $importer, $owner);
-
 		} catch (\NetteAddons\NotSupportedException $e) {
 			$this->error();
-
 		} catch (\NetteAddons\IOException $e) {
 			$this->flashMessage('Version importing failed. Try again later.', 'error');
 			$this->redirect(':Detail:', $this->addon->id);
@@ -134,10 +119,12 @@ final class VersionsPresenter extends BasePresenter
 				foreach ($result['new'] as $version) {
 					$this->versions->add($version);
 				}
+
 				foreach ($result['conflicted'] as $conflict) {
 					$conflict['b']->id = $conflict['a']->id;
 					$this->versions->update($conflict['b']);
 				}
+
 				$this->flashMessage('Versions have been updated.');
 			} catch (\PDOException $e) {
 				$this->flashMessage('Version importing failed. Try again later.', 'error');
@@ -146,5 +133,4 @@ final class VersionsPresenter extends BasePresenter
 
 		$this->redirect(':Detail:', $this->addon->id);
 	}
-
 }

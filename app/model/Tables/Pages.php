@@ -4,9 +4,7 @@ namespace NetteAddons\Model;
 
 use Nette\Utils\Strings;
 
-/**
- * @author Patrik Votoček
- */
+
 class Pages extends Table
 {
 	/** @var string */
@@ -23,7 +21,6 @@ class Pages extends Table
 	}
 
 
-
 	/**
 	 * @return \Nette\Database\Table\Selection
 	 */
@@ -31,7 +28,6 @@ class Pages extends Table
 	{
 		return $this->getTable()->group('slug')->order('revision DESC');
 	}
-
 
 
 	/**
@@ -44,15 +40,14 @@ class Pages extends Table
 	public function savePage($authorId, $name, $content)
 	{
 		return $this->createRow(array(
-			'authorId'  => $authorId,
-			'name'      => $name,
-			'slug'      => Strings::webalize($name),
-			'content'   => $content,
+			'authorId' => $authorId,
+			'name' => $name,
+			'slug' => Strings::webalize($name),
+			'content' => $content,
 			'createdAt' => new \DateTime,
-			'revision'  => 1,
+			'revision' => 1,
 		));
 	}
-
 
 
 	/**
@@ -72,12 +67,11 @@ class Pages extends Table
 		}
 
 		return $row->update(array(
-			'authorId'  => $authorId,
-			'name'      => $name,
-			'content'   => $content,
+			'authorId' => $authorId,
+			'name' => $name,
+			'content' => $content,
 			'createdAt' => new \DateTime,
-			'revision'  => $row->revision + 1,
+			'revision' => $row->revision + 1,
 		));
 	}
-
 }

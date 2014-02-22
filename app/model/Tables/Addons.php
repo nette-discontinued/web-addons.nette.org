@@ -2,22 +2,13 @@
 
 namespace NetteAddons\Model;
 
-use Nette,
-	Nette\Utils\Strings,
-	Nette\Security\IIdentity,
-	Nette\Database\SqlLiteral,
-	Nette\Database\Table\ActiveRow,
-	Nette\Database\Table\Selection,
-	Nette\DateTime,
-	Nette\Http;
+use Nette\Utils\Strings;
+use Nette\Database\Context;
+use Nette\Database\SqlLiteral;
+use Nette\Database\Table\Selection;
+use Nette\DateTime;
 
 
-
-/**
- * Addons table repository
- *
- * @author Patrik Votoček
- */
 class Addons extends Table
 {
 	/** @var array */
@@ -33,14 +24,12 @@ class Addons extends Table
 	private $tags;
 
 
-
-	public function __construct(Nette\Database\Context $db, AddonVersions $versions, Tags $tags)
+	public function __construct(Context $db, AddonVersions $versions, Tags $tags)
 	{
 		parent::__construct($db);
 		$this->versions = $versions;
 		$this->tags = $tags;
 	}
-
 
 
 	/**
@@ -50,28 +39,24 @@ class Addons extends Table
 	protected function getTable($ignoreDeleted = FALSE)
 	{
 		$table = parent::getTable();
+
 		if (!$ignoreDeleted) {
 			$this->filterOutDeleted($table);
 		}
+
 		return $table;
 	}
 
 
-
-// === Selecting addons ========================================================
-
-
-
 	/**
-	 * @param  int
-	 * @param  bool
+	 * @param int
+	 * @param bool
 	 * @return \Nette\Database\Table\ActiveRow|FALSE
 	 */
 	public function find($id, $ignoreDeleted = FALSE)
 	{
 		return $this->getTable($ignoreDeleted)->wherePrimary($id)->fetch();
 	}
-
 
 
 	/**
@@ -81,7 +66,6 @@ class Addons extends Table
 	{
 		return $this->getTable(TRUE)->where('deletedAt IS NOT NULL');
 	}
-
 
 
 	/**
@@ -106,7 +90,6 @@ class Addons extends Table
 	}
 
 
-
 	/**
 	 * @return \Nette\Database\Table\Selection
 	 */
@@ -116,21 +99,21 @@ class Addons extends Table
 	}
 
 
-
 	/**
-	 * @param  int|NULL
-	 * @param  bool
+	 * @param int|NULL
+	 * @param bool
 	 * @return \Nette\Database\Table\Selection
 	 */
 	public function findLastUpdated($count = NULL, $ignoreDeleted = FALSE)
 	{
 		$selection = $this->getTable($ignoreDeleted)->order('updatedAt DESC');
+
 		if (!is_null($count)) {
 			$selection->limit($count);
 		}
+
 		return $selection;
 	}
-
 
 
 	/**
@@ -148,7 +131,6 @@ class Addons extends Table
 	}
 
 
-
 	/**
 	 * @param  int|NULL
 	 * @param  bool
@@ -164,7 +146,6 @@ class Addons extends Table
 	}
 
 
-
 	/**
 	 * @param int
 	 * @return \Nette\Database\Table\Selection
@@ -175,7 +156,6 @@ class Addons extends Table
 	}
 
 
-
 	/**
 	 * @param string
 	 * @return \Nette\Database\Table\Selection
@@ -184,7 +164,6 @@ class Addons extends Table
 	{
 		return $this->findBy(array('composerVendor' => $vendor));
 	}
-
 
 
 	/**
@@ -202,7 +181,6 @@ class Addons extends Table
 	}
 
 
-
 	/**
 	 * @param string
 	 * @param string
@@ -212,7 +190,6 @@ class Addons extends Table
 	{
 		return $this->findOneBy(array('composerVendor' => $vendor, 'composerName' => $name));
 	}
-
 
 
 	/**
@@ -231,12 +208,11 @@ class Addons extends Table
 	}
 
 
-
 	/**
 	 * Filter addon selection by some text.
 	 *
-	 * @param  \Nette\Database\Table\Selection
-	 * @param  string
+	 * @param \Nette\Database\Table\Selection
+	 * @param string
 	 * @return \Nette\Database\Table\Selection for fluent interface
 	 */
 	public function filterByString(Selection $addons, $string)
@@ -244,7 +220,6 @@ class Addons extends Table
 		$string = "%$string%";
 		return $addons->where('name LIKE ? OR shortDescription LIKE ?', $string, $string);
 	}
-
 
 
 	public function incrementDownloadsCount(Addon $addon)
@@ -261,7 +236,6 @@ class Addons extends Table
 	}
 
 
-
 	public function incrementInstallsCount(Addon $addon)
 	{
 		$row = $this->find($addon->id);
@@ -274,7 +248,6 @@ class Addons extends Table
 			'totalInstallsCount' => new SqlLiteral('totalInstallsCount + 1')
 		));
 	}
-
 
 
 	/**
@@ -298,10 +271,6 @@ class Addons extends Table
 	}
 
 
-
-	/**
-	 * @param Addon
-	 */
 	public function unmarkAsDeleted(Addon $addon)
 	{
 		$row = $this->find($addon->id, TRUE);
@@ -319,15 +288,11 @@ class Addons extends Table
 	}
 
 
-
-// === CRUD ====================================================================
-
 	/**
 	 * Saves addon to database.
 	 *
-	 * @author Jan Tvrdík
-	 * @param  Addon
-	 * @return ActiveRow created row
+	 * @param Addon
+	 * @return \Nette\Database\Table\ActiveRow created row
 	 * @throws \NetteAddons\DuplicateEntryException
 	 * @throws \NetteAddons\InvalidArgumentException
 	 * @throws \PDOException
@@ -345,22 +310,22 @@ class Addons extends Table
 		$this->db->beginTransaction();
 		try {
 			$row = $this->createRow(array(
-				'name'                => $addon->name,
-				'composerVendor'      => $addon->composerVendor,
-				'composerName'        => $addon->composerName,
-				'userId'              => $addon->userId,
-				'repository'          => $addon->repository,
-				'repositoryHosting'   => $addon->repositoryHosting,
-				'shortDescription'    => $addon->shortDescription,
-				'description'         => $addon->description,
-				'descriptionFormat'   => $addon->descriptionFormat,
-				'demo'                => $addon->demo ?: NULL,
-				'defaultLicense'      => $addon->defaultLicense,
-				'updatedAt'           => new Datetime('now'),
+				'name' => $addon->name,
+				'composerVendor' => $addon->composerVendor,
+				'composerName' => $addon->composerName,
+				'userId' => $addon->userId,
+				'repository' => $addon->repository,
+				'repositoryHosting' => $addon->repositoryHosting,
+				'shortDescription' => $addon->shortDescription,
+				'description' => $addon->description,
+				'descriptionFormat' => $addon->descriptionFormat,
+				'demo' => $addon->demo ?: NULL,
+				'defaultLicense' => $addon->defaultLicense,
+				'updatedAt' => new Datetime('now'),
 				'totalDownloadsCount' => $addon->totalDownloadsCount ?: 0,
-				'totalInstallsCount'  => $addon->totalInstallsCount ?: 0,
-				'deletedAt'           => $addon->deletedAt,
-				'deletedBy'           => $addon->deletedBy,
+				'totalInstallsCount' => $addon->totalInstallsCount ?: 0,
+				'deletedAt' => $addon->deletedAt,
+				'deletedBy' => $addon->deletedBy,
 			));
 
 			$addon->id = $row->id;
@@ -375,7 +340,6 @@ class Addons extends Table
 			$this->onAddonChange($addon);
 
 			return $row;
-
 		} catch (\Exception $e) {
 			$this->db->rollBack();
 			$addon->id = NULL;
@@ -384,24 +348,23 @@ class Addons extends Table
 	}
 
 
-
 	public function update(Addon $addon)
 	{
 		// TODO: this may fail, becase find() may return FALSE
 		$this->find($addon->id)->update(array(
-			'name'                => $addon->name,
-			'repository'          => $addon->repository,
-			'repositoryHosting'   => $addon->repositoryHosting,
-			'shortDescription'    => $addon->shortDescription,
-			'description'         => $addon->description,
-			'descriptionFormat'   => $addon->descriptionFormat,
-			'demo'                => $addon->demo ?: NULL,
-			'defaultLicense'      => $addon->defaultLicense,
-			'updatedAt'           => new Datetime('now'),
+			'name' => $addon->name,
+			'repository' => $addon->repository,
+			'repositoryHosting' => $addon->repositoryHosting,
+			'shortDescription' => $addon->shortDescription,
+			'description' => $addon->description,
+			'descriptionFormat' => $addon->descriptionFormat,
+			'demo' => $addon->demo ?: NULL,
+			'defaultLicense' => $addon->defaultLicense,
+			'updatedAt' => new Datetime('now'),
 			'totalDownloadsCount' => $addon->totalDownloadsCount ?: 0,
-			'totalInstallsCount'  => $addon->totalInstallsCount ?: 0,
-			'deletedAt'           => $addon->deletedAt,
-			'deletedBy'           => $addon->deletedBy,
+			'totalInstallsCount' => $addon->totalInstallsCount ?: 0,
+			'deletedAt' => $addon->deletedAt,
+			'deletedBy' => $addon->deletedBy,
 		));
 
 		$this->onAddonChange($addon);
@@ -410,10 +373,6 @@ class Addons extends Table
 	}
 
 
-
-	/**
-	 * @param Addon
-	 */
 	public function delete(Addon $addon)
 	{
 		$row = $this->find($addon->id, TRUE);
@@ -428,7 +387,6 @@ class Addons extends Table
 	}
 
 
-
 	/**
 	 * @param  \Nette\Database\Table\Selection
 	 */
@@ -436,5 +394,4 @@ class Addons extends Table
 	{
 		$selection->where('deletedAt IS NULL');
 	}
-
 }

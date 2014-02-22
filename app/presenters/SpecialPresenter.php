@@ -2,21 +2,18 @@
 
 namespace NetteAddons;
 
-/**
- * @author Patrik Votoček
- */
+
 final class SpecialPresenter extends BasePresenter
 {
 	/**
-	 * @var Model\Addons
 	 * @inject
+	 * @var \NetteAddons\Model\Addons
 	 */
 	public $addons;
 
 
-
 	/**
-	 * @param string output type
+	 * @param string
 	 */
 	public function renderSitemap($type = 'html')
 	{
@@ -28,5 +25,4 @@ final class SpecialPresenter extends BasePresenter
 			$this->setView('sitemap.xml');
 		}
 	}
-
 }

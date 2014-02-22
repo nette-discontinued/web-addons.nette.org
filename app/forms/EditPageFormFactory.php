@@ -2,24 +2,17 @@
 
 namespace NetteAddons\Forms;
 
-use Nette\Security\IIdentity,
-	Nette\Database\Table\ActiveRow,
-	NetteAddons\Model\Pages;
+use Nette\Security\IIdentity;
+use Nette\Database\Table\ActiveRow;
+use NetteAddons\Model\Pages;
 
 
-/**
- * @author  Patrik Votoček
- */
 class EditPageFormFactory extends \Nette\Object
 {
-
-	/** @var Pages */
+	/** @var \NetteAddons\Model\Pages */
 	private $pages;
 
 
-	/**
-	 * @param Pages
-	 */
 	public function __construct(Pages $pages)
 	{
 		$this->pages = $pages;
@@ -27,13 +20,14 @@ class EditPageFormFactory extends \Nette\Object
 
 
 	/**
-	 * @param ActiveRow
-	 * @param IIdentity
+	 * @param \Nette\Database\Table\ActiveRow
+	 * @param \Nette\Security\IIdentity
 	 * @return Form
 	 */
 	public function create(ActiveRow $page, IIdentity $user)
 	{
 		$form = new Form;
+
 		$form->addText('name', 'Name')
 			->setRequired()
 			->setAttribute('class', 'text input-half');
@@ -56,5 +50,4 @@ class EditPageFormFactory extends \Nette\Object
 
 		return $form;
 	}
-
 }

@@ -2,11 +2,9 @@
 
 namespace NetteAddons\Model;
 
-use Nette,
-	Nette\Database\SqlLiteral,
-	Nette\Database\Table\ActiveRow,
-	Nette\Utils\Json;
-
+use Nette\Database\SqlLiteral;
+use Nette\Database\Context;
+use Nette\Utils\Json;
 
 
 /**
@@ -25,16 +23,10 @@ class AddonVersions extends Table
 	private $parser;
 
 
-
-	/**
-	 * Class constructor.
-	 *
-	 * @param  Nette\Database\Context
-	 * @param  Utils\VersionParser
-	 */
-	public function __construct(Nette\Database\Context $db, VersionDependencies $dependencies, Utils\VersionParser $parser)
+	public function __construct(Context $db, VersionDependencies $dependencies, Utils\VersionParser $parser)
 	{
 		parent::__construct($db);
+
 		$this->dependencies = $dependencies;
 		$this->parser = $parser;
 	}
@@ -44,8 +36,8 @@ class AddonVersions extends Table
 	/**
 	 * Adds new version of given addon.
 	 *
-	 * @param  AddonVersion
-	 * @return ActiveRow created row
+	 * @param AddonVersion
+	 * @return \Nette\Database\Table\ActiveRow created row
 	 * @throws \NetteAddons\DuplicateEntryException
 	 * @throws \PDOException
 	 * @throws \Nette\Utils\JsonException
@@ -59,11 +51,10 @@ class AddonVersions extends Table
 	}
 
 
-
 	/**
 	 * Updates addon version.
 	 *
-	 * @param  AddonVersion
+	 * @param AddonVersion
 	 * @return bool
 	 * @throws \NetteAddons\InvalidArgumentException
 	 */
@@ -74,16 +65,19 @@ class AddonVersions extends Table
 		}
 
 		$row = $this->find($version->id);
-		if (!$row) return FALSE;
+
+		if (!$row) {
+			return FALSE;
+		}
+
 		return (bool) $row->update($this->toArray($version));
 	}
-
 
 
 	/**
 	 * Sorts list of versions.
 	 *
-	 * @param  AddonVersion[]
+	 * @param AddonVersion[]
 	 * @return void
 	 */
 	public function rsort(&$versions)
@@ -92,12 +86,11 @@ class AddonVersions extends Table
 	}
 
 
-
 	/**
 	 * Returns the latest version.
 	 *
-	 * @param  AddonVersion[] reverse sorted versions
-	 * @param  bool
+	 * @param AddonVersion[] reverse sorted versions
+	 * @param bool
 	 * @return AddonVersion|FALSE
 	 */
 	public function getCurrent($versions, $preferStable = TRUE)
@@ -108,23 +101,28 @@ class AddonVersions extends Table
 
 		if ($preferStable) {
 			$stable = $this->parser->filterStable($versions);
-			if ($stable) $versions = $stable;
+
+			if ($stable) {
+				$versions = $stable;
+			}
 		}
 
 		return reset($versions);
 	}
 
 
-
 	public function incrementDownloadsCount(AddonVersion $version)
 	{
 		$row = $this->find($version->id);
-		if (!$row) return;
+
+		if (!$row) {
+			return;
+		}
+
 		$row->update(array(
 			'downloadsCount' => new SqlLiteral('downloadsCount + 1')
 		));
 	}
-
 
 
 	public function incrementInstallsCount(AddonVersion $version)
@@ -141,26 +139,25 @@ class AddonVersions extends Table
 	}
 
 
-
 	/**
-	 * @param  AddonVersion
+	 * @param AddonVersion
 	 * @return array
 	 */
 	private function toArray(AddonVersion $version)
 	{
 		return array(
-			'addonId'         => $version->addon->id,
-			'version'         => $version->version,
-			'license'         => $version->license,
-			'distType'        => $version->distType,
-			'distUrl'         => $version->distUrl,
-			'downloadsCount'  => $version->downloadsCount ?: 0,
-			'installsCount'  => $version->installsCount ?: 0,
-			'sourceType'      => $version->sourceType,
-			'sourceUrl'       => $version->sourceUrl,
+			'addonId' => $version->addon->id,
+			'version' => $version->version,
+			'license' => $version->license,
+			'distType' => $version->distType,
+			'distUrl' => $version->distUrl,
+			'downloadsCount' => $version->downloadsCount ?: 0,
+			'installsCount' => $version->installsCount ?: 0,
+			'sourceType' => $version->sourceType,
+			'sourceUrl' => $version->sourceUrl,
 			'sourceReference' => $version->sourceReference,
-			'composerJson'    => Json::encode($version->composerJson),
-			'updatedAt'       => $version->updatedAt,
+			'composerJson' => Json::encode($version->composerJson),
+			'updatedAt' => $version->updatedAt,
 		);
 	}
 }

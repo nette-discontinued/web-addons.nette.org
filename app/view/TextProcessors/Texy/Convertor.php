@@ -8,14 +8,12 @@ use FSHL;
 
 /**
  * Texy parser for wiki.
- *
- * @copyright  David Grudl
  */
 class Converter
 {
 	const HOMEPAGE = 'homepage';
 
-	/** @var Link */
+	/** @var \NetteAddons\TextProcessors\Texy\Link */
 	private $current;
 
 	/** @var string */
@@ -68,6 +66,11 @@ class Converter
 	);
 
 
+	/**
+	 * @param string
+	 * @param string
+	 * @param string
+	 */
 	public function __construct($book, $lang, $name)
 	{
 		$this->current = new Link($book, $lang, $name);
@@ -75,6 +78,7 @@ class Converter
 
 
 	/**
+	 * @param string
 	 * @return void
 	 */
 	public function parse($text)
@@ -106,7 +110,7 @@ class Converter
 
 
 	/**
-	 * @return Texy
+	 * @return \Texy
 	 */
 	public function createTexy()
 	{
@@ -141,6 +145,10 @@ class Converter
 	/********************* text tools ****************d*g**/
 
 
+	/**
+	 * @param string
+	 * @return Link|string
+	 */
 	public function resolveLink($link)
 	{
 		if (preg_match('~.+@|https?:|ftp:|mailto:|ftp\.|www\.~Ai', $link)) { // external link
@@ -222,6 +230,10 @@ class Converter
 	}
 
 
+	/**
+	 * @param \NetteAddons\TextProcessors\Texy\Link
+	 * @return string
+	 */
 	public function createUrl(Link $link)
 	{
 		$parts = explode('-', $link->book, 2);
@@ -235,6 +247,11 @@ class Converter
 	}
 
 
+	/**
+	 * @param string
+	 * @param string|NULL
+	 * @return string
+	 */
 	private static function webalize($s, $charlist = NULL)
 	{
 		$s = preg_replace('#[^\x09\x0A\x0D\x20-\x7E\xA0-\x{2FF}\x{370}-\x{10FFFF}]#u', '', $s);
@@ -261,11 +278,11 @@ class Converter
 
 
 	/**
-	 * @param  TexyHandlerInvocation  handler invocation
-	 * @param  string  command
-	 * @param  array   arguments
-	 * @param  string  arguments in raw format
-	 * @return TexyHtml|string|FALSE
+	 * @param \TexyHandlerInvocation
+	 * @param string
+	 * @param array
+	 * @param string
+	 * @return \TexyHtml|string|FALSE
 	 */
 	public function scriptHandler($invocation, $cmd, $args, $raw)
 	{
@@ -328,12 +345,12 @@ class Converter
 
 
 	/**
-	 * @param  TexyHandlerInvocation  handler invocation
-	 * @param  string
-	 * @param  string
-	 * @param  TexyModifier
-	 * @param  TexyLink
-	 * @return TexyHtml|string|FALSE
+	 * @param \TexyHandlerInvocation
+	 * @param string
+	 * @param string
+	 * @param \TexyModifier
+	 * @param \TexyLink
+	 * @return \TexyHtml|string|FALSE
 	 */
 	public function phraseHandler($invocation, $phrase, $content, $modifier, $link)
 	{
@@ -364,9 +381,9 @@ class Converter
 
 
 	/**
-	 * @param  TexyHandlerInvocation  handler invocation
-	 * @param  string
-	 * @return TexyHtml|string|FALSE
+	 * @param \TexyHandlerInvocation
+	 * @param string
+	 * @return \TexyHtml|string|FALSE
 	 */
 	public function newReferenceHandler($invocation, $name)
 	{
@@ -409,12 +426,12 @@ class Converter
 	/**
 	 * User handler for code block.
 	 *
-	 * @param  TexyHandlerInvocation  handler invocation
-	 * @param  string  block type
-	 * @param  string  text to highlight
-	 * @param  string  language
-	 * @param  TexyModifier modifier
-	 * @return TexyHtml
+	 * @param \TexyHandlerInvocation
+	 * @param string
+	 * @param string
+	 * @param string
+	 * @param \TexyModifier
+	 * @return \TexyHtml
 	 */
 	public function blockHandler($invocation, $blocktype, $content, $lang, $modifier)
 	{
@@ -448,5 +465,4 @@ class Converter
 		$elCode = $elPre->create('code', $content);
 		return $elPre;
 	}
-
 }

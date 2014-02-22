@@ -2,69 +2,58 @@
 
 namespace NetteAddons;
 
-use Nette\Http,
-	NetteAddons\Model\Addon,
-	NetteAddons\Model\Addons,
-	NetteAddons\Model\AddonDownloads,
-	NetteAddons\Model\AddonVersions,
-	NetteAddons\Model\AddonVotes,
-	Nette\Caching\Cache;
+use Nette\Http;
+use Nette\Caching\Cache;
+use NetteAddons\Model\Addon;
+use NetteAddons\Model\AddonDownloads;
 
 
-
-/**
- * @author Jan Marek
- * @author Jan Tvrdík
- * @author Patrik Votoček
- * @author Michael Moravec
- */
 final class DetailPresenter extends BasePresenter
 {
 	/**
-	 * @var int addon ID
-	 * @persistent
-	 */
-	public $id;
-
-	/** @var Model\Addon */
-	private $addon;
-
-	/**
-	 * @var Model\Addons
 	 * @inject
+	 * @var \NetteAddons\Model\Addons
 	 */
 	public $addons;
 
 	/**
-	 * @var Model\AddonDownloads
 	 * @inject
+	 * @var \NetteAddons\Model\AddonDownloads
 	 */
 	public $addonDownloads;
 
 	/**
-	 * @var Model\AddonVersions
 	 * @inject
+	 * @var \NetteAddons\Model\AddonVersions
 	 */
 	public $addonVersions;
 
 	/**
-	 * @var Model\AddonVotes
 	 * @inject
+	 * @var \NetteAddons\Model\AddonVotes
 	 */
 	public $addonVotes;
 
 	/**
-	 * @var Forms\ReportFormFactory
 	 * @inject
+	 * @var \NetteAddons\Forms\ReportFormFactory
 	 */
 	public $reportForm;
 
 	/**
-	 * @var \Nette\Caching\IStorage
 	 * @inject
+	 * @var \Nette\Caching\IStorage
 	 */
 	public $cacheStorage;
 
+	/**
+	 * @persistent
+	 * @var int addon ID
+	 */
+	public $id;
+
+	/** @var \NetteAddons\Model\Addon */
+	private $addon;
 
 
 	protected function startup()
@@ -80,7 +69,6 @@ final class DetailPresenter extends BasePresenter
 	}
 
 
-
 	/**
 	 * @param int addon ID
 	 */
@@ -94,14 +82,12 @@ final class DetailPresenter extends BasePresenter
 	}
 
 
-
 	/**
 	 * @param int addon ID
 	 */
 	public function renderVersions($id)
 	{
 	}
-
 
 
 	/**
@@ -130,11 +116,9 @@ final class DetailPresenter extends BasePresenter
 	}
 
 
-
 	/**
 	 * Handle voting for current addon.
 	 *
-	 * @author Jan Tvrdík
 	 * @param  string 'up' or 'down'
 	 * @return void
 	 * @secured
@@ -159,7 +143,7 @@ final class DetailPresenter extends BasePresenter
 
 		$this->addonVotes->vote($this->id, $this->user->id, $vote);
 		if ($this->isAjax()) {
-			$this->invalidateControl('rating');
+			$this->redrawControl('rating');
 		} else {
 			$this->flashMessage('Voting was successful!');
 			$this->redirect('this');
@@ -167,19 +151,17 @@ final class DetailPresenter extends BasePresenter
 	}
 
 
-
 	/**
-	 * @return \Nette\Application\UI\Form
+	 * @return Forms\Form
 	 */
 	protected function createComponentReportForm()
 	{
 		$form = $this->reportForm->create($this->addon, $this->getUser()->getIdentity());
 
-		$form->onSuccess[] = $this->reportFormSubmitted;
+		$form->onSuccess[] = array($this, 'reportFormSubmitted');
 
 		return $form;
 	}
-
 
 
 	/**
@@ -201,7 +183,6 @@ final class DetailPresenter extends BasePresenter
 	{
 
 	}
-
 
 
 	protected function beforeRender()

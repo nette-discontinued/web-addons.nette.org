@@ -2,20 +2,15 @@
 
 namespace NetteAddons\Manage\Forms;
 
-use Nette\Security\IIdentity,
-	NetteAddons\Model\Addon,
-	NetteAddons\Model\AddonVersions,
-	NetteAddons\Model\Utils\VersionParser,
-	NetteAddons\Model\Utils\Licenses,
-	NetteAddons\Model\Utils\FormValidators,
-	NetteAddons\Model\Facade\AddonManageFacade;
+use Nette\Security\IIdentity;
+use NetteAddons\Model\Addon;
+use NetteAddons\Model\AddonVersions;
+use NetteAddons\Model\Utils\VersionParser;
+use NetteAddons\Model\Utils\Licenses;
+use NetteAddons\Model\Utils\FormValidators;
+use NetteAddons\Model\Facade\AddonManageFacade;
 
 
-/**
- * Form for addon version creation.
- *
- * @author Patrik Votoček
- */
 class AddVersionFormFactory extends \Nette\Object
 {
 	/** @var \NetteAddons\Model\Facade\AddonManageFacade */
@@ -37,16 +32,13 @@ class AddVersionFormFactory extends \Nette\Object
 	protected $addon;
 
 
-
-	/**
-	 * @param \NetteAddons\Model\Facade\AddonManageFacade
-	 * @param \NetteAddons\Model\Utils\VersionParser
-	 * @param \NetteAddons\Model\Utils\FormValidators
-	 * @param \NetteAddons\Model\Utils\Licenses
-	 * @param \NetteAddons\Model\AddonVersions
-	 */
-	public function __construct(AddonManageFacade $manager, VersionParser $versionParser, FormValidators $validators, Licenses $licenses, AddonVersions $model)
-	{
+	public function __construct(
+		AddonManageFacade $manager,
+		VersionParser $versionParser,
+		FormValidators $validators,
+		Licenses $licenses,
+		AddonVersions $model
+	) {
 		$this->model = $model;
 		$this->manager = $manager;
 		$this->versionParser = $versionParser;
@@ -55,10 +47,9 @@ class AddVersionFormFactory extends \Nette\Object
 	}
 
 
-
 	/**
-	 * @param Addon
-	 * @param IIdentity
+	 * @param \NetteAddons\Model\Addon
+	 * @param \Nette\Security\IIdentity
 	 * @param string
 	 * @return VersionForm
 	 */
@@ -77,7 +68,6 @@ class AddVersionFormFactory extends \Nette\Object
 
 			try {
 				$version = $manager->addVersionFromValues($addon, $values, $user, $versionParser);
-
 			} catch (\NetteAddons\IOException $e) {
 				$form['archive']->addError('Uploading file failed.');
 				return;
@@ -89,7 +79,6 @@ class AddVersionFormFactory extends \Nette\Object
 				} catch (\NetteAddons\DuplicateEntryException $e) {
 					$form['version']->addError(sprintf("Version '%s' already exists.", $version->version));
 				}
-
 			} else {
 				$manager->storeAddon($values->token, $addon);
 			}

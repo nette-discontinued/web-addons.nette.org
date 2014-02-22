@@ -2,10 +2,9 @@
 
 namespace NetteAddons\Model\Importers\GitHub;
 
-use Nette\Http\Url,
-	Nette\Utils\Strings,
-	NetteAddons\Utils\HttpStreamRequestFactory;
-
+use Nette\Http\Url;
+use Nette\Utils\Strings;
+use NetteAddons\Utils\HttpStreamRequestFactory;
 
 
 /**
@@ -14,14 +13,11 @@ use Nette\Http\Url,
  * This class is not aware how it will be used.
  *
  * @link http://developer.github.com/v3/ GitHub API documentation
- * @author Patrik Votoček
- * @author Jan Tvrdík
- * @author Michael Moravec
  */
 class Repository extends \Nette\Object
 {
-	const URL_PATTERN_PUBLIC = '~^(?:(?:https?|git)://)?github\.com/(?<vendor>[a-z0-9][a-z0-9_-]*)/(?<name>[a-z0-9_.-]+?)(?:\.git)?(/.*)?$~i',
-		URL_PATTERN_PRIVATE = '~^(?:ssh://)?git@github.com(?:/|:)(?<vendor>[a-z0-9][a-z0-9_-]*)/(?<name>[a-z0-9_.-]+?)(?:\.git)?$~i';
+	const URL_PATTERN_PUBLIC = '~^(?:(?:https?|git)://)?github\.com/(?<vendor>[a-z0-9][a-z0-9_-]*)/(?<name>[a-z0-9_.-]+?)(?:\.git)?(/.*)?$~i';
+	const URL_PATTERN_PRIVATE = '~^(?:ssh://)?git@github.com(?:/|:)(?<vendor>[a-z0-9][a-z0-9_-]*)/(?<name>[a-z0-9_.-]+?)(?:\.git)?$~i';
 
 	/** @var \NetteAddons\Utils\HttpStreamRequestFactory */
 	private $requestFactory;
@@ -45,7 +41,6 @@ class Repository extends \Nette\Object
 	private $clientSecret;
 
 
-
 	/**
 	 * @param string
 	 * @param \NetteAddons\Utils\HttpStreamRequestFactory
@@ -53,8 +48,13 @@ class Repository extends \Nette\Object
 	 * @param string|NULL
 	 * @param string|NULL
 	 */
-	public function __construct($apiVersion, HttpStreamRequestFactory $requestFactory, $url, $clientId = NULL, $clientSecret = NULL)
-	{
+	public function __construct(
+		$apiVersion,
+		HttpStreamRequestFactory $requestFactory,
+		$url,
+		$clientId = NULL,
+		$clientSecret = NULL
+	) {
 		$this->apiVersion;
 		$this->requestFactory = $requestFactory;
 
@@ -67,7 +67,6 @@ class Repository extends \Nette\Object
 		$this->clientId = $clientId;
 		$this->clientSecret = $clientSecret;
 	}
-
 
 
 	/**
@@ -86,11 +85,10 @@ class Repository extends \Nette\Object
 	}
 
 
-
 	/**
 	 * Calls remote API.
 	 *
-	 * @param  string
+	 * @param string
 	 * @return mixed json-decoded result
 	 * @throws \NetteAddons\IOException
 	 */
@@ -116,7 +114,6 @@ class Repository extends \Nette\Object
 	}
 
 
-
 	/**
 	 * @return string
 	 */
@@ -126,7 +123,6 @@ class Repository extends \Nette\Object
 	}
 
 
-
 	/**
 	 * @return string
 	 */
@@ -134,7 +130,6 @@ class Repository extends \Nette\Object
 	{
 		return $this->name;
 	}
-
 
 
 	/**
@@ -149,7 +144,6 @@ class Repository extends \Nette\Object
 	}
 
 
-
 	/**
 	 * Returns repository metadata.
 	 *
@@ -161,7 +155,6 @@ class Repository extends \Nette\Object
 	{
 		return $this->exec("/repos/{$this->vendor}/{$this->name}");
 	}
-
 
 
 	/**
@@ -178,7 +171,6 @@ class Repository extends \Nette\Object
 	}
 
 
-
 	/**
 	 * Returns Git "commit" specified by hash.
 	 *
@@ -191,7 +183,6 @@ class Repository extends \Nette\Object
 	{
 		return $this->exec("/repos/{$this->vendor}/{$this->name}/commits/$hash");
 	}
-
 
 
 	/**
@@ -210,7 +201,6 @@ class Repository extends \Nette\Object
 	}
 
 
-
 	/**
 	 * Returns readme content or NULL if readme does not exist.
 	 *
@@ -223,17 +213,16 @@ class Repository extends \Nette\Object
 	{
 		try {
 			$data = $this->exec("/repos/{$this->vendor}/{$this->name}/readme?ref=$hash");
-
 		} catch (\NetteAddons\Utils\HttpException $e) {
 			if ($e->getCode() === 404) {
 				return NULL;
 			}
+
 			throw $e;
 		}
 
 		return $this->processContentResponse($data);
 	}
-
 
 
 	/**
@@ -258,7 +247,6 @@ class Repository extends \Nette\Object
 	}
 
 
-
 	/**
 	 * Returns list of repository tags.
 	 *
@@ -277,9 +265,9 @@ class Repository extends \Nette\Object
 		foreach ($data as $tag) {
 			$tags[$tag->name] = $tag->commit->sha;
 		}
+
 		return $tags;
 	}
-
 
 
 	/**
@@ -302,17 +290,17 @@ class Repository extends \Nette\Object
 				$branches[$branch->name] = $branch->commit->sha;
 			}
 		}
+
 		return $branches;
 	}
-
 
 
 	/**
 	 * Returns download link.
 	 *
 	 * @todo Implement it using GitHub API?
-	 * @param  string
-	 * @param  string
+	 * @param string
+	 * @param string
 	 * @return string
 	 * @throws \NetteAddons\NotSupportedException if $type is other than 'zip'
 	 */
@@ -320,7 +308,6 @@ class Repository extends \Nette\Object
 	{
 		if ($type === 'zip') {
 			return "https://github.com/{$this->vendor}/{$this->name}/zipball/$hash";
-
 		} else {
 			throw new \NetteAddons\NotSupportedException();
 		}

@@ -2,54 +2,45 @@
 
 namespace NetteAddons\Manage\Forms;
 
-use Nette\Utils\Strings,
-	Nette\Forms\Controls\UploadControl,
-	NetteAddons\Model\Addon,
-	NetteAddons\Model\Utils\Licenses,
-	NetteAddons\Model\Utils\FormValidators;
+use Nette\Utils\Strings;
+use Nette\Forms\Controls\UploadControl;
+use NetteAddons\Model\Addon;
+use NetteAddons\Model\Utils\Licenses;
+use NetteAddons\Model\Utils\FormValidators;
 
 
-
-/**
- * @author Patrik Votoček
- */
 class VersionForm extends \NetteAddons\Forms\BaseForm
 {
-	/** @var FormValidators */
+	/** @var \NetteAddons\Model\Utils\FormValidators */
 	private $validators;
 
-	/** @var Licenses */
+	/** @var \NetteAddons\Model\Utils\Licenses */
 	private $licenses;
 
-	/** @var Addon */
+	/** @var \NetteAddons\Model\Addon */
 	private $addon;
 
 
-	/**
-	 * @param FormValidators
-	 * @param Licenses
-	 * @param Addon
-	 */
 	public function __construct(FormValidators $validators, Licenses $licenses, Addon $addon)
 	{
 		$this->validators = $validators;
 		$this->licenses = $licenses;
 		$this->addon = $addon;
+
 		parent::__construct();
 	}
-
 
 
 	protected function buildForm()
 	{
 		$this->addText('version', 'Version', NULL, 100)
 			->setRequired()
-			->addRule($this->validators->isVersionValid, 'Invalid version.');
+			->addRule(array($this->validators, 'isVersionValid'), 'Invalid version.');
 
 		$this->addMultiSelect('license', 'License', $this->licenses->getLicenses(TRUE))
 			->setAttribute('class', 'chzn-select')
 			->setRequired()
-			->addRule($this->validators->isLicenseValid, 'Invalid license identifier.');
+			->addRule(array($this->validators, 'isLicenseValid'), 'Invalid license identifier.');
 
 		$providers = array(
 			'link' => 'Provide link to distribution archive.',
@@ -57,20 +48,23 @@ class VersionForm extends \NetteAddons\Forms\BaseForm
 		);
 		$this->addSelect('how', 'How would you like to provide source codes?', $providers)
 			->setRequired()
-			->addCondition(self::EQUAL, 'link')->toggle('xlink')->endCondition()
-			->addCondition(self::EQUAL, 'upload')->toggle('xupload')->endCondition();
+			->addCondition(self::EQUAL, 'link')
+				->toggle('xlink')
+				->endCondition()
+			->addCondition(self::EQUAL, 'upload')
+				->toggle('xupload');
 
 		$this->addText('archiveLink', 'Link to ZIP archive')
 			->setOption('id', 'xlink')
 			->addConditionOn($this['how'], self::EQUAL, 'link')
-			->addRule(self::FILLED)
-			->addRule(self::URL);
+				->addRule(self::FILLED)
+				->addRule(self::URL);
 
 		$this->addUpload('archive', 'Archive')
 			->setOption('id', 'xupload')
 			->addConditionOn($this['how'], self::EQUAL, 'upload')
-			->addRule(self::FILLED)
-			->addRule($this->isArchiveValid, 'Only ZIP files are allowed.');
+				->addRule(self::FILLED)
+				->addRule(array($this, 'isArchiveValid'), 'Only ZIP files are allowed.');
 
 		$license = $this->addon->defaultLicense;
 		if (is_string($license)) {
@@ -82,7 +76,6 @@ class VersionForm extends \NetteAddons\Forms\BaseForm
 	}
 
 
-
 	/**
 	 * @param \Nette\Forms\Controls\UploadControl
 	 * @return bool
@@ -91,5 +84,4 @@ class VersionForm extends \NetteAddons\Forms\BaseForm
 	{
 		return Strings::endsWith($control->value->name, '.zip');
 	}
-
 }

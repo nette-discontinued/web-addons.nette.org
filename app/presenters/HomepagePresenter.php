@@ -2,23 +2,16 @@
 
 namespace NetteAddons;
 
-use NetteAddons\Model\DevelopmentUtils;
 
-
-/**
- * @author Patrik Votoček
- * @author Vojtěch Dobeš
- */
 final class HomepagePresenter extends BaseListPresenter
 {
 	const ADDONS_LIMIT = 3;
 
 	/**
-	 * @var Model\DevelopmentUtils
 	 * @inject
+	 * @var \NetteAddons\Model\DevelopmentUtils
 	 */
 	public $developmentUtils;
-
 
 
 	public function renderDefault()
@@ -34,13 +27,12 @@ final class HomepagePresenter extends BaseListPresenter
 	}
 
 
-
 	/**
 	 * @secured
 	 */
 	public function handleRandomDownloadAndInstalls()
 	{
-		if ($this->context->parameters['productionMode'] !== FALSE) {
+		if ($this->getContext()->parameters['productionMode'] !== FALSE) {
 			$this->error();
 		}
 

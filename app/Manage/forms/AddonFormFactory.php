@@ -2,16 +2,14 @@
 
 namespace NetteAddons\Manage\Forms;
 
-use NetteAddons\Model\Facade\AddonManageFacade,
-	NetteAddons\Model\Importers\RepositoryImporterManager,
-	NetteAddons\Model\Tags,
-	NetteAddons\Model\Utils\FormValidators,
-	NetteAddons\Model\Utils\Licenses;
+use NetteAddons\Model\Facade\AddonManageFacade;
+use NetteAddons\Model\Importers\RepositoryImporterManager;
+use NetteAddons\Model\Tags;
+use NetteAddons\Model\Utils\FormValidators;
+use NetteAddons\Model\Utils\Licenses;
 
 
 /**
- * @author Patrik Votoček
- *
  * @property string $token
  */
 abstract class AddonFormFactory extends \Nette\Object
@@ -35,16 +33,13 @@ abstract class AddonFormFactory extends \Nette\Object
 	private $descriptionFormats = array();
 
 
-
-	/**
-	 * @param \NetteAddons\Model\Facade\AddonManageFacade
-	 * @param \NetteAddons\Model\Importers\RepositoryImporterManager
-	 * @param \NetteAddons\Model\Tags
-	 * @param \NetteAddons\Model\Utils\FormValidators
-	 * @param \NetteAddons\Model\Utils\Licenses
-	 */
-	public function __construct(AddonManageFacade $manager, RepositoryImporterManager $importerManager, Tags $tags, FormValidators $validators, Licenses $licenses)
-	{
+	public function __construct(
+		AddonManageFacade $manager,
+		RepositoryImporterManager $importerManager,
+		Tags $tags,
+		FormValidators $validators,
+		Licenses $licenses
+	) {
 		$this->manager = $manager;
 		$this->importerManager = $importerManager;
 		$this->tags = $tags;
@@ -53,18 +48,16 @@ abstract class AddonFormFactory extends \Nette\Object
 	}
 
 
-
 	/**
 	 * @param string
 	 * @param string
-	 * @return AddonForm
+	 * @return AddonFormFactory
 	 */
 	public function addDescriptionFormat($id, $name)
 	{
 		$this->descriptionFormats[$id] = $name;
 		return $this;
 	}
-
 
 
 	/**
@@ -81,5 +74,4 @@ abstract class AddonFormFactory extends \Nette\Object
 			$this->descriptionFormats
 		);
 	}
-
 }

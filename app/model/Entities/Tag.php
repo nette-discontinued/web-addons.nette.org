@@ -2,14 +2,10 @@
 
 namespace NetteAddons\Model;
 
-use Nette;
+use Nette\Database\Table\ActiveRow;
 
 
-
-/**
- * @author Jan Tvrdík
- */
-class Tag extends Nette\Object
+class Tag extends \Nette\Object
 {
 	/** @var int */
 	public $id;
@@ -24,12 +20,7 @@ class Tag extends Nette\Object
 	public $level;
 
 
-
-	/**
-	 * @param  Nette\Database\Table\ActiveRow
-	 * @return Tag
-	 */
-	public static function fromActiveRow(Nette\Database\Table\ActiveRow $row)
+	public static function fromActiveRow(ActiveRow $row)
 	{
 		$tag = new static;
 		$tag->id = (int) $row->id;

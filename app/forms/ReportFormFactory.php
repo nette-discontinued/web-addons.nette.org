@@ -2,24 +2,17 @@
 
 namespace NetteAddons\Forms;
 
-use Nette\Security\IIdentity,
-	NetteAddons\Model\Addon,
-	NetteAddons\Model\AddonReports;
+use Nette\Security\IIdentity;
+use NetteAddons\Model\Addon;
+use NetteAddons\Model\AddonReports;
 
 
-/**
- * @author  Patrik Votoček
- */
 class ReportFormFactory extends \Nette\Object
 {
-
-	/** @var AddonReports */
+	/** @var \NetteAddons\Model\AddonReports */
 	private $reports;
 
 
-	/**
-	 * @param AddonReports
-	 */
 	public function __construct(AddonReports $reports)
 	{
 		$this->reports = $reports;
@@ -27,8 +20,8 @@ class ReportFormFactory extends \Nette\Object
 
 
 	/**
-	 * @param Addon
-	 * @param IIdentity
+	 * @param \NetteAddons\Model\Addon
+	 * @param \Nette\Security\IIdentity
 	 * @return Form
 	 */
 	public function create(Addon $addon, IIdentity $user)
@@ -43,10 +36,9 @@ class ReportFormFactory extends \Nette\Object
 		$model = $this->reports;
 		$form->onSuccess[] = function(Form $form) use($model, $addon, $user) {
 			$values = $form->getValues();
-			$model->saveReport($user->getId(), $addon->id, $values['message']);
+			$model->saveReport($user->getId(), $addon->id, $values->message);
 		};
 
 		return $form;
 	}
-
 }

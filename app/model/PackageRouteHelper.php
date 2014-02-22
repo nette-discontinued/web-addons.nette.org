@@ -3,15 +3,10 @@
 namespace NetteAddons\Model;
 
 
-
-/**
- * @author Pavel Kučera
- */
 class PackageRouteHelper extends \Nette\Object
 {
 	/** @var Addons */
 	private $addons;
-
 
 
 	/**
@@ -21,7 +16,6 @@ class PackageRouteHelper extends \Nette\Object
 	{
 		$this->addons = $addons;
 	}
-
 
 
 	/**
@@ -36,7 +30,6 @@ class PackageRouteHelper extends \Nette\Object
 		}
 		return $row->id;
 	}
-
 
 
 	/**

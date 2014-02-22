@@ -2,18 +2,14 @@
 
 namespace NetteAddons\Model;
 
-use Nette;
 
-/**
- * @author Michael Moravec
- */
 class AddonDownloads extends Table
 {
-	const TYPE_DOWNLOAD = 'download',
-		TYPE_INSTALL = 'install';
+	const TYPE_DOWNLOAD = 'download';
+	const TYPE_INSTALL = 'install';
 
+	/** @var string */
 	protected $tableName = 'addons_downloads';
-
 
 
 	/**
@@ -35,11 +31,12 @@ class AddonDownloads extends Table
 			'versionId' => $versionId,
 			'ipAddress' => $ipAddress,
 			'userAgent' => $userAgent,
-			'userId'    => $userId,
-			'time'       => new \DateTime(),
-			'type'       => $type,
+			'userId' => $userId,
+			'time' => new \DateTime(),
+			'type' => $type,
 		));
 	}
+
 
 	/**
 	 * Get cumulative download statistics for an addon in a date range
@@ -72,7 +69,6 @@ class AddonDownloads extends Table
 	}
 
 
-
 	/**
 	 * @param string
 	 * @return bool
@@ -81,5 +77,4 @@ class AddonDownloads extends Table
 	{
 		return in_array($type, array(self::TYPE_DOWNLOAD, self::TYPE_INSTALL), TRUE);
 	}
-
 }

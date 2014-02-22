@@ -2,51 +2,43 @@
 
 namespace NetteAddons\Manage;
 
-use Nette\Utils\Strings,
-	NetteAddons\Model\Addon,
-	NetteAddons\Model\Addons,
-	NetteAddons\Model\Facade\AddonManageFacade,
-	NetteAddons\Model\Importers\RepositoryImporterManager;
+use NetteAddons\Model\Addon;
 
 
-/**
- * @author Patrik Votoček
- */
 abstract class BasePresenter extends \NetteAddons\BasePresenter
 {
 	/**
-	 * @var \NetteAddons\Model\Facade\AddonManageFacade
 	 * @inject
+	 * @var \NetteAddons\Model\Facade\AddonManageFacade
 	 */
 	public $manager;
 
 	/**
-	 * @var \NetteAddons\Model\Importers\RepositoryImporterManager
 	 * @inject
+	 * @var \NetteAddons\Model\Importers\RepositoryImporterManager
 	 */
 	public $importerManager;
 
 	/**
-	 * @var \NetteAddons\Model\Addons
 	 * @inject
+	 * @var \NetteAddons\Model\Addons
 	 */
 	public $addons;
 
 	/**
-	 * @var string token used for storing addon in session
 	 * @persistent
+	 * @var string token used for storing addon in session
 	 */
 	public $token;
 
 	/**
-	 * @var int
 	 * @persistent
+	 * @var int
 	 */
 	public $addonId;
 
 	/** @var \NetteAddons\Model\Addon|NULL from the session. */
 	protected $addon;
-
 
 
 	/**
@@ -61,7 +53,6 @@ abstract class BasePresenter extends \NetteAddons\BasePresenter
 	}
 
 
-
 	protected function startup()
 	{
 		parent::startup();
@@ -72,13 +63,14 @@ abstract class BasePresenter extends \NetteAddons\BasePresenter
 
 		if ($this->token) {
 			$this->addon = $this->manager->restoreAddon($this->token);
-
 		} elseif ($this->addonId) {
 			$deleted = $this->auth->isAllowed('addon', 'delete');
 			$row = $this->addons->find($this->addonId, $deleted);
+
 			if (!$row) {
 				$this->error('Addon not found.');
 			}
+
 			$this->addon = Addon::fromActiveRow($row);
 		}
 

@@ -2,19 +2,16 @@
 
 namespace NetteAddons\Manage\Forms;
 
-use NetteAddons\Model,
-	NetteAddons\Model\Addon,
-	NetteAddons\Model\Tags,
-	NetteAddons\Model\Facade\AddonManageFacade,
-	NetteAddons\Model\Importers\RepositoryImporterManager,
-	NetteAddons\Model\Utils\Licenses,
-	NetteAddons\Model\Utils\FormValidators;
-
+use NetteAddons\Model;
+use NetteAddons\Model\Addon;
+use NetteAddons\Model\Tags;
+use NetteAddons\Model\Facade\AddonManageFacade;
+use NetteAddons\Model\Importers\RepositoryImporterManager;
+use NetteAddons\Model\Utils\Licenses;
+use NetteAddons\Model\Utils\FormValidators;
 
 
 /**
- * @author Patrik Votoček
- *
  * @property \NetteAddons\Model\Addon $addon
  */
 class AddonForm extends \NetteAddons\Forms\BaseForm
@@ -41,25 +38,23 @@ class AddonForm extends \NetteAddons\Forms\BaseForm
 	private $addon;
 
 
-	/**
-	 * @param \NetteAddons\Model\Facade\AddonManageFacade
-	 * @param \NetteAddons\Model\Importers\RepositoryImporterManager
-	 * @param \NetteAddons\Model\Tags
-	 * @param \NetteAddons\Model\Utils\FormValidators
-	 * @param \NetteAddons\Model\Utils\Licenses
-	 * @param array
-	 */
-	public function __construct(AddonManageFacade $manager, RepositoryImporterManager $importerManager, Tags $tags, FormValidators $validators, Licenses $licenses, array $descriptionFormats = array())
-	{
+	public function __construct(
+		AddonManageFacade $manager,
+		RepositoryImporterManager $importerManager,
+		Tags $tags,
+		FormValidators $validators,
+		Licenses $licenses,
+		array $descriptionFormats = array()
+	) {
 		$this->manager = $manager;
 		$this->importerManager = $importerManager;
 		$this->tags = $tags;
 		$this->validators = $validators;
 		$this->licenses = $licenses;
 		$this->descriptionFormats = $descriptionFormats;
+
 		parent::__construct();
 	}
-
 
 
 	protected function buildForm()
@@ -69,10 +64,10 @@ class AddonForm extends \NetteAddons\Forms\BaseForm
 		$this->addText('composerFullName', 'Composer name', NULL, 100)
 			->setRequired()
 			->addRule(self::PATTERN, 'Invalid composer name', FormValidators::COMPOSER_NAME_RE)
-			->addRule($this->validators->isComposerFullNameUnique, 'This composer name has already been taken.');
+			->addRule(array($this->validators, 'isComposerFullNameUnique'), 'This composer name has already been taken.');
 		$this->addMultiSelect('defaultLicense', 'Default license', $this->licenses->getLicenses(TRUE))
 			->setRequired()
-			->addRule($this->validators->isLicenseValid, 'Invalid license identifier.');
+			->addRule(array($this->validators, 'isLicenseValid'), 'Invalid license identifier.');
 		$this->addMultiSelect('tags', 'Categories', $this->getCategories())
 			->setRequired();
 		$this->addText('repository', 'Repository URL', NULL, 500)
@@ -92,19 +87,19 @@ class AddonForm extends \NetteAddons\Forms\BaseForm
 	}
 
 
-
 	/**
 	 * @return array
 	 */
 	private function getCategories()
 	{
 		$categories = array();
+
 		foreach ($this->tags->findMainTags() as $tag) {
 			$categories[$tag->id] = $tag->name;
 		}
+
 		return $categories;
 	}
-
 
 
 	/**
@@ -115,9 +110,9 @@ class AddonForm extends \NetteAddons\Forms\BaseForm
 		if (!$this->addon) {
 			$this->addon = new Addon;
 		}
+
 		return $this->addon;
 	}
-
 
 
 	/**
@@ -166,7 +161,6 @@ class AddonForm extends \NetteAddons\Forms\BaseForm
 	}
 
 
-
 	/**
 	 * @param bool
 	 * @return \Nette\ArrayHash|array
@@ -174,16 +168,18 @@ class AddonForm extends \NetteAddons\Forms\BaseForm
 	public function getValues($asArray = FALSE)
 	{
 		$values = parent::getValues($asArray);
+
 		if (isset($this['repository'])) {
 			$values['repositoryHosting'] = NULL;
 		}
+
 		if (!empty($values['repository'])) {
 			$values['repository'] = $this->importerManager->normalizeUrl($values['repository']);
 			if ($this->importerManager->isValid($values['repository'])) {
 				$values['repositoryHosting'] = $this->importerManager->getIdByUrl($values['repository']);
 			}
 		}
+
 		return $values;
 	}
-
 }

@@ -2,43 +2,52 @@
 
 namespace NetteAddons;
 
-use Nette\Http\Request,
-	Nette\Http\UrlScript,
-	Nette\Utils\Strings,
-	Nette\Security\AuthenticationException,
-	Nette\Security\IAuthenticator;
+use Nette\Http\Request;
+use Nette\Http\UrlScript;
+use Nette\Utils\Strings;
+use Nette\Security\IAuthenticator;
 
-/**
- * @author Patrik Votoček
- */
+
 final class SignPresenter extends BasePresenter
 {
 	/**
-	 * @var \Nette\Application\IRouter
 	 * @inject
+	 * @var \Nette\Application\IRouter
 	 */
 	public $router;
 
 
-
+	/**
+	 * @param string|NULL
+	 */
 	public function renderIn($backlink)
 	{
-		$referer = $this->getHttpRequest()->referer;
-		if (!$backlink && $referer && $referer->host == $this->getHttpRequest()->url->host) {
+		$httpRequest = $this->getHttpRequest();
+
+		$referer = NULL;
+		if ($httpRequest instanceof \Nette\Http\Request) {
+			$referer = $httpRequest->getReferer();
+		}
+
+		if (!$backlink && $referer && $referer->getHost() == $httpRequest->getUrl()->getHost()) {
 			$url = new UrlScript($referer);
-			$url->setScriptPath($this->getHttpRequest()->getUrl()->getScriptPath());
+			$url->setScriptPath($httpRequest->getUrl()->getScriptPath());
 			$tmp = new Request($url);
 			$req = $this->router->match($tmp);
+
 			if (!$req) {
 				return;
 			}
+
 			if (isset($req->parameters[static::SIGNAL_KEY])) {
 				$params = $req->parameters;
 				unset($params[static::SIGNAL_KEY]);
 				$req->setParameters($params);
 			}
+
 			if ($req->getPresenterName() != $this->getName()) {
 				$session = $this->getSession('Nette.Application/requests');
+
 				do {
 					$key = Strings::random(5);
 				} while (isset($session[$key]));
@@ -58,11 +67,10 @@ final class SignPresenter extends BasePresenter
 	protected function createComponentSignInForm()
 	{
 		$form = new Forms\SignInForm();
-		$form->onSuccess[] = $this->signInFormSubmitted;
+		$form->onSuccess[] = array($this, 'signInFormSubmitted');
 
 		return $form;
 	}
-
 
 
 	/**
@@ -87,19 +95,16 @@ final class SignPresenter extends BasePresenter
 				$this->restoreRequest($backlink);
 			}
 
-		} catch (AuthenticationException $e) {
+		} catch (\Nette\Security\AuthenticationException $e) {
 			if ($e->getCode() == IAuthenticator::IDENTITY_NOT_FOUND) {
 				$form['username']->addError("User '$values->username' not found.");
-
 			} elseif ($e->getCode() == IAuthenticator::INVALID_CREDENTIAL) {
 				$form['password']->addError('Invalid password.');
-
 			} else {
 				$form->addError('Invalid credentials.');
 			}
 		}
 	}
-
 
 
 	/**
@@ -127,12 +132,10 @@ final class SignPresenter extends BasePresenter
 	}
 
 
-
 	public function actionOut()
 	{
 		$this->getUser()->logout();
 		$this->flashMessage('You have been signed out.');
 		$this->redirect('in');
 	}
-
 }

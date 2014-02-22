@@ -2,32 +2,22 @@
 
 namespace NetteAddons\Model;
 
-use Nette,
-	Nette\Utils\Strings,
-	Nette\Security as NS,
-	NetteAddons\Utils\HttpStreamRequestFactory;
+use Nette\Utils\Strings;
+use Nette\Security\IAuthenticator;
+use NetteAddons\Utils\HttpStreamRequestFactory;
 
 
-
-/**
- * Users authenticator.
- */
-class Authenticator extends Nette\Object implements NS\IAuthenticator
+class Authenticator extends \Nette\Object implements IAuthenticator
 {
 	const EXTERNAL_URL = 'http://forum.nette.org/cs/login.php?action=in';
 
-	/** @var Users */
+	/** @var \NetteAddons\Model\Users */
 	private $users;
 
 	/** @var \NetteAddons\Utils\HttpStreamRequestFactory */
 	private $requestFactory;
 
 
-
-	/**
-	 * @param  Users
-	 * @param  \NetteAddons\Utils\HttpStreamRequestFactory
-	 */
 	public function __construct(Users $users, HttpStreamRequestFactory $requestFactory)
 	{
 		$this->users = $users;
@@ -35,11 +25,10 @@ class Authenticator extends Nette\Object implements NS\IAuthenticator
 	}
 
 
-
 	/**
 	 * Performs an authentication
 	 *
-	 * @param  array
+	 * @param array
 	 * @return \Nette\Security\Identity
 	 * @throws \Nette\Security\AuthenticationException
 	 */
@@ -50,7 +39,7 @@ class Authenticator extends Nette\Object implements NS\IAuthenticator
 
 		if (!$user) {
 			if (!$user = $this->authenticateExternal($username, $password, TRUE)) {
-				throw new NS\AuthenticationException("User '$username' not found.", self::IDENTITY_NOT_FOUND);
+				throw new \Nette\Security\AuthenticationException("User '$username' not found.", self::IDENTITY_NOT_FOUND);
 			}
 		}
 
@@ -61,7 +50,7 @@ class Authenticator extends Nette\Object implements NS\IAuthenticator
 		}
 
 		if ($user->password !== $this->calculateHash($password, $user->password)) {
-			throw new NS\AuthenticationException("Invalid password.", self::INVALID_CREDENTIAL);
+			throw new \Nette\Security\AuthenticationException("Invalid password.", self::INVALID_CREDENTIAL);
 		}
 
 		if (empty($user->apiToken)) {
@@ -74,12 +63,11 @@ class Authenticator extends Nette\Object implements NS\IAuthenticator
 	}
 
 
-
 	/**
 	 * Computes password hash.
 	 *
-	 * @param  string
-	 * @param  string|NULL
+	 * @param string
+	 * @param string|NULL
 	 * @return string
 	 */
 	public static function calculateHash($password, $salt = NULL)
@@ -91,12 +79,14 @@ class Authenticator extends Nette\Object implements NS\IAuthenticator
 	}
 
 
-
 	/**
 	 * Authenticate again external site (hack ;)
-	 * @param  string
-	 * @param  string
-	 * @param  bool
+	 *
+	 * @todo remove before release
+	 *
+	 * @param string
+	 * @param string
+	 * @param bool
 	 * @return \Nette\Database\Table\ActiveRow|bool
 	 */
 	private function authenticateExternal($username, $password, $create = FALSE)
@@ -128,5 +118,4 @@ class Authenticator extends Nette\Object implements NS\IAuthenticator
 			return TRUE;
 		}
 	}
-
 }

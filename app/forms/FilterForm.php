@@ -2,16 +2,11 @@
 
 namespace NetteAddons\Forms;
 
-use NetteAddons\Model,
-	Nette\Application\UI\Form;
+use NetteAddons\Model\Tags;
 
 
-/**
- * @author  Patrik Votoček
- */
 class FilterForm extends BaseForm
 {
-
 	/** @var \NetteAddons\Model\Tags */
 	private $tags;
 
@@ -19,20 +14,14 @@ class FilterForm extends BaseForm
 	private $tagsPairs;
 
 
-
-	/**
-	 * @param Model\Tags
-	 */
-	public function __construct(Model\Tags $tags)
+	public function __construct(Tags $tags)
 	{
 		$this->tags = $tags;
+
 		parent::__construct();
 	}
 
 
-	/**
-	 * @return \Nette\Application\UI\Form
-	 */
 	protected function buildForm()
 	{
 		$this->tagsPairs = $this->tags->findMainTags()->fetchPairs('slug', 'name');
@@ -43,7 +32,6 @@ class FilterForm extends BaseForm
 
 		$this->addSubmit('sub', 'Filter');
 	}
-
 
 
 	/**
@@ -57,7 +45,6 @@ class FilterForm extends BaseForm
 	}
 
 
-
 	/**
 	 * @param string
 	 * @return FilterForm
@@ -69,7 +56,6 @@ class FilterForm extends BaseForm
 	}
 
 
-
 	/**
 	 * @return string
 	 */
@@ -78,5 +64,4 @@ class FilterForm extends BaseForm
 		$value = $this['category']->getValue();
 		return $value ? $this->tagsPairs[$value] : NULL;
 	}
-
 }

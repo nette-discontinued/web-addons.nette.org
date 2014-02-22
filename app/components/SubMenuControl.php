@@ -2,17 +2,11 @@
 
 namespace NetteAddons\Components;
 
-use Nette,
-	NetteAddons\Model\Addon,
-	NetteAddons\Model\Authorizator;
+use NetteAddons\Model\Addon;
+use NetteAddons\Model\Authorizator;
 
 
-
-/**
- * @author Filip Procházka <filip@prochazka.su>
- * @author Patrik Votoček
- */
-class SubMenuControl extends Nette\Application\UI\Control
+class SubMenuControl extends \Nette\Application\UI\Control
 {
 
 	/** @var \NetteAddons\Model\Authorizator */
@@ -25,27 +19,23 @@ class SubMenuControl extends Nette\Application\UI\Control
 	private $page;
 
 
-
-	/**
-	 * @param \NetteAddons\Model\Authorizator $auth
-	 */
 	public function __construct(Authorizator $auth)
 	{
 		parent::__construct();
+
 		$this->auth = $auth;
 	}
 
 
-
 	/**
 	 * @param \NetteAddons\Model\Addon
+	 * @return SubMenuControl
 	 */
 	public function setAddon(Addon $addon)
 	{
 		$this->addon = $addon;
 		return $this;
 	}
-
 
 
 	/**
@@ -57,7 +47,6 @@ class SubMenuControl extends Nette\Application\UI\Control
 		$this->page = $page;
 		return $this;
 	}
-
 
 
 	public function render()
@@ -73,5 +62,4 @@ class SubMenuControl extends Nette\Application\UI\Control
 		$this->template->setFile(__DIR__ . '/SubMenu.latte');
 		$this->template->render();
 	}
-
 }

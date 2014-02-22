@@ -2,19 +2,13 @@
 
 namespace NetteAddons\Model;
 
-/**
- * @author Michael Moravec
- */
+
 class VendorRouteHelper extends \Nette\Object
 {
-	/** @var Addons */
+	/** @var \NetteAddons\Model\Addons */
 	private $addons;
 
 
-
-	/**
-	 * @param Addons
-	 */
 	public function __construct(Addons $addons)
 	{
 		$this->addons = $addons;
@@ -27,10 +21,16 @@ class VendorRouteHelper extends \Nette\Object
 	public function filterIn($vendor)
 	{
 		$row = $this->addons->findByComposerVendor($vendor)->limit(1)->fetch();
-		if (!$row) return NULL;
+
+		if (!$row) {
+			return NULL;
+		}
+
 		$addon = Addon::fromActiveRow($row);
+
 		return $addon->composerVendor;
 	}
+
 
 	/**
 	 * @param string
@@ -39,8 +39,13 @@ class VendorRouteHelper extends \Nette\Object
 	public function filterOut($vendor)
 	{
 		$row = $this->addons->findByComposerVendor($vendor)->limit(1)->fetch();
-		if (!$row) return NULL;
+
+		if (!$row) {
+			return NULL;
+		}
+
 		$addon = Addon::fromActiveRow($row);
+
 		return $addon->composerVendor;
 	}
 }

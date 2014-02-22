@@ -2,23 +2,17 @@
 
 namespace NetteAddons\Forms;
 
-use Nette,
-	Nette\ComponentModel\IContainer;
+use Nette\Forms\Rendering\DefaultFormRenderer;
 
 
-/**
- * Base class for all forms.
- *
- * Handles the form rendering using form templates.
- */
-class Form extends Nette\Application\UI\Form
+class Form extends \Nette\Application\UI\Form
 {
-	public function __construct(IContainer $parent = NULL, $name = NULL)
+	public function __construct()
 	{
-		parent::__construct($parent, $name);
+		parent::__construct();
 
 		$renderer = $this->getRenderer();
-		if ($renderer instanceof \Nette\Forms\Rendering\DefaultFormRenderer) {
+		if ($renderer instanceof DefaultFormRenderer) {
 			$renderer->wrappers['form']['container'] = 'div class=form';
 			$renderer->wrappers['controls']['container'] = NULL;
 			$renderer->wrappers['pair']['container'] = 'div class=controls';

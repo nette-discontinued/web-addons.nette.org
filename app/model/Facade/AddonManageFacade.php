@@ -2,23 +2,19 @@
 
 namespace NetteAddons\Model\Facade;
 
-use stdClass,
-	Nette,
-	Nette\Utils\Strings,
-	Nette\Http\Url,
-	Nette\Http\Session,
-	Nette\Http\SessionSection,
-	NetteAddons\Model,
-	NetteAddons\Model\Utils\VersionParser;
+use stdClass;
+use Nette\Security\IIdentity;
+use Nette\Utils\Strings;
+use Nette\Http\Url;
+use Nette\Http\Session;
+use NetteAddons\Model\Addon;
+use NetteAddons\Model\AddonVersion;
+use NetteAddons\Model\IAddonImporter;
+use NetteAddons\Model\Utils\VersionParser;
+use NetteAddons\Model\Utils\Composer;
 
 
-
-/**
- * @author Filip Procházka <filip.prochazka@kdyby.org>
- * @author Jan Tvrdík
- * @author Patrik Votoček
- */
-class AddonManageFacade extends Nette\Object
+class AddonManageFacade extends \Nette\Object
 {
 	const SESSION_SECTION = 'addons';
 
@@ -30,7 +26,6 @@ class AddonManageFacade extends Nette\Object
 
 	/** @var \Nette\Http\SessionSection */
 	private $session;
-
 
 
 	/**
@@ -46,17 +41,16 @@ class AddonManageFacade extends Nette\Object
 	}
 
 
-
 	/**
 	 * Imports addon using addon importer.
 	 *
-	 * @param  Model\IAddonImporter
-	 * @param  Nette\Security\IIdentity
-	 * @return Model\Addon
+	 * @param \NetteAddons\Model\IAddonImporter
+	 * @param \Nette\Security\IIdentity
+	 * @return \NetteAddons\Model\Addon
 	 * @throws \NetteAddons\Utils\HttpException
 	 * @throws \NetteAddons\IOException
 	 */
-	public function import(Model\IAddonImporter $importer, Nette\Security\IIdentity $owner)
+	public function import(IAddonImporter $importer, IIdentity $owner)
 	{
 		$addon = $importer->import();
 		$addon->userId = $owner->getId();
@@ -65,48 +59,52 @@ class AddonManageFacade extends Nette\Object
 	}
 
 
-
 	/**
 	 * Imports versions using addon importer.
 	 *
-	 * @param  Model\Addon
-	 * @param  Model\IAddonImporter
-	 * @param  Nette\Security\Identity
-	 * @return Model\AddonVersion[]
+	 * @param \NetteAddons\Model\Addon
+	 * @param \NetteAddons\Model\IAddonImporter
+	 * @param \Nette\Security\IIdentity
+	 * @return \NetteAddons\Model\AddonVersion[]
 	 * @throws \NetteAddons\IOException
 	 */
-	public function importVersions(Model\Addon $addon, Model\IAddonImporter $importer, Nette\Security\Identity $owner)
+	public function importVersions(Addon $addon, IAddonImporter $importer, IIdentity $owner)
 	{
 		return $addon->versions = $this->getImportedVersions($addon, $importer, $owner);
 	}
 
 
-
 	/**
+	 * Update versions using addon importer.
+	 *
+	 * @param \NetteAddons\Model\Addon
+	 * @param \NetteAddons\Model\IAddonImporter
+	 * @param \Nette\Security\IIdentity
+	 * @return \NetteAddons\Model\AddonVersion[]
 	 * @throws \NetteAddons\IOException
 	 */
-	public function updateVersions(Model\Addon $addon, Model\IAddonImporter $importer, Nette\Security\Identity $owner)
+	public function updateVersions(Addon $addon, IAddonImporter $importer, IIdentity $owner)
 	{
 		$current = $addon->versions;
 
 		$new = $this->getImportedVersions($addon, $importer, $owner);
 		$result = $this->mergeVersions($current, $new);
 		$addon->versions = $result['merged'];
+
 		return $result;
 	}
-
 
 
 	/**
 	 * Fills addon with values (usually from form). Those value must be already validated.
 	 *
-	 * @param  Model\Addon
-	 * @param  array
-	 * @param  Nette\Security\IIdentity|NULL
-	 * @return Model\Addon
+	 * @param \NetteAddons\Model\Addon
+	 * @param array
+	 * @param \Nette\Security\IIdentity|NULL
+	 * @return \NetteAddons\Model\Addon
 	 * @throws \NetteAddons\InvalidArgumentException
 	 */
-	public function fillAddonWithValues(Model\Addon $addon, array $values, Nette\Security\IIdentity $owner = NULL)
+	public function fillAddonWithValues(Addon $addon, array $values, IIdentity $owner = NULL)
 	{
 		$overWritable = array(
 			'name' => TRUE,
@@ -161,19 +159,18 @@ class AddonManageFacade extends Nette\Object
 	}
 
 
-
 	/**
 	 * Creates new addon version from values and adds it to addon.
 	 *
-	 * @param  Model\Addon
-	 * @param  array
-	 * @param  Nette\Security\Identity
-	 * @param  VersionParser
-	 * @return Model\AddonVersion
+	 * @param \NetteAddons\Model\Addon
+	 * @param array
+	 * @param \Nette\Security\IIdentity
+	 * @param \NetteAddons\Model\Utils\VersionParser
+	 * @return \NetteAddons\Model\AddonVersion
 	 * @throws \NetteAddons\InvalidArgumentException
 	 * @throws \NetteAddons\IOException
 	 */
-	public function addVersionFromValues(Model\Addon $addon, $values, Nette\Security\Identity $owner, VersionParser $versionParser)
+	public function addVersionFromValues(Addon $addon, $values, IIdentity $owner, VersionParser $versionParser)
 	{
 		if (!$values->license) {
 			throw new \NetteAddons\InvalidArgumentException("License is mandatory.");
@@ -183,7 +180,7 @@ class AddonManageFacade extends Nette\Object
 			throw new \NetteAddons\InvalidArgumentException("Version is mandatory.");
 		}
 
-		$version = new Model\AddonVersion();
+		$version = new AddonVersion;
 		$version->addon = $addon;
 		$version->version = $versionParser->parseTag($values->version);
 		$version->license = is_array($values->license) ? implode(', ', $values->license) : $values->license;
@@ -211,7 +208,7 @@ class AddonManageFacade extends Nette\Object
 			throw new \NetteAddons\InvalidArgumentException();
 		}
 
-		$version->composerJson = Model\Utils\Composer::createComposerJson($version);
+		$version->composerJson = Composer::createComposerJson($version);
 		$version->composerJson->authors = array(
 			(object) array(
 				'name' => $owner->realname,
@@ -229,21 +226,27 @@ class AddonManageFacade extends Nette\Object
 	/**
 	 * Returns versions imported from addon importer.
 	 *
-	 * @param  Model\Addon
-	 * @param  Model\IAddonImporter
-	 * @param  Nette\Security\Identity
-	 * @return Model\AddonVersion[]
+	 * @param \NetteAddons\Model\Addon
+	 * @param \NetteAddons\Model\IAddonImporter
+	 * @param \Nette\Security\IIdentity
+	 * @return \NetteAddons\Model\AddonVersion[]
 	 * @throws \NetteAddons\IOException
 	 */
-	private function getImportedVersions(Model\Addon $addon, Model\IAddonImporter $importer, Nette\Security\Identity $owner)
+	private function getImportedVersions(Addon $addon, IAddonImporter $importer, IIdentity $owner)
 	{
 		$versions = $importer->importVersions($addon);
 
 		// add information about author if missing
 		$author = new stdClass();
 		$author->name = $owner->realname;
-		if (!empty($owner->email)) $author->email = $owner->email;
-		if (!empty($owner->url)) $author->homepage = $owner->url;
+
+		if (!empty($owner->email)) {
+			$author->email = $owner->email;
+		}
+
+		if (!empty($owner->url)) {
+			$author->homepage = $owner->url;
+		}
 
 		foreach ($versions as $version) {
 			if (empty($version->composerJson->authors)) {
@@ -255,14 +258,13 @@ class AddonManageFacade extends Nette\Object
 	}
 
 
-
 	/**
 	 * Returns filename for addon version.
 	 *
-	 * @param  Model\AddonVersion
+	 * @param \NetteAddons\Model\AddonVersion
 	 * @return string
 	 */
-	private function getFileName(Model\AddonVersion $version)
+	private function getFileName(AddonVersion $version)
 	{
 		$name = Strings::webalize($version->addon->composerFullName)
 			. '-' . $version->version . '.zip';
@@ -273,8 +275,8 @@ class AddonManageFacade extends Nette\Object
 
 
 	/**
-	 * @param  Model\AddonVersion[]
-	 * @param  Model\AddonVersion[]
+	 * @param \NetteAddons\Model\AddonVersion[]
+	 * @param \NetteAddons\Model\AddonVersion[]
 	 * @return array
 	 */
 	private function mergeVersions($a, $b)
@@ -317,16 +319,14 @@ class AddonManageFacade extends Nette\Object
 	}
 
 
-
 	/**
 	 * @param string
 	 * @param \NetteAddons\Model\Addon
 	 */
-	public function storeAddon($token, Model\Addon $addon)
+	public function storeAddon($token, Addon $addon)
 	{
 		$this->session[$token] = $addon;
 	}
-
 
 
 	/**
@@ -341,7 +341,6 @@ class AddonManageFacade extends Nette\Object
 	}
 
 
-
 	/**
 	 * @param string
 	 */
@@ -351,7 +350,6 @@ class AddonManageFacade extends Nette\Object
 			unset($this->session[$token]);
 		}
 	}
-
 
 	/**
 	 * @param \Nette\Http\Session
@@ -365,5 +363,4 @@ class AddonManageFacade extends Nette\Object
 		$url = $currentUrl->getHostUrl() . rtrim($currentUrl->getBasePath(), '/') . $uploadUri;
 		return new static($session, $uploadDir, $url);
 	}
-
 }

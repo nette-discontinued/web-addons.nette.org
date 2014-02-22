@@ -2,30 +2,20 @@
 
 namespace NetteAddons\Model;
 
-use Nette;
 
-
-
-/**
- * Repository for addon votes.
- *
- * @author Jan Tvrdík
- * @author Jan Skrasek
- */
 class AddonVotes extends Table
 {
 	/** @var string */
 	protected $tableName = 'addons_votes';
 
 
-
 	/**
 	 * Votes as given user for given addon with optional comment.
 	 *
-	 * @param  int addon id
-	 * @param  int user id
-	 * @param  int +1 or -1 or 0 (means cancel vote)
-	 * @param  string optional comment
+	 * @param int addon id
+	 * @param int user id
+	 * @param int +1 or -1 or 0 (means cancel vote)
+	 * @param string optional comment
 	 * @return void
 	 */
 	public function vote($addonId, $userId, $vote, $comment = NULL)
@@ -52,7 +42,7 @@ class AddonVotes extends Table
 	 *
 	 * @return \stdClass
 	 */
-	public function calculatePopularity(Nette\Database\Table\IRow $addon)
+	public function calculatePopularity(\Nette\Database\Table\IRow $addon)
 	{
 		$plus = $addon->related($this->tableName)->where('vote', 1)->count('*');
 		$minus = $addon->related($this->tableName)->where('vote', -1)->count('*');

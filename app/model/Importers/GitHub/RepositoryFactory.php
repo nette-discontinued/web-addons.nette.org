@@ -4,10 +4,9 @@ namespace NetteAddons\Model\Importers\GitHub;
 
 use NetteAddons\Utils\HttpStreamRequestFactory;
 
+
 /**
  * GitHub repository factory
- *
- * @author Patrik Votoček
  */
 class RepositoryFactory extends \Nette\Object
 {
@@ -24,22 +23,23 @@ class RepositoryFactory extends \Nette\Object
 	private $clientSecret;
 
 
-
 	/**
 	 * @param string
 	 * @param \NetteAddons\Utils\HttpStreamRequestFactory
 	 * @param string|NULL
 	 * @param string|NULL
 	 */
-	public function __construct($apiVersion, HttpStreamRequestFactory $requestFactory, $clientId = NULL, $clientSecret = NULL)
-	{
+	public function __construct(
+		$apiVersion,
+		HttpStreamRequestFactory $requestFactory,
+		$clientId = NULL,
+		$clientSecret = NULL
+	) {
 		$this->apiVersion = $apiVersion;
 		$this->requestFactory = $requestFactory;
 		$this->clientId = $clientId;
 		$this->clientSecret = $clientSecret;
 	}
-
-
 
 	/**
 	 * @param string

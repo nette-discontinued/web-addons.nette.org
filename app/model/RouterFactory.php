@@ -3,33 +3,32 @@
 namespace NetteAddons;
 
 use Nette\Application\Routers\Route;
+use Nette\Application\Routers\RouteList;
 
-/**
- * Router factory.
- */
-class RouterFactory
+
+class RouterFactory extends \Nette\Object
 {
 	/** @var \NetteAddons\Model\PackageRouteHelperCached */
 	private $packageRouterHelper;
 	/** @var \NetteAddons\Model\VendorRouteHelper */
 	private $vendorRouteHelper;
 
-	/**
-	 * @param Model\PackageRouteHelperCached
-	 * @param Model\VendorRouteHelper
-	 */
-	public function __construct(Model\PackageRouteHelperCached $packageRouterHelper, Model\VendorRouteHelper $vendorRouteHelper)
-	{
+
+	public function __construct(
+		Model\PackageRouteHelperCached $packageRouterHelper,
+		Model\VendorRouteHelper $vendorRouteHelper
+	) {
 		$this->packageRouterHelper = $packageRouterHelper;
 		$this->vendorRouteHelper = $vendorRouteHelper;
 	}
+
 
 	/**
 	 * @return \Nette\Application\IRouter
 	 */
 	public function createRouter()
 	{
-		$router = new \Nette\Application\Routers\RouteList();
+		$router = new RouteList();
 
 		// Setup router
 		$router[] = new Route('index.php', 'Homepage:default', Route::ONE_WAY);
@@ -50,21 +49,20 @@ class RouterFactory
 			'action' => 'default',
 			'id' => array(
 				Route::PATTERN => '[^/]+/[^/]+',
-				Route::FILTER_IN => $this->packageRouterHelper->filterIn,
-				Route::FILTER_OUT => $this->packageRouterHelper->filterOut,
+				Route::FILTER_IN => array($this->packageRouterHelper, 'filterIn'),
+				Route::FILTER_OUT => array($this->packageRouterHelper, 'filterOut'),
 			)
 		));
 		$router[] = new Route('<vendor>', array(
 			'presenter' => 'List',
 			'action' => 'default',
 			'vendor' => array(
-				Route::FILTER_IN => $this->vendorRouteHelper->filterIn,
-				Route::FILTER_OUT => $this->vendorRouteHelper->filterOut,
+				Route::FILTER_IN => array($this->vendorRouteHelper, 'filterIn'),
+				Route::FILTER_OUT => array($this->vendorRouteHelper, 'filterOut'),
 			),
 		));
 		$router[] = new Route('<presenter>[/<action>]', 'Homepage:default');
 
 		return $router;
 	}
-
 }

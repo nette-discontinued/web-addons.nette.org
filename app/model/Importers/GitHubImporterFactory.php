@@ -5,10 +5,6 @@ namespace NetteAddons\Model\Importers;
 use NetteAddons\Model\Utils\Validators;
 
 
-
-/**
- * @author Patrik Votoček
- */
 class GitHubImporterFactory extends \Nette\Object
 {
 	/** @var GitHub\RepositoryFactory */
@@ -18,17 +14,11 @@ class GitHubImporterFactory extends \Nette\Object
 	private $validators;
 
 
-
-	/**
-	 * @param GitHub\RepositoryFactory
-	 * @param \NetteAddons\Model\Utils\Validators
-	 */
 	public function __construct(GitHub\RepositoryFactory $repositoryFactory, Validators $validators)
 	{
 		$this->repositoryFactory = $repositoryFactory;
 		$this->validators = $validators;
 	}
-
 
 
 	/**
@@ -40,7 +30,6 @@ class GitHubImporterFactory extends \Nette\Object
 		$repository = $this->repositoryFactory->create($url);
 		return new GitHubImporter($repository, $this->validators);
 	}
-
 
 
 	/**

@@ -2,34 +2,27 @@
 
 namespace NetteAddons;
 
-use NetteAddons\Model\Addons,
-	NetteAddons\Model\AddonVotes;
+use Nette\Utils\Callback;
 
 
-
-/**
- * @author Patrik Votoček
- */
 abstract class BaseListPresenter extends BasePresenter
 {
 	/**
-	 * @var Model\Addons
 	 * @inject
+	 * @var \NetteAddons\Model\Addons
 	 */
 	public $addons;
 
 	/**
-	 * @var Model\AddonVotes
 	 * @inject
+	 * @var \NetteAddons\Model\AddonVotes
 	 */
 	public $addonVotes;
-
 
 
 	protected function beforeRender()
 	{
 		parent::beforeRender();
-		$this->template->addonVotes = callback($this->addonVotes, 'calculatePopularity');
+		$this->template->addonVotes = Callback::closure($this->addonVotes, 'calculatePopularity');
 	}
-
 }

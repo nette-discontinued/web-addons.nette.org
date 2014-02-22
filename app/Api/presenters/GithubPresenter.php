@@ -2,48 +2,37 @@
 
 namespace NetteAddons\Api;
 
-use Nette\Utils\Json,
-	NetteAddons\Model\Addon,
-	NetteAddons\Model\Addons,
-	NetteAddons\Model\Users,
-	NetteAddons\Model\Facade\AddonManageFacade,
-	NetteAddons\Model\Importers\GitHubImporter,
-	NetteAddons\Model\Importers\RepositoryImporterManager;
+use Nette\Utils\Json;
+use Nette\Http\IResponse;
+use NetteAddons\Model\Addon;
+use NetteAddons\Model\Importers\GitHubImporter;
 
 
-
-/**
- * GitHub API
- *
- * @author Jan Dolecek <juzna.cz@gmail.com>
- * @author Patrik Votoček
- */
 final class GithubPresenter extends \NetteAddons\BasePresenter
 {
 	/**
-	 * @var \NetteAddons\Model\Facade\AddonManageFacade
 	 * @inject
+	 * @var \NetteAddons\Model\Facade\AddonManageFacade
 	 */
 	public $manager;
 
 	/**
-	 * @var \NetteAddons\Model\Importers\RepositoryImporterManager
 	 * @inject
+	 * @var \NetteAddons\Model\Importers\RepositoryImporterManager
 	 */
 	public $importerManager;
 
 	/**
-	 * @var \NetteAddons\Model\Users
 	 * @inject
+	 * @var \NetteAddons\Model\Users
 	 */
 	public $users;
 
 	/**
-	 * @var \NetteAddons\Model\Addons
 	 * @inject
+	 * @var \NetteAddons\Model\Addons
 	 */
 	public $addons;
-
 
 
 	/**
@@ -51,7 +40,7 @@ final class GithubPresenter extends \NetteAddons\BasePresenter
 	 */
 	public function actionPostReceive()
 	{
-		$post = $this->getRequest()->post;
+		$post = $this->getRequest()->getPost();
 		if (!isset($post['payload'], $post['username'], $post['apiToken'])) {
 			$this->error('Invalid request.');
 		}
@@ -61,7 +50,7 @@ final class GithubPresenter extends \NetteAddons\BasePresenter
 		try {
 			$payload = Json::decode($post['payload']);
 			if (!isset($payload->repository->url)) {
-				$response->setCode(400); // Bad Request
+				$response->setCode(IResponse::S400_BAD_REQUEST);
 				$this->sendJson(array(
 					'status' => 'error',
 					'message' => 'Missing or invalid payload',
@@ -76,7 +65,7 @@ final class GithubPresenter extends \NetteAddons\BasePresenter
 
 		$user = $this->users->findOneByName($username);
 		if (!$user || $user->apiToken !== $token) {
-			$response->setCode(403); // Forbidden
+			$response->setCode(IResponse::S403_FORBIDDEN);
 			$this->sendJson(array(
 				'status' => 'error',
 				'message' => 'Invalid credentials'
@@ -84,7 +73,7 @@ final class GithubPresenter extends \NetteAddons\BasePresenter
 		}
 
 		if (!GitHubImporter::isValid($payload->repository->url)) {
-			$response->setCode(400); // Bad Request
+			$response->setCode(IResponse::S400_BAD_REQUEST);
 			$this->sendJson(array(
 				'status' => 'error',
 				'message' => 'Could not parse payload repository URL'

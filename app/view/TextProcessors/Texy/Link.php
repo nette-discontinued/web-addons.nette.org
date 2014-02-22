@@ -21,6 +21,12 @@ class Link
 	public $fragment;
 
 
+	/**
+	 * @param string
+	 * @param string
+	 * @param string
+	 * @param string|NULL
+	 */
 	public function __construct($book, $lang, $name, $fragment = NULL)
 	{
 		$this->book = $book;
@@ -28,5 +34,4 @@ class Link
 		$this->name = $name;
 		$this->fragment = $fragment;
 	}
-
 }

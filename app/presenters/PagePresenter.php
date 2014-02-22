@@ -2,40 +2,42 @@
 
 namespace NetteAddons;
 
-/**
- * @author Jan Cerny
- */
+
 final class PagePresenter extends BasePresenter
 {
 	/**
-	 * @var string
+	 * @inject
+	 * @var \NetteAddons\Forms\EditPageFormFactory
+	 */
+	public $editPageForm;
+
+	/**
 	 * @persistent
+	 * @var string
 	 */
 	public $slug;
 
 	/** @var \Nette\Database\Table\ActiveRow|string */
 	private $page;
 
-	/**
-	 * @var Forms\EditPageFormFactory
-	 * @inject
-	 */
-	public $editPageForm;
-
-
 
 	protected function startup()
 	{
 		parent::startup();
-		if (!$this->slug) $this->error();
+
+		if (!$this->slug) {
+			$this->error();
+		}
+
 		$this->page = $this->pages->findOneBySlug($this->slug);
+
 		if (!$this->page) {
 			$this['subMenu']->setPage($this->slug);
 			$this->error();
 		}
+
 		$this['subMenu']->setPage($this->page);
 	}
-
 
 
 	/**
@@ -51,7 +53,6 @@ final class PagePresenter extends BasePresenter
 	}
 
 
-
 	/**
 	 * @return Forms\Form
 	 */
@@ -62,11 +63,10 @@ final class PagePresenter extends BasePresenter
 		}
 
 		$form = $this->editPageForm->create($this->page, $this->getUser()->getIdentity());
-		$form->onSuccess[] = $this->editPageFormSubmitted;
+		$form->onSuccess[] = array($this, 'editPageFormSubmitted');
 
 		return $form;
 	}
-
 
 
 	/**
@@ -81,7 +81,6 @@ final class PagePresenter extends BasePresenter
 	}
 
 
-
 	/**
 	 * @param string
 	 */
@@ -93,5 +92,4 @@ final class PagePresenter extends BasePresenter
 
 		$this->template->page = $this->page;
 	}
-
 }

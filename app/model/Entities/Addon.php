@@ -2,20 +2,15 @@
 
 namespace NetteAddons\Model;
 
-use Nette,
-	Nette\DateTime,
-	Nette\Utils\Strings;
-
+use Nette\DateTime;
+use Nette\Utils\Strings;
+use Nette\Database\Table\ActiveRow;
 
 
 /**
- * @author Filip Procházka <filip.prochazka@kdyby.org>
- * @author Patrik Votoček
- * @author Jan Skrasek
- *
  * @property string $composerFullName
  */
-class Addon extends Nette\Object
+class Addon extends \Nette\Object
 {
 	const COMPOSER_NAME_RE = '#^(?P<vendor>[a-z0-9]+(-[a-z0-9]+)*)/(?P<name>[a-z0-9]+(-[a-z0-9]+)*)$#i';
 
@@ -85,11 +80,11 @@ class Addon extends Nette\Object
 	 *
 	 * @todo   Consider lazy loading for versions and tags.
 	 *
-	 * @param  Nette\Database\Table\ActiveRow
-	 * @param  AddonVotes
+	 * @param \Nette\Database\Table\ActiveRow
+	 * @param AddonVotes
 	 * @return Addon
 	 */
-	public static function fromActiveRow(Nette\Database\Table\ActiveRow $row, AddonVotes $addonVotes = NULL)
+	public static function fromActiveRow(ActiveRow $row, AddonVotes $addonVotes = NULL)
 	{
 		$addon = new static;
 		$addon->id = (int) $row->id;
@@ -128,7 +123,6 @@ class Addon extends Nette\Object
 	}
 
 
-
 	/**
 	 * @return int[]
 	 */
@@ -143,16 +137,7 @@ class Addon extends Nette\Object
 			}
 		}
 		return $ids;
-
-		/*if (empty($this->tags)) {
-			return array();
-		} else if (count(array_filter($this->tags, 'ctype_digit')) === count($this->tags)) {
-			return array_map('intval', $this->tags); // TODO: remove converting to int
-		} else {
-			return array_keys($this->tags);
-		}*/
 	}
-
 
 
 	/**
@@ -165,7 +150,6 @@ class Addon extends Nette\Object
 		}
 		return $this->composerVendor . '/' . $this->composerName;
 	}
-
 
 
 	/**

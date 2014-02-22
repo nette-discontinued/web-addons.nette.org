@@ -2,52 +2,52 @@
 
 namespace NetteAddons;
 
-use NetteAddons\Model,
-	Nette\Application\UI;
-
+use Nette\Reflection\Method;
+use Nette\Application\UI\PresenterComponent;
+use NetteAddons\Model;
 
 
 abstract class BasePresenter extends \Nette\Application\UI\Presenter
 {
 	/**
-	 * @var Model\Authorizator
 	 * @inject
+	 * @var \NetteAddons\Model\Authorizator
 	 */
 	public $auth;
 
 	/**
-	 * @var HelperLoader
 	 * @inject
+	 * @var \NetteAddons\HelperLoader
 	 */
 	public $helperLoader;
 
 	/**
-	 * @var Model\Tags
 	 * @inject
+	 * @var \NetteAddons\Model\Tags
 	 */
 	public $tags;
 
 	/**
-	 * @var Model\Pages
 	 * @inject
+	 * @var \NetteAddons\Model\Pages
 	 */
 	public $pages;
 
 	/**
-	 * @var Model\Utils\Licenses
 	 * @inject
+	 * @var \NetteAddons\Model\Utils\Licenses
 	 */
 	public $licenses;
 
 	/**
-	 * @var TextPreprocessor
 	 * @inject
+	 * @var \NetteAddons\TextPreprocessor
 	 */
 	public $textPreprocessor;
 
 
 	/**
-	 * @param  string|NULL
+	 * @param string|NULL
 	 * @return \Nette\Templating\ITemplate
 	 */
 	public function createTemplate($class = NULL)
@@ -58,12 +58,10 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 	}
 
 
-
 	/**
 	 * Calls signal handler method and processes the @secured annotation.
 	 *
-	 * @author Jan Skrasek, Jan Tvrdík
-	 * @param  string
+	 * @param string
 	 * @return void
 	 * @throws \Nette\Application\BadRequestException
 	 */
@@ -90,14 +88,12 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 	}
 
 
-
 	/**
 	 * Generates link. If links points to @secure annotated signal handler method, additonal
 	 * parameter preventing changing parameters will be added.
 	 *
-	 * @author Jan Skrasek
-	 * @param  string
-	 * @param  array|mixed $args
+	 * @param string
+	 * @param array|mixed $args
 	 * @return string
 	 */
 	public function link($destination, $args = array())
@@ -108,16 +104,22 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 		}
 
 		$link = parent::link($destination, $args);
-		$lastRequest = $this->presenter->lastCreatedRequest;
+		$lastRequest = $this->getPresenter()->getLastCreatedRequest();
 
 		// bad link
-		if ($lastRequest === NULL) return $link;
+		if ($lastRequest === NULL) {
+			return $link;
+		}
 
 		// not a signal
-		if (substr($destination, - 1) !== '!') return $link;
+		if (substr($destination, - 1) !== '!') {
+			return $link;
+		}
 
 		// signal must lead to this presenter
-		if ($this->getPresenter()->getName() !== $lastRequest->getPresenterName()) return $link;
+		if ($this->getPresenter()->getName() !== $lastRequest->getPresenterName()) {
+			return $link;
+		}
 
 		$destination = str_replace(':', '-', $destination);
 		if (strpos($destination, '-') !== FALSE) {
@@ -131,18 +133,24 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 		}
 
 		// only components
-		if (!$component instanceof \Nette\Application\UI\PresenterComponent) return $link;
+		if (!$component instanceof PresenterComponent) {
+			return $link;
+		}
 
 		$method = $component->formatSignalMethod($signal);
-		$reflection = \Nette\Reflection\Method::from($component, $method);
+		$reflection = Method::from($component, $method);
 
 		// does not have annotation
-		if (!$reflection->hasAnnotation('secured')) return $link;
+		if (!$reflection->hasAnnotation('secured')) {
+			return $link;
+		}
 
 		$origParams = $lastRequest->getParameters();
 		$protectedParams = array();
-		foreach ($reflection->getParameters() as $key => $param) {
-			if ($param->isOptional()) continue;
+		foreach ($reflection->getParameters() as $param) {
+			if ($param->isOptional()) {
+				continue;
+			}
 			$protectedParams[$param->name] = $origParams[$component->getParameterId($param->name)];
 		}
 
@@ -159,45 +167,38 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 	}
 
 
-
 	/**
 	 * Creates secure hash from array of arguments.
 	 *
-	 * @author Jan Skrasek
-	 * @param  array
+	 * @param array
 	 * @return string
 	 */
 	protected function createSecureHash($params)
 	{
-		$ns = $this->getSession('Addons.Presenter/CSRF');
-		if ($ns->key === NULL) {
-			$ns->key = uniqid();
+		$session = $this->getSession('Addons.Presenter/CSRF');
+		if ($session->key === NULL) {
+			$session->key = uniqid();
 		}
-		$s = implode('|', array_keys($params)) . '|' . implode('|', array_values($params)) . $ns->key;
-		return substr(md5($s), 4, 8);
+		$data = implode('|', array_keys($params)) . '|' . implode('|', array_values($params)) . $session->key;
+		return substr(md5($data), 4, 8);
 	}
 
 
-
 	/**
-	 * @return Components\SubMenuControl
+	 * @return \NetteAddons\Components\SubMenuControl
 	 */
 	protected function createComponentSubMenu()
 	{
 		return new Components\SubMenuControl($this->auth);
 	}
 
-
-
 	/**
-	 * @return Components\CategoriesControl
+	 * @return \NetteAddons\Components\CategoriesControl
 	 */
 	protected function createComponentCategories()
 	{
 		return new Components\CategoriesControl($this->tags);
 	}
-
-
 
 	protected function beforeRender()
 	{

@@ -2,35 +2,24 @@
 
 namespace NetteAddons\Model;
 
-use Nette;
 
-
-
-/**
- * @author Jan Tvrdík
- */
-class Authorizator extends Nette\Object
+class Authorizator extends \Nette\Object
 {
 	/** @var \Nette\Security\User */
 	private $user;
 
 
-
-	/**
-	 * @param \Nette\Security\User
-	 */
 	public function __construct(\Nette\Security\User $user)
 	{
 		$this->user = $user;
 	}
 
 
-
 	/**
 	 * Is user allowed to perform given action with given resource.
 	 *
-	 * @param  mixed
-	 * @param  string for example 'view', 'edit'
+	 * @param mixed
+	 * @param string for example 'view', 'edit'
 	 * @return bool
 	 * @throws \NetteAddons\InvalidArgumentException
 	 */
@@ -42,7 +31,7 @@ class Authorizator extends Nette\Object
 			$ownerId = $resource->userId;
 			$resource = 'addon';
 
-		} elseif ($resource instanceof Nette\Database\Table\ActiveRow) {
+		} elseif ($resource instanceof \Nette\Database\Table\ActiveRow) {
 			$ownerId = $resource->user->id;
 			$resource = 'addon';
 

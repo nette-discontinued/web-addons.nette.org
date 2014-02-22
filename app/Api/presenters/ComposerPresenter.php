@@ -2,41 +2,31 @@
 
 namespace NetteAddons\Api;
 
-use NetteAddons\Model\Addon,
-	NetteAddons\Model\AddonVersion,
-	NetteAddons\Model\Addons,
-	NetteAddons\Model\AddonDownloads,
-	NetteAddons\Model\AddonVersions,
-	NetteAddons\Model\Utils\Composer;
+use NetteAddons\Model\Addon;
+use NetteAddons\Model\AddonVersion;
+use NetteAddons\Model\AddonDownloads;
+use NetteAddons\Model\Utils\Composer;
 
 
-
-/**
- * @author Jan Marek
- * @author Jan Tvrdík
- * @author Jan Dolecek <juzna.cz@gmail.com>
- * @author Patrik Votoček
- */
 final class ComposerPresenter extends \NetteAddons\BasePresenter
 {
 	/**
-	 * @var \NetteAddons\Model\Addons
 	 * @inject
+	 * @var \NetteAddons\Model\Addons
 	 */
 	public $addons;
 
 	/**
-	 * @var \NetteAddons\Model\AddonDownloads
 	 * @inject
+	 * @var \NetteAddons\Model\AddonDownloads
 	 */
 	public $addonDownloads;
 
 	/**
-	 * @var \NetteAddons\Model\AddonVersions
 	 * @inject
+	 * @var \NetteAddons\Model\AddonVersions
 	 */
 	public $addonVersions;
-
 
 
 	public function renderPackages()
@@ -46,28 +36,28 @@ final class ComposerPresenter extends \NetteAddons\BasePresenter
 
 		$packagesJson = Composer::createPackagesJson($addons);
 		$packagesJson->notify = str_replace(
-			'placeholder', '%package%',
+			'placeholder',
+			'%package%',
 			$this->link('//downloadNotify', array('package' => 'placeholder'))
 		);
 		$this->sendJson($packagesJson);
 	}
 
 
-
 	/**
 	 * Called when composer installs a package to increase counters.
 	 *
 	 * @link http://getcomposer.org/doc/05-repositories.md#notify
+	 *
 	 * @param string
 	 */
 	public function actionDownloadNotify($package)
 	{
-		$post = $this->getRequest()->post;
+		$post = $this->getRequest()->getPost();
 		if (!isset($post['version'])) {
 			$this->error('Invalid request.');
 		}
 		$version = (string) $post['version'];
-
 
 		if (!$addonRow = $this->addons->findOneByComposerFullName($package)) {
 			$this->error('Package not found.');
@@ -81,7 +71,7 @@ final class ComposerPresenter extends \NetteAddons\BasePresenter
 		));
 
 		if (!$versionRow) {
-			$this->error("Version of package not found.");
+			$this->error('Version of package not found.');
 		}
 
 		$version = AddonVersion::fromActiveRow($versionRow);
@@ -93,6 +83,6 @@ final class ComposerPresenter extends \NetteAddons\BasePresenter
 			$this->getHttpRequest()->getHeader('user-agent')
 		);
 
-		$this->sendJson(array('status' => "success"));
+		$this->sendJson(array('status' => 'success'));
 	}
 }

@@ -2,20 +2,13 @@
 
 namespace NetteAddons\Model;
 
-use Nette;
 
-
-
-/**
- *
- */
 interface IAddonImporter
 {
 	/**
 	 * @return string
 	 */
 	public static function getName();
-
 
 
 	/**
@@ -25,13 +18,11 @@ interface IAddonImporter
 	public static function isSupported($url);
 
 
-
 	/**
 	 * @param string
 	 * @return bool
 	 */
 	public static function isValid($url);
-
 
 
 	/**
@@ -42,15 +33,14 @@ interface IAddonImporter
 
 
 	/**
-	 * @return Addon
+	 * @return \NetteAddons\Model\Addon
 	 */
 	public function import();
 
 
-
 	/**
-	 * @param  Addon
-	 * @return AddonVersion[]
+	 * @param \NetteAddons\Model\Addon
+	 * @return \NetteAddons\Model\AddonVersion[]
 	 */
 	public function importVersions(Addon $addon);
 }

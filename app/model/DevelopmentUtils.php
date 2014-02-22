@@ -2,10 +2,11 @@
 
 namespace NetteAddons\Model;
 
+use Nette\Database\Context;
+use Nette\Caching\IStorage;
+
 /**
  * For tests
- *
- * @author Jan Marek
  */
 class DevelopmentUtils extends \Nette\Object
 {
@@ -16,13 +17,11 @@ class DevelopmentUtils extends \Nette\Object
 	private $cacheStorage;
 
 
-
-	public function __construct(\Nette\Database\Context $db,  \Nette\Caching\IStorage $cacheStorage)
+	public function __construct(Context $db,  IStorage $cacheStorage)
 	{
 		$this->db = $db;
 		$this->cacheStorage = $cacheStorage;
 	}
-
 
 
 	/**
@@ -54,7 +53,6 @@ class DevelopmentUtils extends \Nette\Object
 	}
 
 
-
 	/**
 	 * @param string
 	 * @param int
@@ -75,8 +73,6 @@ class DevelopmentUtils extends \Nette\Object
 			'type' => $type,
 		));
 	}
-
-
 
 	/**
 	 * Import taken from Adminer, slightly modified
