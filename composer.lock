@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "2968f72f53705ce0437f0b42bd5c369b",
+    "hash": "045443090f0b446d296ea05db47e76eb",
     "packages": [
         {
             "name": "composer/composer",
@@ -80,12 +80,12 @@
             "target-dir": "emberlabs/gravatarlib",
             "source": {
                 "type": "git",
-                "url": "git://github.com/emberlabs/gravatarlib.git",
+                "url": "https://github.com/emberlabs/gravatarlib.git",
                 "reference": "6bd70321aa59a8002d5fa08d9b592121683801df"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/emberlabs/gravatarlib/zipball/6bd70321aa59a8002d5fa08d9b592121683801df",
+                "url": "https://api.github.com/repos/emberlabs/gravatarlib/zipball/6bd70321aa59a8002d5fa08d9b592121683801df",
                 "reference": "6bd70321aa59a8002d5fa08d9b592121683801df",
                 "shasum": ""
             },
@@ -101,6 +101,7 @@
                     "emberlabs\\gravatarlib\\": ""
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -173,13 +174,13 @@
             "version": "1.1.0",
             "source": {
                 "type": "git",
-                "url": "git://github.com/justinrainbow/json-schema.git",
-                "reference": "v1.1.0"
+                "url": "https://github.com/justinrainbow/json-schema.git",
+                "reference": "05ff6d8d79fe3ad190b0663d80d3f9deee79416c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/justinrainbow/json-schema/zipball/v1.1.0",
-                "reference": "v1.1.0",
+                "url": "https://api.github.com/repos/justinrainbow/json-schema/zipball/05ff6d8d79fe3ad190b0663d80d3f9deee79416c",
+                "reference": "05ff6d8d79fe3ad190b0663d80d3f9deee79416c",
                 "shasum": ""
             },
             "require": {
@@ -191,6 +192,7 @@
                     "JsonSchema": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "NewBSD"
             ],
@@ -587,12 +589,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dg/texy.git",
-                "reference": "11c34e6df7846ff1e02e6ef7c0ef4a1e3af40847"
+                "reference": "18936b0543a79a694c81c1e5842aedf2b0cdf08f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dg/texy/zipball/11c34e6df7846ff1e02e6ef7c0ef4a1e3af40847",
-                "reference": "11c34e6df7846ff1e02e6ef7c0ef4a1e3af40847",
+                "url": "https://api.github.com/repos/dg/texy/zipball/18936b0543a79a694c81c1e5842aedf2b0cdf08f",
+                "reference": "18936b0543a79a694c81c1e5842aedf2b0cdf08f",
                 "shasum": ""
             },
             "require": {
@@ -632,10 +634,54 @@
                 "wiki",
                 "xhtml"
             ],
-            "time": "2013-07-19 22:05:37"
+            "time": "2014-02-09 19:45:14"
         }
     ],
     "packages-dev": [
+        {
+            "name": "jakub-onderka/php-parallel-lint",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/JakubOnderka/PHP-Parallel-Lint.git",
+                "reference": "cf94fd4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/JakubOnderka/PHP-Parallel-Lint/zipball/cf94fd4d0d6540b316a4a59942b2c8d30048b675",
+                "reference": "cf94fd4",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "suggest": {
+                "jakub-onderka/php-console-highlighter": "Highlight syntax in code snippet"
+            },
+            "bin": [
+                "parallel-lint"
+            ],
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "./"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD"
+            ],
+            "authors": [
+                {
+                    "name": "Jakub Onderka",
+                    "email": "jakub.onderka@gmail.com",
+                    "homepage": "http://acci.cz/"
+                }
+            ],
+            "description": "This tool check syntax of PHP files about 20x faster than serial check.",
+            "homepage": "https://github.com/JakubOnderka/PHP-Parallel-Lint",
+            "time": "2014-02-24 20:27:59"
+        },
         {
             "name": "mockery/mockery",
             "version": "0.9.0",
@@ -801,9 +847,11 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "composer/composer": 15,
-        "emberlabs/gravatarlib": 20
+        "emberlabs/gravatarlib": 20,
+        "jakub-onderka/php-parallel-lint": 20
     },
     "platform": {
+        "php": ">=5.3.7",
         "ext-pdo": "*"
     },
     "platform-dev": [

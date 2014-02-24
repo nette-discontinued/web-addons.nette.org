@@ -28,6 +28,7 @@
 		"emberlabs/gravatarlib": "@dev"
 	},
 	"require-dev": {
+		"jakub-onderka/php-parallel-lint": "dev-master#cf94fd4",
 		"nette/tester": "~1.0.0",
 		"mockery/mockery": "~0.9.0",
 		"nextras/migrations": "~2.1"
