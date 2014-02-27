@@ -16,7 +16,7 @@ parameters:
 	ghApiVersion: beta
 	ghClientId: null
 	ghClientSecret: null
-
+	gravatarMaxRating: pg
 
 nette:
 	application:
@@ -58,11 +58,7 @@ services:
 		setup:
 			- addProcessor(@NetteAddons\TextProcessors\TexyProcessor, NetteAddons\TextPreprocessor::FORMAT_TEXY)
 			- addProcessor(@NetteAddons\TextProcessors\MarkdownProcessor, NetteAddons\TextPreprocessor::FORMAT_MARKDOWN)
-	gravatar:
-		class: emberlabs\GravatarLib\Gravatar
-		setup:
-			- setMaxRating(pg)
-	helperLoader: NetteAddons\HelperLoader(@textPreprocessor, @gravatar)
+	helperLoader: NetteAddons\HelperLoader(@textPreprocessor, %gravatarMaxRating%)
 
 	# tables
 	users: NetteAddons\Model\Users

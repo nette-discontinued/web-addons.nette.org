@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "d57666b0b8e7effc24cbfe7f694cd81e",
+    "hash": "9328b05fc1ba1ed4d8237e56dc72c86f",
     "packages": [
         {
             "name": "composer/composer",
@@ -75,56 +75,6 @@
             "time": "2014-01-06 18:39:59"
         },
         {
-            "name": "emberlabs/gravatarlib",
-            "version": "dev-master",
-            "target-dir": "emberlabs/gravatarlib",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/emberlabs/gravatarlib.git",
-                "reference": "6bd70321aa59a8002d5fa08d9b592121683801df"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/emberlabs/gravatarlib/zipball/6bd70321aa59a8002d5fa08d9b592121683801df",
-                "reference": "6bd70321aa59a8002d5fa08d9b592121683801df",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "suggest": {
-                "twig/twig": ">=1.4.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "emberlabs\\gravatarlib\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Sam Thompson",
-                    "email": "sam@emberlabs.org"
-                },
-                {
-                    "name": "Damian Bushong",
-                    "email": "damian@emberlabs.org"
-                }
-            ],
-            "description": "A lightweight PHP 5.3 OOP library providing easy gravatar integration.",
-            "homepage": "http://emberlabs.org/",
-            "keywords": [
-                "gravatar",
-                "templating",
-                "twig"
-            ],
-            "time": "2011-12-28 22:28:37"
-        },
-        {
             "name": "ezyang/htmlpurifier",
             "version": "v4.6.0",
             "source": {
@@ -168,6 +118,45 @@
                 "html"
             ],
             "time": "2013-11-30 08:25:19"
+        },
+        {
+            "name": "forxer/gravatar",
+            "version": "1.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/forxer/gravatar.git",
+                "reference": "e8c121406dd0890e3899825d53381aa8415c003c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/forxer/gravatar/zipball/e8c121406dd0890e3899825d53381aa8415c003c",
+                "reference": "e8c121406dd0890e3899825d53381aa8415c003c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "forxer\\Gravatar\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Vincent Garnier",
+                    "email": "contact@okatea.org"
+                }
+            ],
+            "description": "A library providing easy gravatar integration.",
+            "keywords": [
+                "gravatar"
+            ],
+            "time": "2014-02-19 19:23:41"
         },
         {
             "name": "justinrainbow/json-schema",
@@ -850,7 +839,6 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "composer/composer": 15,
-        "emberlabs/gravatarlib": 20,
         "jakub-onderka/php-parallel-lint": 20
     },
     "platform": {

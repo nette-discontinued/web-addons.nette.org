@@ -25,7 +25,7 @@
 		"kukulich/fshl": "~2.1.0",
 		"michelf/php-markdown": "~1.4.0",
 		"ezyang/htmlpurifier": "~4.6.0",
-		"emberlabs/gravatarlib": "@dev"
+		"forxer/gravatar": "~1.1.2"
 	},
 	"require-dev": {
 		"jakub-onderka/php-parallel-lint": "dev-master#cf94fd4",
@@ -34,7 +34,6 @@
 		"nextras/migrations": "~2.1"
 	},
 	"autoload": {
-		"files": ["app/misc/functions.php"],
-		"classmap": ["libs/emberlabs/gravatarlib/emberlabs/gravatarlib/Gravatar.php"]
+		"files": ["app/misc/functions.php"]
 	}
 }

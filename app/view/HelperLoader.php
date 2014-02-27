@@ -2,7 +2,7 @@
 
 namespace NetteAddons;
 
-use emberlabs\GravatarLib\Gravatar;
+use forxer\Gravatar\Gravatar;
 
 
 /**
@@ -16,15 +16,14 @@ class HelperLoader extends \Nette\Object
 
 	/**
 	 * @param TextPreprocessor
-	 * @param \emberlabs\GravatarLib\Gravatar
+	 * @param string
 	 */
-	public function __construct(TextPreprocessor $preprocessor, Gravatar $gravatar)
+	public function __construct(TextPreprocessor $preprocessor, $gravatarMaxRating)
 	{
 		$this->helpers['description'] = array($preprocessor, 'processDescription');
 		$this->helpers['licenses'] = array($preprocessor, 'processLicenses');
-		$this->helpers['gravatar'] = function($email, $size = 40) use($gravatar) {
-			$gravatar->setAvatarSize($size);
-			return $gravatar->buildGravatarURL($email);
+		$this->helpers['gravatar'] = function($email, $size = 40) use($gravatarMaxRating) {
+			return html_entity_decode(Gravatar::image($email, $size, null, $gravatarMaxRating));
 		};
 		$this->helpers['profile'] = function($id) {
 			return 'http://forum.nette.org/cs/profile.php?id=' . $id;
