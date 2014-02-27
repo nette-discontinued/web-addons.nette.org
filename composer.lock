@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "700646d1bbc7f1cc7f9d234a2e3c9cf1",
+    "hash": "d57666b0b8e7effc24cbfe7f694cd81e",
     "packages": [
         {
             "name": "composer/composer",
@@ -585,23 +585,26 @@
         },
         {
             "name": "texy/texy",
-            "version": "v2.3",
+            "version": "v2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dg/texy.git",
-                "reference": "18936b0543a79a694c81c1e5842aedf2b0cdf08f"
+                "reference": "67d02cd95e4aaa7dae96b24a7d04ba924d641015"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dg/texy/zipball/18936b0543a79a694c81c1e5842aedf2b0cdf08f",
-                "reference": "18936b0543a79a694c81c1e5842aedf2b0cdf08f",
+                "url": "https://api.github.com/repos/dg/texy/zipball/67d02cd95e4aaa7dae96b24a7d04ba924d641015",
+                "reference": "67d02cd95e4aaa7dae96b24a7d04ba924d641015",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.0.0"
+                "php": ">=5.2.0"
+            },
+            "replace": {
+                "dg/texy": "self.version"
             },
             "require-dev": {
-                "nette/tester": "0.9.*"
+                "nette/tester": "~1.0.0"
             },
             "type": "library",
             "autoload": {
@@ -634,7 +637,7 @@
                 "wiki",
                 "xhtml"
             ],
-            "time": "2014-02-09 19:45:14"
+            "time": "2014-02-10 02:34:57"
         }
     ],
     "packages-dev": [
