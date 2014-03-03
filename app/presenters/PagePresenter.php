@@ -7,6 +7,12 @@ final class PagePresenter extends BasePresenter
 {
 	/**
 	 * @inject
+	 * @var \NetteAddons\TextProcessors\TexyProcessor
+	 */
+	public $texyProcessor;
+
+	/**
+	 * @inject
 	 * @var \NetteAddons\Forms\EditPageFormFactory
 	 */
 	public $editPageForm;
@@ -46,7 +52,7 @@ final class PagePresenter extends BasePresenter
 	public function renderDefault($slug)
 	{
 		$this->template->page = $this->page;
-		$description = $this->textPreprocessor->processTexyContent($this->page->content);
+		$description = $this->texyProcessor->process($this->page->content);
 
 		$this->template->content = $description['content'];
 		$this->template->toc = $description['toc'];
