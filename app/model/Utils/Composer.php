@@ -122,7 +122,7 @@ class Composer
 		foreach ($addons as $addon) {
 			$packages->{$addon->composerFullName} = new stdClass();
 			foreach ($addon->versions as $version) {
-				$packages->{$addon->composerFullName}->{$version->version} = $version->composerJson;
+				$packages->{$version->composerJson->name}->{$version->version} = $version->composerJson;
 			}
 		}
 
