@@ -1,10 +1,5 @@
 @import 'combined.css';
 
-a {
-	padding: 0;
-	margin: 0;
-}
-
 .form .required {
 	color: black;
 }
@@ -48,12 +43,12 @@ a {
 	color: white;
 }
 
-.sidebar .info {
+/*#sidebar .info {
 	clear: both;
 	color: #666;
-}
+}*/
 
-.sidebar .bigbutton {
+#sidebar .bigbutton {
 	background: #26374E;
 
 	border-radius: 8px;
@@ -67,33 +62,33 @@ a {
 	text-align: center;
 }
 
-.sidebar .bigbutton:hover, .sidebar .bigbutton:focus {
+#sidebar .bigbutton:hover, #sidebar .bigbutton:focus {
 	background-color: #78AFE5;
 	color: black;
 }
 
-.sidebar .bigbutton .icon-download {
+#sidebar .bigbutton .icon-download {
 	margin-top: 5px;
 	margin-right: 5px;
 }
 
-.sidebar .info h3 {
+#sidebar .info h3 {
 	color: #26374e;
 	margin: 0 0 .2em;
 }
-.sidebar .info ul {
+#sidebar .info ul {
 	margin:0;
 }
-.sidebar .info ul.nostyle {
+#sidebar .info ul.nostyle {
 	list-style: none;
 }
-.sidebar .info ul.nostyle li {
+#sidebar .info ul.nostyle li {
 	margin: .2em 0 .2em 0;
 }
-.sidebar .info ul.nostyle ul {
+#sidebar .info ul.nostyle ul {
 	list-style: disc;
 }
-.sidebar .info ul.nostyle ul li {
+#sidebar .info ul.nostyle ul li {
 	margin: .2em 0 .2em 1.70em;
 }
 
@@ -145,7 +140,6 @@ a {
 }
 
 input.addons-search {
-	width: 608px;
 	border: 1px black solid;
 	background-color: white;
 }
@@ -393,12 +387,8 @@ background: url(../images/li-download.gif) no-repeat;
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#bfbfbf', endColorstr='#979797', GradientType=0);
 }
 
-#header {
-	background-color: #3484d2;
-}
-
 #header.loggedin {
-	height: 130px;
+	height: 120px;
 }
 
 #submenu li, div.linkst li, div.linksb li, div.postlinksb li, div.postfootright li {
@@ -411,7 +401,7 @@ background: url(../images/li-download.gif) no-repeat;
 	font: 11px/27px "Open Sans","Trebuchet MS","Geneva CE",lucida,sans-serif;
 	position: absolute;
 	right: 0;
-	top: 93px;
+	top: 86px;
 	padding: 0;
 	list-style: none;
 	height: 27px;

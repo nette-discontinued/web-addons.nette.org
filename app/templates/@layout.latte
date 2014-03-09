@@ -1,26 +1,27 @@
 {default $showAddAddonButton = TRUE}
 {default $themeicon = 'box-full'}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta charset="utf-8">
 	<meta http-equiv="Content-Language" content="en">
 	<meta http-equiv="imagetoolbar" content="no">
 
 	<meta name="robots" content="{$robots}" n:ifset="$robots">
 
-	<meta name="copyright" content="c 2008, 2012 Nette Foundation">
+	<meta name="author" content="Nette Foundation; c 2008">
 
 	<title>{block #title|striptags}{ifset $title}{$title} | {/ifset}Nette Framework - Addons, plugins and components{/block}</title>
 
 	<link rel="stylesheet" href="{$basePath}/css/addons.css">
 	<link rel="stylesheet" href="{$basePath}/assets/plugins/chosen/chosen.css">
 	<link rel="shortcut icon" href="{$basePath}/favicon.ico">
+	<link rel="image_src" href="http://files.nette.org/images/fb-preview.png">
 
-	{*<script src="http://files.nette.org/js/analytics.js"></script><script>
-	_ga.create('UA-95238-14', '.nette.org');
-	_gaq.push(['_trackPageview']);
+	{*<script src="http://files.nette.org/js/analytics.js"></script>
+	<script>
+		_ga.create('UA-95238-14', '.nette.org');
+		_gaq.push(['_trackPageview']);
 	</script>*}
 	<script src="{$basePath}/js/jquery-1.8.2.js"></script>
 	<script src="{$basePath}/js/spin.js"></script>
@@ -30,67 +31,75 @@
 
 
 <body class="nette-org">
+	<script>document.documentElement.className+=' js'</script>
+
 	<div id="page">
-		<div id="header" n:class="$user->loggedIn ? loggedin">
+		<header id="header" n:class="$user->loggedIn ? loggedin">
 			<a id="logo" title="Homepage" n:href=":Homepage:default"><span>Homepage</span></a>
 
-			{if $user->loggedIn && $presenter->name != 'Error'}{control subMenu}{/if}
-
-			<div id="menu">
+			<nav id="menu">
 				<ul>
 					<li><a title="Download" href="http://nette.org/en/download"><span>Download</span></a></li>
-					<li><a title="Documentation" href="http://doc.nette.org/en/"><span>Documentation</span></a></li>
-					<li><a title="Addons, plugins and components" class="active" n:href=":Homepage:default"><span>Add-ons</span></a></li>
+					<li><a href="/en/"><span>Documentation</span></a></li>
+					<li><a class="active" title="Addons, plugins and components" n:href=":Homepage:default"><span>Add-ons</span></a></li>
 					<li><a title="Planette" href="http://pla.nette.org/en/"><span>Planette</span></a></li>
 					<li><a href="http://forum.nette.org/en/"><span>Forum</span></a></li>
-					<li><a title="Development" href="http://dev.nette.org/en/"><span>Development</span></a></li>
-					<li><a title="About Nette Framework" href="http://nette.org/en/about"><span>About</span></a></li>
+					<li><a href="http://blog.nette.org"><span>Blog</span></a></li>
+					<li><a href="https://github.com/nette/nette"><span>GitHub</span></a></li>
 				</ul>
-			</div>
-		</div>
+			</nav>
+
+			{if $user->loggedIn && $presenter->name != 'Error'}{control subMenu}{/if}
+		</header>
 
 		<div id="tools">
 			{if $user->loggedIn}
-				Logged in as <a href="{$user->identity->id|profile}">{$user->identity->username}</a> / <a n:href=":Sign:out">Sign out</a>
+				<a href="{$user->identity->id|profile}">{$user->identity->username}</a> <a n:href=":Sign:out">Sign out</a>
 			{else}
-				<a n:href=":Sign:in">Sign In</a> | <a href="http://forum.nette.org/en/register.php">Register</a>
+				<a n:href=":Sign:in">Sign in</a> <a href="http://forum.nette.org/en/register.php">Sign out</a>
 			{/if}
 
-			 | <a href="https://github.com/nette/addons.nette.org/issues/new">Report bug</a>
-
-			{*<form action="http://www.google.com/cse" id="search" onsubmit="if(this.q.value.indexOf('more:')==-1)this.q.value+=' more:full_nette.org'">
-				<input type="hidden" name="cx" value="011549293477758430224:vxofa9ufnhc"><input type="hidden" name="ie" value="UTF-8"><input type="text" name="q" class="text" size="30"><input type="image" src="http://files.nette.org/images/search.png" alt="Search">
-			</form>*}
+			<a href="https://github.com/nette/addons.nette.org/issues/new">Report bug</a>
 		</div>
 
 		{block main}
-		<div id="main" class="sidebar">
-			<div id="content">
+		<div id="main" lang="en">
+			<div id="content" class="sidebar">
 				{foreach $flashes as $flash}
 					<div class="flash {$flash->type}">{$flash->message}</div>
 				{/foreach}
 
 				{include #content}
+
+
+				{*
+				<div class="paginator">
+					<small><a href="/en/2.1/requirements">« Server Requirements</a></small>
+					<a href="/en/2.1/templating">Templates »</a>
+				</div>
+
+				<hr>
+				*}
 			</div>
 
-			<div id="sidebar">
+			<aside id="sidebar">
 				<div class="info">
 					{block sidebar}
 						<a n:if="$showAddAddonButton" n:href=":Manage:Addon:add" class="bigbutton">Create New Addon</a>
 					{/block}
 				</div>
-			</div>
-			<div class="clear"></div>
+			</aside>
 		</div>
 		{/block}
 
-		<div id="footer">
-			<p>Copyright &copy; 2008, 2012 <a href="http://nettefoundation.com">Nette Foundation</a>
-			| <a href="http://nette.org/cs/pravni-dolozka">Terms of use</a> | If not stated otherwise, the contents are licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cz/">Creative Commons CC-BY-SA</a>.</p>
-		</div>
-	</div> <!-- /page -->
-	<script src="{$basePath}/assets/plugins/chosen/chosen.jquery.js"></script>
-	<script src="//www.google.com/jsapi"></script>
-	<script src="{$basePath}/js/addons.js"></script>
+		<footer id="footer">
+			<p>Copyright &copy; 2008, 2014 <a href="http://nettefoundation.com">Nette Foundation</a>
+				| <a href="http://nette.org/terms-of-use">Terms of use</a> | If not stated otherwise, the contents are licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cz/">Creative Commons CC-BY-SA</a>.</p>
+		</footer>
+	</div>
+<script src="{$basePath}/assets/plugins/chosen/chosen.jquery.js"></script>
+<script src="//www.google.com/jsapi"></script>
+<script src="{$basePath}/js/addons.js"></script>
+{*<script src="http://files.nette.org/js/combined.js?v=1393339374"></script>*}
 </body>
 </html>
