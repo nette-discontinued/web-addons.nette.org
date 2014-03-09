@@ -4,7 +4,7 @@
 dir=$(cd `dirname $0` && pwd)
 
 # Path to test runner script
-runnerScript="$dir/../libs/nette/tester/Tester/tester.php"
+runnerScript="$dir/../vendor/nette/tester/Tester/tester.php"
 if [ ! -f "$runnerScript" ]; then
 	runnerScript="$dir/../../../nette/tester/Tester/tester.php"
 	if [ ! -f "$runnerScript" ]; then

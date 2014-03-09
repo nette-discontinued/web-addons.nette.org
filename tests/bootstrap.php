@@ -1,6 +1,6 @@
 <?php
 
-require __DIR__ . '/../libs/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 require __DIR__ . '/libs/Access/Init.php';
 require __DIR__ . '/TestCase.php';
 

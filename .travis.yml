@@ -15,7 +15,7 @@ before_script:
   - composer self-update
   - composer install --no-interaction --prefer-source --dev
 
-script: ./libs/bin/parallel-lint app && ./libs/bin/parallel-lint -e php,phpt tests/cases && VERBOSE=true ./tests/run-tests.sh -p php tests/cases/
+script: ./vendor/bin/parallel-lint app && ./vendor/bin/parallel-lint -e php,phpt tests/cases && VERBOSE=true ./tests/run-tests.sh -p php tests/cases/
 
 notifications:
   email: false

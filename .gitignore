@@ -1,4 +1,4 @@
-/libs
+/vendor
 /app/config/config.local.neon
 /tests/coverage
 /tests/temp
