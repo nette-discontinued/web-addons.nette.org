@@ -120,7 +120,6 @@ services:
 	addAddonVersionForm: NetteAddons\Manage\Forms\AddVersionFormFactory
 	reportForm: NetteAddons\Forms\ReportFormFactory
 	manageReportForm: NetteAddons\Manage\Forms\ReportFormFactory
-	editPageForm: NetteAddons\Forms\EditPageFormFactory
 
 	# Presenters
 	-
