@@ -44,18 +44,6 @@
 		</li>
 		{/if}
 		{else}
-		<li n:if="isset($page) && $auth->isAllowed('page', 'manage')">
-			{*if is_string($page)}
-			<a rel="nofollow" href="{plink :Page:edit $page}" n:class="$presenter->linkCurrent ? active">
-				<span>Create</span>
-			</a>
-			{else*}
-			{if !is_string($page)}
-			<a rel="nofollow" href="{plink :Page:edit $page->slug}" n:class="$presenter->linkCurrent ? active">
-				<span>Edit</span>
-			</a>
-			{/if}
-		</li>
 		<li n:if="$auth->isAllowed('addon', 'delete')">
 			<a rel="nofollow" href="{plink :Manage:Admin:deleted}" n:class="$presenter->linkCurrent ? active">
 				<span>List deleted</span>

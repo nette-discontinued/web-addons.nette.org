@@ -2,47 +2,28 @@
 
 namespace NetteAddons;
 
-
 final class PagePresenter extends BasePresenter
 {
-	/**
-	 * @inject
-	 * @var \NetteAddons\TextProcessors\TexyProcessor
-	 */
-	public $texyProcessor;
+	const SOURCE_FILE_PATH_MASK = '%s/page/%s.texy';
 
 	/**
 	 * @inject
-	 * @var \NetteAddons\Forms\EditPageFormFactory
+	 * @var \NetteAddons\TextProcessors\PageProcessor
 	 */
-	public $editPageForm;
+	public $pageProcessor;
+
+	/** @var string */
+	private $dataPath;
+
 
 	/**
-	 * @persistent
-	 * @var string
+	 * @param string
 	 */
-	public $slug;
-
-	/** @var \Nette\Database\Table\ActiveRow|string */
-	private $page;
-
-
-	protected function startup()
+	public function __construct($dataPath)
 	{
-		parent::startup();
+		parent::__construct();
 
-		if (!$this->slug) {
-			$this->error();
-		}
-
-		$this->page = $this->pages->findOneBySlug($this->slug);
-
-		if (!$this->page) {
-			$this['subMenu']->setPage($this->slug);
-			$this->error();
-		}
-
-		$this['subMenu']->setPage($this->page);
+		$this->dataPath = $dataPath;
 	}
 
 
@@ -51,51 +32,33 @@ final class PagePresenter extends BasePresenter
 	 */
 	public function renderDefault($slug)
 	{
-		$this->template->page = $this->page;
-		$description = $this->texyProcessor->process($this->page->content);
+		$this->checkSlugExist($slug);
 
-		$this->template->content = $description['content'];
-		$this->template->toc = $description['toc'];
+		$content = file_get_contents($this->getFilePath($slug));
+		$data = $this->pageProcessor->process($content, 'page/' . $slug);
+
+		$this->template->title = $data['title'];
+		$this->template->content = $data['content'];
+		$this->template->toc = $data['toc'];
 	}
-
-
-	/**
-	 * @return Forms\Form
-	 */
-	protected function createComponentEditPageForm()
-	{
-		if (!$this->getUser()->isLoggedIn()) {
-			$this->redirect(':Sign:in', $this->storeRequest());
-		}
-
-		$form = $this->editPageForm->create($this->page, $this->getUser()->getIdentity());
-		$form->onSuccess[] = array($this, 'editPageFormSubmitted');
-
-		return $form;
-	}
-
-
-	/**
-	 * @param Forms\Form
-	 */
-	public function editPageFormSubmitted(Forms\Form $form)
-	{
-		if ($form->valid) {
-			$this->flashMessage('Page saved.');
-			$this->redirect('default');
-		}
-	}
-
 
 	/**
 	 * @param string
 	 */
-	public function renderEdit($slug)
+	private function checkSlugExist($slug)
 	{
-		if (!$this->getUser()->isLoggedIn()) {
-			$this->redirect(':Sign:in', $this->storeRequest());
+		$path = $this->getFilePath($slug);
+		if (!file_exists($path)) {
+			$this->error('Page does not exist');
 		}
+	}
 
-		$this->template->page = $this->page;
+	/**
+	 * @param string
+	 * @return string
+	 */
+	private function getFilePath($slug)
+	{
+		return sprintf(self::SOURCE_FILE_PATH_MASK, $this->dataPath, $slug);
 	}
 }

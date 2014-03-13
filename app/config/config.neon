@@ -122,6 +122,12 @@ services:
 	manageReportForm: NetteAddons\Manage\Forms\ReportFormFactory
 	editPageForm: NetteAddons\Forms\EditPageFormFactory
 
+	# Presenters
+	-
+		class: NetteAddons\PagePresenter
+		arguments:
+			dataPath: %pagesDataPath%
+
 	# Presenters Cron module
 	-
 		class: NetteAddons\Cli\Cron\PagesPresenter
