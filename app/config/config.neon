@@ -54,6 +54,7 @@ services:
 	authorizator: NetteAddons\Model\Authorizator
 
 	# view
+	- NetteAddons\TextProcessors\PageProcessor
 	- NetteAddons\TextProcessors\TexyProcessor
 	- NetteAddons\TextProcessors\MarkdownProcessor
 	textPreprocessor:
