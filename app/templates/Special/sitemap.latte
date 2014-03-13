@@ -21,7 +21,7 @@
 			<h2>Pages</h2>
 			<ul>
 				{foreach $pages as $page}
-					<li><a n:href=":Page:default $page->slug">{$page->name}</a></li>
+					<li><a n:href=":Page:default slug => $page->slug">{$page->name}</a></li>
 				{/foreach}
 			</ul>
 		</div>

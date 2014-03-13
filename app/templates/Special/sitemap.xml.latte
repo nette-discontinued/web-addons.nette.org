@@ -37,7 +37,7 @@
 	{/foreach}
 	{foreach $pages as $page}
 		<url>
-			<loc>{link "//:Page:default $page->slug"}</loc>
+			<loc>{link //:Page:default slug => $page->slug}</loc>
 			<lastmod>{$page->createdAt|date:'Y-m-d'}</lastmod>
 			<changefreq>monthly</changefreq>
 			<priority>0.3</priority>

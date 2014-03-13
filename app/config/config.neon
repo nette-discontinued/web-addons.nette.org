@@ -127,6 +127,10 @@ services:
 		class: NetteAddons\PagePresenter
 		arguments:
 			dataPath: %pagesDataPath%
+	-
+		class: NetteAddons\SpecialPresenter
+		arguments:
+			pagesDataPath: %pagesDataPath%
 
 	# Presenters Cron module
 	-
