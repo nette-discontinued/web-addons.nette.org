@@ -22,7 +22,8 @@
 		"kukulich/fshl": "~2.1.0",
 		"michelf/php-markdown": "~1.4.0",
 		"ezyang/htmlpurifier": "~4.6.0",
-		"forxer/gravatar": "~1.1.2"
+		"forxer/gravatar": "~1.1.2",
+		"guzzle/guzzle": "~3.8.1"
 	},
 	"require-dev": {
 		"jakub-onderka/php-parallel-lint": "dev-master#cf94fd4",

@@ -10,6 +10,9 @@ php:
 
 
 parameters:
+	pagesSourceUrl: 'https://github.com/nette/web-content/archive/addons-portal.zip'
+	pagesDataPath: '%appDir%/data/pages'
+
 	uploadUri: '/upload'
 	uploadDir: '%wwwDir%%uploadUri%'
 	httpRequestTimeout: 5000 # v ms
@@ -110,3 +113,12 @@ services:
 	reportForm: NetteAddons\Forms\ReportFormFactory
 	manageReportForm: NetteAddons\Manage\Forms\ReportFormFactory
 	editPageForm: NetteAddons\Forms\EditPageFormFactory
+
+	# Presenters Cron module
+	-
+		class: NetteAddons\Cli\Cron\PagesPresenter
+		arguments:
+			dataPath: %pagesDataPath%
+			sourceUrl: %pagesSourceUrl%
+			tempPath: %tempDir%
+			zipRootDirectory: 'web-content-addons-portal'
