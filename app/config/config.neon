@@ -73,7 +73,6 @@ services:
 	addonReports: NetteAddons\Model\AddonReports
 	versionDependencies: NetteAddons\Model\VersionDependencies
 	tags: NetteAddons\Model\Tags
-	pages: NetteAddons\Model\Pages
 
 	# facades
 	addonsManager:

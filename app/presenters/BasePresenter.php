@@ -29,12 +29,6 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 
 	/**
 	 * @inject
-	 * @var \NetteAddons\Model\Pages
-	 */
-	public $pages;
-
-	/**
-	 * @inject
 	 * @var \NetteAddons\Components\IPagesControlFactory
 	 */
 	public $pagesControlFactory;
