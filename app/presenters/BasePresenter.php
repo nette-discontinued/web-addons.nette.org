@@ -35,6 +35,12 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 
 	/**
 	 * @inject
+	 * @var \NetteAddons\Components\IPagesControlFactory
+	 */
+	public $pagesControlFactory;
+
+	/**
+	 * @inject
 	 * @var \NetteAddons\Model\Utils\Licenses
 	 */
 	public $licenses;
@@ -198,6 +204,14 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 	protected function createComponentCategories()
 	{
 		return new Components\CategoriesControl($this->tags);
+	}
+
+	/**
+	 * @return \NetteAddons\Components\PagesControl
+	 */
+	protected function createComponentPages()
+	{
+		return $this->pagesControlFactory->create();
 	}
 
 	protected function beforeRender()

@@ -46,11 +46,7 @@
 	{include #parent}
 
 	<div class="sidebar-box">
-		<ul class="nostyle">
-			{foreach $pages as $page}
-				<li><a n:href=":Page:default $page->slug">{$page->name}</a></li>
-			{/foreach}
-		</ul>
+		{control pages}
 	</div>
 
 	<div class="sidebar-box">

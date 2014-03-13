@@ -80,6 +80,13 @@ services:
 		class: NetteAddons\Model\Facade\AddonManageFacade
 		factory: NetteAddons\Model\Facade\AddonManageFacade::create(@session, @httpRequest::getUrl(), %uploadDir%, %uploadUri%)
 
+	# components
+	-
+		implement: NetteAddons\Components\IPagesControlFactory
+		class: NetteAddons\Components\PagesControl
+		arguments:
+			dataPath: %pagesDataPath%
+
 	# validators
 	licenses: NetteAddons\Model\Utils\Licenses
 	validators: NetteAddons\Model\Utils\Validators
