@@ -7,6 +7,4 @@
 $container = require __DIR__ . '/../app/bootstrap.php';
 
 // Run application.
-if (!$container->parameters['consoleMode']) {
-	$container->getService('application')->run();
-}
+$container->getService('application')->run();

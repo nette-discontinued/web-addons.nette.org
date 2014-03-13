@@ -2,6 +2,7 @@
 
 namespace NetteAddons;
 
+use Nette\Application\Routers\CliRouter;
 use Nette\Application\Routers\Route;
 use Nette\Application\Routers\RouteList;
 
@@ -29,6 +30,11 @@ class RouterFactory extends \Nette\Object
 	public function createRouter()
 	{
 		$router = new RouteList();
+
+		// CLI
+		$router[] = new CliRouter(array(
+			'action' => 'Cli:Help:default',
+		));
 
 		// Setup router
 		$router[] = new Route('index.php', 'Homepage:default', Route::ONE_WAY);
