@@ -236,14 +236,26 @@ class Converter
 	 */
 	public function createUrl(Link $link)
 	{
-		$parts = explode('-', $link->book, 2);
 		$name = self::webalize($link->name, '/');
-		return (false ? '' : 'http://' . ($parts[0] === 'www' ? '' : "$parts[0].") . $this->paths['domain'])
-		. '/'
-		. $link->lang . '/'
-		. (isset($parts[1]) ? "$parts[1]/" : '')
-		. ($name === self::HOMEPAGE ? '' : $name)
-		. ($link->fragment ? "#$link->fragment" : '');
+
+		$parts = array();
+		if ($link->book !== $this->current->book) {
+			$parts = explode('-', $link->book, 2);
+			$url = (false ? '' : 'http://' . ($parts[0] === 'www' ? '' : "$parts[0].") . $this->paths['domain']) . '/';
+		} else {
+			$url = '/';
+		}
+
+		if ($link->lang) {
+			$url .= $link->lang . '/';
+		}
+
+		$url .=
+			(isset($parts[1]) ? "$parts[1]/" : '')
+			. ($name === self::HOMEPAGE ? '' : $name)
+			. ($link->fragment ? "#$link->fragment" : '');
+
+		return $url;
 	}
 
 
