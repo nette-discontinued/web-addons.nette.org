@@ -213,6 +213,5 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 		$this->template->auth = $this->auth;
 		$this->template->categories = $this->tags->findMainTags();
 		$this->template->tags = $this->tags;
-		$this->template->pages = $this->pages->findAll();
 	}
 }
