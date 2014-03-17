@@ -129,7 +129,7 @@ class AddonVersion extends \Nette\Object
 	public function hasNetteVersion()
 	{
 		$version = $this->getNetteVersion();
-		return ($version && strpos($version, 'dev') === FALSE);
+		return ($version && !Strings::startsWith($version, 'dev') && !Strings::startsWith($version, '@dev'));
 	}
 
 
