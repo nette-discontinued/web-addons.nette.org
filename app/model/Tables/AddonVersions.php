@@ -113,6 +113,8 @@ class AddonVersions extends Table
 			}
 		}
 
+		krsort($versions);
+
 		return reset($versions);
 	}
 
