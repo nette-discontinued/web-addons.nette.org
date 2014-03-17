@@ -39,6 +39,13 @@
 	width: 30%;
 }
 
+#content table tr.addon.deleted td {
+	background-color: #FFE1E1;
+}
+#content table tr.addon.alt.deleted td {
+	background-color: #FFF1F1;
+}
+
 #content table th a {
 	color: white;
 }

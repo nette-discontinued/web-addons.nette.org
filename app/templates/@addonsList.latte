@@ -4,7 +4,7 @@
 
 			{foreach $addons as $addon}
 				{var score = $addon->totalDownloadsCount+$addon->totalInstallsCount}
-				<tr n:class="$iterator->odd ? alt, addon" data-addon-id="{$addon->id}" data-addon-score="{$score}">
+				<tr n:class="$iterator->odd ? alt, addon, $addon->deletedAt ? deleted" data-addon-id="{$addon->id}" data-addon-score="{$score}">
 					<td class="name"><a title="{$addon->name}" n:href=":Detail: id => $addon->id">{$addon->name}</a></td>
 					<td class="description">{$addon->shortDescription}</td>
 					{*
