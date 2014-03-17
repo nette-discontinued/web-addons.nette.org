@@ -11,7 +11,7 @@ use Nette\Database\Table\Selection;
  */
 abstract class Table extends \Nette\Object
 {
-	/** @var \Nette\Database\Connection */
+	/** @var \Nette\Database\Context */
 	protected $db;
 
 
