@@ -70,7 +70,13 @@ class AddonVersions extends Table
 			return FALSE;
 		}
 
-		return (bool) $row->update($this->toArray($version));
+		$res = $row->update($this->toArray($version));
+
+		$this->db->table('addons_dependencies')->where('versionId = ?', $version->id)->delete();
+
+		$this->dependencies->setVersionDependencies($version);
+
+		return (bool) $res;
 	}
 
 
