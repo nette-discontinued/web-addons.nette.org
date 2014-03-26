@@ -26,7 +26,7 @@ nano ./app/config/config.local.neon
 
 1. Open Adminer (or whatever tool you use)
 2. Create database
-3. Import `app/model/db/schema.sql`, `app/model/db/data.sql` and `app/model/db/schema-triggers.sql` (in this order)
+3. Run migrations `php migrations/run.php structures test-data --reset`
 
 
 Tests
