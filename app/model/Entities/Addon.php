@@ -65,12 +65,6 @@ class Addon extends \Nette\Object
 	/** @var Tag[]|string[]|int[] (tagId => Tag (from db) or # => tagName (new user-created tags) or # => tagId */
 	public $tags = array();
 
-	/** @var int total times this addon was downloaded */
-	public $totalDownloadsCount = 0;
-
-	/** @var int total times this addon was installed using composer */
-	public $totalInstallsCount = 0;
-
 	/** @var DateTime */
 	public $deletedAt;
 
@@ -106,8 +100,6 @@ class Addon extends \Nette\Object
 		$addon->repositoryHosting = $row->repositoryHosting;
 		$addon->demo = $row->demo;
 		$addon->updatedAt = ($row->updatedAt ? DateTime::from($row->updatedAt) : NULL);
-		$addon->totalDownloadsCount = $row->totalDownloadsCount ?: 0;
-		$addon->totalInstallsCount = $row->totalInstallsCount ?: 0;
 		$addon->deletedAt = $row->deletedAt;
 		$addon->deletedBy = $row->ref('deletedBy');
 		$addon->type = $row->type;

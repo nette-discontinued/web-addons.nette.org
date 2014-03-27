@@ -5,7 +5,6 @@ namespace NetteAddons;
 use Nette\Http;
 use Nette\Caching\Cache;
 use NetteAddons\Model\Addon;
-use NetteAddons\Model\AddonDownloads;
 
 
 final class DetailPresenter extends BasePresenter
@@ -15,12 +14,6 @@ final class DetailPresenter extends BasePresenter
 	 * @var \NetteAddons\Model\Addons
 	 */
 	public $addons;
-
-	/**
-	 * @inject
-	 * @var \NetteAddons\Model\AddonDownloads
-	 */
-	public $addonDownloads;
 
 	/**
 	 * @inject
@@ -87,32 +80,6 @@ final class DetailPresenter extends BasePresenter
 	 */
 	public function renderVersions($id)
 	{
-	}
-
-
-	/**
-	 * @secured
-	 * @param string version identifier
-	 */
-	public function handleDownload($version = NULL)
-	{
-		if ($version === NULL) { // current
-			$version = $this->addonVersions->getCurrent($this->addon->versions);
-		} elseif (isset($this->addon->versions[$version])) { // archive
-			$version = $this->addon->versions[$version];
-		} else {
-			$this->error('Unknown addon version.');
-		}
-
-		$this->addonDownloads->saveDownload(
-			AddonDownloads::TYPE_DOWNLOAD,
-			$version->id,
-			$this->getHttpRequest()->getRemoteAddress(),
-			$this->getHttpRequest()->getHeader('user-agent'),
-			$this->getUser()->isLoggedIn() ? $this->getUser()->getId() : NULL
-		);
-
-		$this->redirectUrl($version->distUrl);
 	}
 
 
@@ -201,23 +168,6 @@ final class DetailPresenter extends BasePresenter
 			$myVote = NULL;
 		}
 
-		$addonId = $this->addon->id;
-		$statsFrom = new \DateTime('- 7 days');
-		$statsFrom->setTime(0, 0, 0);
-		$statsTo = new \DateTime('yesterday');
-		$statsTo->setTime(23, 59, 59);
-
-		$statsCache = new Cache($this->cacheStorage, 'Addon.Detail.Stats');
-		$key = sprintf('%d/%s_%s', $addonId, $statsFrom->format('Y-m-d'), $statsTo->format('Y-m-d'));
-
-		$usageStatistics = $statsCache->load($key);
-		if ($usageStatistics === NULL) {
-			$usageStatistics = $this->addonDownloads->findDownloadUsage($addonId, $statsFrom, $statsTo);
-			$statsCache->save($key, $usageStatistics, array(
-				Cache::EXPIRE => '+ 1 day',
-			));
-		}
-
 		$this['subMenu']->setAddon($this->addon);
 
 		$this->template->addon = $this->addon;
@@ -225,9 +175,5 @@ final class DetailPresenter extends BasePresenter
 		$this->template->composer = $currentVersion->composerJson;
 
 		$this->template->myVote = $myVote;
-		$this->template->usageStatistics = $usageStatistics;
-		$this->template->showUsageStatistics = array_sum(array_map(function ($item) {
-			return $item->count;
-		}, $usageStatistics)) > 0;
 	}
 }

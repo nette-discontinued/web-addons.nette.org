@@ -26,10 +26,10 @@
 				<th>License</th>
 				<td>{$version->license|licenses}</td>
 			</tr>
-			<tr>
+			{* <tr>
 				<th>Download link</th>
 				<td><a n:href="download! version => $version->version">{$version->distUrl}</a></td>
-			</tr>
+			</tr> *}
 			<tr n:ifset="$composer->source">
 				<th>{$composer->source->type|firstUpper} reference</th>
 				<td>

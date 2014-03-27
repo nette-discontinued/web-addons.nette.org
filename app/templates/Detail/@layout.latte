@@ -6,7 +6,7 @@
 {block sidebar}
 	{include #parent}
 
-	<a class="bigbutton" n:href="download!, version => $version->version" title="{$addon->totalDownloadsCount}× total downloads, {$version->downloadsCount}× this version"><i class="icon-download"></i>Download</a>
+	{* <a class="bigbutton" n:href="download!, version => $version->version"><i class="icon-download"></i>Download</a> *}
 
 	<div class="sidebar-box" n:if="count($version->otherRequirements) || $version->hasNetteVersion()">
 		<h3>Requirements</h3>
@@ -89,19 +89,6 @@
 				</td>
 			</tr>
 		</table>
-	</div>
-
-	<div class="sidebar-box" n:if="$showUsageStatistics">
-		<h3>Downloads</h3>
-
-		{* TODO: separate this to a component later *}
-		{var $stats = []}
-		{foreach $usageStatistics as $row}
-			{? $stats[] = [date => $row->day->format('d.m.Y'), count => $row->count]}
-		{/foreach}
-		<div id="downloads-graph" data-netteaddons-downloads="{json_encode($stats)}">
-			loading&hellip;
-		</div>
 	</div>
 
 	{if !empty($toc)}

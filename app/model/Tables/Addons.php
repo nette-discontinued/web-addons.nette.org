@@ -132,21 +132,6 @@ class Addons extends Table
 
 
 	/**
-	 * @param  int|NULL
-	 * @param  bool
-	 * @return \Nette\Database\Table\Selection
-	 */
-	public function findMostUsed($count = NULL, $ignoreDeleted = FALSE)
-	{
-		$selection = $this->getTable($ignoreDeleted)->group('id')->order('SUM(totalDownloadsCount + totalInstallsCount) DESC');
-		if (!is_null($count)) {
-			$selection->limit($count);
-		}
-		return $selection;
-	}
-
-
-	/**
 	 * @param int
 	 * @return \Nette\Database\Table\Selection
 	 */
@@ -222,34 +207,6 @@ class Addons extends Table
 	}
 
 
-	public function incrementDownloadsCount(Addon $addon)
-	{
-		$row = $this->find($addon->id);
-
-		if (!$row) {
-			return;
-		}
-
-		$row->update(array(
-			'totalDownloadsCount' => new SqlLiteral('totalDownloadsCount + 1')
-		));
-	}
-
-
-	public function incrementInstallsCount(Addon $addon)
-	{
-		$row = $this->find($addon->id);
-
-		if (!$row) {
-			return;
-		}
-
-		$row->update(array(
-			'totalInstallsCount' => new SqlLiteral('totalInstallsCount + 1')
-		));
-	}
-
-
 	/**
 	 * @param Addon
 	 * @param \Nette\Security\IIdentity
@@ -322,8 +279,6 @@ class Addons extends Table
 				'demo' => $addon->demo ?: NULL,
 				'defaultLicense' => $addon->defaultLicense,
 				'updatedAt' => new Datetime('now'),
-				'totalDownloadsCount' => $addon->totalDownloadsCount ?: 0,
-				'totalInstallsCount' => $addon->totalInstallsCount ?: 0,
 				'deletedAt' => $addon->deletedAt,
 				'deletedBy' => $addon->deletedBy,
 				'type' => $addon->type,
@@ -362,8 +317,6 @@ class Addons extends Table
 			'demo' => $addon->demo ?: NULL,
 			'defaultLicense' => $addon->defaultLicense,
 			'updatedAt' => new Datetime('now'),
-			'totalDownloadsCount' => $addon->totalDownloadsCount ?: 0,
-			'totalInstallsCount' => $addon->totalInstallsCount ?: 0,
 			'deletedAt' => $addon->deletedAt,
 			'deletedBy' => $addon->deletedBy,
 			'type' => $addon->type,

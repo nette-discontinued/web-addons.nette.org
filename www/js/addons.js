@@ -106,45 +106,4 @@ $(document).ready(function() {
 			$searchInput.val('').keyup();
 		});
 	}
-
-
-
-	var $downloadsGraph = $('#downloads-graph');
-	if ($downloadsGraph.length) {
-		google.load('visualization', '1.0', { 'packages' : ['corechart'], 'callback' : function() {
-			var input = [
-				['Den', 'Downloads + Installs']
-			];
-			$.each($downloadsGraph.data('netteaddonsDownloads'), function() {
-				input.push([this.date, this.count]);
-			});
-			var data = google.visualization.arrayToDataTable(input);
-
-			var options = {
-				height : 60,
-				backgroundColor : { fill : 'transparent' },
-				fontSize : 10,
-				chartArea : {
-					width : '100%',
-					height : '80%'
-				},
-				hAxis : { textPosition : 'none' },
-				vAxis : {
-					format : '#',
-					baselineColor: '#ddd',
-					textPosition : 'in',
-					textStyle : { fontSize: 8 },
-					gridlines : {
-						color : 'transparent',
-						count : 2
-					}
-				},
-				legend : { position : 'none' },
-				series : { 0 : { color : '#26374e' } }
-			};
-
-			var chart = new google.visualization.LineChart($downloadsGraph.get(0));
-			chart.draw(data, options);
-		} });
-	}
 });

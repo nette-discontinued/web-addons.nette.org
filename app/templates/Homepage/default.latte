@@ -26,8 +26,7 @@
 	{else}
 		<p class="warning">
 			<b>Application is running in DEVELOPMENT MODE.</b><br>
-			You can sign in as demo user &mdash; username is <i>demo</i> and password is <i>123</i><br>
-			<a n:href="randomDownloadAndInstalls!">Generate random usage!</a>
+			You can sign in as demo user &mdash; username is <i>demo</i> and password is <i>123</i>
 		</p>
 	{/if}
 
@@ -61,11 +60,6 @@
 	<div class="sidebar-box">
 		<h3>Most favorited</h3>
 		{include #sidebarList addons => $favoritedAddons}
-	</div>
-
-	<div class="sidebar-box">
-		<h3>Most used</h3>
-		{include #sidebarList addons => $usedAddons}
 	</div>
 
 {/block}

@@ -119,34 +119,6 @@ class AddonVersions extends Table
 	}
 
 
-	public function incrementDownloadsCount(AddonVersion $version)
-	{
-		$row = $this->find($version->id);
-
-		if (!$row) {
-			return;
-		}
-
-		$row->update(array(
-			'downloadsCount' => new SqlLiteral('downloadsCount + 1')
-		));
-	}
-
-
-	public function incrementInstallsCount(AddonVersion $version)
-	{
-		$row = $this->find($version->id);
-
-		if (!$row) {
-			return;
-		}
-
-		$row->update(array(
-			'installsCount' => new SqlLiteral('installsCount + 1')
-		));
-	}
-
-
 	/**
 	 * @param AddonVersion
 	 * @return array
@@ -159,8 +131,6 @@ class AddonVersions extends Table
 			'license' => $version->license,
 			'distType' => $version->distType,
 			'distUrl' => $version->distUrl,
-			'downloadsCount' => $version->downloadsCount ?: 0,
-			'installsCount' => $version->installsCount ?: 0,
 			'sourceType' => $version->sourceType,
 			'sourceUrl' => $version->sourceUrl,
 			'sourceReference' => $version->sourceReference,

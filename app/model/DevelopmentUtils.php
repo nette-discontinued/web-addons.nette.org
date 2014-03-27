@@ -25,56 +25,6 @@ class DevelopmentUtils extends \Nette\Object
 
 
 	/**
-	 * @param int
-	 * @param int
-	 */
-	public function generateRandomDownloadsAndInstalls($maxCount = 5, $days = 5)
-	{
-		$this->db->beginTransaction();
-
-		foreach ($this->db->table('addons_versions') as $version) {
-			foreach ($this->db->table('users') as $user) {
-				$limit = mt_rand(0, $maxCount);
-				for ($i=0;$i<$limit;$i++) {
-					$this->addDownloadOrInstall('download', $days, $version->id, $user->id);
-				}
-			}
-			$limit = mt_rand(0, $maxCount);
-			for ($i = 0; $i < $limit; $i++) {
-				$this->addDownloadOrInstall('download', $days, $version->id);
-			}
-			$limit = mt_rand(0, $maxCount);
-			for ($i = 0; $i < $limit; $i++) {
-				$this->addDownloadOrInstall('install', $days, $version->id);
-			}
-		}
-
-		$this->db->commit();
-	}
-
-
-	/**
-	 * @param string
-	 * @param int
-	 * @param int
-	 * @param int|NULL
-	 */
-	protected function addDownloadOrInstall($type = 'download', $days = 5, $versionId, $userId = NULL)
-	{
-		$datetime = \DateTime::createFromFormat('U', time() - ((int)(mt_rand(0, $days*24*60*60))));
-		$ip = mt_rand(0, 254).'.'.mt_rand(0, 254).'.'.mt_rand(0, 254).'.'.mt_rand(0, 254);
-
-		$this->db->table('addons_downloads')->insert(array(
-			'versionId' => $versionId,
-			'userId' => $userId,
-			'ipAddress' => $ip,
-			'userAgent' => 'RANDOM GENERATOR',
-			'time' => $datetime,
-			'type' => $type,
-		));
-	}
-
-	/**
 	 * Import taken from Adminer, slightly modified
 	 * Note: This implementation is aware of delimiters used for trigger definitions (unlike Nette\Database)
 	 *

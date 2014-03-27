@@ -16,8 +16,6 @@
 
 		<p n:if="empty($addon->deletedAt)">Are you sure you want to remove {$addon->name}?</p>
 
-		<p>This addon has {$addon->totalDownloadsCount} download and {$addon->totalInstallsCount} installs.</p>
-
 		<p>
 			{if empty($addon->deletedAt)}<a n:href="delete!">Mark as deleted</a> | {elseif $newest}
 			This addon has newest un-deleted version | {else}
