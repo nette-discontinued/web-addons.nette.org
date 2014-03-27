@@ -400,16 +400,16 @@
         },
         {
             "name": "nette/nette",
-            "version": "v2.1.1",
+            "version": "v2.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/nette.git",
-                "reference": "9e7e5fc5921053172dbacecda2c06d749f89a71b"
+                "reference": "8065ce5a8879557c7a3e5130cd9162e55fb3a5c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/nette/zipball/9e7e5fc5921053172dbacecda2c06d749f89a71b",
-                "reference": "9e7e5fc5921053172dbacecda2c06d749f89a71b",
+                "url": "https://api.github.com/repos/nette/nette/zipball/8065ce5a8879557c7a3e5130cd9162e55fb3a5c4",
+                "reference": "8065ce5a8879557c7a3e5130cd9162e55fb3a5c4",
                 "shasum": ""
             },
             "require": {
@@ -462,7 +462,7 @@
                 "mvc",
                 "templating"
             ],
-            "time": "2014-02-11 04:51:20"
+            "time": "2014-03-17 18:54:21"
         },
         {
             "name": "seld/jsonlint",
