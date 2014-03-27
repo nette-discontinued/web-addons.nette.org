@@ -38,15 +38,6 @@ class RouterFactory extends \Nette\Object
 
 		// Setup router
 		$router[] = new Route('index.php', 'Homepage:default', Route::ONE_WAY);
-		$router[] = new Route('packages.json', 'Api:Composer:packages'); // same as Packagist's route
-		$router[] = new Route('downloads/<package>', array( // same as Packagist's route
-			'module' => 'Api',
-			'presenter' => 'Composer',
-			'action' => 'downloadNotify',
-			'package' => array(
-				Route::PATTERN => '[^/]+/[^/]+',
-			),
-		));
 		$router[] = new Route('api/github', 'Api:Github:postReceive'); // same as Packagist's route
 		$router[] = new Route('page/<slug ([a-z][a-z0-9.-]*(?:/[a-z][a-z0-9.-]*)?)>', 'Page:default');
 		$router[] = new Route('special/<action>[.<type=html (html|xml)>]', 'Special:default');

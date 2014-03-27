@@ -15,10 +15,8 @@
 
 	{* <div n:if="!$version->netteVersion" class="warning">Addon does not specify required Nette version.</div> *}
 
-	<div class="emphasis addon-composer">
+	<div class="emphasis addon-composer" n:if="$addon->type === \NetteAddons\Model\Addon::TYPE_COMPOSER">
 		<h2><span>Composer:</span>{$version->composerJson->name}</h2>
-		{*<p>To install this addon via Composer, you need to <a n:href=":Page:default composer">register Nette Addons repository</a> in your <code>composer.json</code>.</p>*}
-		<p>Installing via Composer requires you to <a n:href=":Page:default composer">register Nette Addons repository</a> in your composer.json.</p>
 	</div>
 
 	{!$content}

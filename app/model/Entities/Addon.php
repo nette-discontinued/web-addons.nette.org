@@ -14,6 +14,9 @@ class Addon extends \Nette\Object
 {
 	const COMPOSER_NAME_RE = '#^(?P<vendor>[a-z0-9]+(-[a-z0-9]+)*)/(?P<name>[a-z0-9]+(-[a-z0-9]+)*)$#i';
 
+	const TYPE_COMPOSER = 'composer';
+	const TYPE_DOWNLOAD = 'download';
+
 	/** @var int */
 	public $id;
 
@@ -74,6 +77,9 @@ class Addon extends \Nette\Object
 	/** @var \Nette\Database\Table\ActiveRow|NULL userId */
 	public $deletedBy;
 
+	/** @var string */
+	public $type;
+
 
 	/**
 	 * Creates Addon entity from Nette\Database row.
@@ -104,6 +110,7 @@ class Addon extends \Nette\Object
 		$addon->totalInstallsCount = $row->totalInstallsCount ?: 0;
 		$addon->deletedAt = $row->deletedAt;
 		$addon->deletedBy = $row->ref('deletedBy');
+		$addon->type = $row->type;
 
 		foreach ($row->related('versions') as $versionRow) {
 			$version = AddonVersion::fromActiveRow($versionRow);

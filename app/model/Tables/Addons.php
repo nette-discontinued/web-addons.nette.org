@@ -326,6 +326,7 @@ class Addons extends Table
 				'totalInstallsCount' => $addon->totalInstallsCount ?: 0,
 				'deletedAt' => $addon->deletedAt,
 				'deletedBy' => $addon->deletedBy,
+				'type' => $addon->type,
 			));
 
 			$addon->id = $row->id;
@@ -365,6 +366,7 @@ class Addons extends Table
 			'totalInstallsCount' => $addon->totalInstallsCount ?: 0,
 			'deletedAt' => $addon->deletedAt,
 			'deletedBy' => $addon->deletedBy,
+			'type' => $addon->type,
 		));
 
 		$this->onAddonChange($addon);
