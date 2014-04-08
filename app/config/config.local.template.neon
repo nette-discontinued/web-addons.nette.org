@@ -7,3 +7,6 @@ parameters:
 		dbname: test
 		user:
 		password:
+
+services:
+	authenticator: NetteAddons\Model\NetteOrgAuthenticator('netteLoginApiPassword')
