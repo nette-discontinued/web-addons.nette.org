@@ -25,8 +25,6 @@ class AddonVersionTest extends TestCase
 			'license' => 'BSD-3',
 			'distType' => 'zip',
 			'distUrl' => 'http://smith.name/browser.zip',
-			'downloadsCount' => 0,
-			'installsCount' => 0,
 			'sourceType' => NULL,
 			'sourceUrl' => NULL,
 			'sourceReference' => NULL,
@@ -65,8 +63,6 @@ class AddonVersionTest extends TestCase
 		Assert::same(NULL, $version->sourceReference);
 		Assert::equal((object) array('a' => 'b'), $version->composerJson);
 		Assert::same(NULL, $version->addon);
-		Assert::same(0, $version->downloadsCount);
-		Assert::same(0, $version->installsCount);
 	}
 
 
