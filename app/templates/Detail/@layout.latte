@@ -42,14 +42,23 @@
 	<div class="sidebar-box">
 		<h3>Authors</h3>
 		<ul>
-			<li class="gravatars" n:foreach="$composer->authors as $author">
-				{ifset $author->email}
-					<img src="{$author->email|gravatar}" alt="{$author->name}" class="gravatar">
-				{else}
-					<img src="{$basePath}/images/default-gravatar.jpg" alt="{$author->name}" class="gravatar">
-				{/ifset}
-				<a n:tag-ifset="$author->homepage" href="{$author->homepage}" rel="nofollow">{$author->name}</a>
-			</li>
+			{if $addon->type === \NetteAddons\Model\Addon::TYPE_COMPOSER}
+				{foreach $composer->authors as $author}
+					<li class="gravatars">
+						{ifset $author->email}
+							<img src="{$author->email|gravatar}" alt="{$author->name}" class="gravatar">
+						{else}
+							<img src="{$basePath}/images/default-gravatar.jpg" alt="{$author->name}" class="gravatar">
+						{/ifset}
+						<a n:tag-ifset="$author->homepage" href="{$author->homepage}" rel="nofollow">{$author->name}</a>
+					</li>
+				{/foreach}
+			{elseif $owner}
+				<li class="gravatars">
+					<img src="{$basePath}/images/default-gravatar.jpg" alt="{if $owner->realname}{$owner->realname}{else}{$owner->username}{/if}" class="gravatar">
+					<a href="http://forum.nette.org/cs/profile.php?id={$addon->userId}">{if $owner->realname}{$owner->realname}{else}{$owner->username}{/if}</a>
+				</li>
+			{/if}
 		</ul>
 
 		{*

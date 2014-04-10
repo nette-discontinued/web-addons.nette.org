@@ -40,6 +40,12 @@ final class DetailPresenter extends BasePresenter
 	public $cacheStorage;
 
 	/**
+	 * @inject
+	 * @var \Nette\Database\Context
+	 */
+	public $db;
+
+	/**
 	 * @persistent
 	 * @var int addon ID
 	 */
@@ -69,9 +75,12 @@ final class DetailPresenter extends BasePresenter
 	{
 		$description = $this->textPreprocessor->processDescription($this->addon);
 
+		$owner = $this->db->table('users')->get($this->addon->userId);
+
 		$this->template->content = $description['content'];
 		$this->template->toc = $description['toc'];
 		$this->template->netteRepositoryUrl = $this->getHttpRequest()->getUrl()->getBaseUrl();
+		$this->template->owner = $owner;
 	}
 
 
