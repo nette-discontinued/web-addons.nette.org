@@ -42,29 +42,11 @@ class VersionForm extends \NetteAddons\Forms\BaseForm
 			->setRequired()
 			->addRule(array($this->validators, 'isLicenseValid'), 'Invalid license identifier.');
 
-		$providers = array(
-			'link' => 'Provide link to distribution archive.',
-			'upload' => 'Upload archive to this site.',
-		);
-		$this->addSelect('how', 'How would you like to provide source codes?', $providers)
-			->setRequired()
-			->addCondition(self::EQUAL, 'link')
-				->toggle('xlink')
-				->endCondition()
-			->addCondition(self::EQUAL, 'upload')
-				->toggle('xupload');
+		$this->addHidden('how', 'link');
 
 		$this->addText('archiveLink', 'Link to ZIP archive')
-			->setOption('id', 'xlink')
-			->addConditionOn($this['how'], self::EQUAL, 'link')
-				->addRule(self::FILLED)
-				->addRule(self::URL);
-
-		$this->addUpload('archive', 'Archive')
-			->setOption('id', 'xupload')
-			->addConditionOn($this['how'], self::EQUAL, 'upload')
-				->addRule(self::FILLED)
-				->addRule(array($this, 'isArchiveValid'), 'Only ZIP files are allowed.');
+			->setRequired()
+			->addRule(self::URL);
 
 		$license = $this->addon->defaultLicense;
 		if (is_string($license)) {
@@ -73,15 +55,5 @@ class VersionForm extends \NetteAddons\Forms\BaseForm
 		$this->setDefaults(array(
 			'license' => $license,
 		));
-	}
-
-
-	/**
-	 * @param \Nette\Forms\Controls\UploadControl
-	 * @return bool
-	 */
-	public function isArchiveValid(UploadControl $control)
-	{
-		return Strings::endsWith($control->value->name, '.zip');
 	}
 }
