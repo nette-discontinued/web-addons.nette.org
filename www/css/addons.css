@@ -39,6 +39,10 @@
 	width: 30%;
 }
 
+#page #tools {
+	white-space: nowrap;
+}
+
 #content table tr.addon.deleted td {
 	background-color: #FFE1E1;
 }
