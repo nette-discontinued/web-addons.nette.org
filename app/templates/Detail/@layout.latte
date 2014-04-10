@@ -6,7 +6,9 @@
 {block sidebar}
 	{include #parent}
 
-	{* <a class="bigbutton" n:href="download!, version => $version->version"><i class="icon-download"></i>Download</a> *}
+	{if $addon->type === \NetteAddons\Model\Addon::TYPE_DOWNLOAD && $version->distUrl !== NULL}
+		<a class="bigbutton" href="{$version->distUrl}" target="_blank"><i class="icon-download"></i>Download</a>
+	{/if}
 
 	<div class="sidebar-box" n:if="count($version->otherRequirements) || $version->hasNetteVersion()">
 		<h3>Requirements</h3>
