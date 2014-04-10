@@ -4,6 +4,7 @@ namespace NetteAddons\Manage\Forms;
 
 use Nette\Utils\Strings;
 use Nette\Security\IIdentity;
+use NetteAddons\Model\Addon;
 
 
 /**
@@ -27,6 +28,9 @@ class AddAddonFormFactory extends AddonFormFactory
 		$manager = $this->manager;
 		$form->onSuccess[] = function(AddonForm $form) use($manager, $user) {
 			$addon = $form->getAddon();
+			if ($addon->type === NULL) {
+				$addon->type = Addon::TYPE_DOWNLOAD;
+			}
 			$values = $form->getValues(TRUE);
 
 			$manager->fillAddonWithValues($addon, $values, $user);

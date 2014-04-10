@@ -7,6 +7,7 @@ use Nette\Utils\Strings;
 use Nette\Forms\IControl;
 use Nette\Security\IIdentity;
 use NetteAddons\Forms\Form;
+use NetteAddons\Model\Addon;
 use NetteAddons\Model\Facade\AddonManageFacade;
 use NetteAddons\Model\Importers\RepositoryImporterManager;
 use NetteAddons\Model\Utils\Validators;
@@ -73,6 +74,7 @@ class ImportAddonFormFactory extends \Nette\Object
 
 			try {
 				$addon = $manager->import($importer, $user);
+				$addon->type = Addon::TYPE_COMPOSER;
 
 				if ($addon->composerFullName && !$validators->isComposerFullNameUnique($addon->composerFullName)) {
 					$form->addError("Addon with composer name '{$addon->composerFullName}' already exists.");
