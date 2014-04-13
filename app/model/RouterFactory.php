@@ -58,6 +58,10 @@ class RouterFactory extends \Nette\Object
 				Route::FILTER_OUT => array($this->vendorRouteHelper, 'filterOut'),
 			),
 		));
+		$router[] = new OldAddonsRoute(array(
+			'presenter' => 'Detail',
+			'action' => 'default',
+		));
 		$router[] = new Route('<presenter>[/<action>]', 'Homepage:default');
 
 		return $router;
