@@ -7,12 +7,6 @@ final class HomepagePresenter extends BaseListPresenter
 {
 	const ADDONS_LIMIT = 3;
 
-	/**
-	 * @inject
-	 * @var \NetteAddons\Model\DevelopmentUtils
-	 */
-	public $developmentUtils;
-
 
 	public function renderDefault()
 	{

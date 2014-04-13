@@ -17,19 +17,6 @@
 	<h1 id="toc-addons-plugins-and-components">Addons, plugins and components</h1>
 	<p class="perex">All extensions for Nette Framework in one place.</p>
 
-	{if $presenter->context->parameters['productionMode']}
-		<p class="note">
-			<b>This is the first BETA version of the new Nette Framework Addons Portal.</b><br>
-			{if !$user->loggedIn}Please <a n:href="Sign:in">sign in</a> with the same credentials as to nette.org.<br>{/if}
-			If you encounter any problem, please report it to the <a href="https://github.com/nette/addons.nette.org/issues">Issue Tracker</a>.
-		</p>
-	{else}
-		<p class="warning">
-			<b>Application is running in DEVELOPMENT MODE.</b><br>
-			You can sign in as demo user &mdash; username is <i>demo</i> and password is <i>123</i>
-		</p>
-	{/if}
-
 	<label for="search-query" class="hide">Search: </label>
 	<input type="search" name="query" id="search-query" class="addons-search input-full input-large" autofocus placeholder="type to search" class="hide">
 

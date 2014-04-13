@@ -100,7 +100,6 @@ services:
 			- addImporter(github, @ghImporterFactory, 'NetteAddons\Model\Importers\GitHubImporter')
 
 	# misc
-	developmentUtils: NetteAddons\Model\DevelopmentUtils
 	versionParser: NetteAddons\Model\Utils\VersionParser
 
 	# form factories
