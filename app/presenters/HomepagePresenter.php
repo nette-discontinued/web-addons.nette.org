@@ -21,7 +21,7 @@ final class HomepagePresenter extends BaseListPresenter
 		$this->template->updatedAddons = $this->addons->findLastUpdated(self::ADDONS_LIMIT, $ignoreDeleted);
 		$this->template->favoritedAddons = $this->addons->findMostFavorited(self::ADDONS_LIMIT, $ignoreDeleted);
 
-		$this->template->categories = $categories = $this->tags->findMainTagsWithAddons();
+		$this->template->categories = $categories = $this->tags->findMainTagsWithAddons($ignoreDeleted);
 		$this->template->addons = $this->addons->findGroupedByCategories($categories, $ignoreDeleted);
 	}
 }

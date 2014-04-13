@@ -19,22 +19,28 @@ class Tags extends Table
 	/**
 	 * Returns tags which represent main catagories.
 	 *
+	 * @param bool
 	 * @return \Nette\Database\Table\Selection
 	 */
-	public function findMainTags()
+	public function findMainTags($ignoreHidden = FALSE)
 	{
-		return $this->findAll()->where('level = ?', self::LEVEL_CATEGORY);
+		$selection = $this->findAll()->where('level = ?', self::LEVEL_CATEGORY);
+		if (!$ignoreHidden) {
+			$selection->where('visible = ?', true);
+		}
+		return $selection;
 	}
 
 
 	/**
 	 * Returns tags which represent main catagories (only with at least one addon).
 	 *
+	 * @param bool
 	 * @return \Nette\Database\Table\Selection
 	 */
-	public function findMainTagsWithAddons()
+	public function findMainTagsWithAddons($ignoreHidden = FALSE)
 	{
-		return $this->findMainTags()->group('tags.id')->having('COUNT(:addons_tags.tagId) > 0');
+		return $this->findMainTags($ignoreHidden)->group('tags.id')->having('COUNT(:addons_tags.tagId) > 0');
 	}
 
 
