@@ -64,6 +64,7 @@ class AddonForm extends \NetteAddons\Forms\BaseForm
 		$this->addText('composerFullName', 'Composer name', NULL, 100)
 			->setRequired()
 			->addRule(self::PATTERN, 'Invalid composer name', FormValidators::COMPOSER_NAME_RE)
+			->addRule(array($this->validators, 'isComposerVendorNameProtectionFree'), 'This vendor name is protected')
 			->addRule(array($this->validators, 'isComposerFullNameUnique'), 'This composer name has already been taken.');
 		$this->addMultiSelect('defaultLicense', 'Default license', $this->licenses->getLicenses(TRUE))
 			->setRequired()

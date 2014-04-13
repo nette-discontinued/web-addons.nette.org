@@ -24,6 +24,16 @@ class FormValidators extends \Nette\Object
 	 * @param \Nette\Forms\IControl
 	 * @return bool
 	 */
+	public function isComposerVendorNameProtectionFree(IControl $control)
+	{
+		return $this->validators->isComposerVendorNameProtectionFree($control->getValue());
+	}
+
+
+	/**
+	 * @param \Nette\Forms\IControl
+	 * @return bool
+	 */
 	public function isComposerFullNameValid(IControl $control)
 	{
 		return $this->validators->isComposerFullNameValid($control->getValue());

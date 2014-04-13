@@ -3,6 +3,7 @@
 namespace NetteAddons\Model\Utils;
 
 use Nette\Utils\Strings;
+use NetteAddons\Model\Addon;
 use NetteAddons\Model\Addons;
 
 
@@ -10,6 +11,9 @@ class Validators extends \Nette\Object
 {
 	/** composerName regular expression */
 	const COMPOSER_NAME_RE = '^[a-z0-9]+(-[a-z0-9]+)*/[a-z0-9]+(-[a-z0-9]+)*$';
+
+	/** @var string[]|array */
+	private $protectedVendors = array('nette', 'page', 'special', 'api');
 
 	/** @var \NetteAddons\Model\Addons */
 	private $addonsRepo;
@@ -26,6 +30,17 @@ class Validators extends \Nette\Object
 		$this->addonsRepo = $addonsRepo;
 		$this->licenseValidator = $licenseValidator;
 		$this->versionParser = $versionParser;
+	}
+
+
+	public function isComposerVendorNameProtectionFree($composerFullName)
+	{
+		$composerVendor = NULL;
+		if (($data = Strings::match($composerFullName, Addon::COMPOSER_NAME_RE)) !== NULL) {
+			$composerVendor = Strings::lower($data['vendor']);
+		}
+
+		return !in_array($composerVendor, $this->protectedVendors);
 	}
 
 
