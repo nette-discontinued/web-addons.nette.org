@@ -14,11 +14,12 @@ class MarkdownProcessor extends \Nette\Object implements \NetteAddons\ITextProce
 	private $converter;
 
 
-	public function __construct()
+	public function __construct($htmlPurifierCachePath)
 	{
 		$markdown = new \Michelf\MarkdownExtra;
 
 		$htmlPurifierConfig = \HTMLPurifier_Config::createDefault();
+		$htmlPurifierConfig->set('Cache.SerializerPath', $htmlPurifierCachePath);
 		$htmlPurifier = new \HTMLPurifier($htmlPurifierConfig);
 
 		$this->converter = function ($description) use ($markdown, $htmlPurifier) {

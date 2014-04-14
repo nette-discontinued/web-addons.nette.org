@@ -56,7 +56,7 @@ services:
 	# view
 	- NetteAddons\TextProcessors\PageProcessor
 	- NetteAddons\TextProcessors\TexyProcessor
-	- NetteAddons\TextProcessors\MarkdownProcessor
+	- NetteAddons\TextProcessors\MarkdownProcessor(%tempDir%/cache)
 	textPreprocessor:
 		class: NetteAddons\TextPreprocessor
 		setup:
