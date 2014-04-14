@@ -66,6 +66,7 @@ class NetteOrgAuthenticator extends \Nette\Object implements \Nette\Security\IAu
 
 		$user = $this->db->table('users')->where('id = ?', $apiData->id)->fetch();
 
+		$registered = new \DateTimeImmutable($apiData->registered->date, new \DateTimeZone($apiData->registered->timezone));
 		$userData = array(
 			'username' => $credentials[self::USERNAME],
 			'password' => $this->calculateAddonsPortalPasswordHash($credentials[self::PASSWORD]),
@@ -76,7 +77,7 @@ class NetteOrgAuthenticator extends \Nette\Object implements \Nette\Security\IAu
 			'language' => $apiData->language,
 			'num_posts' => $apiData->num_posts,
 			'apiToken' => $apiData->apiToken,
-			'registered' => new \DateTimeImmutable($apiData->registered->date, new \DateTimeZone($apiData->registered->timezone)),
+			'registered' => $registered->getTimestamp(),
  		);
 
 		if (!$user) {
