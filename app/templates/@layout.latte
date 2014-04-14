@@ -38,6 +38,10 @@
 <body class="nette-org">
 	<script>document.documentElement.className+=' js'</script>
 
+	<div id="feedback">
+		<a href="https://github.com/nette/web-addons.nette.org/issues/new">Report bug</a>
+	</div>
+
 	<div id="page">
 		<header id="header" n:class="$user->loggedIn ? loggedin">
 			<a id="logo" title="Homepage" n:href=":Homepage:default"><span>Homepage</span></a>
@@ -63,8 +67,6 @@
 			{else}
 				<a n:href=":Sign:in">Sign in</a> <a href="http://forum.nette.org/en/register.php">Sign up</a>
 			{/if}
-
-			<a href="https://github.com/nette/web-addons.nette.org/issues/new">Report bug</a>
 		</div>
 
 		{block main}

@@ -485,3 +485,31 @@ background: url(../images/li-download.gif) no-repeat;
 #search-query {
     padding: 5px 10px;
 }
+
+#feedback {
+	height: 104px;
+	width: 104px;
+	position: fixed;
+	top: 40%;
+	z-index: 999;
+	transform: rotate(-90deg);
+	-webkit-transform: rotate(-90deg);
+	-moz-transform: rotate(-90deg);
+	-o-transform: rotate(-90deg);
+	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+}
+
+#feedback a {
+	display: block;
+	background: #26374E;
+	height: 25px;
+	width: 80px;
+	padding: 2px 8px;
+	color: #fff;
+	text-decoration: none;
+}
+
+#feedback a:hover {
+	background: #78AFE5;
+	color: black;
+}
