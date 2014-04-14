@@ -39,11 +39,11 @@
 
 			<nav id="menu">
 				<ul>
-					<li><a title="Download" href="http://nette.org/en/download"><span>Download</span></a></li>
+					<li><a href="http://nette.org/download"><span>Download</span></a></li>
 					<li><a href="/en/"><span>Documentation</span></a></li>
-					<li><a class="active" title="Addons, plugins and components" n:href=":Homepage:default"><span>Add-ons</span></a></li>
-					<li><a title="Planette" href="http://pla.nette.org/en/"><span>Planette</span></a></li>
-					<li><a href="http://forum.nette.org/en/"><span>Forum</span></a></li>
+					<li><a class="active" n:href=":Homepage:default"><span>Add-ons</span></a></li>
+					<li><a href="http://pla.nette.org"><span>Planette</span></a></li>
+					<li><a href="http://forum.nette.org"><span>Forum</span></a></li>
 					<li><a href="http://blog.nette.org"><span>Blog</span></a></li>
 					<li><a href="https://github.com/nette/nette"><span>GitHub</span></a></li>
 				</ul>
@@ -56,10 +56,10 @@
 			{if $user->loggedIn}
 				<a href="{$user->identity->id|profile}">{$user->identity->username}</a> <a n:href=":Sign:out">Sign out</a>
 			{else}
-				<a n:href=":Sign:in">Sign in</a> <a href="http://forum.nette.org/en/register.php">Sign out</a>
+				<a n:href=":Sign:in">Sign in</a> <a href="http://forum.nette.org/en/register.php">Sign up</a>
 			{/if}
 
-			<a href="https://github.com/nette/addons.nette.org/issues/new">Report bug</a>
+			<a href="https://github.com/nette/web-addons.nette.org/issues/new">Report bug</a>
 		</div>
 
 		{block main}
@@ -85,7 +85,7 @@
 			<aside id="sidebar">
 				<div class="info">
 					{block sidebar}
-						<a n:if="$showAddAddonButton" n:href=":Manage:Addon:add" class="bigbutton">Create New Addon</a>
+						<a n:if="$showAddAddonButton" n:href=":Manage:Addon:add" class="bigbutton">Publish Your Addon</a>
 					{/block}
 				</div>
 			</aside>

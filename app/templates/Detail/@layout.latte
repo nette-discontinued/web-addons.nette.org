@@ -56,14 +56,14 @@
 			{elseif $owner}
 				<li class="gravatars">
 					<img src="{$basePath}/images/default-gravatar.jpg" alt="{if $owner->realname}{$owner->realname}{else}{$owner->username}{/if}" class="gravatar">
-					<a href="http://forum.nette.org/cs/profile.php?id={$addon->userId}">{if $owner->realname}{$owner->realname}{else}{$owner->username}{/if}</a>
+					<a href="http://forum.nette.org/en/profile.php?id={$addon->userId}">{if $owner->realname}{$owner->realname}{else}{$owner->username}{/if}</a>
 				</li>
 			{/if}
 		</ul>
 
 		{*
 			Author
-			<h3><a n:href=":People:detail id => $addon->user->id" title="$addon->user->realname">{$addon->user->realname}</a></h3>
+			<h3><a n:href=":People:detail id => $addon->user->id">{$addon->user->realname}</a></h3>
 			<img src="{$addon->user->email|gravatar}" class="gravatar">
 		*}
 	</div>
@@ -87,7 +87,7 @@
 				</td>
 				<td class="wrap-progress">
 					<div n:class="progress, progress-yesno, progress-success, $addon->votes->plus == 0 && $addon->votes->minus == 0 ? progress-disabled">
-						<div class="bar" title="{$addon->votes->percent|number:2 } %" style="width: {!=100-$addon->votes->percent}%;"></div>
+						<div class="bar" title="{$addon->votes->percent|number:2} %" style="width: {=100-$addon->votes->percent}%;"></div>
 					</div>
 				</td>
 				<td class="thumb">
