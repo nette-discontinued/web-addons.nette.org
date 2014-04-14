@@ -73,14 +73,14 @@
 		<p>{$version->updatedAt|date:'Y-m-d'}</p>
 	</div>*}
 
-	<div n:snippet="rating" class="sidebar-box">
+	<div class="sidebar-box">
 		<h3>Rating</h3>
 		<table class="table-vote">
 			<tr>
 				<td class="thumb">
 					<span class="num">{$addon->votes->minus}×</span>
 					{if $auth->isAllowed($addon, 'vote')}
-						<a n:href="vote! vote => ($myVote < 0) ? cancel : down" class="ajax"><i class="icon-thumb_down" title="{if $myVote < 0}remove my vote{else}vote down{/if}"></i></a>
+						<a n:href="vote! vote => ($myVote < 0) ? cancel : down"><i class="icon-thumb_down" title="{if $myVote < 0}remove my vote{else}vote down{/if}"></i></a>
 					{else}
 						<i class="icon-thumb_down off"></i>
 					{/if}
@@ -93,7 +93,7 @@
 				<td class="thumb">
 					<span class="num">{$addon->votes->plus}×</span>
 					{if $auth->isAllowed($addon, 'vote')}
-						<a n:href="vote! vote => ($myVote > 0) ? cancel : up" class="ajax"><i class="icon-thumb_up" title="{if $myVote > 0}remove my vote{else}vote up{/if}"></i></a>
+						<a n:href="vote! vote => ($myVote > 0) ? cancel : up"><i class="icon-thumb_up" title="{if $myVote > 0}remove my vote{else}vote up{/if}"></i></a>
 					{else}
 						<i class="icon-thumb_up off"></i>
 					{/if}

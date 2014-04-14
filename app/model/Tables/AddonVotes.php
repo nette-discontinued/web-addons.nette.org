@@ -25,7 +25,7 @@ class AddonVotes extends Table
 		}
 
 		$now = new \DateTime('now');
-		$this->connection->query('
+		$this->getTable()->getConnection()->query('
 			INSERT INTO ' . $this->tableName . '
 			(`addonId`, `userId`, `vote`, `comment`, `datetime`)
 			VALUES (?, ?, ?, ?, ?)
