@@ -3,7 +3,7 @@
 {define sidebarList}
 	<ul class="nostyle">
 		<li n:foreach="$addons as $addon">
-			<a title="{$addon->name}" n:href=":Detail: id => $addon->id">{$addon->name}</a>
+			<a n:href=":Detail: id => $addon->id">{$addon->name}</a>
 		</li>
 	</ul>
 {/define}
