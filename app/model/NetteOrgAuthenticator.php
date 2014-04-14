@@ -78,7 +78,7 @@ class NetteOrgAuthenticator extends \Nette\Object implements \Nette\Security\IAu
 			'num_posts' => $apiData->num_posts,
 			'apiToken' => $apiData->apiToken,
 			'registered' => $registered->getTimestamp(),
- 		);
+		);
 
 		if (!$user) {
 			$userData['id'] = $apiData->id;

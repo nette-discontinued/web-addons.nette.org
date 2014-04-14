@@ -44,7 +44,7 @@ class Addon extends \Nette\Object
 	/** @var string default license for new versions */
 	public $defaultLicense;
 
-	/** @var string|NULL repository URL	 */
+	/** @var string|NULL repository URL */
 	public $repository;
 
 	/** @var string|NULL */
