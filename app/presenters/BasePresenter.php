@@ -49,7 +49,7 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 	protected function beforeRender()
 	{
 		parent::beforeRender();
-		$this->flashMessage(\Nette\Utils\Html::el()->setHtml("Chyby co objevíte prosím hlaste <a href='https://github.com/nette/web-addons.nette.org/issues'>na githubu</a>, děkujeme!"));
+		$this->flashMessage(\Nette\Utils\Html::el()->setHtml("Chyby, co objevíte, prosím hlaste <a href='https://github.com/nette/web-addons.nette.org/issues'>na githubu</a>, děkujeme!"));
 	}
 
 
