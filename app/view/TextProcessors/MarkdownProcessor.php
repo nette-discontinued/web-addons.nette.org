@@ -5,8 +5,8 @@ namespace NetteAddons\TextProcessors;
 use Nette\Utils\Strings;
 use Nette\Utils\Callback;
 use FSHL\Highlighter;
-use	FSHL\Output\Html;
-use	FSHL\Lexer;
+use FSHL\Output\Html;
+use FSHL\Lexer;
 
 class MarkdownProcessor extends \Nette\Object implements \NetteAddons\ITextProcessor
 {

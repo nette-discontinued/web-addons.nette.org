@@ -9,7 +9,7 @@ Installation
 
 ```
 # Clone repository
-git clone git://github.com/nette/addons.nette.org.git
+git clone https://github.com/nette/web-addons.nette.org.git
 cd addons.nette.org
 
 # Install dependencies via Composer
