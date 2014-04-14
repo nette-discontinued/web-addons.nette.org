@@ -3,7 +3,7 @@
 		<tbody>
 			{foreach $addons as $addon}
 				<tr n:class="$iterator->odd ? alt, addon, $addon->deletedAt ? deleted" data-addon-id="{$addon->id}" data-addon-score="1">
-					<td class="name"><a title="{$addon->name}" n:href=":Detail: id => $addon->id">{$addon->name}</a></td>
+					<td class="name"><a n:href=":Detail: id => $addon->id">{$addon->name}</a></td>
 					<td class="description">{$addon->shortDescription}</td>
 					{*
 						Temporary hidden
