@@ -54,6 +54,9 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 	{
 		$template = parent::createTemplate();
 		$template->registerHelperLoader($this->helperLoader);
+		if (isset($this->context->getParameters()['googleAnalyticsCode'])) {
+			$template->googleAnalyticsCode = $this->context->getParameters()['googleAnalyticsCode'];
+		}
 		return $template;
 	}
 
