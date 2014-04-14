@@ -11,7 +11,7 @@ final class ErrorPresenter extends \Nette\Application\UI\Presenter
 	 * @inject
 	 * @var \NetteAddons\HelperLoader
 	 */
-	private $helperLoader;
+	public $helperLoader;
 
 
 	/**
