@@ -147,6 +147,22 @@ class AddonForm extends \NetteAddons\Forms\BaseForm
 			}
 		}
 
+		$tagItems = $this['tags']->getItems();
+		$tags = array();
+		foreach ($addon->getTagsIds() as $id) {
+			if (!isset($tagItems[$id])) {
+				$tag = $this->tags->find($id);
+				if ($tag) {
+					$tagItems[$tag->id] = $tag->name;
+				}
+			}
+
+			if (isset($tagItems[$id])) {
+				$tags[] = $id;
+			}
+		}
+		$this['tags']->setItems($tagItems)->setDefaultValues($tags);
+
 		$this->setDefaults(array(
 			'name' => $addon->name,
 			'shortDescription' => $addon->shortDescription,
@@ -155,7 +171,6 @@ class AddonForm extends \NetteAddons\Forms\BaseForm
 			'defaultLicense' => $license,
 			'repository' => $addon->repository,
 			'demo' => $addon->demo,
-			'tags' => $addon->getTagsIds(),
 		));
 
 		return $this;
