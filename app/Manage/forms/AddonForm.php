@@ -146,6 +146,9 @@ class AddonForm extends \NetteAddons\Forms\BaseForm
 				$license = array_map('trim', explode(',', $license));
 			}
 		}
+		if ($key = array_search('NOLICENSE', $license)) {
+			unset($license[$key]);
+		}
 
 		$tagItems = $this['tags']->getItems();
 		$tags = array();
