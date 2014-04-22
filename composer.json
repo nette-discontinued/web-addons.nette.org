@@ -14,7 +14,7 @@
 		"issues": "https://github.com/nette/web-addons.nette.org/issues"
 	},
 	"require": {
-		"php": ">=5.3.2",
+		"php": "~5.5",
 		"ext-pdo": "*",
 		"nette/nette": "~2.1.1",
 		"texy/texy": "~2.4.0",
