@@ -136,19 +136,6 @@ class RepositoryTest extends TestCase
 	}
 
 
-	/**
-	 * @skip Not sure whether getTree() method will be used at all.
-	 */
-	public function testGetTree()
-	{
-		/*$this->requestFactory->shouldReceive('get')->once()
-			->with('https://api.github.com/repos/smith/git/trees/cb3a02f')
-			->andReturn(json_encode(array(
-
-			)));*/
-	}
-
-
 
 	/**
 	 * @return array

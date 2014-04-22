@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "9e8e5ef1ebeb877c057b55298c10cb64",
+    "hash": "28c79c308766d5c1921fcbdcb2706287",
     "packages": [
         {
             "name": "composer/composer",
@@ -889,26 +889,30 @@
         },
         {
             "name": "nette/tester",
-            "version": "v1.0.0",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/tester.git",
-                "reference": "710ea7b1b7e1a05c112438e808daa15314fbfe8f"
+                "reference": "53767d1776d683c33b9cfe742b864311e89c318e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/tester/zipball/710ea7b1b7e1a05c112438e808daa15314fbfe8f",
-                "reference": "710ea7b1b7e1a05c112438e808daa15314fbfe8f",
+                "url": "https://api.github.com/repos/nette/tester/zipball/53767d1776d683c33b9cfe742b864311e89c318e",
+                "reference": "53767d1776d683c33b9cfe742b864311e89c318e",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0"
             },
             "bin": [
-                "Tester/tester",
-                "Tester/coverage-report"
+                "Tester/tester"
             ],
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1-dev"
+                }
+            },
             "autoload": {
                 "classmap": [
                     "Tester/"
@@ -937,7 +941,7 @@
                 "testing",
                 "unit"
             ],
-            "time": "2014-02-08 12:54:09"
+            "time": "2014-04-02 13:27:38"
         },
         {
             "name": "nextras/migrations",
