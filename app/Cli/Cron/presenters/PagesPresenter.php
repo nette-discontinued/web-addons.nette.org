@@ -3,7 +3,6 @@
 namespace NetteAddons\Cli\Cron;
 
 use Guzzle\Http\Client;
-use NetteAddons\Cli\BasePresenter;
 use Nette\Utils\Finder;
 use Nette\Utils\FileSystem;
 
