@@ -164,7 +164,7 @@ class AddonForm extends \NetteAddons\Forms\BaseForm
 				$tags[] = $id;
 			}
 		}
-		$this['tags']->setItems($tagItems)->setDefaultValues($tags);
+		$this['tags']->setItems($tagItems)->setDefaultValue($tags);
 
 		$this->setDefaults(array(
 			'name' => $addon->name,
