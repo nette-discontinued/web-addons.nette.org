@@ -79,12 +79,12 @@ class GitHubImporter extends \Nette\Object implements IAddonImporter
 	public function import()
 	{
 		$info = $this->repository->getMetadata();
-		if (!isset($info->master_branch, $info->name, $info->description)) {
+		if (!isset($info->default_branch, $info->name, $info->description)) {
 			throw new \NetteAddons\IOException('GitHub returned invalid response.');
 		}
 
-		$readme = $this->repository->getReadme($info->master_branch);
-		$composer = $this->getComposerJson($info->master_branch);
+		$readme = $this->repository->getReadme($info->default_branch);
+		$composer = $this->getComposerJson($info->default_branch);
 
 		$addon = new Addon();
 
