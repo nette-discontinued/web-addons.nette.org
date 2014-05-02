@@ -44,7 +44,7 @@ class GitHubImporterTest extends TestCase
 		$this->repo->shouldReceive('getMetadata')
 			->withNoArgs()->once()
 			->andReturn((object) array(
-				'master_branch' => 'work_br',
+				'default_branch' => 'work_br',
 				'name' => 'gh-name',
 				'description' => 'gh-desc',
 			));
@@ -95,7 +95,7 @@ class GitHubImporterTest extends TestCase
 		$this->repo->shouldReceive('getMetadata')
 			->withNoArgs()->once()
 			->andReturn((object) array(
-				'master_branch' => 'work_br',
+				'default_branch' => 'work_br',
 				'name' => 'gh-name',
 				'description' => 'gh-desc',
 			));
@@ -136,7 +136,7 @@ class GitHubImporterTest extends TestCase
 		$this->repo->shouldReceive('getMetadata')
 			->withNoArgs()->once()
 			->andReturn((object) array(
-				'master_branch' => 'work_br',
+				'default_branch' => 'work_br',
 				'name' => 'gh-name',
 				'description' => '',
 			));
