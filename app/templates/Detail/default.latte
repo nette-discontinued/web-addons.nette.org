@@ -16,7 +16,7 @@
 	{* <div n:if="!$version->netteVersion" class="warning">Addon does not specify required Nette version.</div> *}
 
 	<div class="emphasis addon-composer" n:if="$addon->type === \NetteAddons\Model\Addon::TYPE_COMPOSER">
-		<h2><span>Composer:</span>{$version->composerJson->name}</h2>
+		<h2><span>Composer:</span>{$addon->composerFullName}</h2>
 	</div>
 
 	{$content|noescape}

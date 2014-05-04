@@ -30,7 +30,7 @@
 				<th>Download link</th>
 				<td><a n:href="download! version => $version->version">{$version->distUrl}</a></td>
 			</tr> *}
-			<tr n:ifset="$composer->source">
+			<tr n:if="!empty($composer) && isset($composer->source)">
 				<th>{$composer->source->type|firstUpper} reference</th>
 				<td>
 					<a n:tag-if="$addon->repositoryHosting == github" href="{$addon->repository}/tree/{$composer->source->reference}">
@@ -38,7 +38,7 @@
 					</a>
 				</td>
 			</tr>
-			<tr n:ifset="$composer->time">
+			<tr n:if="!empty($composer) && isset($composer->time)">
 				<th>Release date</th>
 				<td>{$composer->time}</td> {* Format: YYYY-MM-DD or YYYY-MM-DD HH:MM:SS *}
 			</tr>
@@ -50,7 +50,7 @@
 					{/foreach}
 				</td>
 			</tr>
-			<tr>
+			<tr n:if="!empty($composer)">
 				<th>Authors</th>
 				<td>
 					{foreach $composer->authors as $author}
@@ -60,7 +60,7 @@
 					{/foreach}
 				</td>
 			</tr>
-			<tr n:if="!empty($composer->support)">
+			<tr n:if="!empty($composer) && !empty($composer->support)">
 				<th>Support channels</th>
 				<td>
 					{var $labels = array(

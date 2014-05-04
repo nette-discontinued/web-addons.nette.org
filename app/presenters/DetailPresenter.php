@@ -89,6 +89,8 @@ final class DetailPresenter extends BasePresenter
 	 */
 	public function renderVersions($id)
 	{
+		$owner = $this->db->table('users')->get($this->addon->userId);
+		$this->template->owner = $owner;
 	}
 
 
