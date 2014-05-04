@@ -23,7 +23,8 @@
 		"michelf/php-markdown": "~1.4.0",
 		"ezyang/htmlpurifier": "~4.6.0",
 		"forxer/gravatar": "~1.1.2",
-		"guzzle/guzzle": "~3.9.0"
+		"guzzle/guzzle": "~3.9.0",
+		"knplabs/packagist-api": "~1.1.0"
 	},
 	"require-dev": {
 		"jakub-onderka/php-parallel-lint": "~0.5.0",
