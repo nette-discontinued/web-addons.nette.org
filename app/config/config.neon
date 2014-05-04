@@ -118,6 +118,13 @@ services:
 	reportForm: NetteAddons\Forms\ReportFormFactory
 	manageReportForm: NetteAddons\Manage\Forms\ReportFormFactory
 
+	# Importers
+	importers.packagist: NetteAddons\Model\Importers\AddonVersionImporters\PackagistImporter
+	-
+		class: NetteAddons\Services\AddonUpdaterService
+		setup:
+			- addImporter(@importers.packagist)
+
 	# Presenters
 	-
 		class: NetteAddons\PagePresenter
