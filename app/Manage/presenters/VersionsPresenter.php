@@ -19,6 +19,12 @@ final class VersionsPresenter extends BasePresenter
 
 	/**
 	 * @inject
+	 * @var \NetteAddons\Services\AddonUpdaterService
+	 */
+	public $addonUpdaterService;
+
+	/**
+	 * @inject
 	 * @var \NetteAddons\Model\Users
 	 */
 	public $users;
@@ -100,35 +106,12 @@ final class VersionsPresenter extends BasePresenter
 			$this->error('Addon not found.');
 		}
 
-		$owner = $this->users->createIdentity($this->users->find($this->addon->userId));
-
 		try {
-			$importer = $this->importerManager->createFromUrl($this->addon->repository);
-			$result = $this->manager->updateVersions($this->addon, $importer, $owner);
-		} catch (\NetteAddons\NotSupportedException $e) {
-			$this->error();
-		} catch (\NetteAddons\IOException $e) {
+			$this->addonUpdaterService->updateAddon($this->addon->id);
+			$this->flashMessage('Versions have been updated.');
+		} catch (\Exception $e) {
 			$this->flashMessage('Version importing failed. Try again later.', 'error');
 			$this->redirect(':Detail:', $this->addon->id);
-		}
-
-		if (count($result['conflicted']) === 0 && count($result['new']) === 0) {
-			$this->flashMessage('Nothing new…');
-		} else {
-			try {
-				foreach ($result['new'] as $version) {
-					$this->versions->add($version);
-				}
-
-				foreach ($result['conflicted'] as $conflict) {
-					$conflict['b']->id = $conflict['a']->id;
-					$this->versions->update($conflict['b']);
-				}
-
-				$this->flashMessage('Versions have been updated.');
-			} catch (\PDOException $e) {
-				$this->flashMessage('Version importing failed. Try again later.', 'error');
-			}
 		}
 
 		$this->redirect(':Detail:', $this->addon->id);
