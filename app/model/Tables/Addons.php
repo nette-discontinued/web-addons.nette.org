@@ -289,6 +289,21 @@ class Addons extends Table
 				$this->versions->add($version);
 			}
 
+			foreach ($addon->resources as $resourceType => $resource) {
+				$row = $this->db->table('addons_resources')->where('addonId = ? AND type = ?', $addon->id, $resourceType)->fetch();
+				if ($row) {
+					$row->update(array(
+						'resource' => $resource,
+					));
+				} else {
+					$this->db->table('addons_resources')->insert(array(
+						'addonId' => $addon->id,
+						'type' => $resourceType,
+						'resource' => $resource,
+					));
+				}
+			}
+
 			$this->tags->saveAddonTags($addon);
 
 			$this->db->commit();

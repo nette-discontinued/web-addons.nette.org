@@ -74,6 +74,9 @@ class Addon extends \Nette\Object
 	/** @var string */
 	public $type;
 
+	/** @var array */
+	public $resources = array();
+
 
 	/**
 	 * Creates Addon entity from Nette\Database row.
@@ -112,6 +115,10 @@ class Addon extends \Nette\Object
 
 		foreach ($row->related('tags') as $tagRow) {
 			$addon->tags[$tagRow->tag->id] = Tag::fromActiveRow($tagRow->tag);
+		}
+
+		foreach ($row->related('addons_resources') as $resourceRow) {
+			$addon->resources[$resourceRow->type] = $resourceRow->resource;
 		}
 
 		if ($addonVotes) {
