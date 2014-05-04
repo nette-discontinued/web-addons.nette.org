@@ -17,6 +17,7 @@ class HelpPresenter extends BasePresenter
 		$this->writeln('Actions:');
 		$this->writeln('Cli:Help:default | print this help');
 		$this->writeln('Cli:Cron:Pages:update | update pages sources');
+		$this->writeln('Cli:Cron:AddonUpdater:update | update addon & versions');
 		$this->writeln();
 	}
 
