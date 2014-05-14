@@ -2,5 +2,6 @@
 /app/config/config.local.neon
 /tests/coverage
 /tests/temp
+maintenance
 *.sublime*
 .DS_Store
