@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "cb34d89252d6e86d585ab8d528e68160",
+    "hash": "ad6fe8671ed8a744789fd1a59f50bb22",
     "packages": [
         {
             "name": "composer/composer",
@@ -895,6 +895,49 @@
                 "xhtml"
             ],
             "time": "2014-02-10 02:34:57"
+        },
+        {
+            "name": "vrtak-cz/newrelic-nette",
+            "version": "v3.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Vrtak-CZ/NewRelic-Nette.git",
+                "reference": "3cc7f2d906e6893dc787136e7ed57f46df59be00"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Vrtak-CZ/NewRelic-Nette/zipball/3cc7f2d906e6893dc787136e7ed57f46df59be00",
+                "reference": "3cc7f2d906e6893dc787136e7ed57f46df59be00",
+                "shasum": ""
+            },
+            "require": {
+                "nette/nette": "~2.1.0",
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "VrtakCZ\\NewRelic": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Patrik Votoček",
+                    "email": "patrik@votocek.cz",
+                    "homepage": "http://patrik.votocek.cz",
+                    "role": "Developer"
+                }
+            ],
+            "description": "NewRelic PHP agent integration for Nette Framework",
+            "keywords": [
+                "nette",
+                "newrelic"
+            ],
+            "time": "2014-02-07 14:32:15"
         }
     ],
     "packages-dev": [
