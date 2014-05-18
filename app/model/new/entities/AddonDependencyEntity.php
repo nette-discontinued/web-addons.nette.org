@@ -109,7 +109,7 @@ class AddonDependencyEntity extends \Nette\Object
 			self::TYPE_REQUIRE,
 			self::TYPE_REQUIRE_DEV,
 			self::TYPE_CONFLICT,
-			self::TYPE_REQUIRE,
+			self::TYPE_REPLACE,
 			self::TYPE_PROVIDE,
 		);
 	}
