@@ -50,8 +50,13 @@ class VersionForm extends \NetteAddons\Forms\BaseForm
 
 		$license = $this->addon->defaultLicense;
 		if (is_string($license)) {
-			$license = array_map('trim', explode(',', $license));
+			if ($license === 'NOLICENSE') {
+				$license = array();
+			} else {
+				$license = array_map('trim', explode(',', $license));
+			}
 		}
+
 		$this->setDefaults(array(
 			'license' => $license,
 		));
