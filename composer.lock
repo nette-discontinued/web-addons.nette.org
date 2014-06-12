@@ -1,9 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
     ],
-    "hash": "ad6fe8671ed8a744789fd1a59f50bb22",
+    "hash": "d0131d69c96a7cc71383cec516d115db",
     "packages": [
         {
             "name": "composer/composer",
@@ -1053,19 +1054,20 @@
         },
         {
             "name": "nette/tester",
-            "version": "v1.1.0",
+            "version": "v1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/tester.git",
-                "reference": "53767d1776d683c33b9cfe742b864311e89c318e"
+                "reference": "1023fbf942a34d8971ec835bb86a849a33e2ad56"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/tester/zipball/53767d1776d683c33b9cfe742b864311e89c318e",
-                "reference": "53767d1776d683c33b9cfe742b864311e89c318e",
+                "url": "https://api.github.com/repos/nette/tester/zipball/1023fbf942a34d8971ec835bb86a849a33e2ad56",
+                "reference": "1023fbf942a34d8971ec835bb86a849a33e2ad56",
                 "shasum": ""
             },
             "require": {
+                "ext-iconv": "*",
                 "php": ">=5.3.0"
             },
             "bin": [
@@ -1074,7 +1076,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.1-dev"
+                    "dev-master": "1.2-dev"
                 }
             },
             "autoload": {
@@ -1098,14 +1100,14 @@
                     "homepage": "http://nette.org/contributors"
                 }
             ],
-            "description": "An easy-to-use PHP Unit Testing framework.",
+            "description": "An easy-to-use PHP unit testing framework.",
             "homepage": "http://nette.org",
             "keywords": [
                 "nette",
                 "testing",
                 "unit"
             ],
-            "time": "2014-04-02 13:27:38"
+            "time": "2014-06-11 15:50:33"
         },
         {
             "name": "nextras/migrations",
