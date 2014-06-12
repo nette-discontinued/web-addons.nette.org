@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1d656589d9e41f0bda763be26fd2b966",
+    "hash": "f4464f65fb0224bfb37606ad23fd7e31",
     "packages": [
         {
             "name": "composer/composer",
@@ -1114,16 +1114,16 @@
         },
         {
             "name": "nextras/migrations",
-            "version": "v2.1.0",
+            "version": "v2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nextras/migrations.git",
-                "reference": "54a4cdcffa7cc4d7e0f1678479de230e49499a29"
+                "reference": "5428e0008b77c6e875cdee07fa1e423129239105"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nextras/migrations/zipball/54a4cdcffa7cc4d7e0f1678479de230e49499a29",
-                "reference": "54a4cdcffa7cc4d7e0f1678479de230e49499a29",
+                "url": "https://api.github.com/repos/nextras/migrations/zipball/5428e0008b77c6e875cdee07fa1e423129239105",
+                "reference": "5428e0008b77c6e875cdee07fa1e423129239105",
                 "shasum": ""
             },
             "require": {
@@ -1132,7 +1132,7 @@
             },
             "require-dev": {
                 "mockery/mockery": "~0.8",
-                "nette/tester": "0.9.*",
+                "nette/tester": "~1.0.0",
                 "php": "~5.4"
             },
             "type": "library",
@@ -1151,7 +1151,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "description": "Simple database migrations runner",
-            "time": "2014-02-03 17:38:53"
+            "time": "2014-05-19 09:38:56"
         }
     ],
     "aliases": [],
