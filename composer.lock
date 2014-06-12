@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d0131d69c96a7cc71383cec516d115db",
+    "hash": "edda17b35ec20d53beab84da5196cf8d",
     "packages": [
         {
             "name": "composer/composer",
@@ -944,20 +944,23 @@
     "packages-dev": [
         {
             "name": "jakub-onderka/php-parallel-lint",
-            "version": "0.5",
+            "version": "v0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/JakubOnderka/PHP-Parallel-Lint.git",
-                "reference": "9c601da4e840e35c7f85a0682b30b9b04400f9e0"
+                "reference": "e0e665af03f8d070358cf6e7289f88f55c9bbd3d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JakubOnderka/PHP-Parallel-Lint/zipball/9c601da4e840e35c7f85a0682b30b9b04400f9e0",
-                "reference": "9c601da4e840e35c7f85a0682b30b9b04400f9e0",
+                "url": "https://api.github.com/repos/JakubOnderka/PHP-Parallel-Lint/zipball/e0e665af03f8d070358cf6e7289f88f55c9bbd3d",
+                "reference": "e0e665af03f8d070358cf6e7289f88f55c9bbd3d",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "nette/tester": "v1.1.0"
             },
             "suggest": {
                 "jakub-onderka/php-console-highlighter": "Highlight syntax in code snippet"
@@ -984,7 +987,7 @@
             ],
             "description": "This tool check syntax of PHP files about 20x faster than serial check.",
             "homepage": "https://github.com/JakubOnderka/PHP-Parallel-Lint",
-            "time": "2014-04-07 21:30:01"
+            "time": "2014-05-09 12:28:26"
         },
         {
             "name": "mockery/mockery",
