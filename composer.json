@@ -17,7 +17,7 @@
 		"php": "~5.5",
 		"ext-pdo": "*",
 		"nette/nette": "~2.1.1",
-		"texy/texy": "~2.4.0",
+		"texy/texy": "~2.5.1",
 		"composer/composer": "~1.0.0-alpha8",
 		"kukulich/fshl": "~2.1.0",
 		"michelf/php-markdown": "~1.4.0",

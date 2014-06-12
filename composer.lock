@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "edda17b35ec20d53beab84da5196cf8d",
+    "hash": "1d656589d9e41f0bda763be26fd2b966",
     "packages": [
         {
             "name": "composer/composer",
@@ -843,16 +843,16 @@
         },
         {
             "name": "texy/texy",
-            "version": "v2.4",
+            "version": "v2.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dg/texy.git",
-                "reference": "67d02cd95e4aaa7dae96b24a7d04ba924d641015"
+                "reference": "e5cf6f4f808e5a39a12fbefefcc62e06fa22b985"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dg/texy/zipball/67d02cd95e4aaa7dae96b24a7d04ba924d641015",
-                "reference": "67d02cd95e4aaa7dae96b24a7d04ba924d641015",
+                "url": "https://api.github.com/repos/dg/texy/zipball/e5cf6f4f808e5a39a12fbefefcc62e06fa22b985",
+                "reference": "e5cf6f4f808e5a39a12fbefefcc62e06fa22b985",
                 "shasum": ""
             },
             "require": {
@@ -895,7 +895,7 @@
                 "wiki",
                 "xhtml"
             ],
-            "time": "2014-02-10 02:34:57"
+            "time": "2014-06-02 13:13:58"
         },
         {
             "name": "vrtak-cz/newrelic-nette",
