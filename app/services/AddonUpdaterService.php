@@ -7,7 +7,9 @@ use Nette\Database\Context;
 use Nette\Diagnostics\Debugger;
 use Nette\Utils\Strings;
 use NetteAddons\Model\AddonResources;
+use NetteAddons\Model\AddonVersion;
 use NetteAddons\Model\Importers\IAddonVersionsImporter;
+use NetteAddons\Model\Utils\Composer;
 
 class AddonUpdaterService extends \Nette\Object
 {
@@ -64,6 +66,7 @@ class AddonUpdaterService extends \Nette\Object
 				'composerVendor' => $addon->getComposerVendor(),
 				'composerName' => $addon->getComposerName(),
 				'shortDescription' => Strings::truncate($addon->getPerex(), 250),
+				'stars' => $addon->getStars(),
 			));
 
 			$this->db->table('addons_versions')->where('addonId = ?', $id)->delete();

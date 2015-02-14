@@ -6,6 +6,7 @@ use Nette\Utils\Strings;
 use NetteAddons\Model\AddonDependencyEntity;
 use NetteAddons\Model\AddonEntity;
 use NetteAddons\Model\AddonVersionEntity;
+use NetteAddons\Model\Importers\GitHub\RepositoryFactory;
 use NetteAddons\Model\Importers\IAddonVersionsImporter;
 use NetteAddons\Model\UrlsHelper;
 use Packagist\Api\Client;
@@ -17,9 +18,13 @@ class PackagistImporter extends \Nette\Object implements IAddonVersionsImporter
 	/** @var \Packagist\Api\Client */
 	private $apiClient;
 
-	public function __construct()
+	/** @var \NetteAddons\Model\Importers\GitHub\RepositoryFactory */
+	private $githubClientFactory;
+
+	public function __construct(RepositoryFactory $githubClientFactory)
 	{
 		$this->apiClient = new Client;
+		$this->githubClientFactory = $githubClientFactory;
 	}
 
 	/**
@@ -50,7 +55,10 @@ class PackagistImporter extends \Nette\Object implements IAddonVersionsImporter
 					/** @var \Packagist\Api\Result\Package\Source $source */
 					$source = $versionData->getSource();
 					if (UrlsHelper::isGithubRepositoryUrl($source->getUrl())) {
-						$addon->setGithub(UrlsHelper::normalizeGithubRepositoryUrl($source->getUrl()));
+						$normalizedGithubUrl = UrlsHelper::normalizeGithubRepositoryUrl($source->getUrl());
+						$addon->setGithub($normalizedGithubUrl);
+						$githubClient = $this->githubClientFactory->create($normalizedGithubUrl);
+						$addon->setStars($githubClient->getMetadata()->stargazers_count);
 					}
 				}
 

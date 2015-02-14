@@ -119,7 +119,10 @@ services:
 	manageReportForm: NetteAddons\Manage\Forms\ReportFormFactory
 
 	# Importers
-	importers.packagist: NetteAddons\Model\Importers\AddonVersionImporters\PackagistImporter
+	importers.packagist:
+		class: NetteAddons\Model\Importers\AddonVersionImporters\PackagistImporter
+		arguments:
+			githubClientFactory: @ghRepositoryFactory
 	-
 		class: NetteAddons\Services\AddonUpdaterService
 		setup:

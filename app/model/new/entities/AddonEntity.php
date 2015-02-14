@@ -28,6 +28,8 @@ class AddonEntity extends \Nette\Object
 	private $github;
 	/** @var string|NULL */
 	private $packagist;
+	/** @var integer */
+	private $stars = 0;
 
 	/**
 	 * @param string
@@ -143,6 +145,25 @@ class AddonEntity extends \Nette\Object
 		Validators::assert($packagist, 'string', 'packagist');
 		UrlsHelper::assertPackagistPackageUrl($packagist);
 		$this->packagist = UrlsHelper::normalizePackagistPackageUrl($packagist);
+		return $this;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getStars()
+	{
+		return $this->stars;
+	}
+
+	/**
+	 * @param int
+	 * @return AddonEntity
+	 */
+	public function setStars($stars)
+	{
+		Validators::assert($stars, 'integer', 'stars');
+		$this->stars = $stars;
 		return $this;
 	}
 }

@@ -77,6 +77,9 @@ class Addon extends \Nette\Object
 	/** @var array */
 	public $resources = array();
 
+	/** @var integer */
+	public $stars;
+
 
 	/**
 	 * Creates Addon entity from Nette\Database row.
@@ -106,6 +109,7 @@ class Addon extends \Nette\Object
 		$addon->deletedAt = $row->deletedAt;
 		$addon->deletedBy = $row->ref('deletedBy');
 		$addon->type = $row->type;
+		$addon->stars = $row->stars;
 
 		foreach ($row->related('versions') as $versionRow) {
 			$version = AddonVersion::fromActiveRow($versionRow);
