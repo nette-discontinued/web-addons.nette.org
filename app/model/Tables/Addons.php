@@ -78,7 +78,7 @@ class Addons extends Table
 		$result = array();
 		foreach ($tags as $tag) {
 			$result[$tag->id] = array();
-			$addons = $tag->related('addons_tags')->order('addon.name');
+			$addons = $tag->related('addons_tags')->order('addon.stars DESC');
 			if (!$ignoreDeleted) {
 				$this->filterOutDeleted($addons);
 			}
