@@ -16,7 +16,7 @@ use Nette\Utils\Validators;
  */
 class AddonEntity extends \Nette\Object
 {
-	const COMPOSER_NAME_REGEXP = '((?P<vendor>[a-z0-9]+(?:-[a-z0-9]+)*)/(?P<name>[a-z0-9]+(?:-[a-z0-9]+)*))';
+	const COMPOSER_NAME_REGEXP = '((?P<vendor>[a-zA-Z0-9]+(?:(?:-|_)[a-zA-Z0-9]+)*)/(?P<name>[a-zA-Z0-9]+(?:(?:-|_)[a-zA-Z0-9]+)*))';
 
 	/** @var string */
 	private $composerFullName;
@@ -35,7 +35,7 @@ class AddonEntity extends \Nette\Object
 	public function __construct($composerFullName)
 	{
 		Validators::assert($composerFullName, 'string', 'composerFullName');
-		Validators::assert($composerFullName, 'pattern:' . self::COMPOSER_NAME_REGEXP, 'composerFullName');
+		Validators::assert($composerFullName, 'pattern:(([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+))', 'composerFullName');
 		$this->composerFullName = $composerFullName;
 	}
 

@@ -5,6 +5,7 @@ namespace NetteAddons\Services;
 use DateTime;
 use Nette\Database\Context;
 use Nette\Diagnostics\Debugger;
+use Nette\Utils\Strings;
 use NetteAddons\Model\AddonResources;
 use NetteAddons\Model\Importers\IAddonVersionsImporter;
 
@@ -62,17 +63,21 @@ class AddonUpdaterService extends \Nette\Object
 			$row->update(array(
 				'composerVendor' => $addon->getComposerVendor(),
 				'composerName' => $addon->getComposerName(),
-				'shortDescription' => $addon->getPerex(),
+				'shortDescription' => Strings::truncate($addon->getPerex(), 250),
 			));
 
 			$this->db->table('addons_versions')->where('addonId = ?', $id)->delete();
 
 			$row = $this->db->table('addons_resources')->where('addonId = ? AND type = ?', $id, AddonResources::RESOURCE_PACKAGIST)->fetch();
 			if ($row) {
-				$row->update(array(
-					'resource' => $addon->getPackagist(),
-				));
-			} else {
+				if ($addon->getPackagist() === null) {
+					$row->delete();
+				} else {
+					$row->update(array(
+						'resource' => $addon->getPackagist(),
+					));
+				}
+			} elseif ($addon->getPackagist() !== null) {
 				$this->db->table('addons_resources')->insert(array(
 					'addonId' => $id,
 					'type' => AddonResources::RESOURCE_PACKAGIST,
@@ -82,10 +87,14 @@ class AddonUpdaterService extends \Nette\Object
 
 			$row = $this->db->table('addons_resources')->where('addonId = ? AND type = ?', $id, AddonResources::RESOURCE_GITHUB)->fetch();
 			if ($row) {
-				$row->update(array(
-					'resource' => $addon->getGithub(),
-				));
-			} else {
+				if ($addon->getGithub() === null) {
+					$row->delete();
+				} else {
+					$row->update(array(
+						'resource' => $addon->getGithub(),
+					));
+				}
+			} elseif ($addon->getGithub() !== null) {
 				$this->db->table('addons_resources')->insert(array(
 					'addonId' => $id,
 					'type' => AddonResources::RESOURCE_GITHUB,
@@ -102,6 +111,7 @@ class AddonUpdaterService extends \Nette\Object
 					'distType' => 'zip', // @todo remove
 					'distUrl' => 'http://nette.org', // @todo remove
 					'updatedAt' => new DateTime,
+					'composerJson' => '',
 				));
 
 				if (!$row) {

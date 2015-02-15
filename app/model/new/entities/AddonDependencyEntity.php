@@ -40,12 +40,12 @@ class AddonDependencyEntity extends \Nette\Object
 	public function __construct($composerFullName, $version, $type, $dependencyName, $dependencyVersion)
 	{
 		Validators::assert($composerFullName, 'string', 'composerFullName');
-		Validators::assert($composerFullName, 'pattern:' . AddonEntity::COMPOSER_NAME_REGEXP, 'composerFullName');
+		Validators::assert($composerFullName, 'pattern:(([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+))', 'composerFullName');
 		Validators::assert($version, 'string', 'version');
 		Validators::assert($type, 'string', 'type');
 		Validators::assert($dependencyName, 'string', 'dependencyName');
 		$patterns = array(
-			'pattern:' . AddonEntity::COMPOSER_NAME_REGEXP,
+			'pattern:(([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+))',
 			'pattern:(php)',
 			'pattern:(hhvm)',
 			'pattern:(ext-(?:\w+))',

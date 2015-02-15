@@ -23,7 +23,7 @@ class AddonUpdaterPresenter extends BasePresenter
 
 	public function actionUpdate()
 	{
-		$query = $this->db->table('addons')->where('type = ?', Addon::TYPE_COMPOSER);
+		$query = $this->db->table('addons')->where('type = ? AND deletedAt IS NULL', Addon::TYPE_COMPOSER);
 		foreach ($query as $row) {
 			$this->addonUpdaterService->updateAddon($row->id);
 			$this->writeln('Updating addon "' . $row->name . '".');
