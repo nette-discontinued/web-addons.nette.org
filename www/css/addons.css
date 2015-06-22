@@ -1,4 +1,6 @@
-@import 'combined.css';
+form {
+	display: inline;
+}
 
 .form .required {
 	color: black;
@@ -7,7 +9,7 @@
 	font-weight: normal;
 }
 
-.input-full, .form chzn-container {
+.input-full, .form .chzn-container {
 	width: 100%;
 }
 
@@ -39,18 +41,18 @@
 	width: 30%;
 }
 
-#page #tools {
+.page #tools {
 	white-space: nowrap;
 }
 
-#content table tr.addon.deleted td {
+.content table tr.addon.deleted td {
 	background-color: #FFE1E1;
 }
-#content table tr.addon.alt.deleted td {
+.content table tr.addon.alt.deleted td {
 	background-color: #FFF1F1;
 }
 
-#content table th a {
+.content table th a {
 	color: white;
 }
 
@@ -208,7 +210,6 @@ img.gravatar {
 	background-position: 14px 14px;
 	background-repeat: no-repeat;
 	*margin-right: .3em;
-	*margin-right: .3em;
 }
 [class^="icon-"]:last-child,
 [class*=" icon-"]:last-child {
@@ -283,7 +284,7 @@ background: url(../images/li-download.gif) no-repeat;
 	-moz-border-radius: 4px;
 	border-radius: 4px;
 }
-.progress .bar {
+.progress .progress-bar {
 	width: 0%;
 	height: 18px;
 	color: #ffffff;
@@ -353,7 +354,7 @@ background: url(../images/li-download.gif) no-repeat;
 	background-repeat: repeat-x;
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#62c462', endColorstr='#57a957', GradientType=0);
 }
-.progress-success .bar {
+.progress-success .progress-bar {
 	background-color: #dd514c;
 	background-image: -moz-linear-gradient(top, #ee5f5b, #c43c35);
 	background-image: -ms-linear-gradient(top, #ee5f5b, #c43c35);
@@ -373,11 +374,11 @@ background: url(../images/li-download.gif) no-repeat;
 	background-repeat: repeat-x;
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ee5f5b', endColorstr='#c43c35', GradientType=0);
 }
-.progress-yesno .bar {
+.progress-yesno .progress-bar {
 	border-right: 1px solid #dbdfcc;
 }
 .progress-disabled,
-.progress-disabled .bar {
+.progress-disabled .progress-bar {
 	background-color: #afafaf;
 	background-image: -moz-linear-gradient(top, #bfbfbf, #979797);
 	background-image: -ms-linear-gradient(top, #bfbfbf, #979797);
@@ -396,67 +397,6 @@ background: url(../images/li-download.gif) no-repeat;
 	background-image: linear-gradient(top, #bfbfbf, #979797);
 	background-repeat: repeat-x;
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#bfbfbf', endColorstr='#979797', GradientType=0);
-}
-
-#header.loggedin {
-	height: 120px;
-}
-
-#submenu li, div.linkst li, div.linksb li, div.postlinksb li, div.postfootright li {
-	display: inline;
-	height: 0;
-	margin-right: 1em
-}
-
-#submenu ul {
-	font: 11px/27px "Open Sans","Trebuchet MS","Geneva CE",lucida,sans-serif;
-	position: absolute;
-	right: 0;
-	top: 86px;
-	padding: 0;
-	list-style: none;
-	height: 27px;
-}
-
-#submenu li {
-	float: left;
-	padding: 0;
-	margin: 0;
-	height: auto;
-}
-
-#submenu a {
-	display: block;
-	padding: 0 0 0 10px;
-	margin: 0 1px;
-	line-height: 27px;
-	color: white;
-	font-size: 130%;
-	text-decoration: none;
-}
-
-#submenu a span {
-	display: inline-block;
-	padding: 0 10px 0 0;
-	height: 27px;
-}
-
-#submenu a.active {
-	color: black;
-	background: #78AFE5 url('../images/menu-button-small-active.gif') no-repeat left;
-}
-
-#submenu a.active span {
-	background: #78AFE5 url('../images/menu-button-small-active.gif') no-repeat right;
-}
-
-#submenu a:hover, #submenu a:active, #submenu a:focus {
-	color: black;
-	background: #FFEA99 url('../images/menu-button-small.gif') no-repeat left;
-}
-
-#submenu a:hover span, #submenu a:active span, #submenu a:focus span {
-	background: #FFEA99 url('../images/menu-button-small.gif') no-repeat right;
 }
 
 #sidebar {

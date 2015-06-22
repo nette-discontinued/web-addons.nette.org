@@ -1,59 +1,57 @@
-<div id="submenu" n:if="$user->loggedIn">
-	<ul>
-		<li n:if="!in_array($presenter->name, array('Homepage', 'List'))">
-			<a rel="nofollow" href="{plink :Manage:Addon:add token => NULL, addonId => NULL}" n:class="$presenter->linkCurrent ? active">
-				<span>Publish your addon</span>
-			</a>
-		</li>
-		<li>
-			<a rel="nofollow" href="{plink :List:mine}" n:class="$presenter->linkCurrent ? active">
-				<span>My addons</span>
-			</a>
-		</li>
-		{ifset $addon}
-		<li n:if="!$presenter->isLinkCurrent(':Detail:default', $addon->id)">
-			<a rel="nofollow" href="{plink :Detail:default $addon->id}" n:class="$presenter->linkCurrent ? active">
-				<span>View</span>
-			</a>
-		</li>
-		<li n:if="!$presenter->isLinkCurrent(':Detail:report', $addon->id)">
-			<a rel="nofollow" href="{plink :Detail:report $addon->id}" n:class="$presenter->linkCurrent ? active">
-				<span>Report</span>
-			</a>
-		</li>
-		{if $auth->isAllowed($addon, 'manage')}
-		<li n:if="!$presenter->isLinkCurrent(':Manage:Addon:edit', $addon->id)">
-			<a rel="nofollow" href="{plink :Manage:Addon:edit $addon->id}" n:class="$presenter->linkCurrent ? active">
-				<span>Edit</span>
-			</a>
-		</li>
-		<li n:if="$auth->isAllowed($addon, 'delete') && !$presenter->isLinkCurrent(':Manage:Addon:delete', $addon->id)">
-			<a rel="nofollow" href="{plink :Manage:Addon:delete $addon->id}" n:class="$presenter->linkCurrent ? active">
-				<span>{if empty($addon->deletedAt)}Delete{else}Restore{/if}</span>
-			</a>
-		</li>
-		<li n:if="isset($addon->repositoryHosting) && $addon->repositoryHosting != NULL">
-			<a data-addons-busy rel="nofollow" href="{plink :Manage:Versions:check $addon->id}" n:class="$presenter->linkCurrent ? active">
-				<span>Check updates</span>
-			</a>
-		</li>
-		<li n:if="isset($addon) && $addon->type === \NetteAddons\Model\Addon::TYPE_DOWNLOAD">
-			<a rel="nofollow" href="{plink :Manage:Versions:add addonId => $addon->id}" n:class="$presenter->linkCurrent ? active">
-				<span>Publish new version</span>
-			</a>
-		</li>
-		{/if}
-		{else}
-		<li n:if="$auth->isAllowed('addon', 'delete')">
-			<a rel="nofollow" href="{plink :Manage:Admin:deleted}" n:class="$presenter->linkCurrent ? active">
-				<span>List deleted</span>
-			</a>
-		</li>
-		<li n:if="$auth->isAllowed('addon', 'reports')">
-			<a rel="nofollow" href="{plink :Manage:Admin:reports}" n:class="$presenter->linkCurrent ? active">
-				<span>List reports</span>
-			</a>
-		</li>
-		{/ifset}
-	</ul>
-</div>
+{if $user->loggedIn}
+	<li n:if="!in_array($presenter->name, array('Homepage', 'List'))">
+		<a rel="nofollow" href="{plink :Manage:Addon:add token => NULL, addonId => NULL}" n:class="$presenter->linkCurrent ? active">
+			<span>Publish your addon</span>
+		</a>
+	</li>
+	<li>
+		<a rel="nofollow" href="{plink :List:mine}" n:class="$presenter->linkCurrent ? active">
+			<span>My addons</span>
+		</a>
+	</li>
+	{ifset $addon}
+	<li n:if="!$presenter->isLinkCurrent(':Detail:default', $addon->id)">
+		<a rel="nofollow" href="{plink :Detail:default $addon->id}" n:class="$presenter->linkCurrent ? active">
+			<span>View</span>
+		</a>
+	</li>
+	<li n:if="!$presenter->isLinkCurrent(':Detail:report', $addon->id)">
+		<a rel="nofollow" href="{plink :Detail:report $addon->id}" n:class="$presenter->linkCurrent ? active">
+			<span>Report</span>
+		</a>
+	</li>
+	{if $auth->isAllowed($addon, 'manage')}
+	<li n:if="!$presenter->isLinkCurrent(':Manage:Addon:edit', $addon->id)">
+		<a rel="nofollow" href="{plink :Manage:Addon:edit $addon->id}" n:class="$presenter->linkCurrent ? active">
+			<span>Edit</span>
+		</a>
+	</li>
+	<li n:if="$auth->isAllowed($addon, 'delete') && !$presenter->isLinkCurrent(':Manage:Addon:delete', $addon->id)">
+		<a rel="nofollow" href="{plink :Manage:Addon:delete $addon->id}" n:class="$presenter->linkCurrent ? active">
+			<span>{if empty($addon->deletedAt)}Delete{else}Restore{/if}</span>
+		</a>
+	</li>
+	<li n:if="isset($addon->repositoryHosting) && $addon->repositoryHosting != NULL">
+		<a data-addons-busy rel="nofollow" href="{plink :Manage:Versions:check $addon->id}" n:class="$presenter->linkCurrent ? active">
+			<span>Check updates</span>
+		</a>
+	</li>
+	<li n:if="isset($addon) && $addon->type === \NetteAddons\Model\Addon::TYPE_DOWNLOAD">
+		<a rel="nofollow" href="{plink :Manage:Versions:add addonId => $addon->id}" n:class="$presenter->linkCurrent ? active">
+			<span>Publish new version</span>
+		</a>
+	</li>
+	{/if}
+	{else}
+	<li n:if="$auth->isAllowed('addon', 'delete')">
+		<a rel="nofollow" href="{plink :Manage:Admin:deleted}" n:class="$presenter->linkCurrent ? active">
+			<span>List deleted</span>
+		</a>
+	</li>
+	<li n:if="$auth->isAllowed('addon', 'reports')">
+		<a rel="nofollow" href="{plink :Manage:Admin:reports}" n:class="$presenter->linkCurrent ? active">
+			<span>List reports</span>
+		</a>
+	</li>
+	{/ifset}
+{/if}
