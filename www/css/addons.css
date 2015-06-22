@@ -453,3 +453,9 @@ background: url(../images/li-download.gif) no-repeat;
 	background: #78AFE5;
 	color: black;
 }
+
+/** issue #141 */
+.search-choice-close {
+	margin: 0;
+	padding: 0;
+}
