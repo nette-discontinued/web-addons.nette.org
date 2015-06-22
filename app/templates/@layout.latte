@@ -14,7 +14,7 @@
 	<title>{block #title|striptags}{ifset $title}{$title} | {/ifset}Nette Framework - Addons, plugins and components{/block}</title>
 
 	<link rel="stylesheet" href="http://files.nette.org/css/combined.css?v=1426725420">
-	<link rel="stylesheet" href="{$basePath}/css/addons.css">
+	<link rel="stylesheet" href="{$basePath}/css/addons.css?v={='css/addons.css'|mtime}">
 	<link rel="stylesheet" href="{$basePath}/assets/plugins/chosen/chosen.css">
 	<link rel="shortcut icon" href="{$basePath}/favicon.ico">
 	<link rel="image_src" href="http://files.nette.org/images/fb-preview.png">
