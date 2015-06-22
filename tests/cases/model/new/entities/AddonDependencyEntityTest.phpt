@@ -9,34 +9,15 @@
 namespace NetteAddons\Test\Model;
 
 use Tester\Assert;
-use NetteAddons\Test\TestCase;
 use NetteAddons\Model\AddonDependencyEntity;
 
-require_once __DIR__ . '/../../../../bootstrap.php';
 
-class AddonDependencyEntityTest extends TestCase
+require __DIR__ . '/../../../../bootstrap.php';
+require __DIR__ . '/AbstractTestCase.php';
+
+
+class AddonDependencyEntityTest extends AbstractTestCase
 {
-	public function dataInvalidComposerFullName()
-	{
-		return array(
-			array('Nette/nette'),
-			array('Nette/Nette'),
-			array('nette foundation/nette framework'),
-			array('nette/nette_framework'),
-			array('nette/nette.framework'),
-		);
-	}
-
-	public function dataInvalidString()
-	{
-		return array(
-			array(null),
-			array(42),
-			array(false),
-			array(array()),
-			array(new \stdClass),
-		);
-	}
 
 	/**
 	 * @dataProvider dataInvalidComposerFullName

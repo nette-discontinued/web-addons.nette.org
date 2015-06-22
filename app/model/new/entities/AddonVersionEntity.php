@@ -3,7 +3,7 @@
 namespace NetteAddons\Model;
 
 use Nette\Utils\Validators;
-use NetteAddons\Test\Model\AddonVersionEntityTest;
+
 
 /**
  * @property-read string $composerFullName
@@ -32,7 +32,7 @@ class AddonVersionEntity extends \Nette\Object
 	public function __construct($composerFullName, $version)
 	{
 		Validators::assert($composerFullName, 'string', 'composerFullName');
-		Validators::assert($composerFullName, 'pattern:(([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+))', 'composerFullName');
+		Validators::assert($composerFullName, 'pattern:' . AddonEntity::COMPOSER_NAME_REGEXP, 'composerFullName');
 		Validators::assert($version, 'string', 'version');
 		$this->composerFullName = $composerFullName;
 		$this->version = $version;
@@ -108,7 +108,7 @@ class AddonVersionEntity extends \Nette\Object
 	public function addSuggest($name, $description)
 	{
 		Validators::assert($name, 'string', 'name');
-		Validators::assert($name, 'pattern:(([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+))', 'name');
+		Validators::assert($name, 'pattern:' . AddonEntity::COMPOSER_NAME_REGEXP, 'name');
 		Validators::assert($description, 'string', 'description');
 		$this->suggest[$name] = $description;
 		return $this;
