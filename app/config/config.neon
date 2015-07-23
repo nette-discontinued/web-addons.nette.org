@@ -62,7 +62,7 @@ services:
 		setup:
 			- addProcessor(@NetteAddons\TextProcessors\TexyProcessor, NetteAddons\TextPreprocessor::FORMAT_TEXY)
 			- addProcessor(@NetteAddons\TextProcessors\MarkdownProcessor, NetteAddons\TextPreprocessor::FORMAT_MARKDOWN)
-	helperLoader: NetteAddons\HelperLoader(@textPreprocessor, %gravatarMaxRating%)
+	helperLoader: NetteAddons\HelperLoader(@textPreprocessor, %gravatarMaxRating%, %wwwDir%)
 
 	# tables
 	users: NetteAddons\Model\Users

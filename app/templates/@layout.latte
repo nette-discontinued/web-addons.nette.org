@@ -13,7 +13,8 @@
 
 	<title>{block #title|striptags}{ifset $title}{$title} | {/ifset}Nette Framework - Addons, plugins and components{/block}</title>
 
-	<link rel="stylesheet" href="{$basePath}/css/addons.css">
+	<link rel="stylesheet" href="http://files.nette.org/css/combined.css?v=1426725420">
+	<link rel="stylesheet" href="{$basePath}/css/addons.css?v={='css/addons.css'|mtime}">
 	<link rel="stylesheet" href="{$basePath}/assets/plugins/chosen/chosen.css">
 	<link rel="shortcut icon" href="{$basePath}/favicon.ico">
 	<link rel="image_src" href="http://files.nette.org/images/fb-preview.png">
@@ -42,42 +43,31 @@
 		<a href="https://github.com/nette/web-addons.nette.org/issues/new">Report bug</a>
 	</div>
 
-	<div id="page">
-		<header id="header" n:class="$user->loggedIn ? loggedin">
-			<a id="logo" title="Homepage" n:href=":Homepage:default"><span>Homepage</span></a>
-
-			<nav id="menu">
+	<div class="page">
+		<header class="main">
+			<a class="logo" n:href=":Homepage:default"><span>Homepage</span></a>
+			<nav class="main">
 				<ul>
-					<li><a href="http://nette.org/download"><span>Download</span></a></li>
-					<li><a href="http://doc.nette.org"><span>Documentation</span></a></li>
-					<li><a class="active" n:href=":Homepage:default"><span>Add-ons</span></a></li>
-					<li><a href="http://pla.nette.org"><span>Planette</span></a></li>
-					<li><a href="http://forum.nette.org"><span>Forum</span></a></li>
-					<li><a href="http://blog.nette.org"><span>Blog</span></a></li>
-					<li><a href="https://github.com/nette/nette"><span>GitHub</span></a></li>
+					{if $user->loggedIn}
+						<li><a href="{$user->identity->id|profile}"><span>{$user->identity->username}</span></a></li>
+						{if $user->loggedIn && $presenter->name != 'Error'}{control subMenu}{/if}
+						<li><a n:href=":Sign:out"><span>Sign out</span></a></li>
+					{else}
+						<li><a n:href=":Sign:in"><span>Sign in</span></a></li>
+						<li><a href="http://forum.nette.org/en/register.php"><span>Sign up</span></a></li>
+					{/if}
 				</ul>
 			</nav>
-
-			{if $user->loggedIn && $presenter->name != 'Error'}{control subMenu}{/if}
 		</header>
 
-		<div id="tools">
-			{if $user->loggedIn}
-				<a href="{$user->identity->id|profile}">{$user->identity->username}</a> <a n:href=":Sign:out">Sign out</a>
-			{else}
-				<a n:href=":Sign:in">Sign in</a> <a href="http://forum.nette.org/en/register.php">Sign up</a>
-			{/if}
-		</div>
-
 		{block main}
-		<div id="main" lang="en">
-			<div id="content" class="sidebar">
+		<div class="main" lang="en">
+			<div class="content has-sidebar">
 				{foreach $flashes as $flash}
 					<div class="flash {$flash->type}">{$flash->message}</div>
 				{/foreach}
 
 				{include #content}
-
 
 				{*
 				<div class="paginator">
@@ -89,7 +79,7 @@
 				*}
 			</div>
 
-			<aside id="sidebar">
+			<aside class="main" id="sidebar">
 				<div class="info">
 					{block sidebar}
 						<a n:if="$showAddAddonButton" n:href=":Manage:Addon:add" class="bigbutton">Publish Your Addon</a>
@@ -99,13 +89,32 @@
 		</div>
 		{/block}
 
-		<footer id="footer">
+		<footer class="main">
 			<p>Copyright &copy; 2008, 2014 <a href="http://nettefoundation.com">Nette Foundation</a>
 				| <a href="http://nette.org/terms-of-use">Terms of use</a> | If not stated otherwise, the contents are licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/cz/">Creative Commons CC-BY-SA</a>.</p>
 		</footer>
 	</div>
-<script src="{$basePath}/assets/plugins/chosen/chosen.jquery.js"></script>
-<script src="{$basePath}/js/addons.js"></script>
-{*<script src="http://files.nette.org/js/combined.js?v=1393339374"></script>*}
+
+	<div class="bar">
+		<div>
+			<ul class="projects">
+				<li><a href="http://nette.org">Nette</a>
+				<li><a href="http://tracy.nette.org">Tracy</a>
+				<li><a href="http://latte.nette.org">Latte</a>
+				<li><a href="http://tester.nette.org">Tester</a>
+				<li><a href="http://ne-on.org">Neon</a>
+			</ul>
+			<ul class="user">
+				<li><a href="http://addons.nette.org/" class="active"><span>Add-ons</span></a>
+				<li><a href="http://pla.nette.org/en/"><span>Planette</span></a>
+				<li><a href="http://forum.nette.org/en/"><span>Forum</span></a>
+				<li><a href="http://blog.nette.org"><span>Blog</span></a>
+				<li><a href="http://nette.org/donate"><span>Donate</span></a>
+			</ul>
+		</div>
+	</div>
+	<script src="{$basePath}/assets/plugins/chosen/chosen.jquery.js"></script>
+	<script src="{$basePath}/js/addons.js"></script>
+	{*<script src="http://files.nette.org/js/combined.js?v=1393339374"></script>*}
 </body>
 </html>

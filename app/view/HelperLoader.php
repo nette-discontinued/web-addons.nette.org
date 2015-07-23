@@ -17,8 +17,9 @@ class HelperLoader extends \Nette\Object
 	/**
 	 * @param TextPreprocessor
 	 * @param string
+	 * @param string
 	 */
-	public function __construct(TextPreprocessor $preprocessor, $gravatarMaxRating)
+	public function __construct(TextPreprocessor $preprocessor, $gravatarMaxRating, $wwwDir)
 	{
 		$this->helpers['description'] = array($preprocessor, 'processDescription');
 		$this->helpers['licenses'] = array($preprocessor, 'processLicenses');
@@ -27,6 +28,9 @@ class HelperLoader extends \Nette\Object
 		};
 		$this->helpers['profile'] = function($id) {
 			return 'http://forum.nette.org/en/profile.php?id=' . $id;
+		};
+		$this->helpers['mtime'] = function($path) use ($wwwDir) {
+			return filemtime($wwwDir . DIRECTORY_SEPARATOR . $path);
 		};
 	}
 

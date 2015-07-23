@@ -2,30 +2,21 @@
 
 /**
  * Test: NetteAddons\Model\AddonEntity
- *
- * @testcase
+ * @testCase
  */
 
 namespace NetteAddons\Test\Model;
 
 use Tester\Assert;
-use NetteAddons\Test\TestCase;
 use NetteAddons\Model\AddonEntity;
 
-require_once __DIR__ . '/../../../../bootstrap.php';
 
-class AddonEntityTest extends TestCase
+require __DIR__ . '/../../../../bootstrap.php';
+require __DIR__ . '/AbstractTestCase.php';
+
+
+class AddonEntityTest extends AbstractTestCase
 {
-	public function dataInvalidComposerFullName()
-	{
-		return array(
-			array('Nette/nette'),
-			array('Nette/Nette'),
-			array('nette foundation/nette framework'),
-			array('nette/nette_framework'),
-			array('nette/nette.framework'),
-		);
-	}
 
 	/**
 	 * @dataProvider dataInvalidComposerFullName
