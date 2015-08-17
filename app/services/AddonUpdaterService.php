@@ -112,7 +112,7 @@ class AddonUpdaterService extends \Nette\Object
 					'version' => $version->getVersion(),
 					'license' => implode(', ', $version->getLicenses()),
 					'distType' => 'zip', // @todo remove
-					'distUrl' => 'http://nette.org', // @todo remove
+					'distUrl' => 'https://nette.org', // @todo remove
 					'updatedAt' => new DateTime,
 					'composerJson' => '',
 				));

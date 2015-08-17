@@ -29,6 +29,7 @@ class RouterFactory extends \Nette\Object
 	 */
 	public function createRouter()
 	{
+		Route::$defaultFlags = Route::SECURED;
 		$router = new RouteList();
 
 		// CLI
