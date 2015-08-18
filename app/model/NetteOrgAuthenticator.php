@@ -33,7 +33,7 @@ class NetteOrgAuthenticator extends \Nette\Object implements \Nette\Security\IAu
 	public function __construct($cryptPassword, Context $db)
 	{
 		$this->cryptPassword = $cryptPassword;
-		$this->baseUrl = new Url('http://nette.org/loginpoint.php');
+		$this->baseUrl = new Url('https://nette.org/loginpoint.php');
 		$this->httpClient = new Client;
 		$this->httpClient->setUserAgent('Nette Addons portal authenticator');
 

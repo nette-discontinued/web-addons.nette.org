@@ -27,7 +27,7 @@ class HelperLoader extends \Nette\Object
 			return html_entity_decode(Gravatar::image($email, $size, null, $gravatarMaxRating));
 		};
 		$this->helpers['profile'] = function($id) {
-			return 'http://forum.nette.org/en/profile.php?id=' . $id;
+			return 'https://forum.nette.org/en/profile.php?id=' . $id;
 		};
 		$this->helpers['mtime'] = function($path) use ($wwwDir) {
 			return filemtime($wwwDir . DIRECTORY_SEPARATOR . $path);

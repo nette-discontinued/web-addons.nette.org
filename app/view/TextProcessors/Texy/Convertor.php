@@ -241,7 +241,7 @@ class Converter
 		$parts = array();
 		if ($link->book !== $this->current->book) {
 			$parts = explode('-', $link->book, 2);
-			$url = (false ? '' : 'http://' . ($parts[0] === 'www' ? '' : "$parts[0].") . $this->paths['domain']) . '/';
+			$url = (false ? '' : '//' . ($parts[0] === 'www' ? '' : "$parts[0].") . $this->paths['domain']) . '/';
 		} else {
 			$url = '/';
 		}
