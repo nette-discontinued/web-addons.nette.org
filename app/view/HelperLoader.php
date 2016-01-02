@@ -3,6 +3,7 @@
 namespace NetteAddons;
 
 use forxer\Gravatar\Gravatar;
+use Latte\Engine;
 
 
 /**
@@ -32,6 +33,14 @@ class HelperLoader extends \Nette\Object
 		$this->helpers['mtime'] = function($path) use ($wwwDir) {
 			return filemtime($wwwDir . DIRECTORY_SEPARATOR . $path);
 		};
+	}
+
+
+	public function load(Engine $latte)
+	{
+		foreach ($this->helpers as $name => $callback) {
+			$latte->addFilter($name, $callback);
+		}
 	}
 
 

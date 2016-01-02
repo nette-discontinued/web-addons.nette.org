@@ -2,9 +2,9 @@
 
 namespace NetteAddons\Model\Utils;
 
+use Composer\Semver\Constraint\Constraint;
 use NetteAddons\Model\AddonVersion;
 use Composer\Package\Version\VersionParser as ComposerVersionParser;
-use Composer\Package\LinkConstraint\VersionConstraint;
 
 
 class VersionParser extends \Nette\Object
@@ -92,7 +92,7 @@ class VersionParser extends \Nette\Object
 		$a = $parser->normalize($a->version);
 		$b = $parser->normalize($b->version);
 
-		$constraint = new VersionConstraint(NULL, NULL);
+		$constraint = new Constraint('==', $a);
 		if ($constraint->versionCompare($a, $b, '==')) {
 			return 0;
 		} elseif ($constraint->versionCompare($a, $b, '<')) {

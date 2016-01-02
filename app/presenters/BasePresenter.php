@@ -52,8 +52,9 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 	 */
 	public function createTemplate($class = NULL)
 	{
+		/** @var \Nette\Bridges\ApplicationLatte\Template $template */
 		$template = parent::createTemplate();
-		$template->registerHelperLoader($this->helperLoader);
+		$this->helperLoader->load($template->getLatte());
 		if (isset($this->context->getParameters()['googleAnalyticsCode'])) {
 			$template->googleAnalyticsCode = $this->context->getParameters()['googleAnalyticsCode'];
 		}
