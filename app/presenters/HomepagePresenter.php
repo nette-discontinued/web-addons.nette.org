@@ -10,6 +10,8 @@ final class HomepagePresenter extends BaseListPresenter
 
 	public function renderDefault()
 	{
+		$this->redirectUrl('https://componette.com/', \Nette\Http\IResponse::S301_MOVED_PERMANENTLY);
+
 		$ignoreDeleted = $this->auth->isAllowed('addon', 'delete');
 
 		$this->template->updatedAddons = $this->addons->findLastUpdated(self::ADDONS_LIMIT, $ignoreDeleted);
