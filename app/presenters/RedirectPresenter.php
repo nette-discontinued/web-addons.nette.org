@@ -225,6 +225,8 @@ final class RedirectPresenter extends \Nette\Application\UI\Presenter
 			'sandbox/passwordrecovery' => 'vipercz/passwordrecovery',
 			'makr/feed' => 'martinknor/feed',
 			'pavlista/nette-palette' => 'michaelpavlista/nette-palette',
+			'vojtech-dobes/nette-ajax-js' => 'vojtech-dobes/nette.ajax.js',
+			'mesour/datagrid' => 'mesour/datagrid',
 		];
 	}
 
