@@ -42,6 +42,7 @@ class RouterFactory extends \Nette\Object
 		$router[] = new Route('api/github', 'Api:Github:postReceive'); // same as Packagist's route
 		$router[] = new Route('page/<slug ([a-z][a-z0-9.-]*(?:/[a-z][a-z0-9.-]*)?)>', 'Page:default');
 		$router[] = new Route('special/<action>[.<type=html (html|xml)>]', 'Special:default');
+		$router[] = new Route('<slug [^/]+/[^/]+>', 'Redirect:default');
 		$router[] = new Route('<id>[/<action>]', array(
 			'presenter' => 'Detail',
 			'action' => 'default',
