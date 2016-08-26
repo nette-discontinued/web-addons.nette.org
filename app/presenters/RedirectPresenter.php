@@ -237,7 +237,10 @@ final class RedirectPresenter extends \Nette\Application\UI\Presenter
 		$slug = strtolower($slug);
 
 		if (isset($this->map[$slug])) {
-			$this->redirectUrl(sprintf(self::NEW_PORTAL_URL_MASK, $this->map[$slug]));
+			$this->redirectUrl(
+				sprintf(self::NEW_PORTAL_URL_MASK, $this->map[$slug]),
+				\Nette\Http\IResponse::S301_MOVED_PERMANENTLY
+			);
 		}
 
 		$this->error('Addon not found', 404);
